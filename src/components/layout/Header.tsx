@@ -8,47 +8,12 @@ import { Menu, X } from "lucide-react";
 export function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    const user = null;
-    const userRole: "guest" | "family" | "organization" | "admin" = "guest";
-    const signOut = () => console.log("Sign out");
-
-    const guestNav = [
+    // TODO: Replace with API data when authentication is implemented
+    const navItems = [
         { label: "الرئيسية", href: "/" },
         { label: "الحالات", href: "/cases" },
         { label: "الإحصائيات", href: "/statistics" },
     ];
-
-    const familyNav = [
-        { label: "الصفحة الرئيسية", href: "/" },
-        { label: "طلباتي", href: "/dashboard/family" },
-        { label: "تعديل البيانات", href: "/dashboard/family/profile" },
-    ];
-
-    const orgNav = [
-        { label: "الحالات", href: "/dashboard/organization" },
-        { label: "نظام التوصية", href: "/dashboard/organization" },
-        { label: "الإحصائيات", href: "/dashboard/organization" },
-    ];
-
-    const adminNav = [
-        { label: "لوحة التحكم", href: "/dashboard/admin" },
-        { label: "المستخدمين", href: "/dashboard/admin/users" },
-        { label: "الإحصائيات", href: "/dashboard/admin" },
-    ];
-
-    const getNavItems = () => {
-        if (userRole === "family") {
-            return familyNav;
-        } else if (userRole === "organization") {
-            return orgNav;
-        } else if (userRole === "admin") {
-            return adminNav;
-        } else {
-            return guestNav;
-        }
-    };
-
-    const navItems = getNavItems();
 
     return (
         <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/90 border-b border-border/50 shadow-sm">
@@ -77,25 +42,18 @@ export function Header() {
                     </nav>
 
                     {/* Action Buttons */}
+                    {/* TODO: Add authentication state from API */}
                     <div className="hidden md:flex items-center gap-4">
-                        {user ? (
-                            <Button variant="destructive" onClick={signOut} className="font-semibold px-6 h-11 rounded-xl">
-                                تسجيل الخروج
+                        <Link href="/login">
+                            <Button variant="ghost" className="font-semibold px-6 h-11 rounded-xl hover:bg-primary/5">
+                                تسجيل الدخول
                             </Button>
-                        ) : (
-                            <>
-                                <Link href="/login">
-                                    <Button variant="ghost" className="font-semibold px-6 h-11 rounded-xl hover:bg-primary/5">
-                                        تسجيل الدخول
-                                    </Button>
-                                </Link>
-                                <Link href="/register">
-                                    <Button className="font-semibold px-6 h-11 rounded-xl bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all duration-300">
-                                        حساب جديد
-                                    </Button>
-                                </Link>
-                            </>
-                        )}
+                        </Link>
+                        <Link href="/register">
+                            <Button className="font-semibold px-6 h-11 rounded-xl bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all duration-300">
+                                حساب جديد
+                            </Button>
+                        </Link>
                     </div>
 
                     {/* Mobile Menu Button */}
@@ -126,26 +84,18 @@ export function Header() {
                                     {item.label}
                                 </Link>
                             ))}
+                            {/* TODO: Add authentication state from API */}
                             <div className="flex flex-col gap-3 pt-6 mt-4 border-t border-border/50">
-                                {!user && (
-                                    <>
-                                        <Link href="/login" onClick={() => setIsMenuOpen(false)}>
-                                            <Button variant="outline" className="w-full font-semibold h-12 rounded-xl border-2">
-                                                تسجيل الدخول
-                                            </Button>
-                                        </Link>
-                                        <Link href="/register" onClick={() => setIsMenuOpen(false)}>
-                                            <Button className="w-full font-semibold h-12 rounded-xl bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20">
-                                                حساب جديد
-                                            </Button>
-                                        </Link>
-                                    </>
-                                )}
-                                {user && (
-                                    <Button variant="destructive" onClick={() => { signOut(); setIsMenuOpen(false); }} className="w-full font-semibold h-12 rounded-xl">
-                                        تسجيل الخروج
+                                <Link href="/login" onClick={() => setIsMenuOpen(false)}>
+                                    <Button variant="outline" className="w-full font-semibold h-12 rounded-xl border-2">
+                                        تسجيل الدخول
                                     </Button>
-                                )}
+                                </Link>
+                                <Link href="/register" onClick={() => setIsMenuOpen(false)}>
+                                    <Button className="w-full font-semibold h-12 rounded-xl bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20">
+                                        حساب جديد
+                                    </Button>
+                                </Link>
                             </div>
                         </nav>
                     </div>
