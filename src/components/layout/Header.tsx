@@ -36,7 +36,19 @@ export function Header() {
         { label: "الإحصائيات", href: "/dashboard/admin" },
     ];
 
-    const navItems = userRole === "family" ? familyNav : userRole === "organization" ? orgNav : userRole === "admin" ? adminNav : guestNav;
+    const getNavItems = () => {
+        if (userRole === "family") {
+            return familyNav;
+        } else if (userRole === "organization") {
+            return orgNav;
+        } else if (userRole === "admin") {
+            return adminNav;
+        } else {
+            return guestNav;
+        }
+    };
+
+    const navItems = getNavItems();
 
     return (
         <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/90 border-b border-border/50 shadow-sm">
