@@ -13,9 +13,11 @@ export const useRegisterForm = () => {
 
     // Read URL parameter and set initial account type
     useEffect(() => {
-        const type = searchParams.get('type');
-        if (type === 'organization' || type === 'individual') {
-            setFormData(prev => ({ ...prev, accountType: type as AccountType }));
+        if (searchParams) {
+            const type = searchParams.get('type');
+            if (type === 'organization' || type === 'individual') {
+                setFormData(prev => ({ ...prev, accountType: type as AccountType }));
+            }
         }
     }, [searchParams]);
 

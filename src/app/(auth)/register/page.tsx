@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 import Link from "next/link";
 import { Button as UiButton } from "@/components/ui/button";
 import {
@@ -19,7 +19,7 @@ import {
 } from "@/components/auth/register";
 import { AuthWrapper } from "@/components/auth/shared";
 
-export default function RegisterPage() {
+function RegisterPageContent() {
     const {
         isLoading,
         showPassword,
@@ -151,5 +151,13 @@ export default function RegisterPage() {
                 </div>
             </form>
         </AuthWrapper>
+    );
+}
+
+export default function RegisterPage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <RegisterPageContent />
+        </Suspense>
     );
 }
