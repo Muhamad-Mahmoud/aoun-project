@@ -2,7 +2,7 @@
 
 import { UserPlus, FileText, BrainCircuit, Building2, CheckCircle2, ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 
 const steps = [
     {

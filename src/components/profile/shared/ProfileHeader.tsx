@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Edit2, Save, X } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
 import { AvatarUpload } from './AvatarUpload';
 
 interface ProfileHeaderProps {

@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { Button as UiButton } from "@/components/ui/Button";
+import { Button as UiButton } from "@/components/ui/button";
 import {
     CardContent,
 } from "@/components/ui/card";
