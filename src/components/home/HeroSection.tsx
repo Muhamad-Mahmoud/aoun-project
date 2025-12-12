@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import { ArrowLeft, Users, Building2, MapPin, ShieldCheck, Award, Heart } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";

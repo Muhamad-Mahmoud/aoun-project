@@ -7,7 +7,7 @@ import { ProfileSection } from '../shared/ProfileSection';
 import { ProfileField } from '../shared/ProfileField';
 import { EditableField } from '../shared/EditableField';
 import { UserProfile, ProfileFieldConfig } from '@/types/profile';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
 
 interface UserPersonalInfoProps {
     profile: UserProfile;

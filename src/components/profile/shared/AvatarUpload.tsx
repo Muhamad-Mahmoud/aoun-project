@@ -5,7 +5,7 @@ import { Upload, Loader2, X } from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { AvatarUploadProps } from '@/types/profile';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
 
 export const AvatarUpload: React.FC<AvatarUploadProps> = ({
     currentImage,

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Lock, Shield } from 'lucide-react';
 import { ProfileCard } from '../shared/ProfileCard';
 import { ProfileSection } from '../shared/ProfileSection';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
