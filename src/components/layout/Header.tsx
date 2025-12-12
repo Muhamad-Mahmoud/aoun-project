@@ -9,7 +9,7 @@ export function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const user = null;
-    const userRole = "guest";
+    const userRole: "guest" | "family" | "organization" | "admin" = "guest";
     const signOut = () => console.log("Sign out");
 
     const guestNav = [
