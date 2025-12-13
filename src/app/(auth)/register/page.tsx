@@ -2,10 +2,10 @@
 
 import React, { Suspense } from "react";
 import Link from "next/link";
-import { Button as UiButton } from "@/components/ui/button";
+import { Button as UiButton } from "@/components/shadcn/button";
 import {
     CardContent,
-} from "@/components/ui/card";
+} from "@/components/shadcn/card";
 import { Loader2, UserPlus, CheckCircle, ArrowRight, ArrowLeft } from "lucide-react";
 import { useRegisterForm } from "@/hooks/auth/useRegisterForm";
 import {

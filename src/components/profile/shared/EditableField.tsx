@@ -2,10 +2,10 @@
 
 import React, { useState } from 'react';
 import { Edit2, Save, X } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
+import { Input } from '@/components/shadcn/input';
+import { Textarea } from '@/components/shadcn/textarea';
+import { Button } from '@/components/shadcn/button';
+import { Label } from '@/components/shadcn/label';
 import { cn } from '@/lib/utils';
 import { EditableFieldProps } from '@/types/profile';
 

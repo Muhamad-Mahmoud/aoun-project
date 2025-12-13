@@ -1,5 +1,5 @@
 import React from 'react';
-import { Label } from '@/components/ui/label';
+import { Label } from '@/components/shadcn/label';
 import { cn } from '@/lib/utils';
 
 interface ProfileFieldProps {

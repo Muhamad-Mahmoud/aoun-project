@@ -1,6 +1,6 @@
 import React from "react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Input } from "@/components/shadcn/input";
+import { Label } from "@/components/shadcn/label";
 import { cn } from "@/lib/utils";
 
 interface FormFieldProps {
