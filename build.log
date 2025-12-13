@@ -1,0 +1,16 @@
+   Γû▓ Next.js 16.0.10 (Turbopack)
+
+   Creating an optimized production build ...
+ Γ£ô Compiled successfully in 8.3s
+   Running TypeScript ...
+Failed to compile.
+
+./src/hooks/use-toast.ts:1:33
+Type error: Cannot find module '@/components/ui/toast' or its corresponding type declarations.
+
+> 1 | import type { ToastProps } from "@/components/ui/toast";
+    |                                 ^
+  2 | import { useCallback, useState } from "react";
+  3 |
+  4 | const TOAST_LIMIT = 1;
+Next.js build worker exited with code: 1 and signal: null
