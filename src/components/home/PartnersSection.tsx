@@ -2,7 +2,7 @@
 
 import { Heart, Stethoscope, UtensilsCrossed, Users, ArrowLeft } from "lucide-react";
 import Link from 'next/link';
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/shadcn/button";
 
 const partners = [
   { name: "جمعية رسالة", icon: Heart, cases: "٣٥٠ حالة", type: "عامة" },

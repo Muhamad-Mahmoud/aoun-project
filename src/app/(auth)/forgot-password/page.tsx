@@ -2,9 +2,9 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Button as UiButton } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Button as UiButton } from "@/components/shadcn/button";
+import { Input } from "@/components/shadcn/input";
+import { Label } from "@/components/shadcn/label";
 import {
     Card,
     CardContent,
@@ -12,7 +12,7 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card";
+} from "@/components/shadcn/card";
 import { ArrowLeft, Loader2, Mail } from "lucide-react";
 
 export default function ForgotPasswordPage() {

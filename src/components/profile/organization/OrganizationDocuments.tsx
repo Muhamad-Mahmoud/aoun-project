@@ -4,7 +4,7 @@ import React from 'react';
 import { FileText, Download, Upload, Eye } from 'lucide-react';
 import { ProfileCard } from '../shared/ProfileCard';
 import { ProfileSection } from '../shared/ProfileSection';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/shadcn/button';
 import { OrganizationProfile } from '@/types/profile';
 
 interface OrganizationDocumentsProps {

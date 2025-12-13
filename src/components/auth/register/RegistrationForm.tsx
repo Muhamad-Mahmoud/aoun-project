@@ -1,7 +1,7 @@
 import React from "react";
 import { FileText } from "lucide-react";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/shadcn/label";
+import { RadioGroup, RadioGroupItem } from "@/components/shadcn/radio-group";
 import { FormField } from "../shared/FormField";
 import { FormErrors } from "@/types/auth/register";
 

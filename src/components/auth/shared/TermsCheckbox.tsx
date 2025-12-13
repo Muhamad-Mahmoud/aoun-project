@@ -1,5 +1,5 @@
 import React from "react";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Checkbox } from "@/components/shadcn/checkbox";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 

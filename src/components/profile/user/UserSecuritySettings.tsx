@@ -4,9 +4,9 @@ import React, { useState } from 'react';
 import { Lock, Shield } from 'lucide-react';
 import { ProfileCard } from '../shared/ProfileCard';
 import { ProfileSection } from '../shared/ProfileSection';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Button } from '@/components/shadcn/button';
+import { Input } from '@/components/shadcn/input';
+import { Label } from '@/components/shadcn/label';
 
 export const UserSecuritySettings: React.FC = () => {
     const [isChangingPassword, setIsChangingPassword] = useState(false);
