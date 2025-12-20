@@ -20,7 +20,6 @@ export default function LoginPage() {
             footerText="ليس لديك حساب؟"
             footerLinkText="إنشاء حساب جديد"
             footerLinkHref="/register"
-            showSocialAuth={true}
         >
             <form onSubmit={onSubmit} className="space-y-5">
                 {/* Email Field */}
