@@ -10,6 +10,8 @@ export const useRegisterForm = () => {
     const [currentStep, setCurrentStep] = useState(1);
     const [formData, setFormData] = useState<FormData>(INITIAL_FORM_DATA);
     const [errors, setErrors] = useState<FormErrors>({});
+    const [touched, setTouched] = useState<Record<string, boolean>>({});
+    const [attemptedSubmit, setAttemptedSubmit] = useState(false);
 
     // Read URL parameter and set initial account type
     useEffect(() => {
@@ -25,6 +27,7 @@ export const useRegisterForm = () => {
 
     const handleInputChange = useCallback((field: keyof FormData, value: string | boolean) => {
         setFormData(prev => ({ ...prev, [field]: value }));
+        setTouched(prev => ({ ...prev, [field]: true }));
 
         setErrors(prev => {
             if (prev[field]) {
@@ -43,8 +46,10 @@ export const useRegisterForm = () => {
     }, [formData, currentStep]);
 
     const nextStep = useCallback(() => {
+        setAttemptedSubmit(true);
         if (validateCurrentStep() && currentStep < totalSteps) {
             setCurrentStep(prev => prev + 1);
+            setAttemptedSubmit(false);
         }
     }, [validateCurrentStep, currentStep, totalSteps]);
 
@@ -58,10 +63,13 @@ export const useRegisterForm = () => {
         setFormData(prev => ({ ...prev, accountType: type }));
         setCurrentStep(1);
         setErrors({});
+        setTouched({});
+        setAttemptedSubmit(false);
     }, []);
 
     const handleSubmit = useCallback(async (event: React.FormEvent) => {
         event.preventDefault();
+        setAttemptedSubmit(true);
 
         if (!validateCurrentStep()) return;
 
@@ -80,12 +88,20 @@ export const useRegisterForm = () => {
         setShowPassword(prev => !prev);
     }, []);
 
+    // Filter errors to only show touched fields or all fields if submit was attempted
+    const visibleErrors = Object.keys(errors).reduce((acc, key) => {
+        if (attemptedSubmit || touched[key]) {
+            acc[key] = errors[key];
+        }
+        return acc;
+    }, {} as FormErrors);
+
     return {
         isLoading,
         showPassword,
         currentStep,
         formData,
-        errors,
+        errors: visibleErrors,
         totalSteps,
         handleInputChange,
         handleAccountTypeChange,

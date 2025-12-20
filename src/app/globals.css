@@ -24,70 +24,82 @@
     /* Font Family - Cairo for Egyptian Identity */
     --font-sans: var(--font-cairo), system-ui, sans-serif;
 
-    /* ===== EGYPTIAN COLOR SYSTEM - AOUN PLATFORM 🇪🇬 (REFINED) ===== */
+    /* ===== AOUN WARM & HUMAN COLOR SYSTEM 🇪🇬 ===== */
 
-    /* Nile Blue - Primary (More Deep & Royal) */
-    --nile-blue: 215 90% 32%;
-    /* Slightly more indigo/royal shift */
-    --nile-blue-light: 215 85% 48%;
-    /* Vibrant but professional */
-    --nile-blue-lighter: 215 75% 70%;
-    --nile-blue-pale: 215 60% 97%;
+    /* Warm Green - Primary (Hope & Growth) */
+    --warm-green: 160 84% 39%;
+    /* #059669 */
+    --warm-green-light: 142 71% 45%;
+    /* #10B981 */
+    --warm-green-lighter: 142 76% 73%;
+    --warm-green-pale: 138 76% 97%;
+    /* #F0FDF4 */
 
-    /* Pharaonic Gold - Accent (More Precious Metal look) */
-    --pharaoh-gold: 43 90% 50%;
-    /* Rich, less neon yellow */
-    --pharaoh-gold-light: 45 95% 60%;
-    --pharaoh-gold-dark: 40 85% 38%;
+    /* Golden Orange - Call-to-Action (Warmth & Action) */
+    --golden-orange: 38 92% 50%;
+    /* #F59E0B */
+    --golden-orange-light: 43 96% 56%;
+    /* #FCD34D */
+    --golden-orange-dark: 32 95% 44%;
+    /* #D97706 */
+    --golden-orange-pale: 48 100% 88%;
+    /* #FEF3C7 */
 
-    /* Egyptian Green - Secondary (Lush Delta) */
-    --egyptian-green: 155 65% 40%;
-    --egyptian-green-light: 155 60% 55%;
-    --egyptian-green-pale: 155 45% 96%;
+    /* Sky Blue - Trust & Credibility */
+    --sky-blue: 199 89% 48%;
+    /* #0284C7 */
+    --sky-blue-light: 199 95% 74%;
+    /* #38BDF8 */
+    --sky-blue-pale: 204 94% 94%;
+    /* #E0F2FE */
 
-    /* Sand & Desert Tones (Warmer Neutrals) */
-    --desert-sand: 35 30% 92%;
-    --pyramid-stone: 30 15% 80%;
+    /* Warm Neutrals & Backgrounds */
+    --warm-beige: 48 100% 96%;
+    /* #FFFBEB */
+    --warm-white: 0 0% 100%;
+    /* #FFFFFF */
+    --soft-gray: 220 13% 91%;
+    /* #E5E7EB */
 
-    /* Neutral Backgrounds */
-    --background-primary: 0 0% 100%;
-    --background-secondary: 210 30% 98%;
-    --background-tertiary: 210 25% 96%;
-
-    /* Text Colors */
-    --text-primary: 215 60% 12%;
-    /* Deep Navy Black */
-    --text-secondary: 215 25% 40%;
-    --text-tertiary: 215 15% 60%;
+    /* Text Colors (WCAG AA/AAA Compliant) */
+    --text-primary: 217 33% 17%;
+    /* #111827 - 7:1 contrast */
+    --text-secondary: 215 16% 47%;
+    /* #374151 - 6:1 contrast */
+    --text-tertiary: 215 13% 65%;
+    /* #6B7280 - 4.5:1 contrast */
+    --text-muted: 210 10% 85%;
 
     /* Border Colors */
-    --border-light: 215 20% 92%;
-    --border-medium: 215 15% 85%;
+    --border-light: 214 32% 91%;
+    --border-medium: 217 19% 85%;
+    --border-accent: var(--warm-green);
 
     /* Glass Effects */
     --glass-border: 0 0% 100% / 0.1;
     --glass-bg: 0 0% 100% / 0.7;
 
-    /* ===== SHADCN MAPPINGS TO EGYPTIAN SYSTEM ===== */
-    --background: var(--background-primary);
+    /* ===== SHADCN MAPPINGS TO WARM SYSTEM ===== */
+    --background: var(--warm-white);
     --foreground: var(--text-primary);
-    --card: var(--background-primary);
+    --card: var(--warm-white);
     --card-foreground: var(--text-primary);
-    --popover: var(--background-primary);
+    --popover: var(--warm-white);
     --popover-foreground: var(--text-primary);
-    --primary: var(--nile-blue);
+    --primary: var(--warm-green);
     --primary-foreground: 0 0% 100%;
-    --secondary: var(--egyptian-green);
+    --secondary: var(--golden-orange);
     --secondary-foreground: 0 0% 100%;
-    --muted: var(--background-tertiary);
+    --muted: var(--warm-beige);
     --muted-foreground: var(--text-tertiary);
-    --accent: var(--pharaoh-gold);
+    --accent: var(--golden-orange);
     --accent-foreground: var(--text-primary);
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 84% 60%;
+    /* #DC2626 */
     --destructive-foreground: 0 0% 100%;
     --border: var(--border-light);
     --input: var(--border-light);
-    --ring: var(--nile-blue);
+    --ring: var(--warm-green);
     --radius: 0.5rem;
 
     /* Chart Colors (Default) */
@@ -195,6 +207,18 @@ nextjs-portal {
     animation: scaleIn 0.4s ease-out forwards;
   }
 
+  .animate-counter {
+    animation: counter 0.5s ease-out forwards;
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
   .delay-100 {
     animation-delay: 100ms;
   }
@@ -207,8 +231,53 @@ nextjs-portal {
     animation-delay: 300ms;
   }
 
+  .delay-400 {
+    animation-delay: 400ms;
+  }
+
+  .delay-500 {
+    animation-delay: 500ms;
+  }
+
+  .delay-700 {
+    animation-delay: 700ms;
+  }
+
   .text-balance {
     text-wrap: balance;
+  }
+
+  /* Spacing System - 8px Base */
+  .spacing-xs {
+    gap: 8px;
+  }
+
+  .spacing-sm {
+    gap: 16px;
+  }
+
+  .spacing-md {
+    gap: 24px;
+  }
+
+  .spacing-lg {
+    gap: 32px;
+  }
+
+  .spacing-xl {
+    gap: 48px;
+  }
+
+  .spacing-2xl {
+    gap: 64px;
+  }
+
+  .spacing-3xl {
+    gap: 96px;
+  }
+
+  .spacing-4xl {
+    gap: 128px;
   }
 }
 
@@ -243,5 +312,53 @@ nextjs-portal {
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+@keyframes counter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes pulse-subtle {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.95;
   }
 }

@@ -21,7 +21,6 @@ export default function LoginPage() {
             footerLinkText="إنشاء حساب جديد"
             footerLinkHref="/register"
             showSocialAuth={true}
-            headerIcon={<LogIn />}
         >
             <form onSubmit={onSubmit} className="space-y-5">
                 {/* Email Field */}
@@ -77,13 +76,13 @@ export default function LoginPage() {
 
                 {/* Remember Me */}
                 <div className="flex items-center gap-2 justify-end">
+                    <Checkbox id="remember" className="order-1" />
                     <label
                         htmlFor="remember"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground order-2"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground order-2 cursor-pointer"
                     >
                         تذكرني
                     </label>
-                    <Checkbox id="remember" className="order-1" />
                 </div>
 
                 {/* Submit Button */}

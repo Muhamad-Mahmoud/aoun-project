@@ -35,7 +35,7 @@ export function FAQSection() {
 
     return (
 
-        <section className="py-20 md:py-28 bg-card relative overflow-hidden">
+        <section id="faq" className="py-20 md:py-28 bg-card relative overflow-hidden">
             {/* Background */}
             <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl -z-10"></div>
             <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-3xl -z-10"></div>
@@ -75,7 +75,7 @@ export function FAQSection() {
                                     <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 ${openIndex === index ? 'bg-gradient-to-br from-primary to-primary-dark text-white' : 'bg-muted'}`}>
                                         <HelpCircle className={`w-6 h-6 transition-colors duration-300 ${openIndex === index ? 'text-white' : 'text-primary'}`} />
                                     </div>
-                                    <h3 className="text-lg md:text-xl font-bold text-foreground">
+                                    <h3 className="text-base sm:text-lg md:text-xl font-bold text-foreground text-right leading-snug">
                                         {faq.question}
                                     </h3>
                                 </div>
@@ -87,7 +87,7 @@ export function FAQSection() {
                             <div
                                 className={`overflow-hidden transition-all duration-300 ${openIndex === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}
                             >
-                                <div className="p-6 pt-0 pr-[88px] text-muted-foreground leading-relaxed text-base">
+                                <div className="p-4 sm:p-6 pt-0 pr-[72px] sm:pr-[88px] text-muted-foreground leading-relaxed text-[13px] sm:text-base">
                                     {faq.answer}
                                 </div>
                             </div>
