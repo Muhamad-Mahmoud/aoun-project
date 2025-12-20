@@ -4,121 +4,102 @@ import { UserPlus, FileText, BrainCircuit, Building2, CheckCircle2, ArrowLeft } 
 import Link from "next/link";
 import { Button } from "@/components/shadcn/button";
 
+import { colors } from "@/lib/colors";
+
 const steps = [
     {
         icon: UserPlus,
         number: "١",
         title: "أنشئ حسابك",
-        description: "ابدأ بتسجيل بياناتك الأساسية بسهولة وسرعة لضمان التواصل الفعال.",
-        color: "from-primary/80 to-primary",
+        description: "سجل بياناتك الأساسية بسهولة",
+        color: colors.emerald.gradient,
     },
     {
         icon: FileText,
         number: "٢",
         title: "حدد احتياجك",
-        description: "قم بوصف حالتك ونوع الدعم المطلوب (طبي، تعليمي، غذائي، إلخ) بدقة.",
-        color: "from-secondary to-secondary/80",
+        description: "اختر نوع الدعم المطلوب",
+        color: colors.orange.gradient,
     },
     {
         icon: BrainCircuit,
         number: "٣",
-        title: "التحليل والترشيح",
-        description: "يقوم نظامنا الذكي بتحليل طلبك وترشيح أنسب الجمعيات لتلبية احتياجك.",
-        color: "from-accent to-accent/80",
+        title: "التحليل الذكي",
+        description: "نظامنا يرشح أنسب الجمعيات",
+        color: colors.purple.gradient,
     },
     {
         icon: Building2,
         number: "٤",
         title: "التوصيل المباشر",
-        description: "يتم إيصال طلبك للجهة المختصة فوراً للمراجعة واتخاذ الإجراء اللازم.",
-        color: "from-primary/60 to-secondary",
+        description: "نوصل طلبك للجهة المختصة",
+        color: colors.cyan.gradient,
     },
     {
         icon: CheckCircle2,
         number: "٥",
         title: "استلام الدعم",
-        description: "تتواصل معك الجمعية لتقديم الدعم المطلوب بعد الموافقة النهائية.",
-        color: "from-secondary to-secondary/80",
+        description: "الجمعية تتواصل معك مباشرة",
+        color: colors.warmGreen.gradient,
     },
 ];
 
 export function JourneySection() {
     return (
-        <section className="py-20 md:py-28 bg-gradient-to-b from-primary/5 to-background relative overflow-hidden">
+        <section id="journey" className="py-20 md:py-28 bg-warm-beige/50 relative overflow-hidden">
             {/* Background Elements */}
-            <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-secondary/5 rounded-full blur-3xl -z-10"></div>
-            <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-accent/5 rounded-full blur-3xl -z-10"></div>
+            <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-golden-orange/3 rounded-full blur-3xl -z-10"></div>
+            <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-sky-blue/3 rounded-full blur-3xl -z-10"></div>
 
             <div className="container mx-auto px-4 max-w-[1400px]" dir="rtl">
                 {/* Header */}
-                <div className="text-center mb-24 animate-fade-in">
-                    <div className="inline-block px-5 py-2 rounded-full bg-card text-primary text-sm font-bold mb-5 border-2 border-primary/10 shadow-sm">
+                <div className="text-center mb-20 animate-fade-in">
+                    <div className="inline-block px-5 py-2 rounded-full bg-white text-warm-green text-sm font-bold mb-5 border border-warm-green/20 shadow-sm">
                         رحلة المستخدم
                     </div>
-                    <h2 className="text-4xl md:text-5xl font-black mb-6 text-foreground">
-                        كيف تحصل على <span className="text-primary">المساعدة؟</span>
+                    <h2 className="text-3xl md:text-4xl lg:text-[40px] font-bold mb-6 text-foreground">
+                        كيف تحصل على <span className="text-warm-green">المساعدة؟</span>
                     </h2>
-                    <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                        خطوات ميسرة وواضحة تضمن وصول صوتك لمن يمد يد العون
+                    <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+                        خطوات بسيطة وواضحة تضمن وصول صوتك لمن يمد يد العون
                     </p>
                 </div>
 
-                {/* Journey Map */}
+                {/* Steps - Responsive Grid/Stack */}
                 <div className="relative max-w-6xl mx-auto">
-                    {/* Connection Line - Curved */}
-                    <div className="hidden lg:block absolute top-20 left-10 right-10 h-1 -z-10">
-                        <svg className="w-full h-24" viewBox="0 0 1000 80" preserveAspectRatio="none">
-                            <path
-                                d="M 0 40 Q 125 0 250 40 T 500 40 T 750 40 T 1000 40"
-                                stroke="url(#gradient)"
-                                strokeWidth="4"
-                                fill="none"
-                                strokeDasharray="12 8"
-                                strokeLinecap="round"
-                                className="opacity-40 animate-pulse"
-                            />
-                            <defs>
-                                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" stopColor="hsl(var(--primary))" />
-                                    <stop offset="50%" stopColor="hsl(var(--accent))" />
-                                    <stop offset="100%" stopColor="hsl(var(--secondary))" />
-                                </linearGradient>
-                            </defs>
-                        </svg>
-                    </div>
+                    {/* Connection Line - Desktop Only */}
+                    <div className="hidden lg:block absolute top-[66px] left-16 right-16 h-0.5 bg-border -z-10"></div>
 
                     {/* Steps Grid */}
-                    <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-8 lg:gap-4 relative">
+                    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8 lg:gap-4 relative">
                         {steps.map((step, index) => {
                             const Icon = step.icon;
+                            const isFirst = index === 0;
+
                             return (
                                 <div
                                     key={index}
-                                    className="flex flex-col items-center text-center animate-fade-in relative z-10"
-                                    style={{ animationDelay: `${index * 150}ms` }}
+                                    className="flex flex-col items-center text-center animate-fade-in relative group"
+                                    style={{ animationDelay: `${index * 100}ms` }}
                                 >
-                                    {/* Icon Circle with Number Badge */}
-                                    <div className="relative mb-8">
-                                        <div className="relative z-10 w-24 h-24 lg:w-28 lg:h-28 rounded-full bg-card border-4 border-card shadow-xl flex items-center justify-center overflow-hidden">
-                                            {/* Gradient Background */}
-                                            <div className={`absolute inset-0 bg-gradient-to-br ${step.color} opacity-10`}></div>
-
-                                            <div className={`text-primary relative z-10`}>
-                                                <Icon className="w-10 h-10 lg:w-12 lg:h-12" />
-                                            </div>
+                                    {/* Step Circle with Number */}
+                                    <div className="relative mb-4 lg:mb-6">
+                                        {/* Main Circle */}
+                                        <div className={`relative z-10 w-24 h-24 lg:w-32 lg:h-32 rounded-full bg-white border-4 ${isFirst ? 'border-warm-green' : 'border-border/40 group-hover:border-warm-green/40 transition-colors duration-300'} shadow-lg flex items-center justify-center`}>
+                                            <Icon className="w-10 h-10 lg:w-12 lg:h-12 text-warm-green transform group-hover:scale-110 transition-transform duration-300" />
                                         </div>
 
-                                        {/* Number Badge */}
-                                        <div className={`absolute -top-2 -right-2 w-10 h-10 rounded-full bg-gradient-to-br ${step.color} text-white flex items-center justify-center font-bold text-lg border-4 border-card shadow-lg z-20`}>
+                                        {/* Number Badge - Prominent */}
+                                        <div className={`absolute -top-1 -right-1 lg:-top-2 lg:-right-2 w-8 h-8 lg:w-10 lg:h-10 rounded-full bg-gradient-to-br ${step.color} text-white flex items-center justify-center font-bold text-base lg:text-lg shadow-xl z-20`}>
                                             {step.number}
                                         </div>
                                     </div>
 
-                                    {/* Content */}
-                                    <h3 className="text-xl font-bold mb-2 text-foreground">
+                                    {/* Content - Concise */}
+                                    <h3 className="text-base lg:text-lg font-bold mb-1.5 lg:mb-2 text-foreground px-2">
                                         {step.title}
                                     </h3>
-                                    <p className="text-muted-foreground text-sm px-1 leading-relaxed">
+                                    <p className="text-muted-foreground text-[13px] lg:text-sm leading-relaxed max-w-[200px] mx-auto">
                                         {step.description}
                                     </p>
                                 </div>
@@ -127,20 +108,18 @@ export function JourneySection() {
                     </div>
                 </div>
 
-                {/* CTA */}
-                <div className="text-center mt-24">
-                    <div className="inline-block rounded-[2.5rem] border border-border/50 bg-white/80 backdrop-blur-sm p-8 md:p-12 shadow-xl max-w-3xl mx-auto relative overflow-hidden">
-                        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-secondary/5 opacity-100"></div>
-
-                        <h3 className="text-2xl md:text-3xl font-black mb-4 text-foreground relative z-10">
+                {/* CTA - Repeated Strategically */}
+                <div className="text-center mt-20">
+                    <div className="inline-block rounded-3xl bg-white p-10 shadow-xl max-w-2xl mx-auto">
+                        <h3 className="text-2xl md:text-3xl font-bold mb-4 text-foreground">
                             جاهز لتغيير واقعك للأفضل؟
                         </h3>
-                        <p className="text-muted-foreground mb-8 text-lg relative z-10">
+                        <p className="text-muted-foreground mb-8 text-base">
                             العديد من الأسر استفادت.. ابدأ خطوتك الأولى الآن
                         </p>
-                        <Link href="/register" className="relative z-10">
-                            <Button className="h-14 px-12 text-lg font-bold bg-[#EC4F10] text-white shadow-lg transition-all duration-300 gap-2 rounded-2xl">
-                                سجل الآن مجاناً
+                        <Link href="/register">
+                            <Button className="h-14 px-10 text-lg font-bold bg-gradient-to-l from-golden-orange via-golden-orange-light to-golden-orange hover:from-golden-orange-dark hover:to-golden-orange text-white shadow-lg transition-all duration-250 gap-2 rounded-2xl hover:scale-[1.02] hover:-translate-y-0.5">
+                                ابدأ رحلتك الآن
                                 <ArrowLeft className="w-5 h-5" />
                             </Button>
                         </Link>

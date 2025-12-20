@@ -93,7 +93,7 @@ function RegisterPageContent() {
             footerText="لديك حساب بالفعل؟"
             footerLinkText="تسجيل الدخول"
             footerLinkHref="/login"
-            headerIcon={<UserPlus />}
+            showLogo={true}
             maxWidth="4xl"
         >
             <div className="pt-0 pb-3 animate-fade-in delay-100">

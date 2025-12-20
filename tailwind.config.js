@@ -51,23 +51,34 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Custom Egyptian Palette available directly
-        "nile-blue": {
-          DEFAULT: "hsl(var(--nile-blue))",
-          light: "hsl(var(--nile-blue-light))",
-          lighter: "hsl(var(--nile-blue-lighter))",
-          pale: "hsl(var(--nile-blue-pale))",
+        // Warm Color Palette
+        "warm-green": {
+          DEFAULT: "hsl(var(--warm-green))",
+          light: "hsl(var(--warm-green-light))",
+          lighter: "hsl(var(--warm-green-lighter))",
+          pale: "hsl(var(--warm-green-pale))",
         },
-        "pharaoh-gold": {
-          DEFAULT: "hsl(var(--pharaoh-gold))",
-          light: "hsl(var(--pharaoh-gold-light))",
-          dark: "hsl(var(--pharaoh-gold-dark))",
+        "golden-orange": {
+          DEFAULT: "hsl(var(--golden-orange))",
+          light: "hsl(var(--golden-orange-light))",
+          dark: "hsl(var(--golden-orange-dark))",
+          pale: "hsl(var(--golden-orange-pale))",
         },
-        "egyptian-green": {
-          DEFAULT: "hsl(var(--egyptian-green))",
-          light: "hsl(var(--egyptian-green-light))",
-          pale: "hsl(var(--egyptian-green-pale))",
+        "sky-blue": {
+          DEFAULT: "hsl(var(--sky-blue))",
+          light: "hsl(var(--sky-blue-light))",
+          pale: "hsl(var(--sky-blue-pale))",
         },
+        "warm-beige": "hsl(var(--warm-beige))",
+      },
+      fontSize: {
+        'hero-desktop': ['64px', { lineHeight: '1.2', fontWeight: '900' }],
+        'hero-mobile': ['48px', { lineHeight: '1.2', fontWeight: '900' }],
+        'h2-desktop': ['48px', { lineHeight: '1.3', fontWeight: '700' }],
+        'h2-mobile': ['36px', { lineHeight: '1.3', fontWeight: '700' }],
+        'h3': ['32px', { lineHeight: '1.3', fontWeight: '600' }],
+        'body-lg': ['20px', { lineHeight: '1.8' }],
+        'body': ['18px', { lineHeight: '1.8' }],
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -95,6 +106,18 @@ module.exports = {
           "0%": { opacity: "0", transform: "scale(0.95)" },
           "100%": { opacity: "1", transform: "scale(1)" },
         },
+        counter: {
+          "0%": { opacity: "0", transform: "translateY(10px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-20px)" },
+        },
+        pulse: {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.5" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -102,6 +125,9 @@ module.exports = {
         "fade-in-up": "fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards",
         "fade-in": "fadeIn 0.5s ease-out forwards",
         "scale-in": "scaleIn 0.4s ease-out forwards",
+        "counter": "counter 0.5s ease-out forwards",
+        "float": "float 3s ease-in-out infinite",
+        "pulse-slow": "pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite",
       },
     },
   },

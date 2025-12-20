@@ -9,14 +9,15 @@ export function Footer() {
             <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent/5 rounded-full blur-[100px] pointer-events-none"></div>
 
             <div className="container mx-auto px-4 md:px-6 relative z-10" dir="rtl">
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-16">
+                <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-8 mb-12">
                     {/* Brand - Egyptian Identity */}
-                    <div className="col-span-1 lg:col-span-1">
-                        <Link href="/" className="flex items-center gap-3 mb-6 group w-fit">
-                            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg shadow-blue-600/20 group-hover:scale-105 transition-transform duration-300">
-                                <span className="text-white font-black text-2xl">ع</span>
-                            </div>
-                            <span className="text-3xl font-black tracking-tight text-white group-hover:text-primary transition-colors duration-300">عون</span>
+                    <div className="col-span-2 md:col-span-1 lg:col-span-1">
+                        <Link href="/" className="inline-block mb-6 group">
+                            <img
+                                src="/logo.png"
+                                alt="عون"
+                                className="h-16 w-auto object-contain opacity-90 group-hover:opacity-100 transition-all duration-300"
+                            />
                         </Link>
                         <p className="text-slate-400 leading-relaxed text-base mb-8 max-w-sm">
                             منصة مصرية ١٠٠٪ لخدمة المصريين. نجمع بين التكنولوجيا والعمل الإنساني لضمان وصول الدعم لمستحقيه.
@@ -88,7 +89,7 @@ export function Footer() {
                     </div>
 
                     {/* Contact - Egyptian Info */}
-                    <div>
+                    <div className="col-span-2 md:col-span-1">
                         <h3 className="text-lg font-bold mb-6 text-white relative inline-block">
                             تواصل معنا
                             <span className="absolute -bottom-2 right-0 w-1/2 h-1 bg-accent rounded-full"></span>
