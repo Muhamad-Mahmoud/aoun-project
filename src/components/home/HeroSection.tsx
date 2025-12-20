@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Button } from "@/components/shadcn/button";
-import { ArrowLeft, Users, Building2, MapPin, ShieldCheck, Award, Clock, Heart, CheckCircle } from "lucide-react";
+import { ArrowLeft, Users, Building2, MapPin, ShieldCheck, Award, Clock, Heart, CheckCircle, BrainCircuit } from "lucide-react";
 import Link from "next/link";
 import { colors } from "@/lib/colors";
 
@@ -35,6 +35,12 @@ export function HeroSection() {
 
           {/* Content Column - 60% */}
           <div className="text-right space-y-6 lg:space-y-8 order-2 lg:order-1">
+
+            {/* AI Badge */}
+            <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-600 text-sm font-bold transition-all duration-700 hover:scale-105 cursor-default ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+              <BrainCircuit className="w-4 h-4 text-cyan-500" />
+              <span className="bg-gradient-to-r from-cyan-600 to-cyan-500 bg-clip-text text-transparent">مدعومة بالذكاء الاصطناعي</span>
+            </div>
 
             {/* Main Headline - Enhanced Size & Typography */}
             <h1 className={`text-3xl sm:text-4px lg:text-[56px] font-bold leading-[1.3] lg:leading-[1.2] text-foreground transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>

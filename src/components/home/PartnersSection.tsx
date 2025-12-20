@@ -100,7 +100,7 @@ export function PartnersSection() {
           <p className="text-muted-foreground mb-6 text-lg">
             انضم لشبكة عون واستقبل طلبات مساعدة موثقة من محافظتك
           </p>
-          <Link href="/contact">
+          <Link href="/register?type=organization">
             <Button className="h-14 px-10 text-lg font-bold bg-gradient-to-l from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-600 text-white shadow-xl hover:shadow-2xl transition-all duration-300 gap-2 rounded-2xl hover:-translate-y-1">
               سجل جمعيتك الآن
               <ArrowLeft className="w-5 h-5" />
