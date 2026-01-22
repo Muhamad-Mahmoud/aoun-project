@@ -1,18 +1,18 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useParams } from 'next/navigation';
-import { ProfileType, UserProfile, OrganizationProfile } from '@/types/profile';
+import { logger } from '@/lib/logger';
+import { ProfileType, UserProfile, OrganizationProfile } from '@/features/profile/types';
 import {
     ProfileHeader,
     UserPersonalInfo,
     UserSecuritySettings,
     OrganizationInfo,
     OrganizationRepresentative,
-    OrganizationAbout,
     OrganizationDocuments
-} from '@/components/profile';
-import { useProfileEdit, useAvatarUpload } from '@/hooks/profile';
+} from '@/features/profile/components';
+import { useProfileEdit, useAvatarUpload } from '@/features/profile/hooks';
 
 // Mock data - Replace with actual API calls
 const mockUserProfile: UserProfile = {
@@ -62,17 +62,53 @@ const mockOrgProfile: OrganizationProfile = {
 
 export default function ProfilePage() {
     const params = useParams();
-    const type = params.type as ProfileType;
+    const type = (params?.type as ProfileType) || null;
 
     const { isEditing, startEditing, cancelEditing } = useProfileEdit();
-    const { isUploading, uploadAvatar } = useAvatarUpload();
+    const { isUploading, uploadAvatar, uploadError } = useAvatarUpload();
+    const objectUrlRef = useRef<string | null>(null);
+
+    // Cleanup object URLs on unmount
+    useEffect(() => {
+        return () => {
+            if (objectUrlRef.current) {
+                URL.revokeObjectURL(objectUrlRef.current);
+                objectUrlRef.current = null;
+            }
+        };
+    }, []);
+
+    // Validate type parameter
+    if (!type || (type !== 'user' && type !== 'organization')) {
+        return (
+            <div className="text-center py-12">
+                <h1 className="text-2xl font-bold text-foreground">نوع الملف الشخصي غير صحيح</h1>
+                <p className="text-muted-foreground mt-2">يرجى اختيار نوع صحيح (user أو organization)</p>
+            </div>
+        );
+    }
 
     const handleImageUpload = async (file: File) => {
-        await uploadAvatar(file, async (file) => {
-            // TODO: Implement actual upload logic
-            console.log('Uploading file:', file);
-            return URL.createObjectURL(file);
-        });
+        try {
+            // Revoke previous object URL if exists
+            if (objectUrlRef.current) {
+                URL.revokeObjectURL(objectUrlRef.current);
+            }
+
+            const result = await uploadAvatar(file, async (file) => {
+                // TODO: Implement actual upload logic
+                logger.debug('Uploading profile image', { fileName: file.name, fileSize: file.size, fileType: file.type });
+                const objectUrl = URL.createObjectURL(file);
+                objectUrlRef.current = objectUrl;
+                return objectUrl;
+            });
+
+            if (!result && uploadError) {
+                logger.error('Image upload failed', new Error(uploadError));
+            }
+        } catch (error) {
+            logger.error('Image upload error', error);
+        }
     };
 
     const handleEditToggle = () => {
@@ -119,7 +155,6 @@ export default function ProfilePage() {
 
                 <OrganizationInfo profile={mockOrgProfile} isEditing={isEditing} />
                 <OrganizationRepresentative representative={mockOrgProfile.representative} isEditing={isEditing} />
-                <OrganizationAbout profile={mockOrgProfile} />
                 <OrganizationDocuments documents={mockOrgProfile.documents} />
             </div>
         );

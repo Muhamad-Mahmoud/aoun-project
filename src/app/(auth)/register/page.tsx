@@ -2,12 +2,12 @@
 
 import React, { Suspense } from "react";
 import Link from "next/link";
-import { Button as UiButton } from "@/components/shadcn/button";
+import { Button as UiButton } from "@/shared/ui/button";
 import {
     CardContent,
-} from "@/components/shadcn/card";
+} from "@/shared/ui/card";
 import { Loader2, UserPlus, CheckCircle, ArrowRight, ArrowLeft } from "lucide-react";
-import { useRegisterForm } from "@/hooks/auth/useRegisterForm";
+import { useRegisterForm } from "@/features/auth/hooks/useRegisterForm";
 import {
     ProgressBar,
     AccountTypeSelector,
@@ -16,8 +16,8 @@ import {
     OrganizationForm,
     RegistrationForm,
     SecurityStep
-} from "@/components/auth/register";
-import { AuthWrapper } from "@/components/auth/shared";
+} from "@/features/auth/components/register";
+import { AuthWrapper } from "@/features/auth/components/shared";
 
 function RegisterPageContent() {
     const {
@@ -124,7 +124,7 @@ function RegisterPageContent() {
                         <UiButton
                             type="button"
                             onClick={nextStep}
-                            className="flex-1 h-12 font-bold shadow-lg shadow-primary/20 bg-gradient-to-r from-primary to-blue-600 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5 transition-all duration-300"
+                            className="flex-1 h-12 font-bold shadow-lg shadow-primary/20 bg-gradient-to-r from-primary to-sky-blue hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5 transition-all duration-300"
                         >
                             التالي
                             <ArrowRight className="mr-2 h-5 w-5" />
@@ -133,7 +133,7 @@ function RegisterPageContent() {
                         <UiButton
                             type="submit"
                             disabled={isLoading}
-                            className="flex-1 h-12 font-bold shadow-lg shadow-green-500/20 bg-gradient-to-r from-green-600 to-emerald-600 hover:shadow-xl hover:shadow-green-500/30 hover:-translate-y-0.5 transition-all duration-300"
+                            className="flex-1 h-12 font-bold shadow-lg shadow-success/20 bg-gradient-to-r from-success to-emerald-green hover:shadow-xl hover:shadow-success/30 hover:-translate-y-0.5 transition-all duration-300"
                         >
                             {isLoading ? (
                                 <>

@@ -2,11 +2,11 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Button as UiButton } from "@/components/shadcn/button";
-import { Input } from "@/components/shadcn/input";
-import { Label } from "@/components/shadcn/label";
+import { Button as UiButton } from "@/shared/ui/button";
+import { Input } from "@/shared/ui/input";
+import { Label } from "@/shared/ui/label";
 import { ArrowLeft, Loader2, Mail, CheckCircle2 } from "lucide-react";
-import { AuthWrapper } from "@/components/auth/shared";
+import { AuthWrapper } from "@/features/auth/components/shared";
 
 export default function ForgotPasswordPage() {
     const [isLoading, setIsLoading] = useState(false);
@@ -30,8 +30,8 @@ export default function ForgotPasswordPage() {
                 description="لقد أرسلنا رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني."
             >
                 <div className="space-y-4 text-center py-6">
-                    <div className="mx-auto w-20 h-20 rounded-full bg-emerald-500/10 flex items-center justify-center">
-                        <CheckCircle2 className="w-10 h-10 text-emerald-600" />
+                    <div className="mx-auto w-20 h-20 rounded-full bg-success-light flex items-center justify-center">
+                        <CheckCircle2 className="w-10 h-10 text-success" />
                     </div>
                     <p className="text-sm text-muted-foreground">
                         يرجى التحقق من صندوق الوارد الخاص بك واتباع التعليمات لإعادة تعيين كلمة المرور.

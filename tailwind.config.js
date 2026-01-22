@@ -35,6 +35,31 @@ module.exports = {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
         },
+        // Semantic Colors
+        success: {
+          DEFAULT: "hsl(var(--success))",
+          foreground: "hsl(var(--success-foreground))",
+          light: "hsl(var(--success-light))",
+          dark: "hsl(var(--success-dark))",
+        },
+        warning: {
+          DEFAULT: "hsl(var(--warning))",
+          foreground: "hsl(var(--warning-foreground))",
+          light: "hsl(var(--warning-light))",
+          dark: "hsl(var(--warning-dark))",
+        },
+        error: {
+          DEFAULT: "hsl(var(--error))",
+          foreground: "hsl(var(--error-foreground))",
+          light: "hsl(var(--error-light))",
+          dark: "hsl(var(--error-dark))",
+        },
+        info: {
+          DEFAULT: "hsl(var(--info))",
+          foreground: "hsl(var(--info-foreground))",
+          light: "hsl(var(--info-light))",
+          dark: "hsl(var(--info-dark))",
+        },
         muted: {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
@@ -52,9 +77,11 @@ module.exports = {
           foreground: "hsl(var(--card-foreground))",
         },
         // Warm Color Palette
+        // Warm Color Palette
         "warm-green": {
           DEFAULT: "hsl(var(--warm-green))",
           light: "hsl(var(--warm-green-light))",
+          dark: "hsl(var(--warm-green-dark))",
           lighter: "hsl(var(--warm-green-lighter))",
           pale: "hsl(var(--warm-green-pale))",
         },
@@ -64,12 +91,51 @@ module.exports = {
           dark: "hsl(var(--golden-orange-dark))",
           pale: "hsl(var(--golden-orange-pale))",
         },
+        "pharaoh-gold": "hsl(var(--pharaoh-gold))",
         "sky-blue": {
           DEFAULT: "hsl(var(--sky-blue))",
           light: "hsl(var(--sky-blue-light))",
+          dark: "hsl(var(--sky-blue-dark))",
           pale: "hsl(var(--sky-blue-pale))",
         },
+        "royal-purple": {
+          DEFAULT: "hsl(var(--royal-purple))",
+          light: "hsl(var(--royal-purple-light))",
+          pale: "hsl(var(--royal-purple-pale))",
+        },
+        "vibrant-cyan": {
+          DEFAULT: "hsl(var(--vibrant-cyan))",
+          light: "hsl(var(--vibrant-cyan-light))",
+          pale: "hsl(var(--vibrant-cyan-pale))",
+        },
+        "emerald-green": {
+          DEFAULT: "hsl(var(--emerald-green))",
+          light: "hsl(var(--emerald-green-light))",
+          pale: "hsl(var(--emerald-green-pale))",
+        },
+        "social": {
+          facebook: "hsl(var(--social-facebook))",
+          twitter: "hsl(var(--social-twitter))",
+          instagram: "hsl(var(--social-instagram))",
+          linkedin: "hsl(var(--social-linkedin))",
+        },
         "warm-beige": "hsl(var(--warm-beige))",
+        sidebar: {
+          DEFAULT: 'hsl(var(--sidebar-background))',
+          foreground: 'hsl(var(--sidebar-foreground))',
+          primary: 'hsl(var(--sidebar-primary))',
+          'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
+          accent: 'hsl(var(--sidebar-accent))',
+          'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
+          border: 'hsl(var(--sidebar-border))',
+          ring: 'hsl(var(--sidebar-ring))',
+        },
+        footer: {
+          DEFAULT: 'hsl(var(--footer-background))',
+          foreground: 'hsl(var(--footer-foreground))',
+          muted: 'hsl(var(--footer-muted))',
+          border: 'hsl(var(--footer-border))',
+        },
       },
       fontSize: {
         'hero-desktop': ['64px', { lineHeight: '1.2', fontWeight: '900' }],
