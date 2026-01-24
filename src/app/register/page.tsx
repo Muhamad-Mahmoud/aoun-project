@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 import { useRegisterForm } from "@/features/auth/hooks/useRegisterForm";
 import {
     ProgressBar,
@@ -9,14 +9,13 @@ import {
     OrganizationForm,
     RepresentativeForm,
     RegistrationForm,
-    SecurityStep,
 } from "@/features/auth/components/register";
 import { AuthWrapper } from "@/features/auth/components/shared/AuthWrapper";
 import { ROUTES } from "@/shared/constants/routes";
 import { Button } from "@/shared/ui/button";
 import { ChevronRight, ChevronLeft, Loader2 } from "lucide-react";
 
-export default function RegisterPage() {
+function RegisterFormContent() {
     const {
         isLoading,
         currentStep,
@@ -83,7 +82,61 @@ export default function RegisterPage() {
         }
     };
 
+    return (
+        <form onSubmit={handleSubmit} className="space-y-6">
+            <ProgressBar
+                currentStep={currentStep}
+                totalSteps={totalSteps}
+                accountType={formData.accountType}
+            />
 
+            {renderStep()}
+
+            <div className="flex items-center gap-4">
+                {currentStep < totalSteps ? (
+                    <Button
+                        type="button"
+                        onClick={nextStep}
+                        className="flex-1 font-bold h-11"
+                    >
+                        المتابعة
+                        <ChevronLeft className="mr-2 h-4 w-4" />
+                    </Button>
+                ) : (
+                    <Button
+                        type="submit"
+                        disabled={isLoading}
+                        className="flex-1 font-bold h-11"
+                    >
+                        {isLoading ? (
+                            <>
+                                <Loader2 className="ml-2 h-4 w-4 animate-spin" />
+                                جاري الحفظ...
+                            </>
+                        ) : (
+                            "إتمام التسجيل"
+                        )}
+                    </Button>
+                )}
+
+
+                {currentStep > 1 && (
+                    <Button
+                        type="button"
+                        variant="outline"
+                        onClick={prevStep}
+                        className="flex-1 font-bold h-11"
+                    >
+                        <ChevronRight className="ml-2 h-4 w-4" />
+                        السابق
+                    </Button>
+                )}
+            </div>
+        </form>
+    );
+}
+
+export default function RegisterPage() {
     return (
         <div className="container mx-auto flex min-h-[calc(100vh-72px)] items-center justify-center px-4 py-12">
             <AuthWrapper
@@ -94,56 +147,14 @@ export default function RegisterPage() {
                 footerLinkHref={ROUTES.AUTH.LOGIN}
             >
                 <div className="space-y-8">
-                    <ProgressBar
-                        currentStep={currentStep}
-                        totalSteps={totalSteps}
-                        accountType={formData.accountType}
-                    />
-
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        {renderStep()}
-
-                        <div className="flex items-center gap-4">
-                            {currentStep < totalSteps ? (
-                                <Button
-                                    type="button"
-                                    onClick={nextStep}
-                                    className="flex-1 font-bold h-11"
-                                >
-                                    المتابعة
-                                    <ChevronLeft className="mr-2 h-4 w-4" />
-                                </Button>
-                            ) : (
-                                <Button
-                                    type="submit"
-                                    disabled={isLoading}
-                                    className="flex-1 font-bold h-11"
-                                >
-                                    {isLoading ? (
-                                        <>
-                                            <Loader2 className="ml-2 h-4 w-4 animate-spin" />
-                                            جاري الحفظ...
-                                        </>
-                                    ) : (
-                                        "إتمام التسجيل"
-                                    )}
-                                </Button>
-                            )}
-
-
-                            {currentStep > 1 && (
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    onClick={prevStep}
-                                    className="flex-1 font-bold h-11"
-                                >
-                                    <ChevronRight className="ml-2 h-4 w-4" />
-                                    السابق
-                                </Button>
-                            )}
+                    <Suspense fallback={
+                        <div className="flex flex-col items-center justify-center p-12 space-y-4">
+                            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                            <p className="text-slate-400 font-bold">جاري تحميل النموذج...</p>
                         </div>
-                    </form>
+                    }>
+                        <RegisterFormContent />
+                    </Suspense>
                 </div>
             </AuthWrapper>
         </div>
