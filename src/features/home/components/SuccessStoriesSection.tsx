@@ -1,7 +1,7 @@
 "use client";
 
 import { Quote, MapPin, Heart } from "lucide-react";
-import { storyCategoryColors } from "@/lib/colors";
+import { storyCategoryColors } from "@/shared/constants";
 
 const stories = [
     {
@@ -26,14 +26,15 @@ const stories = [
 
 export function SuccessStoriesSection() {
     return (
-        <section id="success-stories" className="py-20 md:py-28 bg-card relative overflow-hidden">
+        <section id="success-stories" className="py-24 md:py-32 bg-warm-white relative overflow-hidden">
             {/* Background */}
+
             <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-emerald-green-pale/50 rounded-full blur-3xl -z-10"></div>
             <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-vibrant-cyan-pale/50 rounded-full blur-3xl -z-10"></div>
 
             <div className="container mx-auto px-4 max-w-[1400px]" dir="rtl">
                 {/* Header */}
-                <div className="text-center mb-16 animate-fade-in">
+                <div className="!text-center mb-16 animate-fade-in">
                     <div className="inline-block px-5 py-2 rounded-full bg-gradient-to-l from-vibrant-cyan-pale/50 to-emerald-green-pale/50 text-vibrant-cyan text-sm font-bold mb-5 border border-vibrant-cyan/20">
                         قصص نجاح
                     </div>
@@ -58,7 +59,7 @@ export function SuccessStoriesSection() {
                         return (
                             <div
                                 key={index}
-                                className="relative bg-card rounded-3xl p-8 border-2 border-border shadow-lg transition-all duration-500 flex flex-col overflow-hidden text-center items-center"
+                                className="relative bg-card rounded-3xl p-8 border-2 border-border shadow-lg transition-all duration-500 flex flex-col overflow-hidden !text-center items-center"
                                 style={{ animationDelay: `${index * 100}ms` }}
                             >
                                 {/* Gradient Background */}
@@ -99,7 +100,7 @@ export function SuccessStoriesSection() {
             </div>
 
             {/* Bottom Note */}
-            <div className="text-center mt-12">
+            <div className="!text-center mt-12">
                 <p className="text-muted-foreground text-lg">
                     <span className="font-bold text-emerald-green">+١,٢٠٠ أسرة</span> استفادت من منصة عون حتى الآن
                 </p>

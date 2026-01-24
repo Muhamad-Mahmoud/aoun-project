@@ -1,15 +1,11 @@
-/**
- * API Configuration
- * Centralized configuration for API communication
- */
-
-import { env } from '@/lib/config';
+import { env } from '@/env';
 
 export const API_CONFIG = {
-    baseURL: env.apiUrl,
-    version: env.apiVersion,
+    // Point to local Next.js proxy
+    baseURL: '/api/proxy',
+    version: 'v1',
     timeout: 30000, // 30 seconds
-    withCredentials: false,
+    withCredentials: true,
 } as const;
 
 export const API_ENDPOINTS = {

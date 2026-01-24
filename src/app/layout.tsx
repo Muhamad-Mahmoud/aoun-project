@@ -2,31 +2,34 @@ import type { Metadata } from "next";
 import { Cairo } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/shared/ui/sonner";
+import { AuthProvider } from "@/shared/providers";
+import LayoutContent from "./LayoutContent";
 
-const cairo = Cairo({
-  subsets: ["arabic"],
-  variable: "--font-cairo",
-  display: "swap",
-});
+const font = Cairo({ subsets: ["arabic", "latin"] });
+
+
 
 export const metadata: Metadata = {
-  title: "Aoun Platform | منصة عون",
-  description: "منصة ذكية للمساعدات الخيرية في مصر",
+    title: "عون - منصة العون للأسر المحتاجة",
+    description: "منصة رقمية لربط الأسر المحتاجة بالجمعيات الموثوقة",
 };
 
 export default function RootLayout({
-  children,
+    children,
 }: Readonly<{
-  children: React.ReactNode;
+    children: React.ReactNode;
 }>) {
-  return (
-    <html lang="ar" dir="rtl">
-      <body
-        className={`${cairo.variable} font-sans antialiased`}
-      >
-        {children}
-        <Toaster />
-      </body>
-    </html>
-  );
+    return (
+        <html lang="ar" dir="rtl">
+            <body className={font.className}>
+                <AuthProvider>
+
+                    <LayoutContent>
+                        {children}
+                    </LayoutContent>
+                    <Toaster />
+                </AuthProvider>
+            </body>
+        </html>
+    );
 }

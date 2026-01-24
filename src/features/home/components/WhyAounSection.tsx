@@ -1,7 +1,7 @@
 "use client";
 
 import { MapPinned, Target, Zap, ShieldCheck } from "lucide-react";
-import { colors } from "@/lib/colors";
+import { colors } from "@/shared/constants";
 
 const features = [
     {
@@ -40,14 +40,14 @@ const features = [
 
 export function WhyAounSection() {
     return (
-        <section id="why-aoun" className="py-20 md:py-28 bg-warm-beige relative overflow-hidden">
+        <section id="why-aoun" className="py-24 md:py-32 bg-warm-white relative overflow-hidden">
             {/* Background Decorations */}
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-sky-blue/5 rounded-full blur-3xl -z-10"></div>
             <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-warm-green/5 rounded-full blur-3xl -z-10"></div>
 
             <div className="container mx-auto px-4 max-w-[1400px]" dir="rtl">
                 {/* Header */}
-                <div className="text-center mb-16 animate-fade-in">
+                <div className="!text-center mb-16 animate-fade-in">
                     <div className="inline-block px-5 py-2 rounded-full bg-gradient-to-l from-warm-green/10 to-warm-green-light/10 text-warm-green text-sm font-bold mb-5 border border-warm-green/20">
                         لماذا عون؟
                     </div>
@@ -74,7 +74,7 @@ export function WhyAounSection() {
                         return (
                             <div
                                 key={index}
-                                className={`group relative bg-card rounded-2xl lg:rounded-3xl p-6 lg:p-8 border-2 ${feature.border} hover:border-warm-green/30 shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col items-center text-center h-full`}
+                                className={`group relative bg-card rounded-2xl lg:rounded-3xl p-6 lg:p-8 border-2 ${feature.border} hover:border-warm-green/30 shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col items-center !text-center h-full`}
                                 style={{ animationDelay: `${index * 100}ms` }}
                             >
                                 {/* Icon Background */}

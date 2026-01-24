@@ -1,7 +1,7 @@
 import React from "react";
 import { Checkbox } from "@/shared/ui/checkbox";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/utils";
 
 interface TermsCheckboxProps {
     id: string;
@@ -34,3 +34,4 @@ export const TermsCheckbox: React.FC<TermsCheckboxProps> = ({ id, checked, onCha
         </>
     );
 };
+

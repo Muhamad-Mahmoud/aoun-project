@@ -13,6 +13,31 @@
 - **lucide-react** - Icon library with 1000+ consistent SVG icons
 - **Custom CSS Variables** - Brand colors (Nile Blue, Pharaoh Gold)
 
+### Security & Environment
+- **Environment Validation** - Type-safe environment variables
+- **JWT Authentication** - Secure token handling with expiration
+
+## 🚀 Getting Started
+
+### 1. Environment Setup
+The application requires a `JWT_SECRET` to function.
+
+```bash
+# Generate a secure secret
+openssl rand -base64 32
+
+# Create .env.local
+cp .env.example .env.local
+# Add your secret
+JWT_SECRET=your_generated_secret_here
+```
+
+### 2. Installation
+```bash
+npm install
+npm run dev
+```
+
 ### State Management
 - **React Hooks** - useState, useEffect, useCallback for local state
 - **Custom Hooks** - useProfileEdit, useAvatarUpload, useRegisterForm

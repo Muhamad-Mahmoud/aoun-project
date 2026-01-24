@@ -133,12 +133,13 @@ export function Footer() {
                 {/* Bottom Bar - Egyptian Pride */}
                 <div className="pt-8 border-t border-footer-border flex flex-col md:flex-row items-center justify-between gap-4">
                     <p className="text-footer-muted text-sm">
-                        © {new Date().getFullYear()} منصة عون – مصرية ١٠٠٪ لخدمة المصريين 🇪🇬
+                        © <span suppressHydrationWarning>{new Date().getFullYear()}</span> منصة عون – مصرية ١٠٠٪ لخدمة المصريين 🇪🇬
                     </p>
                     <p className="text-footer-muted text-sm flex items-center gap-1.5" dir="ltr">
                         Made with <Heart className="w-4 h-4 fill-secondary text-secondary animate-pulse" /> by Aoun Team
                     </p>
                 </div>
+
             </div>
         </footer>
     );

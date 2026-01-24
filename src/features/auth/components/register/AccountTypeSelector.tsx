@@ -1,6 +1,6 @@
 import React from "react";
 import { User, Building2, CheckCircle2 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/utils";
 import { AccountType } from "@/features/auth/types/register";
 
 interface AccountTypeSelectorProps {
@@ -85,3 +85,4 @@ export const AccountTypeSelector: React.FC<AccountTypeSelectorProps> = ({ accoun
         </div>
     );
 };
+

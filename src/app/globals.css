@@ -1,298 +1,296 @@
 @tailwind base;
-
-
 @tailwind components;
 @tailwind utilities;
 
 /* Hide scrollbar but keep functionality */
 @layer utilities {
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    /* IE and Edge */
-    scrollbar-width: none;
-    /* Firefox */
-  }
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        /* IE and Edge */
+        scrollbar-width: none;
+        /* Firefox */
+    }
 
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-    /* Chrome, Safari and Opera */
-  }
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+        /* Chrome, Safari and Opera */
+    }
 }
 
 @layer base {
-  :root {
-    /* ===== TYPOGRAPHY ===== */
-    --font-sans: var(--font-cairo), system-ui, sans-serif;
+    :root {
+        /* ===== TYPOGRAPHY ===== */
+        --font-sans: var(--font-cairo), system-ui, sans-serif;
 
-    /* ===== AOUN WARM & HUMAN COLOR SYSTEM 🇪🇬 ===== */
-    /* Organized by purpose: Brand → Semantic → UI → Special */
+        /* ===== AOUN WARM & HUMAN COLOR SYSTEM 🇪🇬 ===== */
+        /* Organized by purpose: Brand → Semantic → UI → Special */
 
-    /* --- BRAND COLORS (Primary Identity) --- */
-    /* Warm Green - Primary Brand (Hope & Growth) */
-    --warm-green: 160 84% 39%;
-    --warm-green-light: 160 71% 45%;
-    --warm-green-dark: 160 84% 30%;
-    --warm-green-lighter: 160 76% 73%;
-    --warm-green-pale: 160 76% 97%;
+        /* --- BRAND COLORS (Primary Identity) --- */
+        /* Warm Green - Primary Brand (Hope & Growth) */
+        --warm-green: 160 84% 39%;
+        --warm-green-light: 160 71% 45%;
+        --warm-green-dark: 160 84% 30%;
+        --warm-green-lighter: 160 76% 73%;
+        --warm-green-pale: 160 76% 97%;
 
-    /* Golden Orange - Secondary Brand (Warmth & Action) */
-    --golden-orange: 38 92% 50%;
-    --golden-orange-light: 43 96% 56%;
-    --golden-orange-dark: 32 95% 44%;
-    --golden-orange-pale: 48 100% 88%;
+        /* Golden Orange - Secondary Brand (Warmth & Action) */
+        --golden-orange: 38 92% 50%;
+        --golden-orange-light: 43 96% 56%;
+        --golden-orange-dark: 32 95% 44%;
+        --golden-orange-pale: 48 100% 88%;
 
-    /* Pharaoh Gold - Accent Brand (Luxury & Heritage) */
-    --pharaoh-gold: 43 96% 56%;
-    /* Matching golden-orange-light for now, adjust as needed */
+        /* Pharaoh Gold - Accent Brand (Luxury & Heritage) */
+        --pharaoh-gold: 43 96% 56%;
+        /* Matching golden-orange-light for now, adjust as needed */
 
-    /* Sky Blue - Trust Brand (Credibility) */
-    --sky-blue: 199 89% 48%;
-    --sky-blue-light: 199 95% 74%;
-    --sky-blue-dark: 199 89% 40%;
-    --sky-blue-pale: 204 94% 94%;
+        /* Sky Blue - Trust Brand (Credibility) */
+        --sky-blue: 199 89% 48%;
+        --sky-blue-light: 199 95% 74%;
+        --sky-blue-dark: 199 89% 40%;
+        --sky-blue-pale: 204 94% 94%;
 
-    /* --- SEMANTIC COLORS (Status & Feedback) --- */
-    /* Success - Use for positive actions, confirmations */
-    --success: 160 84% 39%;
-    /* Maps to warm-green */
-    --success-foreground: 0 0% 100%;
-    --success-light: 160 76% 97%;
-    --success-dark: 160 84% 30%;
+        /* --- SEMANTIC COLORS (Status & Feedback) --- */
+        /* Success - Use for positive actions, confirmations */
+        --success: 160 84% 39%;
+        /* Maps to warm-green */
+        --success-foreground: 0 0% 100%;
+        --success-light: 160 76% 97%;
+        --success-dark: 160 84% 30%;
 
-    /* Warning - Use for cautions, important notices */
-    --warning: 38 92% 50%;
-    /* Maps to golden-orange */
-    --warning-foreground: 0 0% 100%;
-    --warning-light: 48 100% 88%;
-    --warning-dark: 32 95% 44%;
+        /* Warning - Use for cautions, important notices */
+        --warning: 38 92% 50%;
+        /* Maps to golden-orange */
+        --warning-foreground: 0 0% 100%;
+        --warning-light: 48 100% 88%;
+        --warning-dark: 32 95% 44%;
 
-    /* Error/Destructive - Use for errors, destructive actions */
-    --error: 0 84% 60%;
-    --error-foreground: 0 0% 100%;
-    --error-light: 0 84% 97%;
-    --error-dark: 0 84% 50%;
+        /* Error/Destructive - Use for errors, destructive actions */
+        --error: 0 84% 60%;
+        --error-foreground: 0 0% 100%;
+        --error-light: 0 84% 97%;
+        --error-dark: 0 84% 50%;
 
-    /* Info - Use for informational messages */
-    --info: 199 89% 48%;
-    /* Maps to sky-blue */
-    --info-foreground: 0 0% 100%;
-    --info-light: 204 94% 94%;
-    --info-dark: 199 89% 40%;
+        /* Info - Use for informational messages */
+        --info: 199 89% 48%;
+        /* Maps to sky-blue */
+        --info-foreground: 0 0% 100%;
+        --info-light: 204 94% 94%;
+        --info-dark: 199 89% 40%;
 
-    /* --- AUXILIARY BRAND COLORS (Feature Variety) --- */
-    --royal-purple: 270 95% 60%;
-    --royal-purple-light: 270 96% 75%;
-    --royal-purple-pale: 270 96% 96%;
+        /* --- AUXILIARY BRAND COLORS (Feature Variety) --- */
+        --royal-purple: 270 95% 60%;
+        --royal-purple-light: 270 96% 75%;
+        --royal-purple-pale: 270 96% 96%;
 
-    --vibrant-cyan: 190 90% 50%;
-    --vibrant-cyan-light: 190 90% 70%;
-    --vibrant-cyan-pale: 190 90% 95%;
+        --vibrant-cyan: 190 90% 50%;
+        --vibrant-cyan-light: 190 90% 70%;
+        --vibrant-cyan-pale: 190 90% 95%;
 
-    --emerald-green: 150 80% 40%;
-    --emerald-green-light: 150 80% 60%;
-    --emerald-green-pale: 150 80% 95%;
+        --emerald-green: 150 80% 40%;
+        --emerald-green-light: 150 80% 60%;
+        --emerald-green-pale: 150 80% 95%;
 
-    /* --- NEUTRAL COLORS (Backgrounds & Text) --- */
-    /* Backgrounds */
-    --warm-white: 0 0% 100%;
-    --warm-beige: 48 100% 96%;
-    --soft-gray: 220 13% 91%;
+        /* --- NEUTRAL COLORS (Backgrounds & Text) --- */
+        /* Backgrounds */
+        --warm-white: 0 0% 100%;
+        --warm-beige: 48 100% 96%;
+        --soft-gray: 220 13% 91%;
 
-    /* Text Colors (WCAG AA/AAA Compliant) */
-    --text-primary: 217 33% 17%;
-    /* 7:1 contrast ratio */
-    --text-secondary: 215 16% 47%;
-    /* 6:1 contrast ratio */
-    --text-tertiary: 215 16% 35%;
-    --text-muted: 210 10% 85%;
+        /* Text Colors (WCAG AA/AAA Compliant) */
+        --text-primary: 217 33% 17%;
+        /* 7:1 contrast ratio */
+        --text-secondary: 215 16% 47%;
+        /* 6:1 contrast ratio */
+        --text-tertiary: 215 16% 35%;
+        --text-muted: 210 10% 85%;
 
-    /* Borders */
-    --border-light: 214 32% 91%;
-    --border-medium: 217 19% 85%;
-    --border-dark: 217 19% 70%;
+        /* Borders */
+        --border-light: 214 32% 91%;
+        --border-medium: 217 19% 85%;
+        --border-dark: 217 19% 70%;
 
-    /* --- SOCIAL MEDIA COLORS --- */
-    --social-facebook: 221 90% 52%;
-    --social-twitter: 203 89% 53%;
-    --social-instagram: 340 75% 57%;
-    --social-linkedin: 206 90% 40%;
+        /* --- SOCIAL MEDIA COLORS --- */
+        --social-facebook: 221 90% 52%;
+        --social-twitter: 203 89% 53%;
+        --social-instagram: 340 75% 57%;
+        --social-linkedin: 206 90% 40%;
 
-    /* --- GLASS EFFECTS --- */
-    --glass-border: 0 0% 100% / 0.1;
-    --glass-bg: 0 0% 100% / 0.7;
+        /* --- GLASS EFFECTS --- */
+        --glass-border: 0 0% 100% / 0.1;
+        --glass-bg: 0 0% 100% / 0.7;
 
-    /* ===== SHADCN/UI SEMANTIC MAPPINGS ===== */
-    /* Maps brand colors to UI semantic tokens */
-    --background: var(--warm-white);
-    --foreground: var(--text-primary);
-    
-    --card: var(--warm-white);
-    --card-foreground: var(--text-primary);
-    
-    --popover: var(--warm-white);
-    --popover-foreground: var(--text-primary);
-    
-    /* Primary = Warm Green (Brand Primary) */
-    --primary: var(--warm-green);
-    --primary-foreground: 0 0% 100%;
-    
-    /* Secondary = Golden Orange (Brand Secondary) */
-    --secondary: var(--golden-orange);
-    --secondary-foreground: 0 0% 100%;
-    
-    /* Muted = Warm Beige (Subtle Backgrounds) */
-    --muted: var(--warm-beige);
-    --muted-foreground: var(--text-tertiary);
-    
-    /* Accent = Golden Orange (Call-to-Action) */
-    --accent: var(--golden-orange);
-    --accent-foreground: var(--text-primary);
-    
-    /* Destructive = Error Red */
-    --destructive: var(--error);
-    --destructive-foreground: var(--error-foreground);
-    
-    /* UI Elements */
-    --border: var(--border-light);
-    --input: var(--border-light);
-    --ring: var(--warm-green);
-    --radius: 0.5rem;
+        /* ===== SHADCN/UI SEMANTIC MAPPINGS ===== */
+        /* Maps brand colors to UI semantic tokens */
+        --background: var(--warm-white);
+        --foreground: var(--text-primary);
 
-    /* --- CHART COLORS (Data Visualization) --- */
-    --chart-1: 160 84% 39%;
-    /* Warm Green */
-    --chart-2: 38 92% 50%;
-    /* Golden Orange */
-    --chart-3: 199 89% 48%;
-    /* Sky Blue */
-    --chart-4: 270 95% 60%;
-    /* Royal Purple */
-    --chart-5: 150 80% 40%;
-    /* Emerald Green */
+        --card: var(--warm-white);
+        --card-foreground: var(--text-primary);
 
-    /* --- SIDEBAR COLORS --- */
-    --sidebar-background: var(--warm-white);
-    --sidebar-foreground: var(--text-primary);
-    --sidebar-primary: var(--warm-green);
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: var(--warm-beige);
-    --sidebar-accent-foreground: var(--text-primary);
-    --sidebar-border: var(--border-light);
-    --sidebar-ring: var(--warm-green);
+        --popover: var(--warm-white);
+        --popover-foreground: var(--text-primary);
 
-    /* --- FOOTER COLORS (Always Dark) --- */
-    --footer-background: 222 47% 11%;
-    /* Dark blue-grey */
-    --footer-foreground: 210 40% 95%;
-    /* Light text for dark background */
-    --footer-muted: 215 20% 65%;
-    /* Muted text for dark background */
-    --footer-border: 217 19% 25%;
-    /* Border for dark background */
-  }
+        /* Primary = Warm Green (Brand Primary) */
+        --primary: var(--warm-green);
+        --primary-foreground: 0 0% 100%;
 
-  .dark {
-    /* ===== DARK MODE OVERRIDES ===== */
-    /* Maintains brand colors but adjusts backgrounds and text for dark theme */
+        /* Secondary = Golden Orange (Brand Secondary) */
+        --secondary: var(--golden-orange);
+        --secondary-foreground: 0 0% 100%;
 
-    /* --- BACKGROUNDS (Dark Theme) --- */
-    --background-primary: 222 47% 10%;
-    --background-secondary: 220 35% 15%;
-    --background-tertiary: 220 30% 20%;
-    --background: 222 47% 10%;
-    --card: 220 35% 15%;
-    --popover: 220 35% 15%;
+        /* Muted = Warm Beige (Subtle Backgrounds) */
+        --muted: var(--warm-beige);
+        --muted-foreground: var(--text-tertiary);
 
-    /* --- TEXT (Dark Theme - High Contrast) --- */
-    --text-primary: 210 40% 98%;
-    --text-secondary: 215 20% 85%;
-    --text-tertiary: 215 15% 65%;
-    --foreground: var(--text-primary);
-    --card-foreground: var(--text-primary);
-    --popover-foreground: var(--text-primary);
-    --muted-foreground: var(--text-tertiary);
+        /* Accent = Golden Orange (Call-to-Action) */
+        --accent: var(--golden-orange);
+        --accent-foreground: var(--text-primary);
 
-    /* --- BORDERS (Dark Theme) --- */
-    --border: 217 19% 30%;
-    --input: 217 19% 30%;
-    --border-light: 217 19% 30%;
-    --border-medium: 217 19% 25%;
-    --border-dark: 217 19% 20%;
+        /* Destructive = Error Red */
+        --destructive: var(--error);
+        --destructive-foreground: var(--error-foreground);
 
-    /* --- BRAND COLORS (Slightly Adjusted for Dark) --- */
-    /* Keep brand colors but may adjust lightness for better contrast */
-    --warm-green: 160 70% 45%;
-    /* Slightly lighter for dark backgrounds */
-    --golden-orange: 38 85% 55%;
-    /* Slightly lighter */
-    --sky-blue: 199 85% 55%;
-    /* Slightly lighter */
+        /* UI Elements */
+        --border: var(--border-light);
+        --input: var(--border-light);
+        --ring: var(--warm-green);
+        --radius: 0.5rem;
 
-    /* --- SEMANTIC COLORS (Dark Theme) --- */
-    --success: 160 70% 45%;
-    --warning: 38 85% 55%;
-    --error: 0 72% 65%;
-    /* Slightly lighter for dark mode */
-    --info: 199 85% 55%;
+        /* --- CHART COLORS (Data Visualization) --- */
+        --chart-1: 160 84% 39%;
+        /* Warm Green */
+        --chart-2: 38 92% 50%;
+        /* Golden Orange */
+        --chart-3: 199 89% 48%;
+        /* Sky Blue */
+        --chart-4: 270 95% 60%;
+        /* Royal Purple */
+        --chart-5: 150 80% 40%;
+        /* Emerald Green */
 
-    /* --- UI ELEMENTS (Dark Theme) --- */
-    --ring: var(--pharaoh-gold);
-    /* Gold ring for better visibility in dark mode */
-    --muted: 220 35% 15%;
-    /* Darker muted background */
+        /* --- SIDEBAR COLORS --- */
+        --sidebar-background: var(--warm-white);
+        --sidebar-foreground: var(--text-primary);
+        --sidebar-primary: var(--warm-green);
+        --sidebar-primary-foreground: 0 0% 100%;
+        --sidebar-accent: var(--warm-beige);
+        --sidebar-accent-foreground: var(--text-primary);
+        --sidebar-border: var(--border-light);
+        --sidebar-ring: var(--warm-green);
 
-    /* --- GLASS EFFECTS (Dark Theme) --- */
-    --glass-border: 255 255% 255% / 0.08;
-    --glass-bg: 222 47% 10% / 0.6;
+        /* --- FOOTER COLORS (Always Dark) --- */
+        --footer-background: 222 47% 11%;
+        /* Dark blue-grey */
+        --footer-foreground: 210 40% 95%;
+        /* Light text for dark background */
+        --footer-muted: 215 20% 65%;
+        /* Muted text for dark background */
+        --footer-border: 217 19% 25%;
+        /* Border for dark background */
+    }
 
-    /* --- CHART COLORS (Dark Theme - Adjusted for Visibility) --- */
-    --chart-1: 160 70% 50%;
-    /* Warm Green - lighter */
-    --chart-2: 38 85% 60%;
-    /* Golden Orange - lighter */
-    --chart-3: 199 85% 60%;
-    /* Sky Blue - lighter */
-    --chart-4: 270 90% 70%;
-    /* Royal Purple - lighter */
-    --chart-5: 150 75% 55%;
-    /* Emerald Green - lighter */
+    .dark {
+        /* ===== DARK MODE OVERRIDES ===== */
+        /* Maintains brand colors but adjusts backgrounds and text for dark theme */
 
-    /* --- SIDEBAR (Dark Theme) --- */
-    --sidebar-background: 222 47% 10%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: var(--warm-green);
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 35% 15%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 217 19% 30%;
-    --sidebar-ring: var(--pharaoh-gold);
+        /* --- BACKGROUNDS (Dark Theme) --- */
+        --background-primary: 222 47% 10%;
+        --background-secondary: 220 35% 15%;
+        --background-tertiary: 220 30% 20%;
+        --background: 222 47% 10%;
+        --card: 220 35% 15%;
+        --popover: 220 35% 15%;
 
-    /* --- FOOTER COLORS (Dark Mode - Same as Light) --- */
-    /* Footer is always dark, so colors remain the same */
-    --footer-background: 222 47% 11%;
-    --footer-foreground: 210 40% 95%;
-    --footer-muted: 215 20% 65%;
-    --footer-border: 217 19% 25%;
-  }
+        /* --- TEXT (Dark Theme - High Contrast) --- */
+        --text-primary: 210 40% 98%;
+        --text-secondary: 215 20% 85%;
+        --text-tertiary: 215 15% 65%;
+        --foreground: var(--text-primary);
+        --card-foreground: var(--text-primary);
+        --popover-foreground: var(--text-primary);
+        --muted-foreground: var(--text-tertiary);
+
+        /* --- BORDERS (Dark Theme) --- */
+        --border: 217 19% 30%;
+        --input: 217 19% 30%;
+        --border-light: 217 19% 30%;
+        --border-medium: 217 19% 25%;
+        --border-dark: 217 19% 20%;
+
+        /* --- BRAND COLORS (Slightly Adjusted for Dark) --- */
+        /* Keep brand colors but may adjust lightness for better contrast */
+        --warm-green: 160 70% 45%;
+        /* Slightly lighter for dark backgrounds */
+        --golden-orange: 38 85% 55%;
+        /* Slightly lighter */
+        --sky-blue: 199 85% 55%;
+        /* Slightly lighter */
+
+        /* --- SEMANTIC COLORS (Dark Theme) --- */
+        --success: 160 70% 45%;
+        --warning: 38 85% 55%;
+        --error: 0 72% 65%;
+        /* Slightly lighter for dark mode */
+        --info: 199 85% 55%;
+
+        /* --- UI ELEMENTS (Dark Theme) --- */
+        --ring: var(--pharaoh-gold);
+        /* Gold ring for better visibility in dark mode */
+        --muted: 220 35% 15%;
+        /* Darker muted background */
+
+        /* --- GLASS EFFECTS (Dark Theme) --- */
+        --glass-border: 255 255% 255% / 0.08;
+        --glass-bg: 222 47% 10% / 0.6;
+
+        /* --- CHART COLORS (Dark Theme - Adjusted for Visibility) --- */
+        --chart-1: 160 70% 50%;
+        /* Warm Green - lighter */
+        --chart-2: 38 85% 60%;
+        /* Golden Orange - lighter */
+        --chart-3: 199 85% 60%;
+        /* Sky Blue - lighter */
+        --chart-4: 270 90% 70%;
+        /* Royal Purple - lighter */
+        --chart-5: 150 75% 55%;
+        /* Emerald Green - lighter */
+
+        /* --- SIDEBAR (Dark Theme) --- */
+        --sidebar-background: 222 47% 10%;
+        --sidebar-foreground: 210 40% 98%;
+        --sidebar-primary: var(--warm-green);
+        --sidebar-primary-foreground: 0 0% 100%;
+        --sidebar-accent: 220 35% 15%;
+        --sidebar-accent-foreground: 210 40% 98%;
+        --sidebar-border: 217 19% 30%;
+        --sidebar-ring: var(--pharaoh-gold);
+
+        /* --- FOOTER COLORS (Dark Mode - Same as Light) --- */
+        /* Footer is always dark, so colors remain the same */
+        --footer-background: 222 47% 11%;
+        --footer-foreground: 210 40% 95%;
+        --footer-muted: 215 20% 65%;
+        --footer-border: 217 19% 25%;
+    }
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
+    * {
+        @apply border-border outline-ring/50;
+    }
 
-  html {
-    direction: rtl;
-    scroll-behavior: smooth;
-  }
+    html {
+        direction: rtl;
+        scroll-behavior: smooth;
+    }
 
-  body {
-    @apply bg-background text-foreground font-sans antialiased;
-    background-image:
-      radial-gradient(circle at 50% 0%, hsl(var(--primary) / 0.05) 0%, transparent 60%),
-      radial-gradient(circle at 100% 100%, hsl(var(--accent) / 0.03) 0%, transparent 40%);
-    background-attachment: fixed;
-  }
+    body {
+        @apply bg-background text-foreground font-sans antialiased;
+        background-image:
+            radial-gradient(circle at 50% 0%, hsl(var(--primary) / 0.05) 0%, transparent 60%),
+            radial-gradient(circle at 100% 100%, hsl(var(--accent) / 0.03) 0%, transparent 40%);
+        background-attachment: fixed;
+    }
 }
 
 /* Hide Next.js Dev Indicators */
@@ -300,203 +298,203 @@
 [data-nextjs-toast],
 .nextjs-toast-errors-parent,
 nextjs-portal {
-  display: none !important;
+    display: none !important;
 }
 
 @layer components {
 
-  /* Premium Glass Effect */
-  .glass-panel {
-    @apply bg-background/60 backdrop-blur-xl border border-white/20 shadow-xl;
-  }
+    /* Premium Glass Effect */
+    .glass-panel {
+        @apply bg-background/60 backdrop-blur-xl border border-white/20 shadow-xl;
+    }
 
-  .dark .glass-panel {
-    @apply bg-background/40 border-white/5;
-  }
+    .dark .glass-panel {
+        @apply bg-background/40 border-white/5;
+    }
 
-  .text-gradient {
-    @apply bg-gradient-to-br from-primary via-sky-blue to-primary/80 bg-clip-text text-transparent;
-  }
+    .text-gradient {
+        @apply bg-gradient-to-br from-primary via-sky-blue to-primary/80 bg-clip-text text-transparent;
+    }
 
-  .text-gradient-gold {
-    @apply bg-gradient-to-br from-golden-orange via-pharaoh-gold to-golden-orange-light bg-clip-text text-transparent;
-  }
+    .text-gradient-gold {
+        @apply bg-gradient-to-br from-golden-orange via-pharaoh-gold to-golden-orange-light bg-clip-text text-transparent;
+    }
 
-  /* Card Hover Effects */
-  .card-premium {
-    @apply rounded-xl border border-border/40 bg-card/60 backdrop-blur-sm shadow-sm transition-all duration-300 hover:shadow-lg hover:border-primary/20 hover:-translate-y-1;
-  }
+    /* Card Hover Effects */
+    .card-premium {
+        @apply rounded-xl border border-border/40 bg-card/60 backdrop-blur-sm shadow-sm transition-all duration-300 hover:shadow-lg hover:border-primary/20 hover:-translate-y-1;
+    }
 
-  .container-responsive {
-    @apply container mx-auto px-4 md:px-6 lg:px-8;
-  }
+    .container-responsive {
+        @apply container mx-auto px-4 md:px-6 lg:px-8;
+    }
 }
 
 @layer utilities {
-  .animate-fade-in-up {
-    animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
+    .animate-fade-in-up {
+        animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
 
-  .animate-fade-in {
-    animation: fadeIn 0.5s ease-out forwards;
-  }
+    .animate-fade-in {
+        animation: fadeIn 0.5s ease-out forwards;
+    }
 
-  .animate-scale-in {
-    animation: scaleIn 0.4s ease-out forwards;
-  }
+    .animate-scale-in {
+        animation: scaleIn 0.4s ease-out forwards;
+    }
 
-  .animate-counter {
-    animation: counter 0.5s ease-out forwards;
-  }
+    .animate-counter {
+        animation: counter 0.5s ease-out forwards;
+    }
 
-  .animate-float {
-    animation: float 3s ease-in-out infinite;
-  }
+    .animate-float {
+        animation: float 3s ease-in-out infinite;
+    }
 
-  .animate-pulse-slow {
-    animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  }
+    .animate-pulse-slow {
+        animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
 
-  .delay-100 {
-    animation-delay: 100ms;
-  }
+    .delay-100 {
+        animation-delay: 100ms;
+    }
 
-  .delay-200 {
-    animation-delay: 200ms;
-  }
+    .delay-200 {
+        animation-delay: 200ms;
+    }
 
-  .delay-300 {
-    animation-delay: 300ms;
-  }
+    .delay-300 {
+        animation-delay: 300ms;
+    }
 
-  .delay-400 {
-    animation-delay: 400ms;
-  }
+    .delay-400 {
+        animation-delay: 400ms;
+    }
 
-  .delay-500 {
-    animation-delay: 500ms;
-  }
+    .delay-500 {
+        animation-delay: 500ms;
+    }
 
-  .delay-700 {
-    animation-delay: 700ms;
-  }
+    .delay-700 {
+        animation-delay: 700ms;
+    }
 
-  .text-balance {
-    text-wrap: balance;
-  }
+    .text-balance {
+        text-wrap: balance;
+    }
 
-  /* Spacing System - 8px Base */
-  .spacing-xs {
-    gap: 8px;
-  }
+    /* Spacing System - 8px Base */
+    .spacing-xs {
+        gap: 8px;
+    }
 
-  .spacing-sm {
-    gap: 16px;
-  }
+    .spacing-sm {
+        gap: 16px;
+    }
 
-  .spacing-md {
-    gap: 24px;
-  }
+    .spacing-md {
+        gap: 24px;
+    }
 
-  .spacing-lg {
-    gap: 32px;
-  }
+    .spacing-lg {
+        gap: 32px;
+    }
 
-  .spacing-xl {
-    gap: 48px;
-  }
+    .spacing-xl {
+        gap: 48px;
+    }
 
-  .spacing-2xl {
-    gap: 64px;
-  }
+    .spacing-2xl {
+        gap: 64px;
+    }
 
-  .spacing-3xl {
-    gap: 96px;
-  }
+    .spacing-3xl {
+        gap: 96px;
+    }
 
-  .spacing-4xl {
-    gap: 128px;
-  }
+    .spacing-4xl {
+        gap: 128px;
+    }
 }
 
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
+    from {
+        opacity: 0;
+    }
 
-  to {
-    opacity: 1;
-  }
+    to {
+        opacity: 1;
+    }
 }
 
 @keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
 
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 @keyframes counter {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes float {
 
-  0%,
-  100% {
-    transform: translateY(0);
-  }
+    0%,
+    100% {
+        transform: translateY(0);
+    }
 
-  50% {
-    transform: translateY(-20px);
-  }
+    50% {
+        transform: translateY(-20px);
+    }
 }
 
 @keyframes pulse {
 
-  0%,
-  100% {
-    opacity: 1;
-  }
+    0%,
+    100% {
+        opacity: 1;
+    }
 
-  50% {
-    opacity: 0.5;
-  }
+    50% {
+        opacity: 0.5;
+    }
 }
 
 @keyframes pulse-subtle {
 
-  0%,
-  100% {
-    opacity: 1;
-  }
+    0%,
+    100% {
+        opacity: 1;
+    }
 
-  50% {
-    opacity: 0.95;
-  }
+    50% {
+        opacity: 0.95;
+    }
 }

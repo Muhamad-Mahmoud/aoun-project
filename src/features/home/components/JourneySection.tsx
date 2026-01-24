@@ -4,7 +4,7 @@ import { UserPlus, FileText, BrainCircuit, Building2, CheckCircle2, ArrowLeft } 
 import Link from "next/link";
 import { Button } from "@/shared/ui/button";
 
-import { colors } from "@/lib/colors";
+import { colors } from "@/shared/constants";
 
 const steps = [
     {
@@ -46,14 +46,14 @@ const steps = [
 
 export function JourneySection() {
     return (
-        <section id="journey" className="py-20 md:py-28 bg-warm-beige/50 relative overflow-hidden">
+        <section id="journey" className="py-24 md:py-32 bg-warm-beige/30 relative overflow-hidden">
             {/* Background Elements */}
             <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-golden-orange/3 rounded-full blur-3xl -z-10"></div>
             <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-sky-blue/3 rounded-full blur-3xl -z-10"></div>
 
             <div className="container mx-auto px-4 max-w-[1400px]" dir="rtl">
                 {/* Header */}
-                <div className="text-center mb-20 animate-fade-in">
+                <div className="!text-center mb-20 animate-fade-in">
                     <div className="inline-block px-5 py-2 rounded-full bg-white text-warm-green text-sm font-bold mb-5 border border-warm-green/20 shadow-sm">
                         رحلة المستخدم
                     </div>
@@ -79,7 +79,7 @@ export function JourneySection() {
                             return (
                                 <div
                                     key={index}
-                                    className="flex flex-col items-center text-center animate-fade-in relative group"
+                                    className="flex flex-col items-center !text-center animate-fade-in relative group"
                                     style={{ animationDelay: `${index * 100}ms` }}
                                 >
                                     {/* Step Circle with Number */}
@@ -108,9 +108,9 @@ export function JourneySection() {
                     </div>
                 </div>
 
-                {/* CTA - Repeated Strategically */}
-                <div className="text-center mt-20">
-                    <div className="inline-block rounded-3xl bg-white p-10 shadow-xl max-w-2xl mx-auto">
+                <div className="!text-center mt-20">
+                    <div className="inline-block rounded-3xl bg-white p-10 shadow-xl max-w-2xl mx-auto border border-border/50">
+
                         <h3 className="text-2xl md:text-3xl font-bold mb-4 text-foreground">
                             جاهز لتغيير واقعك للأفضل؟
                         </h3>

@@ -35,14 +35,14 @@ export function FAQSection() {
 
     return (
 
-        <section id="faq" className="py-20 md:py-28 bg-card relative overflow-hidden">
+        <section id="faq" className="py-24 md:py-32 bg-warm-white relative overflow-hidden">
             {/* Background */}
             <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl -z-10"></div>
             <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-3xl -z-10"></div>
 
             <div className="container mx-auto px-4 max-w-[1000px]" dir="rtl">
                 {/* Header */}
-                <div className="text-center mb-16 animate-fade-in">
+                <div className="!text-center mb-16 animate-fade-in">
                     <div className="inline-block px-5 py-2 rounded-full bg-gradient-to-l from-primary/10 to-secondary/10 text-primary text-sm font-bold mb-5 border border-primary/20">
                         الأسئلة الشائعة
                     </div>
@@ -96,7 +96,7 @@ export function FAQSection() {
                 </div>
 
                 {/* Contact Note */}
-                <div className="text-center mt-12 p-8 bg-gradient-to-l from-primary/10 to-secondary/10 rounded-2xl border-2 border-border">
+                <div className="!text-center mt-12 p-8 bg-gradient-to-l from-primary/10 to-secondary/10 rounded-2xl border-2 border-border">
                     <p className="text-lg text-muted-foreground">
                         لم تجد إجابة لسؤالك؟{" "}
                         <a href="mailto:info@aoun.org" className="font-bold text-primary transition-colors underline">

@@ -3,7 +3,7 @@
 import { Heart, Stethoscope, UtensilsCrossed, Users, ArrowLeft } from "lucide-react";
 import Link from 'next/link';
 import { Button } from "@/shared/ui/button";
-import { partnerTypeColors } from "@/lib/colors";
+import { partnerTypeColors } from "@/shared/constants";
 
 const partners = [
   { name: "جمعية رسالة", icon: Heart, cases: "٣٥٠ حالة", type: "عامة" },
@@ -16,14 +16,14 @@ const partners = [
 
 export function PartnersSection() {
   return (
-    <section id="partners" className="py-20 md:py-28 bg-gradient-to-b from-emerald-green-pale/50 to-background relative overflow-hidden">
+    <section id="partners" className="py-24 md:py-32 bg-gradient-to-b from-emerald-green-pale/30 via-background to-background relative overflow-hidden">
       {/* Background */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-vibrant-cyan-pale/50 rounded-full blur-3xl -z-10"></div>
       <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-golden-orange-pale/50 rounded-full blur-3xl -z-10"></div>
 
       <div className="container mx-auto px-4 max-w-[1400px]" dir="rtl">
         {/* Header */}
-        <div className="text-center mb-16 animate-fade-in">
+        <div className="!text-center mb-16 animate-fade-in">
           <div className="inline-block px-5 py-2 rounded-full bg-background text-emerald-green text-sm font-bold mb-5 border-2 border-emerald-green/20 shadow-sm">
             شركاؤنا
           </div>
@@ -49,7 +49,7 @@ export function PartnersSection() {
             return (
               <div
                 key={index}
-                className="group bg-card rounded-2xl border-2 border-border p-6 flex flex-col items-center justify-center text-center transition-all duration-300 hover:border-emerald-green/40 hover:shadow-xl hover:-translate-y-2 animate-fade-in"
+                className="group bg-card rounded-2xl border-2 border-border p-6 flex flex-col items-center justify-center !text-center transition-all duration-300 hover:border-emerald-green/40 hover:shadow-xl hover:-translate-y-2 animate-fade-in"
                 style={{ animationDelay: `${index * 50}ms` }}
               >
                 {/* Icon */}
@@ -74,26 +74,26 @@ export function PartnersSection() {
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 max-w-4xl mx-auto">
-          <div className="text-center p-6 bg-card rounded-2xl border-2 border-border shadow-md">
+          <div className="!text-center p-6 bg-card rounded-2xl border-2 border-border shadow-md">
             <div className="text-4xl font-bold text-emerald-green mb-2">٨٥+</div>
             <div className="text-sm text-muted-foreground">جهة شريكة</div>
           </div>
-          <div className="text-center p-6 bg-card rounded-2xl border-2 border-border shadow-md">
+          <div className="!text-center p-6 bg-card rounded-2xl border-2 border-border shadow-md">
             <div className="text-4xl font-bold text-vibrant-cyan mb-2">٢٧</div>
             <div className="text-sm text-muted-foreground">محافظة</div>
           </div>
-          <div className="text-center p-6 bg-card rounded-2xl border-2 border-border shadow-md">
+          <div className="!text-center p-6 bg-card rounded-2xl border-2 border-border shadow-md">
             <div className="text-4xl font-bold text-golden-orange mb-2">١,٢٠٠+</div>
             <div className="text-sm text-muted-foreground">أسرة مستفيدة</div>
           </div>
-          <div className="text-center p-6 bg-card rounded-2xl border-2 border-border shadow-md">
+          <div className="!text-center p-6 bg-card rounded-2xl border-2 border-border shadow-md">
             <div className="text-4xl font-bold text-emerald-green mb-2">٩٨٪</div>
             <div className="text-sm text-muted-foreground">نسبة نجاح</div>
           </div>
         </div>
 
         {/* CTA for NGOs */}
-        <div className="text-center mt-16 p-10 bg-card rounded-3xl border-2 border-border shadow-xl max-w-3xl mx-auto">
+        <div className="!text-center mt-16 p-10 bg-card rounded-3xl border-2 border-border shadow-xl max-w-3xl mx-auto">
           <h3 className="text-2xl md:text-3xl font-bold mb-4 text-foreground">
             هل أنت جمعية خيرية مسجلة؟
           </h3>

@@ -1,7 +1,7 @@
 import React from "react";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/utils";
 
 interface FormFieldProps {
     id: string;
@@ -56,3 +56,4 @@ export const FormField: React.FC<FormFieldProps> = ({
         </div>
     );
 };
+

@@ -8,6 +8,10 @@ module.exports = {
     './src/**/*.{ts,tsx}',
   ],
   prefix: "",
+  // Enable RTL support - uses logical properties (start/end instead of left/right)
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
   theme: {
     container: {
       center: true,
@@ -76,8 +80,7 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Warm Color Palette
-        // Warm Color Palette
+        // Spec-driven Palette
         "warm-green": {
           DEFAULT: "hsl(var(--warm-green))",
           light: "hsl(var(--warm-green-light))",
@@ -120,6 +123,8 @@ module.exports = {
           linkedin: "hsl(var(--social-linkedin))",
         },
         "warm-beige": "hsl(var(--warm-beige))",
+        "warm-white": "hsl(var(--warm-white))",
+        "soft-gray": "hsl(var(--soft-gray))",
         sidebar: {
           DEFAULT: 'hsl(var(--sidebar-background))',
           foreground: 'hsl(var(--sidebar-foreground))',
@@ -137,6 +142,8 @@ module.exports = {
           border: 'hsl(var(--footer-border))',
         },
       },
+
+
       fontSize: {
         'hero-desktop': ['64px', { lineHeight: '1.2', fontWeight: '900' }],
         'hero-mobile': ['48px', { lineHeight: '1.2', fontWeight: '900' }],

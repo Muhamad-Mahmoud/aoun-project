@@ -34,7 +34,7 @@ export function FeaturesSection() {
 
             <div className="container mx-auto px-4 relative">
                 {/* Section Header */}
-                <div className="text-center mb-20 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                <div className="!text-center mb-20 animate-in fade-in slide-in-from-bottom-4 duration-700">
                     <div className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-bold mb-4 border border-primary/20">
                         لماذا عون؟
                     </div>

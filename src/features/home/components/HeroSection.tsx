@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/shared/ui/button";
 import { ArrowLeft, Users, Building2, MapPin, ShieldCheck, Award, Clock, Heart, CheckCircle, BrainCircuit } from "lucide-react";
 import Link from "next/link";
-import { colors } from "@/lib/colors";
+import { colors } from "@/shared/constants";
 
 export function HeroSection() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -58,11 +58,12 @@ export function HeroSection() {
             <div className={`flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center justify-center lg:justify-start transition-all duration-1000 delay-300 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
               {/* Primary CTA - Larger & More Prominent */}
               <Link href="/register" className="w-full sm:w-auto">
-                <Button className="w-full sm:w-auto h-14 lg:h-16 text-base lg:text-[17px] font-semibold px-8 rounded-xl gap-3 text-white bg-gradient-to-l from-warm-green via-warm-green/90 to-sky-blue hover:from-warm-green-dark hover:via-warm-green hover:to-sky-blue-dark shadow-[0_8px_20px_hsla(var(--warm-green),0.3)] hover:shadow-[0_8px_30px_hsla(var(--warm-green),0.5)] transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 animate-pulse-subtle">
+                <Button className="w-full sm:w-auto h-14 lg:h-16 text-base lg:text-[17px] font-semibold px-8 rounded-xl gap-3 text-white bg-gradient-to-l from-warm-green via-warm-green/90 to-sky-blue hover:from-warm-green-dark hover:via-warm-green hover:to-sky-blue-dark shadow-[0_8px_20px_hsla(var(--warm-green)/0.3)] hover:shadow-[0_8px_30px_hsla(var(--warm-green)/0.5)] transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 animate-pulse-subtle">
                   اطلب مساعدة الآن
                   <ArrowLeft className="w-5 h-5" />
                 </Button>
               </Link>
+
 
               {/* Secondary CTA - Enhanced Design */}
               <Link href="/register?type=organization" className="w-full sm:w-auto">
@@ -110,13 +111,14 @@ export function HeroSection() {
               <div className="relative z-10 flex items-center justify-center h-full">
                 <div className="relative w-full h-full flex items-center justify-center">
                   {/* Main Illustration Image */}
-                  <div className="relative w-full aspect-square rounded-[24px] lg:rounded-[32px] overflow-hidden shadow-[0_10px_30px_hsla(0,0%,0%,0.05)] lg:shadow-[0_20px_60px_hsla(0,0%,0%,0.1)] bg-gradient-to-br from-warm-green/5 to-golden-orange/5">
+                  <div className="relative w-full aspect-square rounded-[24px] lg:rounded-[32px] overflow-hidden shadow-[0_10px_30px_hsla(var(--text-primary)/0.05)] lg:shadow-[0_20px_60px_hsla(var(--text-primary)/0.1)] bg-gradient-to-br from-warm-green/5 to-golden-orange/5">
                     <img
                       src="/hero-illustration.png"
                       alt="عون - منصة تربط الأسر المحتاجة بالجمعيات الخيرية"
                       className="w-full h-full object-cover"
                     />
                   </div>
+
 
                   {/* Floating Stats - Enhanced */}
                   <div className="absolute -top-4 -right-4 lg:-top-6 lg:-right-6 bg-white border-2 border-sky-blue/20 rounded-xl px-3 py-2 lg:px-4 lg:py-2.5 shadow-lg scale-90 lg:scale-100">
@@ -147,14 +149,16 @@ export function HeroSection() {
       </div>
 
       {/* Statistics Section - Trust Signals */}
-      <div className={`mt-20 lg:mt-24 pt-12 border-t border-border/50 transition-all duration-700 delay-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className={`mt-20 lg:mt-24 px-6 py-10 lg:px-12 lg:py-14 rounded-[2rem] bg-white border border-border/50 shadow-[0_10px_40px_hsla(var(--text-primary)/0.03)] transition-all duration-700 delay-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16">
+
           <StatCard
             icon={Users}
             number={1200}
             suffix="+"
             label="أسرة مستفيدة"
-            gradient={colors.warmGreen.gradient}
+            colorClass="text-warm-green"
+            bgClass="bg-warm-green/10"
             delay={600}
           />
           <StatCard
@@ -162,7 +166,8 @@ export function HeroSection() {
             number={85}
             suffix="+"
             label="جهة شريكة"
-            gradient={colors.skyBlue.gradient}
+            colorClass="text-sky-blue"
+            bgClass="bg-sky-blue/10"
             delay={700}
           />
           <StatCard
@@ -170,7 +175,8 @@ export function HeroSection() {
             number={27}
             suffix=""
             label="محافظة مصرية"
-            gradient={colors.skyBlue.gradient}
+            colorClass="text-sky-blue"
+            bgClass="bg-sky-blue/10"
             delay={800}
           />
           <StatCard
@@ -178,11 +184,13 @@ export function HeroSection() {
             number={98}
             suffix="%"
             label="نسبة نجاح"
-            gradient={colors.warmGreen.gradient}
+            colorClass="text-warm-green"
+            bgClass="bg-warm-green/10"
             delay={900}
           />
         </div>
       </div>
+
 
     </section>
   );
@@ -194,17 +202,18 @@ interface StatCardProps {
   number: number;
   suffix: string;
   label: string;
-  gradient: string;
+  colorClass: string;
+  bgClass: string;
   delay: number;
 }
 
-function StatCard({ icon: Icon, number, suffix, label, gradient, delay }: StatCardProps) {
+function StatCard({ icon: Icon, number, suffix, label, colorClass, bgClass, delay }: StatCardProps) {
   const [count, setCount] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     let counter: NodeJS.Timeout | null = null;
-    
+
     const timer = setTimeout(() => {
       setIsVisible(true);
       let start = 0;
@@ -230,22 +239,20 @@ function StatCard({ icon: Icon, number, suffix, label, gradient, delay }: StatCa
 
   return (
     <div
-      className={`text-center transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+      className={`!text-center transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
     >
-      {/* Icon */}
-      <div className={`w-12 h-12 mx-auto mb-3 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center shadow-lg`}>
-        <Icon className="w-6 h-6 text-white" />
+      <div className={`w-14 h-14 mx-auto mb-4 rounded-2xl ${bgClass} flex items-center justify-center transition-transform hover:scale-110 duration-300`}>
+        <Icon className={`w-7 h-7 ${colorClass}`} />
       </div>
 
-      {/* Number */}
-      <div className={`text-3xl lg:text-4xl  font-black mb-1 bg-gradient-to-br ${gradient} bg-clip-text text-transparent`}>
+      <div className={`text-3xl lg:text-4xl font-black mb-1 ${colorClass}`}>
         {count.toLocaleString('ar-EG')}{suffix}
       </div>
 
-      {/* Label */}
-      <div className="text-sm text-muted-foreground font-medium">
+      <div className="text-[15px] text-muted-foreground font-bold">
         {label}
       </div>
     </div>
   );
 }
+

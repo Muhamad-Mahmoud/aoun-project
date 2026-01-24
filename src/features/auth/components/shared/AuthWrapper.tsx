@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/utils";
 import { Button } from "@/shared/ui/button";
 
 interface AuthWrapperProps {
@@ -109,3 +109,4 @@ export const AuthWrapper: React.FC<AuthWrapperProps> = ({
         </div>
     );
 };
+

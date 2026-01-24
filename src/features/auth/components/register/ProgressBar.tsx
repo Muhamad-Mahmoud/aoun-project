@@ -1,6 +1,6 @@
 import React from "react";
 import { Check } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/utils";
 
 interface ProgressBarProps {
     currentStep: number;
@@ -78,3 +78,4 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentStep, totalStep
         </div>
     );
 };
+

@@ -79,7 +79,7 @@ export function Header() {
                             >
                                 {item.label}
                                 <span
-                                    className={`absolute -bottom-[22px] left-0 h-[3px] bg-warm-green transition-all duration-300 ${isActive(item.href) ? "w-full" : "w-0 group-hover:w-full"
+                                    className={`absolute -bottom-[22px] inset-x-0 h-[3px] bg-warm-green transition-all duration-300 ${isActive(item.href) ? "w-full" : "w-0 group-hover:w-full"
                                         }`}
                                 ></span>
                             </Link>
@@ -88,6 +88,20 @@ export function Header() {
 
                     {/* Action Buttons - Enhanced Design */}
                     <div className="hidden md:flex items-center gap-3">
+                        {/* Phase 1: Temporary Dashboard Links for easy access */}
+                        <Link href="/dashboard/family">
+                            <Button variant="ghost" className="text-sm font-medium hover:text-warm-green">
+                                لوحة الأسرة
+                            </Button>
+                        </Link>
+                        <Link href="/dashboard/organization">
+                            <Button variant="ghost" className="text-sm font-medium hover:text-warm-green">
+                                لوحة الجمعية
+                            </Button>
+                        </Link>
+
+                        <div className="w-[1px] h-6 bg-border mx-1" />
+
                         <Link href="/login">
                             <Button
                                 variant="ghost"
@@ -123,7 +137,7 @@ export function Header() {
                         ></div>
 
                         {/* Sidebar Menu - Optimized Width for Mobile */}
-                        <div className="fixed top-0 right-0 h-[100dvh] w-[60vw] sm:w-[250px] bg-background shadow-2xl z-[70] lg:hidden animate-in slide-in-from-right duration-300 flex flex-col">
+                        <div className="fixed top-0 end-0 h-[100dvh] w-[75vw] sm:w-[300px] bg-background shadow-2xl z-[70] lg:hidden animate-in slide-in-from-inline-end duration-300 flex flex-col">
 
                             {/* Menu Header */}
                             <div className="flex items-center justify-between p-6 border-b border-border/50 shrink-0">

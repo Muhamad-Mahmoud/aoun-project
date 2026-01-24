@@ -3,7 +3,7 @@
 import * as React from "react"
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/shared/utils"
 import { buttonVariants } from "@/shared/ui/button"
 
 function AlertDialog({
@@ -70,7 +70,7 @@ function AlertDialogHeader({
   return (
     <div
       data-slot="alert-dialog-header"
-      className={cn("flex flex-col gap-2 text-center sm:text-left", className)}
+      className={cn("flex flex-col gap-2 text-center sm:text-start", className)}
       {...props}
     />
   )
@@ -155,3 +155,4 @@ export {
   AlertDialogAction,
   AlertDialogCancel,
 }
+

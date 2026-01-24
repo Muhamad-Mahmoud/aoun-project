@@ -4,9 +4,10 @@
  */
 
 import { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
-import { TOKEN_STORAGE_KEY } from './config';
 import { ApiError } from './types';
 import { logger } from '../logger';
+import { refreshToken } from '@/features/auth/api/authApi';
+import { ROUTES } from '@/shared/constants/routes';
 
 // Type for API error response data
 interface ErrorResponseData {
@@ -20,13 +21,7 @@ interface ErrorResponseData {
 export function setupRequestInterceptors(axiosInstance: AxiosInstance) {
     axiosInstance.interceptors.request.use(
         (config: InternalAxiosRequestConfig) => {
-            // Add authentication token if available
-            if (typeof window !== 'undefined') {
-                const token = localStorage.getItem(TOKEN_STORAGE_KEY);
-                if (token && config.headers) {
-                    config.headers.Authorization = `Bearer ${token}`;
-                }
-            }
+            // Authentication is now handled via HttpOnly cookies and Proxy Middleware
 
             // Log request in development
             if (process.env.NODE_ENV === 'development') {
@@ -71,16 +66,18 @@ export function setupResponseInterceptors(axiosInstance: AxiosInstance) {
                 originalRequest._retry = true;
 
                 try {
-                    // TODO: Implement token refresh logic
-                    // const newToken = await refreshToken();
-                    // localStorage.setItem(TOKEN_STORAGE_KEY, newToken);
-                    // originalRequest.headers.Authorization = `Bearer ${newToken}`;
-                    // return axiosInstance(originalRequest);
+                    // Try to refresh token via BFF (HttpOnly cookie)
+                    await refreshToken();
+
+                    // Retry the original request
+                    // The browser will automatically attach the new cookies
+                    return axiosInstance(originalRequest);
                 } catch (refreshError) {
                     // Refresh failed, redirect to login
                     if (typeof window !== 'undefined') {
-                        localStorage.removeItem(TOKEN_STORAGE_KEY);
-                        window.location.href = '/login';
+                        // We rely on server deletion of cookies on refresh failure, or handle it here
+                        // Since client can't delete HttpOnly cookies, we validly redirect.
+                        window.location.href = ROUTES.AUTH.LOGIN;
                     }
                     return Promise.reject(refreshError);
                 }

@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import "./src/env"; // 👈 CRITICAL: Force Env Validation on Build/Start
 
 const nextConfig: NextConfig = {
   // Security headers

@@ -2,7 +2,7 @@ import React from "react";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 import { Eye, EyeOff } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/utils";
 
 interface PasswordFieldProps {
     id: string;
@@ -52,3 +52,4 @@ export const PasswordField: React.FC<PasswordFieldProps> = ({
         </div>
     );
 };
+
