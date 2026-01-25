@@ -1,3 +1,5 @@
+"use client";
+
 import { DashboardLayout, DashboardTopBar } from "@/shared/components/layout/DashboardLayout";
 import { OrganizationSidebar } from "@/shared/components/layout/OrganizationSidebar";
 import { Card } from "@/shared/ui/card";
