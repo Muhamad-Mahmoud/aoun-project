@@ -12,8 +12,8 @@ export default function OrganizationApprovedPage() {
             <OrganizationSidebar />
             <div className="flex-1 flex flex-col min-h-screen overflow-y-auto">
                 <DashboardTopBar userType="organization" />
-                <main className="p-8">
-                    <div className="mx-auto max-w-7xl space-y-8">
+                <main className="py-8">
+                    <div className="space-y-8 px-6 lg:px-10">
                         <div>
                             <h1 className="text-3xl font-bold tracking-tight">الحالات المعتمدة</h1>
                             <p className="text-muted-foreground">عرض وإدارة الحالات التي تمت الموافقة عليها.</p>

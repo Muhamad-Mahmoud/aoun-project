@@ -52,7 +52,10 @@ export async function middleware(request: NextRequest) {
     }
 
     // 2. Route Protection Logic
+    // DISABLED: We are using sessionStorage for tokens (Client-Side), so Server-Side Middleware cannot check auth status.
+    // Client-side components (AuthProvider) must handle protection.
 
+    /*
     // Define route types
     const isAuthPage = pathname.startsWith(ROUTES.AUTH.LOGIN) ||
         pathname.startsWith(ROUTES.AUTH.REGISTER) ||
@@ -77,6 +80,7 @@ export async function middleware(request: NextRequest) {
     if (isAuthPage && isValidToken) {
         return NextResponse.redirect(new URL(ROUTES.HOME, request.url));
     }
+    */
 
     return NextResponse.next();
 }

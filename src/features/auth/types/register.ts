@@ -5,23 +5,27 @@
 export type AccountType = "individual" | "organization";
 
 export interface FormData {
+    // Common
     accountType: AccountType;
-    name: string;
-    governorate: string;
-    phone: string;
     email: string;
-    repName: string;
-    repJob: string;
-    repEmail: string;
-    repPhone: string;
-    orgName: string;
-    orgLegalName: string;
-    orgAddress: string;
-    orgGovernorate: string;
-    isRegistered: "yes" | "no";
-    registrationNumber: string;
+    phone: string;
     password: string;
+    confirmPassword: string;
+    country: string;
+    city: string;
+    governorate: string;
     acceptTerms: boolean;
+
+    // Family Specific
+    firstName: string;
+    lastName: string;
+    headNationalId: string;
+    neighborhood: string;
+
+    // Association Specific
+    name: string; // Association Name
+    capacity: string; // Will convert to number on submit
+    coverageNotes: string;
 }
 
 export interface FormErrors {
@@ -30,22 +34,25 @@ export interface FormErrors {
 
 export const INITIAL_FORM_DATA: FormData = {
     accountType: "individual",
-    name: "",
-    governorate: "",
-    phone: "",
     email: "",
-    repName: "",
-    repJob: "",
-    repEmail: "",
-    repPhone: "",
-    orgName: "",
-    orgLegalName: "",
-    orgAddress: "",
-    orgGovernorate: "",
-    isRegistered: "yes",
-    registrationNumber: "",
+    phone: "",
     password: "",
+    confirmPassword: "",
+    country: "Egypt", // Default
+    city: "",
+    governorate: "",
     acceptTerms: false,
+
+    // Family
+    firstName: "",
+    lastName: "",
+    headNationalId: "",
+    neighborhood: "",
+
+    // Association
+    name: "",
+    capacity: "",
+    coverageNotes: "",
 };
 
 export const ERROR_MESSAGES = {
@@ -57,11 +64,9 @@ export const ERROR_MESSAGES = {
     EMAIL_REQUIRED: "البريد الإلكتروني مطلوب",
     EMAIL_INVALID: "بريد إلكتروني غير صالح",
     PASSWORD_SHORT: "كلمة المرور يجب أن تكون 8 أحرف على الأقل",
+    PASSWORD_MISMATCH: "كلمة المرور غير متطابقة",
     TERMS_REQUIRED: "يجب الموافقة على الشروط والأحكام",
-    REP_NAME_REQUIRED: "اسم المسؤول مطلوب",
-    JOB_REQUIRED: "الوظيفة مطلوبة",
     ORG_NAME_REQUIRED: "اسم الجمعية مطلوب",
-    LEGAL_NAME_REQUIRED: "الاسم القانوني مطلوب",
-    ADDRESS_REQUIRED: "العنوان مطلوب",
-    REGISTRATION_NUMBER_REQUIRED: "رقم التسجيل مطلوب",
+    NATIONAL_ID_REQUIRED: "الرقم القومي مطلوب",
+    NATIONAL_ID_INVALID: "الرقم القومي يجب أن يتكون من 14 رقم",
 } as const;

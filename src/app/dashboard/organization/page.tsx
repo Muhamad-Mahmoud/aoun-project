@@ -37,8 +37,8 @@ export default function OrganizationDashboardPage() {
             <OrganizationSidebar />
             <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-[#f8fafc]">
                 <DashboardTopBar userType="organization" />
-                <main className="p-4 sm:p-10 pb-20 pt-20 lg:pt-32 relative z-10">
-                    <div className="mx-auto max-w-7xl space-y-10">
+                <main className="pb-20 pt-20 lg:pt-32 relative z-10">
+                    <div className="space-y-10 px-6 lg:px-10">
                         <div className="animate-in fade-in slide-in-from-top-4 duration-700">
                             <h1 className="text-4xl font-black tracking-tight text-slate-900">لوحة تحكم الجمعية</h1>
                             <p className="text-lg text-slate-500 font-bold mt-2">إدارة الطلبات والحالات بفاعلية ودقة.</p>
@@ -73,4 +73,3 @@ export default function OrganizationDashboardPage() {
         </DashboardLayout>
     );
 }
-

@@ -12,10 +12,8 @@ const getStepLabel = (stepNumber: number, accountType: "individual" | "organizat
     if (accountType === "individual") {
         return stepNumber === 1 ? "البيانات الأساسية" : "تأمين الحساب";
     }
-    return stepNumber === 1 ? "بيانات المسؤول"
-        : stepNumber === 2 ? "بيانات الجمعية"
-            : stepNumber === 3 ? "التراخيص"
-                : "تأمين الحساب";
+    // Organization has same structure as individual: Data + Security
+    return stepNumber === 1 ? "بيانات الجمعية" : "تأمين الحساب";
 };
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({ currentStep, totalSteps, accountType }) => {

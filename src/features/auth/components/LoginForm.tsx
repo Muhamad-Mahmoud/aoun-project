@@ -139,6 +139,16 @@ export function LoginForm() {
                     )}
                 </Button>
             </div>
+
+            {/* Forgot Password Link */}
+            <div className="text-center">
+                <Link
+                    href="/forgot-password"
+                    className="text-sm font-bold text-warm-green hover:text-warm-green-light transition-colors"
+                >
+                    نسيت كلمة المرور؟
+                </Link>
+            </div>
         </form>
     );
 }

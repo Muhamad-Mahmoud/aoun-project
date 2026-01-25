@@ -7,8 +7,6 @@ import {
     AccountTypeSelector,
     IndividualForm,
     OrganizationForm,
-    RepresentativeForm,
-    RegistrationForm,
     SecurityForm,
 } from "@/features/auth/components/register";
 import { AuthWrapper } from "@/features/auth/components/shared/AuthWrapper";
@@ -77,45 +75,26 @@ function RegisterFormContent() {
         }
 
         // Organization Flow
-        switch (currentStep) {
-            case 1:
-                return (
-                    <OrganizationForm
-                        formData={formData}
-                        errors={errors}
-                        onChange={handleInputChange}
-                    />
-                );
-            case 2:
-                return (
-                    <RegistrationForm
-                        isRegistered={formData.isRegistered}
-                        registrationNumber={formData.registrationNumber}
-                        errors={errors}
-                        onRegisteredChange={(val) => handleInputChange("isRegistered", val)}
-                        onNumberChange={(val) => handleInputChange("registrationNumber", val)}
-                    />
-                );
-            case 3:
-                return (
-                    <RepresentativeForm
-                        formData={formData}
-                        errors={errors}
-                        onChange={handleInputChange}
-                    />
-                );
-            case 4:
-                return (
-                    <SecurityForm
-                        formData={formData}
-                        errors={errors}
-                        onChange={handleInputChange}
-                    />
-                );
-            default:
-                return null;
+        if (currentStep === 1) {
+            return (
+                <OrganizationForm
+                    formData={formData}
+                    errors={errors}
+                    onChange={handleInputChange}
+                />
+            );
         }
+        return (
+            <SecurityForm
+                formData={formData}
+                errors={errors}
+                onChange={handleInputChange}
+            />
+        );
     };
+
+    // Debug Log
+    console.log("Render RegisterPage:", { currentStep, isLoading, errors });
 
     return (
         <div className="space-y-6">
@@ -133,7 +112,8 @@ function RegisterFormContent() {
                 accountType={formData.accountType}
             />
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+
                 <div className="animate-fade-in-up duration-500">
                     {renderStep()}
                 </div>

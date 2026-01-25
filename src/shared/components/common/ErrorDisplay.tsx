@@ -22,7 +22,7 @@ export const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
   return (
     <Alert
       variant={variant}
-      className={cn('relative', className)}
+      className={cn('relative animate-in fade-in slide-in-from-top-2 duration-300', className)}
       role="alert"
       aria-live="assertive"
     >

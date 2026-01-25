@@ -1,45 +1,48 @@
 import { env } from '@/env';
 
 export const API_CONFIG = {
-    // Point to local Next.js proxy
-    baseURL: '/api/proxy',
+    // Point to external API
+    baseURL: 'https://aoun-api.runasp.net',
     version: 'v1',
-    timeout: 30000, // 30 seconds
-    withCredentials: true,
+    timeout: 30000,
+    withCredentials: false,
 } as const;
 
 export const API_ENDPOINTS = {
     // Auth endpoints
     auth: {
-        login: '/auth/login',
-        register: '/auth/register',
-        logout: '/auth/logout',
-        refresh: '/auth/refresh',
-        resetPassword: '/auth/reset-password',
-        verifyEmail: '/auth/verify-email',
+        login: '/api/Auth/login',
+        registerFamily: '/api/Auth/register/family',
+        registerAssociation: '/api/Auth/register/association',
+        logout: '/api/Auth/logout', // Assuming this exists or we keep it for client cleanup
+        refresh: '/api/Auth/refresh-token',
+        resetPassword: '/api/Auth/reset-password',
+        forgotPassword: '/api/Auth/forgot-password',
+        verifyResetCode: '/api/Auth/verify-reset-code',
+        me: '/api/Auth/me',
     },
 
     // User endpoints
     user: {
-        profile: '/user/profile',
-        updateProfile: '/user/profile',
-        changePassword: '/user/change-password',
+        profile: '/api/User/profile', // Placeholder till verified
+        updateProfile: '/api/User/profile',
+        changePassword: '/api/User/change-password',
     },
 
     // Profile endpoints
     profile: {
-        get: (id: string) => `/profile/${id}`,
-        update: '/profile',
-        avatar: '/profile/avatar',
-        bookings: '/profile/bookings',
-        reviews: '/profile/reviews',
+        get: (id: string) => `/api/profile/${id}`,
+        update: '/api/profile',
+        avatar: '/api/profile/avatar',
+        bookings: '/api/profile/bookings',
+        reviews: '/api/profile/reviews',
     },
 
     // Organization endpoints
     organization: {
-        get: (id: string) => `/organization/${id}`,
-        update: '/organization',
-        members: '/organization/members',
+        get: (id: string) => `/api/organization/${id}`,
+        update: '/api/organization',
+        members: '/api/organization/members',
     },
 } as const;
 

@@ -13,6 +13,7 @@ import { logger } from "@/lib/logger";
 import { login } from "../api/authApi";
 import { loginSchema, type LoginSchema } from "../types/schema";
 import type { ApiError } from "@/lib/api/types";
+import { useAuthContext } from "@/shared/providers";
 import { ROUTES } from "@/shared/constants/routes";
 
 export const useLoginForm = () => {
@@ -20,6 +21,7 @@ export const useLoginForm = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
+    const { login: authLogin } = useAuthContext();
 
     const form = useForm<LoginSchema>({
         resolver: zodResolver(loginSchema),
@@ -41,6 +43,9 @@ export const useLoginForm = () => {
         try {
             const response = await login(data);
             logger.debug("Login successful", { userId: response.user.id });
+
+            // Update Auth Context and Storage (Fetches user details internally)
+            await authLogin(response.token, response.refreshToken);
 
             // Redirect to home or dashboard
             router.push(ROUTES.HOME);

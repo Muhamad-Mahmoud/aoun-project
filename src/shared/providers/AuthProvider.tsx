@@ -19,6 +19,7 @@ interface AuthContextType {
     isLoading: boolean;
     logout: () => Promise<void>;
     updateUser: (user: AuthUser | null) => void;
+    login: (token: string, refreshToken?: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -57,15 +58,49 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const logout = useCallback(async () => {
         try {
-            await logoutApi();
+            // Attempt to notify backend, but don't block cleanup if it fails
+            await logoutApi().catch(err => logger.warn('Logout API failed', err));
+        } catch (error) {
+            // Ignore errors here
+        } finally {
+            // ALWAYS cleanup client state
             setUser(null);
             setToken(null);
             setIsAuthenticated(false);
+
+            // Clear storage
+            sessionStorage.removeItem('auth_token');
+            sessionStorage.removeItem('refresh_token');
+            // Ensure cookies are also cleared just in case
+            document.cookie = "auth_token=; path=/; max-age=0; SameSite=Lax";
+
             router.push(ROUTES.AUTH.LOGIN);
-        } catch (error) {
-            logger.error('Logout failed', error);
         }
     }, [router]);
+
+    const login = useCallback(async (token: string, refreshToken?: string) => {
+        try {
+            // 1. Store tokens immediately so apiClient can use them
+            sessionStorage.setItem('auth_token', token);
+            if (refreshToken) {
+                sessionStorage.setItem('refresh_token', refreshToken);
+            }
+            setToken(token);
+            setIsAuthenticated(true);
+
+            // 2. Fetch full user profile
+            const currentUser = await getCurrentUser();
+            if (currentUser) {
+                setUser(currentUser);
+            } else {
+                // If fetching user fails, we might be in weird state. 
+                // But generally better to have auth state true and try.
+                logger.warn('Login successful but failed to fetch user details');
+            }
+        } catch (e) {
+            console.error("Login Error inside provider", e);
+        }
+    }, []);
 
     const updateUser = useCallback((newUser: AuthUser | null) => {
         setUser(newUser);
@@ -78,6 +113,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isLoading,
         logout,
         updateUser,
+        login,
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

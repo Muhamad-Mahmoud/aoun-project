@@ -14,12 +14,28 @@ export const IndividualForm: React.FC<IndividualFormProps> = ({ formData, errors
             <div className="p-5 rounded-xl bg-gradient-to-br from-primary/[0.03] via-primary/[0.01] to-transparent border border-primary/10 shadow-sm backdrop-blur-sm">
                 <div className="grid lg:grid-cols-2 gap-4">
                     <FormField
-                        id="name"
-                        label="الاسم الرباعي"
-                        placeholder="محمد أحمد علي سالم"
-                        value={formData.name}
-                        onChange={(val) => onChange("name", val)}
-                        error={errors.name}
+                        id="firstName"
+                        label="الاسم الأول"
+                        placeholder="محمد"
+                        value={formData.firstName}
+                        onChange={(val) => onChange("firstName", val)}
+                        error={errors.firstName}
+                    />
+                    <FormField
+                        id="lastName"
+                        label="الاسم الأخير"
+                        placeholder="أحمد"
+                        value={formData.lastName}
+                        onChange={(val) => onChange("lastName", val)}
+                        error={errors.lastName}
+                    />
+                    <FormField
+                        id="headNationalId"
+                        label="الرقم القومي"
+                        placeholder="الرقم القومي المكون من 14 رقم"
+                        value={formData.headNationalId}
+                        onChange={(val) => onChange("headNationalId", val)}
+                        error={errors.headNationalId}
                     />
                     <FormField
                         id="governorate"
@@ -28,6 +44,22 @@ export const IndividualForm: React.FC<IndividualFormProps> = ({ formData, errors
                         value={formData.governorate}
                         onChange={(val) => onChange("governorate", val)}
                         error={errors.governorate}
+                    />
+                    <FormField
+                        id="city"
+                        label="المدينة / المركز"
+                        placeholder="مدينة نصر"
+                        value={formData.city}
+                        onChange={(val) => onChange("city", val)}
+                        error={errors.city}
+                    />
+                    <FormField
+                        id="neighborhood"
+                        label="الحي / المنطقة"
+                        placeholder="الحي السابع"
+                        value={formData.neighborhood}
+                        onChange={(val) => onChange("neighborhood", val)}
+                        error={errors.neighborhood}
                     />
                     <FormField
                         id="phone"

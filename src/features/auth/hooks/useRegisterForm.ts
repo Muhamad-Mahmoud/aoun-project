@@ -8,9 +8,13 @@
 import { useState, useCallback, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { logger } from "@/lib/logger";
-import { register } from "../api/authApi";
-import type { RegisterData } from "../types";
+import { registerFamily, registerAssociation, login } from "../api/authApi";
+import type { RegisterFamilyRequest, RegisterAssociationRequest, LoginCredentials } from "../types";
 import type { ApiError } from "@/lib/api/types";
+import { useAuthContext } from "@/shared/providers";
+import { TOKEN_STORAGE_KEY } from "@/lib/api/config";
+import { ROUTES } from "@/shared/constants/routes";
+import { toast } from "sonner"; // Assuming sonner is used, or use valid notification approach
 
 // Import validation utilities from old location (will migrate later)
 import { FormData, FormErrors, AccountType, INITIAL_FORM_DATA } from "@/features/auth/types/register";
@@ -19,6 +23,7 @@ import { validateStep } from "@/features/auth/utils/register-validation";
 export const useRegisterForm = () => {
     const searchParams = useSearchParams();
     const router = useRouter();
+    const { login: authLogin } = useAuthContext();
     const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [currentStep, setCurrentStep] = useState(1);
@@ -37,7 +42,7 @@ export const useRegisterForm = () => {
         }
     }, [searchParams]);
 
-    const totalSteps = formData.accountType === "individual" ? 2 : 4;
+    const totalSteps = 2; // Always 2 steps now (Info -> Security)
 
     const handleInputChange = useCallback((field: keyof FormData, value: string | boolean) => {
         setFormData(prev => ({ ...prev, [field]: value }));
@@ -83,28 +88,103 @@ export const useRegisterForm = () => {
 
     const handleSubmit = useCallback(async (event: React.FormEvent) => {
         event.preventDefault();
+        console.log("handleSubmit triggered");
         setAttemptedSubmit(true);
 
-        if (!validateCurrentStep()) return;
-
-        setIsLoading(true);
         try {
-            // Map form data to API format
-            const registerData: RegisterData = {
-                email: formData.email,
-                password: formData.password,
-                confirmPassword: formData.password, // Use same password as confirmation
-                name: formData.name,
-                phone: formData.phone,
-                userType: formData.accountType,
-            };
+            console.log("Validating step...");
+            const isValid = validateCurrentStep();
+            console.log("Validation result:", isValid, "Current Errors:", errors);
 
-            const response = await register(registerData);
-            logger.debug("Registration successful", { userId: response.userId });
+            if (!isValid) {
+                console.warn("Validation failed preventing submission");
+                toast.error("يرجى التأكد من ملء جميع الحقول المطلوبة بشكل صحيح");
+                return;
+            }
 
-            // Redirect to login or verification page
-            router.push("/login");
-        } catch (err) {
+            setIsLoading(true);
+            console.log("Starting API submission with data:", formData);
+
+            let response;
+            // Common fields are already in formData, just map specifics
+            const {
+                email, phone, password, confirmPassword,
+                country, city, governorate
+            } = formData;
+
+            if (formData.accountType === 'individual') {
+                const familyData: RegisterFamilyRequest = {
+                    firstName: formData.firstName,
+                    lastName: formData.lastName,
+                    email,
+                    phone,
+                    headNationalId: formData.headNationalId,
+                    password,
+                    confirmPassword,
+                    country,
+                    city,
+                    governorate,
+                    neighborhood: formData.neighborhood,
+                };
+                console.log("Sending Individual Data:", familyData);
+                response = await registerFamily(familyData);
+            } else {
+                const associationData: RegisterAssociationRequest = {
+                    name: formData.name, // Association Name
+                    email,
+                    phone,
+                    password,
+                    confirmPassword,
+                    country,
+                    city,
+                    governorate,
+                    capacity: Number(formData.capacity) || 0,
+                    coverageNotes: formData.coverageNotes,
+                };
+                console.log("Sending Association Data:", associationData);
+                response = await registerAssociation(associationData);
+            }
+
+            console.log("API Response received:", response);
+            logger.info("Registration successful", { userId: response?.userId });
+
+            // Auto-Login
+            try {
+                console.log("Attempting Auto-Login...");
+                const loginData: LoginCredentials = {
+                    email,
+                    password
+                };
+                const loginResponse = await login(loginData);
+                console.log("Login Response:", loginResponse);
+
+                if (loginResponse.token) {
+                    await authLogin(loginResponse.token, loginResponse.refreshToken);
+
+                    logger.info("Auto-login successful");
+                    toast.success("تم إنشاء الحساب وتسجيل الدخول بنجاح");
+
+                    // Force a hard reload to ensure clean state and auth provider re-init
+                    setTimeout(() => {
+                        window.location.href = ROUTES.HOME;
+                    }, 500);
+                } else {
+                    // Fallback if no token returned
+                    toast.success("تم إنشاء الحساب بنجاح");
+                    router.push(ROUTES.AUTH.LOGIN);
+                }
+            } catch (loginError) {
+                console.error("Auto-login failed:", loginError);
+                logger.error("Auto-login failed after registration", loginError);
+                toast.success("تم إنشاء الحساب بنجاح، الرجاء تسجيل الدخول");
+                router.push(ROUTES.AUTH.LOGIN);
+            }
+
+        } catch (err: any) {
+            console.error("Critical Error in handleSubmit:", err);
+            logger.error("Registration critical error", err);
+
+            // Handle standard API errors
             const apiError = err as ApiError;
             const errorMessage = apiError.message || 'فشل التسجيل. يرجى المحاولة مرة أخرى.';
 
@@ -116,15 +196,16 @@ export const useRegisterForm = () => {
                     formErrors[key] = Array.isArray(messages) ? messages[0] : messages;
                 });
                 setErrors(formErrors);
+                // Also show a toast for better visibility
+                toast.error("يرجى تصحيح الأخطاء في النموذج: " + Object.values(formErrors).join(", "));
             } else {
                 setErrors({ general: errorMessage });
+                toast.error(errorMessage);
             }
-
-            logger.error("Registration submission failed", err);
         } finally {
             setIsLoading(false);
         }
-    }, [validateCurrentStep, formData, router]);
+    }, [validateCurrentStep, formData, router, errors]);
 
     const togglePassword = useCallback(() => {
         setShowPassword(prev => !prev);
