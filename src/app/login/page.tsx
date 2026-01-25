@@ -1,9 +1,17 @@
 import { LoginForm } from "@/features/auth/components/LoginForm";
+import { AuthWrapper } from "@/features/auth/components/shared/AuthWrapper";
+import { ROUTES } from "@/shared/constants/routes";
 
 export default function LoginPage() {
     return (
-        <div className="container mx-auto flex min-h-[calc(100vh-72px)] items-center justify-center px-4 py-12">
+        <AuthWrapper
+            title="مرحباً بعودتك"
+            description="سجل الدخول للمتابعة والوصول إلى لوحة التحكم الخاصة بك"
+            footerText="ليس لديك حساب؟"
+            footerLinkText="إنشاء حساب جديد"
+            footerLinkHref={ROUTES.AUTH.REGISTER}
+        >
             <LoginForm />
-        </div>
+        </AuthWrapper>
     );
 }

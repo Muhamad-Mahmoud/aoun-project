@@ -2,19 +2,46 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Hide scrollbar but keep functionality */
+/* Custom Scrollbar Styling */
 @layer utilities {
     .scrollbar-hide {
         -ms-overflow-style: none;
-        /* IE and Edge */
         scrollbar-width: none;
-        /* Firefox */
     }
 
     .scrollbar-hide::-webkit-scrollbar {
         display: none;
-        /* Chrome, Safari and Opera */
     }
+}
+
+/* Global Custom Scrollbar */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(160 84% 39% / 0.4) transparent;
+}
+
+*::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: hsl(160 84% 39% / 0.3);
+    border-radius: 10px;
+    transition: background 0.2s ease;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background: hsl(160 84% 39% / 0.6);
+}
+
+*::-webkit-scrollbar-corner {
+    background: transparent;
 }
 
 @layer base {

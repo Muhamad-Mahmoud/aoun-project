@@ -85,4 +85,3 @@ export const AccountTypeSelector: React.FC<AccountTypeSelectorProps> = ({ accoun
         </div>
     );
 };
-

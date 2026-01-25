@@ -8,4 +8,4 @@ export { IndividualForm } from './IndividualForm';
 export { RepresentativeForm } from './RepresentativeForm';
 export { OrganizationForm } from './OrganizationForm';
 export { RegistrationForm } from './RegistrationForm';
-export { SecurityStep } from './SecurityStep';
+export { SecurityForm } from './SecurityForm';

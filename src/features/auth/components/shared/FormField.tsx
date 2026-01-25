@@ -36,6 +36,7 @@ export const FormField: React.FC<FormFieldProps> = ({
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
                 className={cn(
+                    "h-11",
                     dir === "ltr" ? "text-left" : "text-right",
                     error && "border-destructive focus:border-destructive focus:ring-destructive/20"
                 )}
@@ -44,7 +45,7 @@ export const FormField: React.FC<FormFieldProps> = ({
                 aria-describedby={error ? `${id}-error` : undefined}
             />
             {error && (
-                <p 
+                <p
                     id={`${id}-error`}
                     className="text-xs text-destructive font-semibold text-right"
                     role="alert"
@@ -56,4 +57,3 @@ export const FormField: React.FC<FormFieldProps> = ({
         </div>
     );
 };
-

@@ -1,37 +1,65 @@
 "use client";
 
-import { DashboardLayout } from "@/shared/components/layout/DashboardLayout";
+import { DashboardLayout, DashboardTopBar } from "@/shared/components/layout/DashboardLayout";
 import { FamilySidebar } from "@/shared/components/layout/FamilySidebar";
-import { DashboardTopBar } from "@/shared/components/layout/DashboardLayout";
 import { Card } from "@/shared/ui/card";
-import { User, Mail, Phone, MapPin } from "lucide-react";
+import { useProfile } from "@/features/profile/hooks/useProfile";
+import { Loader2, User, Mail, Phone, MapPin } from "lucide-react";
 
 export default function FamilyProfilePage() {
+    // In a real app, we'd get this ID from the auth context or URL params
+    const { profile, isLoading, error } = useProfile("FAM-12345");
+
+    if (isLoading) {
+        return (
+            <DashboardLayout>
+                <FamilySidebar />
+                <div className="flex-1 flex items-center justify-center">
+                    <Loader2 className="w-10 h-10 animate-spin text-primary" />
+                </div>
+            </DashboardLayout>
+        );
+    }
+
+    if (error || !profile) {
+        return (
+            <DashboardLayout>
+                <FamilySidebar />
+                <div className="flex-1 flex items-center justify-center text-destructive font-bold">
+                    {error || "لم يتم العثور على بيانات الملف الشخصي"}
+                </div>
+            </DashboardLayout>
+        );
+    }
+
+    const userData = profile as any; // Cast for now based on inferred structure
+
     return (
         <DashboardLayout>
             <FamilySidebar />
             <div className="flex-1 flex flex-col min-h-screen overflow-y-auto">
                 <DashboardTopBar userType="family" />
                 <main className="p-8">
-                    <div className="mx-auto max-w-3xl space-y-8">
+                    <div className="mx-auto max-w-3xl space-y-8 text-right">
                         <div>
                             <h1 className="text-3xl font-bold tracking-tight">الملف الشخصي</h1>
                             <p className="text-muted-foreground">عرض وتعديل بيانات الأسرة.</p>
                         </div>
 
-                        <Card className="p-8 text-end">
+                        <Card className="p-8">
                             <div className="flex flex-col items-center mb-8">
                                 <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center text-primary text-3xl font-bold mb-4">
-                                    أم
+                                    {userData.name?.substring(0, 2) || "أس"}
                                 </div>
-                                <h2 className="text-xl font-bold">أسرة محمد أحمد علي</h2>
-                                <p className="text-muted-foreground">كود الأسرة: FAM-12345</p>
+                                <h2 className="text-xl font-bold">{userData.name || "اسم غير متوفر"}</h2>
+                                <p className="text-muted-foreground">كود الأسرة: {userData.id || "FAM-000"}</p>
                             </div>
 
                             <div className="grid gap-6">
-                                <ProfileItem icon={User} label="اسم رب الأسرة" value="محمد أحمد علي" />
-                                <ProfileItem icon={Phone} label="رقم الهاتف" value="٠١٢٣٤٥٦٧٨٩٠" />
-                                <ProfileItem icon={MapPin} label="العنوان" value="القاهرة، مدينة نصر، الحي السابع" />
+                                <ProfileItem icon={User} label="اسم رب الأسرة" value={userData.name} />
+                                <ProfileItem icon={Phone} label="رقم الهاتف" value={userData.phone} />
+                                <ProfileItem icon={Mail} label="البريد الإلكتروني" value={userData.email} />
+                                <ProfileItem icon={MapPin} label="المحافظة" value={userData.governorate} />
                             </div>
                         </Card>
                     </div>

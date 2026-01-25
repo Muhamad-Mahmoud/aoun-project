@@ -12,6 +12,10 @@ const font = Cairo({ subsets: ["arabic", "latin"] });
 export const metadata: Metadata = {
     title: "عون - منصة العون للأسر المحتاجة",
     description: "منصة رقمية لربط الأسر المحتاجة بالجمعيات الموثوقة",
+    icons: {
+        icon: "/logo.png",
+        apple: "/logo.png",
+    },
 };
 
 export default function RootLayout({

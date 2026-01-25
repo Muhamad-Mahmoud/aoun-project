@@ -1,7 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { cn } from "@/shared/utils";
-import { Button } from "@/shared/ui/button";
+import { ArrowRight } from "lucide-react";
 
 interface AuthWrapperProps {
     children: React.ReactNode;
@@ -10,10 +9,7 @@ interface AuthWrapperProps {
     footerText?: string;
     footerLinkText?: string;
     footerLinkHref?: string;
-    maxWidth?: "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl";
-    showSocialAuth?: boolean;
     showLogo?: boolean;
-    socialAuthLoading?: boolean;
 }
 
 export const AuthWrapper: React.FC<AuthWrapperProps> = ({
@@ -23,90 +19,104 @@ export const AuthWrapper: React.FC<AuthWrapperProps> = ({
     footerText,
     footerLinkText,
     footerLinkHref,
-    maxWidth = "md",
-    showSocialAuth = false,
-    showLogo = true,
-    socialAuthLoading = false
 }) => {
     return (
-        <div className="w-full space-y-8 relative animate-fade-in">
-            {/* Header Section - Mobile Logo + Title */}
-            <div className="space-y-4 text-center relative z-10">
-                {/* Logo - Mobile Only */}
-                {showLogo && (
-                    <div className="mx-auto w-fit mb-2 lg:hidden animate-fade-in delay-100">
-                        <Link href="/">
+        <div className="flex h-screen w-full bg-white font-cairo overflow-hidden flex-row-reverse">
+            {/* Right Side: Form Area (Scrollable) */}
+            <div className="flex-1 h-full flex flex-col relative min-w-0 bg-white overflow-y-auto custom-scrollbar">
+                {/* Back Link */}
+                <div className="absolute top-8 right-8 z-20">
+                    <Link
+                        href="/"
+                        className="group flex items-center gap-2 text-slate-400 hover:text-primary transition-all font-bold text-sm"
+                    >
+                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        العودة للرئيسية
+                    </Link>
+                </div>
+
+                <div className="flex-1 flex items-center justify-center p-6 md:p-10 lg:p-16">
+                    <div className="w-full max-w-[620px] space-y-6 animate-fade-in py-8">
+                        {/* Header Section */}
+                        <div className="text-center space-y-3">
+                            <h1 className="text-4xl font-black text-slate-900 tracking-tight">
+                                {title}
+                            </h1>
+                            {description && (
+                                <p className="text-lg text-slate-500 font-bold leading-relaxed">
+                                    {description}
+                                </p>
+                            )}
+                        </div>
+
+                        {/* Form Content */}
+                        <div className="relative">
+                            {children}
+                        </div>
+
+                        {/* Footer Section */}
+                        {(footerText || footerLinkText) && (
+                            <div className="text-center pt-6 border-t border-slate-50">
+                                <span className="text-slate-400 font-bold text-base">{footerText} </span>
+                                {footerLinkText && footerLinkHref && (
+                                    <Link
+                                        href={footerLinkHref}
+                                        className="text-primary hover:text-primary/80 font-black text-base hover:underline underline-offset-8 transition-all"
+                                    >
+                                        {footerLinkText}
+                                    </Link>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+
+            {/* Left Side: Hero Area (Fixed) */}
+            <div className="hidden lg:flex lg:w-[40%] h-full relative bg-[#0e1525] overflow-hidden items-center justify-center border-l border-white/5">
+                {/* Visual Elements */}
+                <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
+
+                {/* Glows */}
+                <div className="absolute top-0 left-0 w-96 h-96 bg-primary/10 rounded-full blur-[100px] -ml-48 -mt-48" />
+                <div className="absolute bottom-0 right-0 w-96 h-96 bg-emerald-500/5 rounded-full blur-[100px] -mr-48 -mb-48" />
+
+                <div className="relative z-10 w-full text-center px-16 space-y-12">
+                    {/* Logo Panel */}
+                    <div className="flex justify-center flex-col items-center gap-12">
+                        <Link href="/" className="hover:scale-105 transition-transform duration-500">
                             <img
                                 src="/logo.png"
                                 alt="عون"
-                                className="h-16 w-auto object-contain opacity-95 hover:opacity-100 transition-all duration-300 hover:scale-105"
+                                className="h-28 w-auto"
                             />
                         </Link>
-                    </div>
-                )}
 
-                <div className="animate-fade-in-up delay-200">
-                    <h2 className="text-3xl md:text-4xl font-black tracking-tight text-foreground mb-3">
-                        {title}
-                    </h2>
-                    {description && (
-                        <p className="text-base text-muted-foreground max-w-md mx-auto leading-relaxed">
-                            {description}
+                        {/* Badge */}
+                        <div className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white text-xs font-black">
+                            <span className="w-2 h-2 rounded-full bg-[#f59e0b] shadow-[0_0_8px_#f59e0b]" />
+                            منصة إنسانية ذكية
+                        </div>
+                    </div>
+
+                    {/* Text Content */}
+                    <div className="space-y-6">
+                        <h2 className="text-5xl font-black text-white leading-[1.3] tracking-tight">
+                            معاً نصنع <span className="text-primary">الأمل</span>
+                            <br />
+                            ونبني المستقبل.
+                        </h2>
+                        <p className="text-lg text-slate-400 font-bold leading-relaxed max-w-sm mx-auto opacity-80">
+                            انضم إلى آلاف المتطوعين والجمعيات الخيرية في مصر. نضمن وصول مساعدتك لمستحقيها بشفافية تامة.
                         </p>
-                    )}
-                </div>
-            </div>
-
-            {/* Content Section */}
-            <div className="space-y-6 animate-fade-in-up delay-300">
-                {children}
-
-                {showSocialAuth && (
-                    <div className="space-y-4 pt-2">
-                        <div className="relative">
-                            <div className="absolute inset-0 flex items-center">
-                                <span className="w-full border-t border-border/50" />
-                            </div>
-                            <div className="relative flex justify-center text-xs uppercase">
-                                <span className="bg-background px-3 text-muted-foreground font-medium">
-                                    أو
-                                </span>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 xs:grid-cols-2 gap-3">
-                            <Button variant="outline" type="button" disabled={socialAuthLoading} className="h-11 border-border/60 hover:border-primary hover:bg-primary/5 transition-all duration-300 w-full justify-center text-sm font-medium hover:scale-[1.02] active:scale-[.98]">
-                                <svg className="ml-2 h-5 w-5" viewBox="0 0 24 24">
-                                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
-                                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
-                                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
-                                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
-                                </svg>
-                                Google
-                            </Button>
-                            <Button variant="outline" type="button" disabled={socialAuthLoading} className="h-11 border-border/60 hover:border-primary hover:bg-primary/5 transition-all duration-300 w-full justify-center text-sm font-medium hover:scale-[1.02] active:scale-[.98]">
-                                <svg className="ml-2 h-5 w-5 text-foreground" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                                </svg>
-                                GitHub
-                            </Button>
-                        </div>
                     </div>
-                )}
-            </div>
-
-            {/* Footer Section */}
-            {(footerText || footerLinkText) && (
-                <div className="text-center text-sm text-muted-foreground pt-4 animate-fade-in delay-500">
-                    {footerText}{" "}
-                    {footerLinkText && footerLinkHref && (
-                        <Link href={footerLinkHref} className="font-semibold text-primary hover:text-primary/80 hover:underline underline-offset-4 transition-all">
-                            {footerLinkText}
-                        </Link>
-                    )}
                 </div>
-            )}
+
+                {/* Copyright Footer */}
+                <div className="absolute bottom-8 text-slate-500 text-xs font-bold tracking-wider">
+                    © 2026 منصة عون - جميع الحقوق محفوظة
+                </div>
+            </div>
         </div>
     );
 };
-
