@@ -5,7 +5,10 @@ import { Toaster } from "@/shared/ui/sonner";
 import { AuthProvider } from "@/shared/providers";
 import LayoutContent from "./LayoutContent";
 
-const font = Cairo({ subsets: ["arabic", "latin"] });
+const font = Cairo({
+    subsets: ["arabic", "latin"],
+    display: 'swap'
+});
 
 
 
@@ -50,6 +53,11 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="ar" dir="rtl">
+            <head>
+                <link rel="dns-prefetch" href="https://aoun-api.runasp.net" />
+                <link rel="preconnect" href="https://aoun-api.runasp.net" crossOrigin="anonymous" />
+                <link rel="preconnect" href="https://api.dicebear.com" />
+            </head>
             <body className={font.className}>
                 <AuthProvider>
 

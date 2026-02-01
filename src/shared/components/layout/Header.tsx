@@ -113,7 +113,7 @@ export function Header() {
                             width={160}
                             height={56}
                             priority
-                            className="h-14 w-auto object-contain transition-all duration-300 group-hover:scale-105"
+                            className="h-14 w-auto object-contain transition-[transform,opacity] duration-300 group-hover:scale-105"
                         />
                     </Link>
 
@@ -125,14 +125,14 @@ export function Header() {
                                 href={item.href}
                                 aria-label={`انتقل إلى ${item.label}`}
                                 onClick={(e) => handleNavClick(e, item.href)}
-                                className={`text-[15px] font-medium transition-all duration-200 relative group ${isActive(item.href)
+                                className={`text-[15px] font-medium transition-[color,transform] duration-200 relative group ${isActive(item.href)
                                     ? "text-warm-green"
                                     : "text-foreground/70 hover:text-warm-green"
                                     }`}
                             >
                                 {item.label}
                                 <span
-                                    className={`absolute -bottom-[22px] inset-x-0 h-[3px] bg-warm-green transition-all duration-300 ${isActive(item.href) ? "w-full" : "w-0 group-hover:w-full"
+                                    className={`absolute -bottom-[22px] inset-x-0 h-[3px] bg-warm-green transition-[width] duration-300 ${isActive(item.href) ? "w-full" : "w-0 group-hover:w-full"
                                         }`}
                                 ></span>
                             </Link>
@@ -149,7 +149,7 @@ export function Header() {
                         ) : isAuthenticated && user ? (
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" className="relative h-12 rounded-full pl-2 pr-4 hover:bg-muted/50 border border-transparent hover:border-border transition-all group">
+                                    <Button variant="ghost" className="relative h-12 rounded-full pl-2 pr-4 hover:bg-muted/50 border border-transparent hover:border-border transition-[background-color,border-color,transform] group">
                                         <div className="flex items-center gap-3">
                                             <Avatar className="h-9 w-9 border border-border shadow-sm group-hover:scale-105 transition-transform">
                                                 <AvatarImage src={`https://api.dicebear.com/7.x/initials/svg?seed=${user.name}`} alt={user.name} />
@@ -212,7 +212,7 @@ export function Header() {
                                     </Button>
                                 </Link>
                                 <Link href="/register">
-                                    <Button className="font-semibold text-[15px] px-6 h-11 rounded-lg bg-warm-green hover:bg-warm-green-light shadow-lg shadow-warm-green/20 hover:shadow-warm-green/30 hover:-translate-y-0.5 transition-all duration-250">
+                                    <Button className="font-semibold text-[15px] px-6 h-11 rounded-lg bg-warm-green hover:bg-warm-green-light shadow-lg shadow-warm-green/20 hover:shadow-warm-green/30 hover:-translate-y-0.5 transition-[background-color,box-shadow,transform] duration-250">
                                         حساب جديد
                                     </Button>
                                 </Link>
