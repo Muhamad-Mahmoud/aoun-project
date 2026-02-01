@@ -34,7 +34,7 @@ const nextConfig: NextConfig = {
           },
           {
             key: "Content-Security-Policy",
-            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://api.dicebear.com; font-src 'self' data:; frame-ancestors 'none'; connect-src 'self';",
+            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://api.dicebear.com https://aoun-api.runasp.net; font-src 'self' data:; frame-ancestors 'none'; connect-src 'self' https://aoun-api.runasp.net;",
           },
         ],
       },
@@ -43,7 +43,16 @@ const nextConfig: NextConfig = {
   // Image optimization
   images: {
     formats: ["image/avif", "image/webp"],
-    remotePatterns: [],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "api.dicebear.com",
+      },
+      {
+        protocol: "https",
+        hostname: "aoun-api.runasp.net",
+      },
+    ],
   },
   // Performance optimizations
   compress: true,

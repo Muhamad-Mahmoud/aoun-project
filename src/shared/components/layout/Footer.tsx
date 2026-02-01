@@ -14,7 +14,7 @@ export function Footer() {
                 <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-8 mb-12">
                     {/* Brand - Egyptian Identity */}
                     <div className="col-span-2 md:col-span-1 lg:col-span-1">
-                        <Link href="/" className="inline-block mb-6 group">
+                        <Link href="/" aria-label="العودة للصفحة الرئيسية" className="inline-block mb-6 group">
                             <Image
                                 src="/logo.png"
                                 alt="عون"
@@ -30,14 +30,15 @@ export function Footer() {
                         {/* Social Links - Egyptian Colors */}
                         <div className="flex items-center gap-3">
                             {[
-                                { Icon: Facebook, href: "#", color: "hover:bg-social-facebook" },
-                                { Icon: Twitter, href: "#", color: "hover:bg-social-twitter" },
-                                { Icon: Instagram, href: "#", color: "hover:bg-social-instagram" },
-                                { Icon: Linkedin, href: "#", color: "hover:bg-social-linkedin" }
-                            ].map(({ Icon, href, color }, i) => (
+                                { Icon: Facebook, href: "#", color: "hover:bg-social-facebook", label: "فيسبوك" },
+                                { Icon: Twitter, href: "#", color: "hover:bg-social-twitter", label: "تويتر" },
+                                { Icon: Instagram, href: "#", color: "hover:bg-social-instagram", label: "انستجرام" },
+                                { Icon: Linkedin, href: "#", color: "hover:bg-social-linkedin", label: "لينكد إن" }
+                            ].map(({ Icon, href, color, label }, i) => (
                                 <Link
                                     key={i}
                                     href={href}
+                                    aria-label={label}
                                     className={`w-10 h-10 rounded-full bg-footer/50 border border-footer-border ${color} hover:text-white text-footer-muted flex items-center justify-center transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg`}
                                 >
                                     <Icon className="w-5 h-5" />

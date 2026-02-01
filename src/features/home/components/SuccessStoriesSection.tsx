@@ -78,7 +78,7 @@ export function SuccessStoriesSection() {
                                 {/* Author Info */}
                                 <div className="w-full flex items-center justify-between pt-6 border-t-2 border-border">
                                     <div className="text-right">
-                                        <h4 className="text-lg font-bold text-foreground mb-1">{story.name}</h4>
+                                        <h3 className="text-lg font-bold text-foreground mb-1">{story.name}</h3>
                                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                                             <MapPin className="w-4 h-4" />
                                             <span>{story.location}</span>

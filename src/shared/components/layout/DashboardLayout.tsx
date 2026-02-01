@@ -27,7 +27,10 @@ export function DashboardTopBar({ userType }: { userType: string }) {
         {/* Mobile Menu Trigger */}
         <Sheet>
           <SheetTrigger asChild>
-            <button className="lg:hidden w-12 h-12 flex items-center justify-center bg-slate-50 rounded-2xl text-slate-400 active:scale-90 transition-all border border-slate-100 shadow-sm">
+            <button
+              aria-label="القائمة الجانبية"
+              className="lg:hidden w-12 h-12 flex items-center justify-center bg-slate-50 rounded-2xl text-slate-400 active:scale-90 transition-all border border-slate-100 shadow-sm"
+            >
               <Menu className="w-6 h-6" />
             </button>
           </SheetTrigger>
@@ -47,7 +50,10 @@ export function DashboardTopBar({ userType }: { userType: string }) {
 
       <div className="flex items-center gap-2 sm:gap-6">
         <div className="flex items-center gap-2">
-          <button className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center hover:bg-slate-50 rounded-2xl relative transition-all active:scale-90 group">
+          <button
+            aria-label="التنبيهات"
+            className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center hover:bg-slate-50 rounded-2xl relative transition-all active:scale-90 group"
+          >
             <Bell className="w-5 h-5 sm:w-6 sm:h-6 text-slate-400 group-hover:text-slate-900 transition-colors" />
             <span className="absolute top-2 sm:top-3 end-2 sm:end-3 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-rose-500 rounded-full border-2 border-white ring-4 ring-rose-500/10"></span>
           </button>

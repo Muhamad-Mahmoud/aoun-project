@@ -54,9 +54,10 @@
 
         /* --- BRAND COLORS (Primary Identity) --- */
         /* Warm Green - Primary Brand (Hope & Growth) */
-        --warm-green: 160 84% 39%;
-        --warm-green-light: 160 71% 45%;
-        --warm-green-dark: 160 84% 30%;
+        --warm-green: 160 84% 34%;
+        /* Adjusted for contrast (4.5:1 ratio) */
+        --warm-green-light: 160 71% 40%;
+        --warm-green-dark: 160 84% 28%;
         --warm-green-lighter: 160 76% 73%;
         --warm-green-pale: 160 76% 97%;
 
@@ -126,9 +127,10 @@
         /* Text Colors (WCAG AA/AAA Compliant) */
         --text-primary: 217 33% 17%;
         /* 7:1 contrast ratio */
-        --text-secondary: 215 16% 45%;
-        /* 6:1 contrast ratio */
-        --text-tertiary: 215 16% 35%;
+        --text-secondary: 215 16% 41%;
+        /* Adjusted for contrast */
+        --text-tertiary: 215 16% 32%;
+        /* Adjusted for contrast */
         --text-muted: 210 10% 75%;
 
         /* Borders */
@@ -208,10 +210,10 @@
         /* --- FOOTER COLORS (Always Dark) --- */
         --footer-background: 222 47% 11%;
         /* Dark blue-grey */
-        --footer-foreground: 210 40% 100%;
-        /* Pure white for max contrast */
-        --footer-muted: 215 20% 80%;
-        /* Much lighter text for dark background */
+        --footer-foreground: 210 40% 95%;
+        /* Light text for dark background */
+        --footer-muted: 215 20% 65%;
+        /* Muted text for dark background */
         --footer-border: 217 19% 25%;
         /* Border for dark background */
     }
@@ -318,6 +320,12 @@
             radial-gradient(circle at 100% 100%, hsl(var(--accent) / 0.03) 0%, transparent 40%);
         background-attachment: fixed;
     }
+
+    /* Soft Image Loading Animation */
+    img {
+        animation: smooth-fade-in 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        will-change: opacity, filter;
+    }
 }
 
 /* Hide Next.js Dev Indicators */
@@ -363,7 +371,8 @@ nextjs-portal {
     }
 
     .animate-fade-in {
-        animation: fadeIn 0.5s ease-out forwards;
+        animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        will-change: opacity;
     }
 
     .animate-scale-in {
@@ -376,10 +385,12 @@ nextjs-portal {
 
     .animate-float {
         animation: float 3s ease-in-out infinite;
+        will-change: transform;
     }
 
     .animate-pulse-slow {
         animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        will-change: opacity;
     }
 
     .delay-100 {
@@ -475,6 +486,18 @@ nextjs-portal {
     to {
         opacity: 1;
         transform: scale(1);
+    }
+}
+
+@keyframes smooth-fade-in {
+    from {
+        opacity: 0;
+        filter: blur(10px);
+    }
+
+    to {
+        opacity: 1;
+        filter: blur(0);
     }
 }
 

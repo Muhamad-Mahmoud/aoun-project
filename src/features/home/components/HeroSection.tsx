@@ -44,14 +44,14 @@ export function HeroSection() {
             </div>
 
             {/* Main Headline - Enhanced Size & Typography */}
-            <h1 className={`text-3xl sm:text-4xl lg:text-[56px] font-bold leading-[1.3] lg:leading-[1.2] text-foreground transition-all duration-700`}>
+            <h1 className="text-3xl sm:text-4xl lg:text-[56px] font-bold leading-[1.3] lg:leading-[1.2] text-foreground transition-all duration-700">
               نُوصّل <span className="text-warm-green">المساعدة</span>
               <br className="hidden sm:block" />
               إلى كل أسرة بأمان وسرعة
             </h1>
 
             {/* Subheadline - Concise & Direct */}
-            <p className={`text-base sm:text-lg lg:text-[20px] text-muted-foreground leading-relaxed max-w-2xl transition-all duration-700 delay-100 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+            <p className="text-base sm:text-lg lg:text-[20px] text-muted-foreground leading-relaxed max-w-2xl transition-all duration-700 delay-100">
               منصة رقمية تربط الأسر المحتاجة بالجمعيات الموثوقة في دقائق، لتجربة إنسانية كريمة
             </p>
 

@@ -103,6 +103,7 @@ export function Header() {
                     {/* Logo */}
                     <Link
                         href="/"
+                        aria-label="العودة للصفحة الرئيسية"
                         className="flex items-center gap-3 group transition-opacity hover:opacity-85"
                         onClick={(e) => handleNavClick(e, "/")}
                     >
@@ -122,6 +123,7 @@ export function Header() {
                             <Link
                                 key={item.href}
                                 href={item.href}
+                                aria-label={`انتقل إلى ${item.label}`}
                                 onClick={(e) => handleNavClick(e, item.href)}
                                 className={`text-[15px] font-medium transition-all duration-200 relative group ${isActive(item.href)
                                     ? "text-warm-green"
@@ -222,7 +224,7 @@ export function Header() {
                     <button
                         className={`lg:hidden p-2.5 hover:bg-muted/50 rounded-lg transition-all duration-300 ${isMenuOpen ? 'opacity-0 invisible' : 'opacity-100 visible'}`}
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        aria-label="Toggle menu"
+                        aria-label="فتح القائمة"
                     >
                         <Menu className="w-6 h-6 text-foreground" />
                     </button>
