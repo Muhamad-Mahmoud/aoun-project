@@ -126,10 +126,10 @@
         /* Text Colors (WCAG AA/AAA Compliant) */
         --text-primary: 217 33% 17%;
         /* 7:1 contrast ratio */
-        --text-secondary: 215 16% 47%;
+        --text-secondary: 215 16% 45%;
         /* 6:1 contrast ratio */
         --text-tertiary: 215 16% 35%;
-        --text-muted: 210 10% 85%;
+        --text-muted: 210 10% 75%;
 
         /* Borders */
         --border-light: 214 32% 91%;
@@ -167,7 +167,7 @@
 
         /* Muted = Warm Beige (Subtle Backgrounds) */
         --muted: var(--warm-beige);
-        --muted-foreground: var(--text-tertiary);
+        --muted-foreground: var(--text-secondary);
 
         /* Accent = Golden Orange (Call-to-Action) */
         --accent: var(--golden-orange);
@@ -208,10 +208,10 @@
         /* --- FOOTER COLORS (Always Dark) --- */
         --footer-background: 222 47% 11%;
         /* Dark blue-grey */
-        --footer-foreground: 210 40% 95%;
-        /* Light text for dark background */
-        --footer-muted: 215 20% 65%;
-        /* Muted text for dark background */
+        --footer-foreground: 210 40% 100%;
+        /* Pure white for max contrast */
+        --footer-muted: 215 20% 80%;
+        /* Much lighter text for dark background */
         --footer-border: 217 19% 25%;
         /* Border for dark background */
     }

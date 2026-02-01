@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 import {
   LayoutDashboard,
   Inbox,
@@ -35,7 +36,7 @@ export function OrganizationSidebarContent() {
       {/* Logo area */}
       <div className="p-8 border-b border-border/50">
         <Link href="/" className="flex items-center gap-3">
-          <img src="/logo.png" alt="عون" className="h-12 w-auto" />
+          <Image src="/logo.png" alt="عون" width={96} height={48} className="h-12 w-auto" />
         </Link>
       </div>
 

@@ -13,6 +13,7 @@ import {
     DropdownMenuTrigger,
 } from "@/shared/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
+import Image from "next/image";
 import { Menu, X, LogOut, User, LayoutDashboard, Settings, ChevronDown } from "lucide-react";
 import { useAuthContext } from "@/shared/providers";
 
@@ -105,9 +106,12 @@ export function Header() {
                         className="flex items-center gap-3 group transition-opacity hover:opacity-85"
                         onClick={(e) => handleNavClick(e, "/")}
                     >
-                        <img
+                        <Image
                             src="/logo.png"
                             alt="عون - منصة العون للأسر المحتاجة"
+                            width={160}
+                            height={56}
+                            priority
                             className="h-14 w-auto object-contain transition-all duration-300 group-hover:scale-105"
                         />
                     </Link>
@@ -236,9 +240,11 @@ export function Header() {
 
                             {/* Menu Header */}
                             <div className="flex items-center justify-between p-6 border-b border-border/50 shrink-0">
-                                <img
+                                <Image
                                     src="/logo.png"
                                     alt="عون - منصة العون للأسر المحتاجة"
+                                    width={160}
+                                    height={56}
                                     className="h-14 w-auto object-contain"
                                 />
                                 <button

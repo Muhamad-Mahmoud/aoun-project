@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/shared/ui/button";
 import { ArrowLeft, Users, Building2, MapPin, ShieldCheck, Award, Clock, Heart, CheckCircle, BrainCircuit } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { colors } from "@/shared/constants";
 
 export function HeroSection() {
@@ -43,7 +44,7 @@ export function HeroSection() {
             </div>
 
             {/* Main Headline - Enhanced Size & Typography */}
-            <h1 className={`text-3xl sm:text-4xl lg:text-[56px] font-bold leading-[1.3] lg:leading-[1.2] text-foreground transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+            <h1 className={`text-3xl sm:text-4xl lg:text-[56px] font-bold leading-[1.3] lg:leading-[1.2] text-foreground transition-all duration-700`}>
               نُوصّل <span className="text-warm-green">المساعدة</span>
               <br className="hidden sm:block" />
               إلى كل أسرة بأمان وسرعة
@@ -101,7 +102,7 @@ export function HeroSection() {
           </div>
 
           {/* Visual Column - 40% - Enhanced Illustration */}
-          <div className={`relative transition-all duration-700 delay-400 order-1 lg:order-2 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+          <div className={`relative transition-all duration-700 delay-400 order-1 lg:order-2`}>
             <div className="relative aspect-square max-w-[320px] sm:max-w-lg mx-auto lg:mx-0">
               {/* Decorative Circles */}
               <div className="absolute top-1/4 right-0 w-48 lg:w-64 h-48 lg:h-64 bg-warm-green/10 rounded-full blur-3xl animate-pulse-slow"></div>
@@ -112,10 +113,13 @@ export function HeroSection() {
                 <div className="relative w-full h-full flex items-center justify-center">
                   {/* Main Illustration Image */}
                   <div className="relative w-full aspect-square rounded-[24px] lg:rounded-[32px] overflow-hidden shadow-[0_10px_30px_hsla(var(--text-primary)/0.05)] lg:shadow-[0_20px_60px_hsla(var(--text-primary)/0.1)] bg-gradient-to-br from-warm-green/5 to-golden-orange/5">
-                    <img
+                    <Image
                       src="/hero-illustration.png"
                       alt="عون - منصة تربط الأسر المحتاجة بالجمعيات الخيرية"
-                      className="w-full h-full object-cover"
+                      fill
+                      priority
+                      sizes="(max-width: 768px) 100vw, 40vw"
+                      className="object-cover"
                     />
                   </div>
 

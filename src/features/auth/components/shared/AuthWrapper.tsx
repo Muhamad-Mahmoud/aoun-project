@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 
 interface AuthWrapperProps {
@@ -85,9 +86,12 @@ export const AuthWrapper: React.FC<AuthWrapperProps> = ({
                     {/* Logo Panel */}
                     <div className="flex justify-center flex-col items-center gap-12">
                         <Link href="/" className="hover:scale-105 transition-transform duration-500">
-                            <img
+                            <Image
                                 src="/logo.png"
                                 alt="عون"
+                                width={224}
+                                height={112}
+                                priority
                                 className="h-28 w-auto"
                             />
                         </Link>

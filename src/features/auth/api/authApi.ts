@@ -106,6 +106,14 @@ export async function refreshToken(data: RefreshTokenRequest): Promise<string> {
  * Get current user session
  */
 export async function getCurrentUser(): Promise<AuthUser | null> {
+    // First check if we have a token - if not, no need to call API
+    if (typeof window !== 'undefined') {
+        const token = sessionStorage.getItem('auth_token');
+        if (!token) {
+            return null;
+        }
+    }
+
     try {
         const response = await apiClient.get(API_ENDPOINTS.auth.me);
 

@@ -1,10 +1,12 @@
+import dynamic from "next/dynamic";
 import { HeroSection } from "@/features/home/components/HeroSection";
-
 import { WhyAounSection } from "@/features/home/components/WhyAounSection";
-import { JourneySection } from "@/features/home/components/JourneySection";
-import { PartnersSection } from "@/features/home/components/PartnersSection";
-import { SuccessStoriesSection } from "@/features/home/components/SuccessStoriesSection";
-import { FAQSection } from "@/features/home/components/FAQSection";
+
+const JourneySection = dynamic(() => import("@/features/home/components/JourneySection").then(mod => mod.JourneySection));
+const PartnersSection = dynamic(() => import("@/features/home/components/PartnersSection").then(mod => mod.PartnersSection));
+const SuccessStoriesSection = dynamic(() => import("@/features/home/components/SuccessStoriesSection").then(mod => mod.SuccessStoriesSection));
+const FAQSection = dynamic(() => import("@/features/home/components/FAQSection").then(mod => mod.FAQSection));
+
 
 export default function Home() {
     return (

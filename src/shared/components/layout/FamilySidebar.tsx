@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 import {
   LayoutDashboard,
   FileText,
@@ -33,7 +34,7 @@ export function FamilySidebarContent() {
       <div className="px-8 py-10">
         <Link href="/" className="flex items-center gap-3 group transition-transform hover:scale-105 active:scale-95 duration-300">
           <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-            <img src="/logo.png" alt="عون" className="h-8 w-auto" />
+            <Image src="/logo.png" alt="عون" width={32} height={32} className="h-8 w-auto" />
           </div>
           <span className="text-2xl font-black text-slate-900 tracking-tight">عون</span>
         </Link>

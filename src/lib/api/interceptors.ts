@@ -99,8 +99,16 @@ export function setupResponseInterceptors(axiosInstance: AxiosInstance) {
                         // No refresh token available, user needs to re-login
                         if (typeof window !== 'undefined') {
                             sessionStorage.removeItem('auth_token');
-                            // Only redirect if not already on login page
-                            if (!window.location.pathname.includes('/login')) {
+                            // Only redirect if on a protected page (not on public pages)
+                            const currentPath = window.location.pathname;
+                            const isPublicPage = currentPath === '/' ||
+                                currentPath.includes('/login') ||
+                                currentPath.includes('/register') ||
+                                currentPath.includes('/forgot-password') ||
+                                currentPath.includes('/reset-password') ||
+                                currentPath.includes('/verify-code');
+
+                            if (!isPublicPage) {
                                 window.location.href = ROUTES.AUTH.LOGIN;
                             }
                         }
@@ -129,10 +137,16 @@ export function setupResponseInterceptors(axiosInstance: AxiosInstance) {
                     if (typeof window !== 'undefined') {
                         sessionStorage.removeItem('auth_token');
                         sessionStorage.removeItem('refresh_token');
-                        // Only redirect if not already on login/auth pages
-                        if (!window.location.pathname.includes('/login') &&
-                            !window.location.pathname.includes('/register') &&
-                            !window.location.pathname.includes('/forgot-password')) {
+                        // Only redirect if on a protected page (not on public pages)
+                        const currentPath = window.location.pathname;
+                        const isPublicPage = currentPath === '/' ||
+                            currentPath.includes('/login') ||
+                            currentPath.includes('/register') ||
+                            currentPath.includes('/forgot-password') ||
+                            currentPath.includes('/reset-password') ||
+                            currentPath.includes('/verify-code');
+
+                        if (!isPublicPage) {
                             window.location.href = ROUTES.AUTH.LOGIN;
                         }
                     }

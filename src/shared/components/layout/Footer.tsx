@@ -1,5 +1,7 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Heart, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, ChevronLeft } from "lucide-react";
+
 
 export function Footer() {
     return (
@@ -13,9 +15,11 @@ export function Footer() {
                     {/* Brand - Egyptian Identity */}
                     <div className="col-span-2 md:col-span-1 lg:col-span-1">
                         <Link href="/" className="inline-block mb-6 group">
-                            <img
+                            <Image
                                 src="/logo.png"
                                 alt="عون"
+                                width={128}
+                                height={64}
                                 className="h-16 w-auto object-contain opacity-90 group-hover:opacity-100 transition-all duration-300"
                             />
                         </Link>

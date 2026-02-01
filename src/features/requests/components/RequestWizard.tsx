@@ -35,9 +35,7 @@ import { cn } from "@/shared/utils";
 // Schema for Step 1
 const step1Schema = z.object({
     title: z.string().min(5, "العنوان يجب أن يكون 5 أحرف على الأقل"),
-    category: z.enum(['HEALTH', 'EDUCATION', 'FOOD', 'HOUSING', 'DEBT', 'OTHER'] as [string, ...string[]], {
-        required_error: "يرجى اختيار الفئة",
-    }),
+    category: z.enum(['HEALTH', 'EDUCATION', 'FOOD', 'HOUSING', 'DEBT', 'OTHER'] as [string, ...string[]]),
     amountNeeded: z.string().optional(),
     location: z.string().min(2, "الموقع مطلوب"),
 });
