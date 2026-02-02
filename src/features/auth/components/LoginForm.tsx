@@ -11,6 +11,8 @@ import { Eye, EyeOff, Loader2, LogIn, Mail, ChevronLeft } from "lucide-react";
 import { ErrorDisplay } from "@/shared/components/common";
 import { useLoginForm } from "../hooks/useLoginForm";
 import type { LoginCredentials } from "../types";
+import { checkRateLimit, getRemainingAttempts, getResetTime } from "@/lib/security/rateLimiter";
+import { toast } from "sonner";
 
 export function LoginForm() {
     const { isLoading, showPassword, error, togglePassword, onSubmit } = useLoginForm();
@@ -20,6 +22,17 @@ export function LoginForm() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        // Check rate limit before proceeding
+        if (!checkRateLimit(email)) {
+            const resetTime = getResetTime(email);
+            const minutes = Math.ceil(resetTime / 60);
+            toast.error(
+                `تم تجاوز عدد المحاولات المسموح بها. حاول مرة أخرى بعد ${minutes} دقيقة.`,
+                { duration: 5000 }
+            );
+            return;
+        }
 
         const credentials: LoginCredentials = {
             email,

@@ -30,11 +30,11 @@ const nextConfig: NextConfig = {
           },
           {
             key: "Referrer-Policy",
-            value: "origin-when-cross-origin",
+            value: "strict-origin-when-cross-origin",
           },
           {
             key: "Content-Security-Policy",
-            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://api.dicebear.com https://aoun-api.runasp.net; font-src 'self' data:; frame-ancestors 'none'; connect-src 'self' https://aoun-api.runasp.net;",
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://api.dicebear.com https://aoun-api.runasp.net; font-src 'self' data:; frame-ancestors 'none'; connect-src 'self' https://aoun-api.runasp.net;",
           },
         ],
       },

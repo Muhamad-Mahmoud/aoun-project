@@ -11,7 +11,6 @@ const font = Cairo({
 });
 
 
-
 export const metadata: Metadata = {
     metadataBase: new URL("https://aoun.org"),
     title: "عون | مد يد المساعدة للأسر المحتاجة في مصر",
@@ -57,6 +56,8 @@ export default function RootLayout({
                 <link rel="dns-prefetch" href="https://aoun-api.runasp.net" />
                 <link rel="preconnect" href="https://aoun-api.runasp.net" crossOrigin="anonymous" />
                 <link rel="preconnect" href="https://api.dicebear.com" />
+                {/* CSRF Protection Hint - Signals backend to use SameSite=Strict cookies */}
+                <meta name="csrf-protection" content="SameSite=Strict; Secure" />
             </head>
             <body className={font.className}>
                 <AuthProvider>

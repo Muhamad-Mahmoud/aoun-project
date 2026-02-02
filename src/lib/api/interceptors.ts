@@ -16,13 +16,15 @@ interface ErrorResponseData {
 }
 
 import { TOKEN_STORAGE_KEY, API_ENDPOINTS } from './config';
+import { getSecureToken, setSecureToken, removeSecureToken } from '../security/tokenStorage';
+import { sanitizeLogData } from '../security/sanitize';
 
 /**
  * Setup request interceptors
  */
 export function setupRequestInterceptors(axiosInstance: AxiosInstance) {
     axiosInstance.interceptors.request.use(
-        (config: InternalAxiosRequestConfig) => {
+        async (config: InternalAxiosRequestConfig) => {
             // Define public endpoints that don't need auth token
             const publicEndpoints = [
                 API_ENDPOINTS.auth.login,
@@ -38,18 +40,19 @@ export function setupRequestInterceptors(axiosInstance: AxiosInstance) {
 
             // Attach token if available and NOT a public endpoint
             if (typeof window !== 'undefined' && !isPublicEndpoint) {
-                const token = sessionStorage.getItem(TOKEN_STORAGE_KEY);
+                // Use encrypted token storage
+                const token = await getSecureToken(TOKEN_STORAGE_KEY);
                 if (token) {
                     config.headers.Authorization = `Bearer ${token}`;
                 }
             }
 
-            // Log request in development
+            // Log request in development (sanitized)
             if (process.env.NODE_ENV === 'development') {
                 logger.debug('API Request', {
                     method: config.method?.toUpperCase(),
                     url: config.url,
-                    data: config.data,
+                    data: sanitizeLogData(config.data),
                 });
             }
 
@@ -90,15 +93,15 @@ export function setupResponseInterceptors(axiosInstance: AxiosInstance) {
                 originalRequest._retry = true;
 
                 try {
-                    // Get refresh token from storage
+                    // Get refresh token from encrypted storage
                     const refreshTokenValue = typeof window !== 'undefined'
-                        ? sessionStorage.getItem('refresh_token')
+                        ? await getSecureToken('refresh_token')
                         : null;
 
                     if (!refreshTokenValue) {
                         // No refresh token available, user needs to re-login
                         if (typeof window !== 'undefined') {
-                            sessionStorage.removeItem('auth_token');
+                            removeSecureToken('auth_token');
                             // Only redirect if on a protected page (not on public pages)
                             const currentPath = window.location.pathname;
                             const isPublicPage = currentPath === '/' ||
@@ -116,14 +119,15 @@ export function setupResponseInterceptors(axiosInstance: AxiosInstance) {
                     }
 
                     // Attempt to refresh the token
+                    const currentToken = await getSecureToken(TOKEN_STORAGE_KEY);
                     const response = await refreshToken({
-                        token: sessionStorage.getItem(TOKEN_STORAGE_KEY) || '',
+                        token: currentToken || '',
                         refreshToken: refreshTokenValue
                     });
 
-                    // Save new token
+                    // Save new token using encrypted storage
                     if (response && typeof window !== 'undefined') {
-                        sessionStorage.setItem(TOKEN_STORAGE_KEY, response);
+                        await setSecureToken(TOKEN_STORAGE_KEY, response);
 
                         // Retry original request with new token
                         if (originalRequest.headers) {
@@ -135,8 +139,8 @@ export function setupResponseInterceptors(axiosInstance: AxiosInstance) {
                     // Refresh failed, redirect to login
                     logger.error('Token refresh failed', refreshError);
                     if (typeof window !== 'undefined') {
-                        sessionStorage.removeItem('auth_token');
-                        sessionStorage.removeItem('refresh_token');
+                        removeSecureToken('auth_token');
+                        removeSecureToken('refresh_token');
                         // Only redirect if on a protected page (not on public pages)
                         const currentPath = window.location.pathname;
                         const isPublicPage = currentPath === '/' ||

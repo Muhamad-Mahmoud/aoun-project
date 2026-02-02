@@ -11,6 +11,7 @@ import { getCurrentUser, logout as logoutApi } from '@/features/auth/api/authApi
 import type { AuthUser } from '@/features/auth/types';
 import { logger } from '@/lib/logger';
 import { ROUTES } from '@/shared/constants/routes';
+import { setSecureToken, getSecureToken, removeSecureToken } from '@/lib/security/tokenStorage';
 
 interface AuthContextType {
     user: AuthUser | null;
@@ -68,9 +69,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             setToken(null);
             setIsAuthenticated(false);
 
-            // Clear storage
-            sessionStorage.removeItem('auth_token');
-            sessionStorage.removeItem('refresh_token');
+            // Clear storage using secure functions
+            removeSecureToken('auth_token');
+            removeSecureToken('refresh_token');
             // Ensure cookies are also cleared just in case
             document.cookie = "auth_token=; path=/; max-age=0; SameSite=Lax";
 
@@ -80,10 +81,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const login = useCallback(async (token: string, refreshToken?: string) => {
         try {
-            // 1. Store tokens immediately so apiClient can use them
-            sessionStorage.setItem('auth_token', token);
+            // 1. Store tokens using encrypted storage
+            await setSecureToken('auth_token', token);
             if (refreshToken) {
-                sessionStorage.setItem('refresh_token', refreshToken);
+                await setSecureToken('refresh_token', refreshToken);
             }
             setToken(token);
             setIsAuthenticated(true);
