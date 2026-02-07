@@ -98,7 +98,7 @@ export function Header() {
     return (
         <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/90 border-b border-border/50 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
             <div className="container mx-auto px-6 lg:px-12">
-                <div className="flex h-[72px] items-center justify-between gap-8">
+                <div className="flex h-[72px] items-center justify-between gap-8 relative">
 
                     {/* Logo */}
                     <Link
@@ -139,8 +139,8 @@ export function Header() {
                         ))}
                     </nav>
 
-                    {/* Desktop Action Buttons / User Menu */}
-                    <div className="hidden md:flex items-center gap-3">
+                    {/* Desktop Action Buttons / User Menu - HIDDEN ON LG and below to prevent overlap */}
+                    <div className="hidden lg:flex items-center gap-3">
                         {isLoading ? (
                             <div className="flex items-center gap-3">
                                 <div className="w-24 h-10 bg-muted/60 animate-pulse rounded-lg" />
@@ -222,85 +222,56 @@ export function Header() {
 
                     {/* Mobile Menu Button */}
                     <button
-                        className={`lg:hidden p-2.5 hover:bg-muted/50 rounded-lg transition-all duration-300 ${isMenuOpen ? 'opacity-0 invisible' : 'opacity-100 visible'}`}
+                        className={`lg:hidden p-2.5 hover:bg-muted/50 rounded-lg transition-all duration-300 ${isMenuOpen ? 'bg-muted/50' : ''}`}
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
                         aria-label="فتح القائمة"
                     >
-                        <Menu className="w-6 h-6 text-foreground" />
+                        {isMenuOpen ? <X className="w-6 h-6 text-foreground" /> : <Menu className="w-6 h-6 text-foreground" />}
                     </button>
-                </div>
 
-                {/* Mobile Menu */}
-                {isMenuOpen && (
-                    <>
-                        <div
-                            className="fixed top-[72px] left-0 right-0 bottom-0 bg-black/60 backdrop-blur-sm z-[40] lg:hidden"
-                            onClick={() => setIsMenuOpen(false)}
-                        ></div>
+                    {/* Mobile Menu Dropdown (Compact) */}
+                    {isMenuOpen && (
+                        <div className="absolute top-[calc(100%+8px)] left-4 w-[280px] z-50 lg:hidden flex flex-col bg-popover/95 backdrop-blur-md border border-border/50 shadow-2xl rounded-2xl animate-in slide-in-from-top-2 fade-in duration-200 origin-top">
 
-                        <div className="fixed top-0 end-0 h-[100dvh] w-[75vw] sm:w-[300px] bg-background shadow-2xl z-[70] lg:hidden animate-in slide-in-from-inline-end duration-300 flex flex-col">
-
-                            {/* Menu Header */}
-                            <div className="flex items-center justify-between p-6 border-b border-border/50 shrink-0">
-                                <Image
-                                    src="/logo.png"
-                                    alt="عون - منصة العون للأسر المحتاجة"
-                                    width={160}
-                                    height={56}
-                                    className="h-14 w-auto object-contain"
-                                />
-                                <button
-                                    onClick={() => setIsMenuOpen(false)}
-                                    className="p-2 hover:bg-muted rounded-full transition-colors border border-transparent hover:border-border"
-                                >
-                                    <X className="w-5 h-5 text-foreground" />
-                                </button>
-                            </div>
-
-                            {/* Menu Content */}
-                            <nav className="flex-1 overflow-y-auto p-6 min-h-0">
-                                <div className="flex flex-col gap-2">
-                                    {navItems.map((item) => (
-                                        <Link
-                                            key={item.href}
-                                            href={item.href}
-                                            className={`text-[16px] font-medium py-3.5 px-4 rounded-xl transition-all duration-200 flex items-center justify-between group ${isActive(item.href)
-                                                ? "bg-warm-green/10 text-warm-green border border-warm-green/20"
-                                                : "text-foreground/80 hover:text-warm-green hover:bg-warm-green/5 border border-transparent"
-                                                }`}
-                                            onClick={(e) => handleNavClick(e, item.href)}
-                                        >
-                                            {item.label}
-                                            {isActive(item.href) && (
-                                                <div className="w-1.5 h-1.5 rounded-full bg-warm-green" />
-                                            )}
-                                        </Link>
-                                    ))}
-                                </div>
+                            {/* Menu Links */}
+                            <nav className="flex flex-col p-2">
+                                {navItems.map((item) => (
+                                    <Link
+                                        key={item.href}
+                                        href={item.href}
+                                        className={`text-base font-bold px-4 py-3 rounded-xl transition-colors flex items-center justify-between ${isActive(item.href)
+                                                ? "bg-warm-green/10 text-warm-green"
+                                                : "text-foreground/80 hover:bg-muted/50 hover:text-foreground"
+                                            }`}
+                                        onClick={(e) => handleNavClick(e, item.href)}
+                                    >
+                                        {item.label}
+                                        {isActive(item.href) && <div className="w-1.5 h-1.5 rounded-full bg-warm-green" />}
+                                    </Link>
+                                ))}
                             </nav>
 
+                            <div className="h-[1px] bg-border/50 mx-4" />
+
                             {/* Menu Footer - Auth Logic */}
-                            <div className="p-6 border-t border-border/50 bg-muted/30 shrink-0">
+                            <div className="p-4 flex flex-col gap-3">
                                 {isLoading ? (
-                                    <div className="flex flex-col gap-3 animate-pulse">
-                                        <div className="h-12 bg-gray-200 rounded-xl" />
-                                        <div className="h-12 bg-gray-200 rounded-xl" />
-                                    </div>
+                                    <div className="h-10 bg-muted/60 animate-pulse rounded-xl w-full" />
                                 ) : isAuthenticated && user ? (
-                                    <div className="flex flex-col gap-3">
-                                        {/* User Info Card */}
-                                        <div className="flex items-center gap-3 p-3 bg-white rounded-xl border border-border/60 shadow-sm mb-2">
-                                            <Avatar className="h-10 w-10 border border-border">
+                                    <>
+                                        <div className="flex items-center gap-3 px-2 py-1 mb-1">
+                                            <Avatar className="h-8 w-8 border border-border">
                                                 <AvatarImage src={`https://api.dicebear.com/7.x/initials/svg?seed=${user.name}`} />
                                                 <AvatarFallback>{getInitials()}</AvatarFallback>
                                             </Avatar>
-                                            <span className="font-bold text-sm truncate">{getDisplayName()}</span>
+                                            <div className="flex flex-col overflow-hidden">
+                                                <span className="font-bold text-sm truncate">{user.name}</span>
+                                                <span className="text-xs text-muted-foreground truncate">{user.email}</span>
+                                            </div>
                                         </div>
 
                                         <Link href={dashboardUrl} onClick={() => setIsMenuOpen(false)}>
-                                            <Button
-                                                className="w-full font-bold h-12 rounded-xl bg-primary text-white hover:bg-primary/90"
-                                            >
+                                            <Button className="w-full h-10 font-bold rounded-xl bg-primary text-white hover:bg-primary/90 shadow-sm">
                                                 <LayoutDashboard className="ml-2 h-4 w-4" />
                                                 لوحة التحكم
                                             </Button>
@@ -308,28 +279,27 @@ export function Header() {
 
                                         <Button
                                             variant="outline"
-                                            className="w-full font-bold h-12 rounded-xl border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300"
+                                            className="w-full h-10 font-bold rounded-xl border-red-100 text-red-600 hover:bg-red-50 hover:border-red-200"
                                             onClick={() => {
                                                 logout();
                                                 setIsMenuOpen(false);
                                             }}
                                         >
-                                            <LogOut className="ml-2 h-4 w-4" />
                                             تسجيل الخروج
                                         </Button>
-                                    </div>
+                                    </>
                                 ) : (
-                                    <div className="flex flex-col gap-3">
+                                    <div className="grid grid-cols-2 gap-3">
                                         <Link href="/login" onClick={() => setIsMenuOpen(false)}>
                                             <Button
                                                 variant="outline"
-                                                className="w-full font-bold text-[15px] h-12 rounded-xl border-2 border-border/60 hover:border-warm-green hover:bg-warm-green/5 hover:text-warm-green"
+                                                className="w-full h-10 font-bold rounded-xl border-border/60 hover:bg-muted/50"
                                             >
                                                 تسجيل الدخول
                                             </Button>
                                         </Link>
                                         <Link href="/register" onClick={() => setIsMenuOpen(false)}>
-                                            <Button className="w-full font-bold text-[15px] h-12 rounded-xl bg-warm-green hover:bg-warm-green-light shadow-lg shadow-warm-green/20">
+                                            <Button className="w-full h-10 font-bold rounded-xl bg-warm-green hover:bg-warm-green-light shadow-md shadow-warm-green/20">
                                                 حساب جديد
                                             </Button>
                                         </Link>
@@ -337,8 +307,8 @@ export function Header() {
                                 )}
                             </div>
                         </div>
-                    </>
-                )}
+                    )}
+                </div>
             </div>
         </header>
     );

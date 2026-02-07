@@ -11,7 +11,6 @@ const FAQSection = dynamic(() => import("@/features/home/components/FAQSection")
 export default function Home() {
     return (
         <div className="flex flex-col gap-0 pb-20">
-
             <HeroSection />
             <WhyAounSection />
 

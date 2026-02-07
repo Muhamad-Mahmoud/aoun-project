@@ -44,11 +44,19 @@ export const useRegisterForm = () => {
 
     const totalSteps = 2; // Always 2 steps now (Info -> Security)
 
+    // Clear errors and submit attempt when changing steps
+    useEffect(() => {
+        setErrors({});
+        setTouched({});
+        setAttemptedSubmit(false);
+    }, [currentStep]);
+
     const handleInputChange = useCallback((field: keyof FormData, value: string | boolean) => {
         setFormData(prev => ({ ...prev, [field]: value }));
         setTouched(prev => ({ ...prev, [field]: true }));
 
         setErrors(prev => {
+            // Only clear the specific error for the field being changed
             if (prev[field]) {
                 const newErrors = { ...prev };
                 delete newErrors[field];
@@ -64,11 +72,20 @@ export const useRegisterForm = () => {
         return Object.keys(newErrors).length === 0;
     }, [formData, currentStep]);
 
-    const nextStep = useCallback(() => {
+    const nextStep = useCallback((e?: React.MouseEvent) => {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
         setAttemptedSubmit(true);
         if (validateCurrentStep() && currentStep < totalSteps) {
-            setCurrentStep(prev => prev + 1);
+            // Explicitly clear validation state before advancing
+            // This ensures the next step renders without inherited errors
+            setErrors({});
+            setTouched({});
             setAttemptedSubmit(false);
+
+            setCurrentStep(prev => prev + 1);
         }
     }, [validateCurrentStep, currentStep, totalSteps]);
 
@@ -88,6 +105,13 @@ export const useRegisterForm = () => {
 
     const handleSubmit = useCallback(async (event: React.FormEvent) => {
         event.preventDefault();
+
+        // If not on the last step, treat submit as "Next"
+        if (currentStep < totalSteps) {
+            nextStep();
+            return;
+        }
+
         console.log("handleSubmit triggered");
         setAttemptedSubmit(true);
 
