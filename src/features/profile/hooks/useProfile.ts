@@ -1,29 +1,30 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getUserProfile } from '../api/profileApi';
+import { getMyProfile } from '../api/profileApi';
 import type { UserProfile, OrganizationProfile } from '../types';
 import { logger } from '@/lib/logger';
 
-export const useProfile = (id: string | undefined) => {
+export const useProfile = () => {
     const [profile, setProfile] = useState<UserProfile | OrganizationProfile | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (!id) {
-            setIsLoading(false);
-            return;
-        }
-
         const fetchProfile = async () => {
             setIsLoading(true);
             try {
-                const data = await getUserProfile(id);
+                const data = await getMyProfile();
                 setProfile(data);
                 setError(null);
-            } catch (err) {
+            } catch (err: any) {
                 logger.error('Failed to fetch profile', err);
+                console.error('Profile Fetch Error Debug:', {
+                    status: err.response?.status,
+                    data: err.response?.data,
+                    url: err.config?.url,
+                    message: err.message
+                });
                 setError('فشل تحميل بيانات الملف الشخصي');
                 setProfile(null);
             } finally {
@@ -32,7 +33,8 @@ export const useProfile = (id: string | undefined) => {
         };
 
         fetchProfile();
-    }, [id]);
+    }, []);
 
     return { profile, isLoading, error };
 };
+

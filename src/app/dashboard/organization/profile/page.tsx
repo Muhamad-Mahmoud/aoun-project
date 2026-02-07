@@ -5,10 +5,10 @@ import { OrganizationSidebar } from "@/shared/components/layout/OrganizationSide
 import { Card } from "@/shared/ui/card";
 import { Building2, Mail, Phone, MapPin, ShieldCheck, Loader2 } from "lucide-react";
 import { useProfile } from "@/features/profile/hooks/useProfile";
+import { useAuthContext } from "@/shared/providers/AuthProvider";
 
 export default function OrganizationProfilePage() {
-    // In a real app, we'd get this ID from the auth context or URL params
-    const { profile, isLoading, error } = useProfile("ORG-12345");
+    const { profile, isLoading, error } = useProfile();
 
     if (isLoading) {
         return (

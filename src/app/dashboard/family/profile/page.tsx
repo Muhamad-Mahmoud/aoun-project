@@ -4,11 +4,11 @@ import { DashboardLayout, DashboardTopBar } from "@/shared/components/layout/Das
 import { FamilySidebar } from "@/shared/components/layout/FamilySidebar";
 import { Card } from "@/shared/ui/card";
 import { useProfile } from "@/features/profile/hooks/useProfile";
+import { useAuthContext } from "@/shared/providers/AuthProvider";
 import { Loader2, User, Mail, Phone, MapPin } from "lucide-react";
 
 export default function FamilyProfilePage() {
-    // In a real app, we'd get this ID from the auth context or URL params
-    const { profile, isLoading, error } = useProfile("FAM-12345");
+    const { profile, isLoading, error } = useProfile();
 
     if (isLoading) {
         return (

@@ -14,6 +14,21 @@ export async function getUserProfile(userId: string): Promise<UserProfile> {
     return response.data.data;
 }
 
+export async function getOrganizationProfile(orgId: string): Promise<OrganizationProfile> {
+    const response = await apiClient.get<ApiResponse<OrganizationProfile>>(
+        API_ENDPOINTS.organization.get(orgId)
+    );
+    return response.data.data;
+}
+
+// Use /api/Auth/me to get current user's profile
+export async function getMyProfile(): Promise<UserProfile | OrganizationProfile> {
+    const response = await apiClient.get<ApiResponse<UserProfile | OrganizationProfile>>(
+        API_ENDPOINTS.auth.me
+    );
+    return response.data.data;
+}
+
 export async function updateProfile(data: Partial<UserProfile | OrganizationProfile>): Promise<void> {
     await apiClient.put(API_ENDPOINTS.profile.update, data);
 }

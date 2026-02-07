@@ -1,79 +1,109 @@
-# Aoun Platform - Development Summary
+# Aoun Platform - منصة عون
 
-## Technology Stack
-
-### Core Framework
-- **Next.js 15+** - React framework with App Router for server-side rendering and routing
-- **TypeScript** - Static typing for better code quality and developer experience
-- **React 18+** - UI library with hooks and modern features
-
-### Styling & UI
-- **Tailwind CSS v4** - Utility-first CSS framework for rapid UI development
-- **shadcn/ui** - High-quality, accessible React components built on Radix UI
-- **lucide-react** - Icon library with 1000+ consistent SVG icons
-- **Custom CSS Variables** - Brand colors (Nile Blue, Pharaoh Gold)
-
-### Security & Environment
-- **Environment Validation** - Type-safe environment variables
-- **JWT Authentication** - Secure token handling with expiration
-
-## 🚀 Getting Started
-
-### 1. Environment Setup
-The application requires a `JWT_SECRET` to function.
-
-```bash
-# Generate a secure secret
-openssl rand -base64 32
-
-# Create .env.local
-cp .env.example .env.local
-# Add your secret
-JWT_SECRET=your_generated_secret_here
-```
-
-### 2. Installation
-```bash
-npm install
-npm run dev
-```
-
-### State Management
-- **React Hooks** - useState, useEffect, useCallback for local state
-- **Custom Hooks** - useProfileEdit, useAvatarUpload, useRegisterForm
-
-### Routing
-- **Next.js App Router** - File-based routing with layouts and dynamic routes
-- **Route Groups** - (auth), (public) for organized structure
-- **Dynamic Routes** - [type] parameter for user/organization profiles
-
-### Form Handling
-- **Custom Components** - FormField, EditableField with built-in validation
-- **Client-side Validation** - Real-time error handling and feedback
+**Aoun** is a comprehensive digital platform designed to bridge the gap between donors, charitable organizations, and families in need. Built with scalability and security in mind, it leverages modern web technologies to provide a seamless user experience.
 
 ---
 
-## What We Built
+## 🛠️ Technology Stack
 
-### 1. Authentication Pages Enhancement
-Enhanced login and registration pages with better spacing, larger inputs, improved labels, and cleaner backgrounds using brand colors. Added auto-selection for organization registration.
+### Frontend (User Interface)
+- **Framework**: [Next.js 15+](https://nextjs.org/) (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS v4, Custom Design System
+- **UI Library**: Shadcn/ui (Radix Primitives), Lucide React Icons
+- **State Management**: React Context API + Hooks
+- **Forms**: Custom Form Hooks with Real-time Validation
+- **Network**: Fetch API with Interceptors
 
-### 2. Profile System
-Created complete profile pages for users and organizations with inline editing, avatar/logo upload, and 13 reusable components (shared, user, organization).
-
-### 3. Key Features
-- Inline editing with individual field controls
-- Avatar/logo upload with drag & drop
-- Premium UI with gradients and shadows
-- RTL support throughout
-- Responsive design
-
-### 4. Routes
-- `/login` - User login
-- `/register` - Registration with auto-selection
-- `/profile/user` - User profile
-- `/profile/organization` - Organization profile
+### Backend (Core System)
+- **Framework**: ASP.NET Core 8 Web API
+- **Database**: SQL Server (optimised with Partitioning)
+- **ORM**: Entity Framework Core
+- **Architecture**: Onion/Clean Architecture
+- **Background Processing**: Hangfire
+- **Payments**: Stripe Integration
 
 ---
 
-*Session Date: December 12, 2024*
+## 🌟 Comprehensive Feature List
+
+### 1. Landing Page (Home)
+A fully responsive, informational landing page designed to build trust and guide users.
+- **Hero Section**: Engaging introduction with clear Calls to Action (CTA) for Donors and Families.
+- **Why Aoun**: Highlights platform advantages (Transparency, Speed, Security).
+- **The Journey**: Visual guide explaining how the donation process works step-by-step.
+- **Success Stories**: Real-world examples of impact to inspire community trust.
+- **Partners**: Showcasing collaborating organizations and sponsors.
+- **FAQ Section**: Accordion-style answers to common user questions.
+
+### 2. Authentication & Security
+- **Dual-Flow Registration**: Specialized sign-up paths for **Families** (Individuals) and **Organizations** (Charities).
+- **Secure Login**: JWT-based authentication with automatic token refresh.
+- **Password Recovery**: Complete flow for **Forgot Password**, **Verify Code**, and **Reset Password**.
+- **Session Persistence**: Secure storage mechanisms to keep users logged in across reloads.
+- **Auto-Login**: Seamless redirection after successful registration.
+- **Role-Based Access Control (RBAC)**: Distinct permissions for Users, Organizations, and Admins.
+
+### 3. User & Organization Profiles
+- **Dashboard**: Personalized landing pages (`/dashboard`) based on user account type.
+- **Profile Management**:
+    - **Inline Editing**: Update profile fields directly without navigating away.
+    - **Avatar/Logo Upload**: Drag & drop support for profile pictures.
+    - **Organization Specifics**: Manage association capacity, coverage areas, and legal data.
+- **Settings Module**: Dedicated area for managing account preferences and security settings.
+
+### 4. Core Services
+- **Aid Requests**: System for families to submit and track requests for assistance (`src/features/requests`).
+- **Donation Management**: Secure processing of donations via Stripe.
+- **Tour/Provider Management**: Backend systems for managing service providers.
+
+### 5. Advanced UI/UX Experience
+- **Responsive Navigation**:
+    - **Desktop**: Clean top-bar with dropdown user menus.
+    - **Mobile**: Custom **Floating Glass Card** menu for easy thumb access.
+- **Native RTL Support**: Fully optimized for Arabic layout and typography (Cairo Font).
+- **Smart Notifications**: "Clean & Light" Toaster system for success/error feedback.
+- **Modern Aesthetics**: Glassmorphism effects, smooth transitions, and a premium color palette (Nile Blue & Gold).
+
+### 6. Backend Architecture & Infrastructure
+- **Database Partitioning**: Data is logically separated into schemas (`Identity`, `Tours`, `Billing`, `Infra`) for better organization and performance.
+- **Robust Error Handling**: Centralized global exception handler ensuring consistent API responses.
+- **Background Jobs**: Automated tasks using **Hangfire** for sending emails and cleaning up data.
+- **Advanced Search**: Specification Pattern implementation for filtering doctors, services, and aid requests.
+
+---
+
+## 📂 Project Structure
+
+### Frontend (`/src`)
+```
+src/
+├── app/                 # Next.js App Router (Pages & Layouts)
+│   ├── (auth)/          # Login, Register, Forgot Password
+│   ├── dashboard/       # Protected User Dashboards
+│   └── page.tsx         # Landing Page
+├── features/            # Business Logic Modules
+│   ├── auth/            # Auth logic & hooks
+│   ├── home/            # Landing Page Components
+│   ├── profile/         # Profile management
+│   ├── requests/        # Aid Requests Logic
+│   └── settings/        # Account Settings
+├── shared/              # Core Utilities
+│   ├── components/      # Reusable UI (Header, Button, Toaster)
+│   └── providers/       # AuthProvider, ThemeProvider
+└── lib/                 # Configurations (API Client, Constants)
+```
+
+### Backend (ASP.NET Core)
+```
+Solution/
+├── Core/                # Domain Entities, Interfaces, Enums
+├── Application/         # Business Logic, DTOs, Services
+├── Infrastructure/      # EF Core Context, Migrations, Ext. Services
+└── API/                 # Controllers, Middleware, Filters
+```
+
+---
+
+## 🤝 Current Status
+The platform is currently in **Active Development**. The Core Identity and Profile modules are complete, with ongoing work in the Service Booking and Donation modules.
