@@ -59,30 +59,28 @@ export const SecurityForm: React.FC<SecurityFormProps> = ({ formData, errors, on
 
                     {/* Terms & Conditions */}
                     <div className="pt-2 border-t border-slate-50">
-                        <div
-                            className="flex items-start gap-3 group cursor-pointer"
-                            onClick={() => onChange("acceptTerms", !formData.acceptTerms)}
-                        >
+                        <div className="flex items-start gap-3 group">
                             <div className="mt-1">
                                 <Checkbox
                                     id="acceptTerms"
                                     checked={formData.acceptTerms}
                                     onCheckedChange={(val) => {
-                                        // Stop propagation to avoid double toggle from parent div
                                         onChange("acceptTerms", !!val);
                                     }}
-                                    onClick={(e) => e.stopPropagation()}
                                     className="w-6 h-6 rounded-lg border-2 border-slate-200 data-[state=checked]:bg-primary data-[state=checked]:border-primary transition-all"
                                 />
                             </div>
-                            <div className="space-y-1 pointer-events-none">
+                            <div className="space-y-1">
                                 <Label
                                     htmlFor="acceptTerms"
-                                    className="text-base font-bold text-slate-700 cursor-pointer group-hover:text-slate-900 transition-colors pointer-events-none"
+                                    className="text-base font-bold text-slate-700 cursor-pointer group-hover:text-slate-900 transition-colors block"
                                 >
                                     أوافق على الشروط والأحكام
                                 </Label>
-                                <p className="text-sm text-slate-400 font-medium leading-relaxed pointer-events-none">
+                                <p
+                                    className="text-sm text-slate-400 font-medium leading-relaxed cursor-pointer"
+                                    onClick={() => onChange("acceptTerms", !formData.acceptTerms)}
+                                >
                                     باستمرارك في التسجيل، أنت توافق على سياسة الخصوصية وشروط الاستخدام الخاصة بمنصة عون.
                                 </p>
                             </div>
