@@ -75,17 +75,17 @@ export function RequestHistoryTable({
                                 <div className="flex-1 min-w-0">
                                     <div className="flex items-center gap-2 mb-1">
                                         <h4 className="font-bold text-foreground text-sm truncate">{req.title}</h4>
-                                        <Badge variant="outline" className={`text-[10px] px-1.5 py-0 h-5 ${status.color}`}>
+                                        <Badge variant="outline" className={`text-[10px] px-1.5 py-0 h-5 font-medium ${status.color}`}>
                                             {status.label}
                                         </Badge>
                                     </div>
-                                    <p className="text-xs text-muted-foreground truncate">{req.description}</p>
+                                    <p className="text-[11px] text-muted-foreground font-medium truncate">{req.description}</p>
                                 </div>
 
                                 <div className="flex items-center gap-6 text-sm text-start hidden sm:flex">
                                     <div className="text-end sm:text-start">
-                                        <p className="font-bold text-foreground">{req.amount}</p>
-                                        <p className="text-xs text-muted-foreground">{req.date}</p>
+                                        <p className="font-bold text-slate-900">{req.amount}</p>
+                                        <p className="text-[10px] text-muted-foreground font-bold">{req.date}</p>
                                     </div>
                                 </div>
 

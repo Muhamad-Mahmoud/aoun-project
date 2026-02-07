@@ -34,7 +34,7 @@ export function DashboardTopBar({ userType }: { userType: string }) {
               <Menu className="w-6 h-6" />
             </button>
           </SheetTrigger>
-          <SheetContent side="left" className="p-0 border-none w-80 shadow-2xl" dir="rtl">
+          <SheetContent side="right" className="p-0 border-none w-80 shadow-2xl" dir="rtl">
             <SidebarContent />
           </SheetContent>
         </Sheet>
@@ -63,8 +63,8 @@ export function DashboardTopBar({ userType }: { userType: string }) {
 
         <div className="flex items-center gap-2 sm:gap-4 cursor-pointer group px-1 sm:px-2 py-1.5 rounded-2xl hover:bg-slate-50 transition-all active:scale-95">
           <div className="text-end hidden md:block">
-            <p className="text-sm font-black text-slate-900 leading-none mb-1">محمد أحمد</p>
-            <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest">{userType === 'family' ? 'حساب أسرة' : 'حساب جمعية'}</p>
+            <p className="text-sm font-bold text-slate-900 leading-none mb-1">محمد أحمد</p>
+            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{userType === 'family' ? 'حساب أسرة' : 'حساب جمعية'}</p>
           </div>
           <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-[12px] sm:rounded-[15px] bg-slate-100 flex items-center justify-center border-2 border-white shadow-sm ring-1 ring-slate-100 group-hover:ring-primary/20 transition-all overflow-hidden">
             <UserCircle className="w-7 h-7 sm:w-8 sm:h-8 text-slate-400 group-hover:text-primary transition-colors" />

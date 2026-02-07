@@ -37,8 +37,8 @@ export function Timeline({ items, className }: TimelineProps) {
                         )}
                     </div>
                     <div className="pb-6 last:pb-0 text-end">
-                        <p className="font-medium text-foreground text-sm">{item.text}</p>
-                        <p className="text-xs text-muted-foreground mt-1">{item.time}</p>
+                        <p className="font-semibold text-slate-800 text-sm">{item.text}</p>
+                        <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider mt-1">{item.time}</p>
                     </div>
                 </div>
             ))}

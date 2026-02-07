@@ -40,8 +40,8 @@ export default function OrganizationDashboardPage() {
                 <main className="pb-20 pt-20 lg:pt-32 relative z-10">
                     <div className="space-y-10 px-6 lg:px-10">
                         <div className="animate-in fade-in slide-in-from-top-4 duration-700">
-                            <h1 className="text-4xl font-black tracking-tight text-slate-900">لوحة تحكم الجمعية</h1>
-                            <p className="text-lg text-slate-500 font-bold mt-2">إدارة الطلبات والحالات بفاعلية ودقة.</p>
+                            <h1 className="text-3xl font-bold tracking-tight text-slate-900">لوحة تحكم الجمعية</h1>
+                            <p className="text-base text-slate-500 font-medium mt-2">إدارة الطلبات والحالات بفاعلية ودقة.</p>
                         </div>
 
                         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -55,14 +55,14 @@ export default function OrganizationDashboardPage() {
                             <div className="lg:col-span-8 space-y-4">
                                 <div className="flex items-center gap-2 mb-4">
                                     <div className="w-1.5 h-6 bg-primary rounded-full" />
-                                    <h2 className="text-xl font-black text-slate-900">المهام العاجلة</h2>
+                                    <h2 className="text-xl font-bold text-slate-900">المهام العاجلة</h2>
                                 </div>
                                 <TasksCard tasks={MOCK_TASKS} />
                             </div>
                             <div className="lg:col-span-4 space-y-4">
                                 <div className="flex items-center gap-2 mb-4">
                                     <div className="w-1.5 h-6 bg-golden-orange rounded-full" />
-                                    <h2 className="text-xl font-black text-slate-900">آخر النشاطات</h2>
+                                    <h2 className="text-xl font-bold text-slate-900">آخر النشاطات</h2>
                                 </div>
                                 <RecentActivityCard activities={MOCK_ACTIVITIES} />
                             </div>

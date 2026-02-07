@@ -31,18 +31,14 @@ export function FamilySidebarContent() {
   return (
     <div className="flex flex-col h-full bg-white">
       {/* Logo area */}
-      <div className="px-8 py-10">
-        <Link href="/" className="flex items-center gap-3 group transition-transform hover:scale-105 active:scale-95 duration-300">
-          <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-            <Image src="/logo.png" alt="عون" width={32} height={32} className="h-8 w-auto" />
-          </div>
-          <span className="text-2xl font-black text-slate-900 tracking-tight">عون</span>
+      <div className="p-8 border-b border-border/50">
+        <Link href="/" className="flex items-center gap-3">
+          <Image src="/logo.png" alt="عون" width={96} height={48} className="h-12 w-auto" />
         </Link>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-6 space-y-1 overflow-y-auto custom-scrollbar">
-        <p className="px-4 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">القائمة الرئيسية</p>
+      <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           const Icon = item.icon;
@@ -51,42 +47,46 @@ export function FamilySidebarContent() {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center justify-between p-3.5 rounded-2xl transition-all duration-300 group relative",
+                "flex items-center justify-between p-3.5 rounded-xl transition-all duration-300 group",
                 isActive
-                  ? "bg-primary text-white shadow-xl shadow-primary/20 translate-x-1"
-                  : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+                  ? "bg-primary/10 text-primary shadow-sm border border-primary/20"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
               )}
             >
               <div className="flex items-center gap-3">
                 <div className={cn(
-                  "p-2 rounded-xl transition-all duration-300",
-                  isActive ? "bg-white/20 text-white" : "bg-slate-100 group-hover:bg-white group-hover:shadow-sm"
+                  "p-2 rounded-lg transition-colors",
+                  isActive ? "bg-primary text-white" : "bg-muted group-hover:bg-primary/10 group-hover:text-primary"
                 )}>
                   <Icon className="w-5 h-5" />
                 </div>
-                <span className="font-bold text-sm tracking-tight">{item.label}</span>
+                <span className="font-bold text-sm">{item.label}</span>
               </div>
-              {isActive && (
-                <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse ps-2" />
-              )}
+              {isActive && <ChevronLeft className="w-4 h-4" />}
             </Link>
           );
         })}
       </nav>
 
-      {/* Footer / Profile */}
-      <div className="p-6 border-t border-slate-50 mt-auto bg-slate-50/30">
-        <div className="flex items-center gap-3 p-4 rounded-[2rem] bg-white shadow-sm border border-slate-100 group hover:shadow-md transition-shadow duration-300">
-          <div className="w-12 h-12 rounded-2xl bg-warm-green/10 flex items-center justify-center text-warm-green font-black text-lg border border-warm-green/20">
-            أم
+      {/* Footer / Logout */}
+      <div className="p-6 border-t border-border mt-auto">
+        <Button
+          variant="ghost"
+          className="w-full justify-start gap-3 h-12 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-xl font-bold"
+        >
+          <LogOut className="w-5 h-5" />
+          <span>تسجيل الخروج</span>
+        </Button>
+        <div className="mt-4 p-4 rounded-xl bg-muted/50 border border-border">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-sm">
+              أم
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-bold text-foreground truncate">أسرة محمد علي</p>
+              <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">حساب مفعل</p>
+            </div>
           </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-black text-slate-900 truncate">أسرة محمد علي</p>
-            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-0.5">حساب مفعل</p>
-          </div>
-          <Button variant="ghost" size="icon" className="text-slate-300 hover:text-rose-500 hover:bg-rose-50 rounded-xl">
-            <LogOut className="w-5 h-5" />
-          </Button>
         </div>
       </div>
     </div>
@@ -95,8 +95,9 @@ export function FamilySidebarContent() {
 
 export function FamilySidebar() {
   return (
-    <aside className="w-80 bg-white border-e border-slate-100 hidden lg:flex flex-col sticky top-0 h-screen overflow-hidden z-30 shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
+    <aside className="w-80 bg-white border-e border-slate-100 hidden lg:flex flex-col sticky top-0 h-screen overflow-hidden">
       <FamilySidebarContent />
     </aside>
   );
 }
+

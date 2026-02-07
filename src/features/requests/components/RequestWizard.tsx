@@ -118,7 +118,7 @@ export function RequestWizard({ onSubmit }: { onSubmit: (data: any) => void }) {
                                 )}
                             </div>
                             <span className={cn(
-                                "text-sm font-black mt-4 transition-colors tracking-tight",
+                                "text-xs font-bold mt-4 transition-colors tracking-tight",
                                 step >= s.num ? "text-slate-900" : "text-slate-300"
                             )}>
                                 {s.label}
@@ -144,10 +144,10 @@ export function RequestWizard({ onSubmit }: { onSubmit: (data: any) => void }) {
                             <Sparkles className="w-6 h-6 text-warm-green animate-pulse" />
                         </div>
                         <div>
-                            <CardTitle className="text-2xl font-black text-slate-900">
+                            <CardTitle className="text-xl font-bold text-slate-900 text-start">
                                 {step === 1 ? "ما هي حاجتك اليوم؟" : "التفاصيل الداعمة"}
                             </CardTitle>
-                            <CardDescription className="mt-1.5 font-bold text-slate-400">
+                            <CardDescription className="mt-1 font-semibold text-slate-400 text-start">
                                 {step === 1 ? "اختر التصنيف المناسب لطلبك لنتمكن من توجيهك للجهة المختصة." : "كلما زادت التفاصيل والمستندات، زادت سرعة دراسة حالتك."}
                             </CardDescription>
                         </div>
@@ -161,8 +161,8 @@ export function RequestWizard({ onSubmit }: { onSubmit: (data: any) => void }) {
                                 {/* Category Selection - RTL Grid */}
                                 <FormField control={form1.control} name="category" render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel className="text-base font-black text-slate-800 flex items-center gap-2 mb-4">
-                                            <div className="w-1 h-4 bg-warm-green rounded-full" />
+                                        <FormLabel className="text-sm font-bold text-slate-800 flex items-center gap-2 mb-4">
+                                            <div className="w-1 h-3.5 bg-warm-green rounded-full" />
                                             تصنيف المساعدة
                                         </FormLabel>
                                         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
@@ -171,9 +171,9 @@ export function RequestWizard({ onSubmit }: { onSubmit: (data: any) => void }) {
                                                     key={cat.value}
                                                     onClick={() => field.onChange(cat.value)}
                                                     className={cn(
-                                                        "relative cursor-pointer rounded-[2rem] border-2 p-6 transition-all duration-300 text-center flex flex-col items-center",
+                                                        "relative cursor-pointer rounded-[1.5rem] border-2 p-5 transition-all duration-300 text-center flex flex-col items-center",
                                                         selectedCategory === cat.value
-                                                            ? `${cat.border} ${cat.bg} shadow-2xl shadow-indigo-500/5 ring-4 ring-white`
+                                                            ? `${cat.border} ${cat.bg} shadow-xl shadow-indigo-500/5`
                                                             : "border-slate-50 hover:border-slate-100 bg-slate-50/50 hover:bg-white"
                                                     )}
                                                 >
@@ -187,7 +187,7 @@ export function RequestWizard({ onSubmit }: { onSubmit: (data: any) => void }) {
                                                         )} />
                                                     </div>
                                                     <p className={cn(
-                                                        "font-black text-sm tracking-tight",
+                                                        "font-bold text-xs tracking-tight",
                                                         selectedCategory === cat.value ? "text-slate-900" : "text-slate-400"
                                                     )}>
                                                         {cat.label}
@@ -205,34 +205,34 @@ export function RequestWizard({ onSubmit }: { onSubmit: (data: any) => void }) {
                                 )} />
 
                                 <FormField control={form1.control} name="title" render={({ field }) => (
-                                    <FormItem className="space-y-3">
-                                        <FormLabel className="text-base font-black text-slate-800 flex items-center gap-2">
-                                            <div className="w-1 h-4 bg-warm-green rounded-full" />
+                                    <FormItem className="space-y-3 text-start">
+                                        <FormLabel className="text-sm font-bold text-slate-800 flex items-center gap-2">
+                                            <div className="w-1 h-3.5 bg-warm-green rounded-full" />
                                             عنوان الطلب
                                         </FormLabel>
                                         <FormControl>
                                             <Input
                                                 placeholder="مثال: مساعدة في تكاليف عملية جراحية عاجلة"
-                                                className="h-16 text-lg rounded-2xl border-slate-200/60 focus:ring-4 focus:ring-warm-green/10 focus:border-warm-green transition-all px-6 font-bold"
+                                                className="h-14 text-base rounded-xl border-slate-200/60 focus:border-warm-green transition-all px-6 font-bold"
                                                 {...field}
                                             />
                                         </FormControl>
-                                        <FormDescription className="text-xs font-bold text-slate-400 ps-1">اجعل العنوان مختصراً وواضحاً قدر الإمكان.</FormDescription>
+                                        <FormDescription className="text-[10px] font-bold text-slate-400 ps-1">اجعل العنوان مختصراً وواضحاً قدر الإمكان.</FormDescription>
                                         <FormMessage />
                                     </FormItem>
                                 )} />
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <FormField control={form1.control} name="location" render={({ field }) => (
-                                        <FormItem className="space-y-3">
-                                            <FormLabel className="text-base font-black text-slate-800 flex items-center gap-2">
-                                                <div className="w-1 h-4 bg-warm-green rounded-full" />
+                                        <FormItem className="space-y-3 text-start">
+                                            <FormLabel className="text-sm font-bold text-slate-800 flex items-center gap-2">
+                                                <div className="w-1 h-3.5 bg-warm-green rounded-full" />
                                                 الموقع الجغرافي
                                             </FormLabel>
                                             <FormControl>
                                                 <Input
                                                     placeholder="محافظة القاهرة، حي عين شمس"
-                                                    className="h-14 rounded-2xl border-slate-200/60 px-6 font-bold"
+                                                    className="h-12 rounded-xl border-slate-200/60 px-5 font-bold text-sm"
                                                     {...field}
                                                 />
                                             </FormControl>
@@ -241,9 +241,9 @@ export function RequestWizard({ onSubmit }: { onSubmit: (data: any) => void }) {
                                     )} />
 
                                     <FormField control={form1.control} name="amountNeeded" render={({ field }) => (
-                                        <FormItem className="space-y-3">
-                                            <FormLabel className="text-base font-black text-slate-800 flex items-center gap-2">
-                                                <div className="w-1 h-4 bg-warm-green rounded-full" />
+                                        <FormItem className="space-y-3 text-start">
+                                            <FormLabel className="text-sm font-bold text-slate-800 flex items-center gap-2">
+                                                <div className="w-1 h-3.5 bg-warm-green rounded-full" />
                                                 المبلغ التقديري
                                             </FormLabel>
                                             <FormControl>
@@ -251,10 +251,10 @@ export function RequestWizard({ onSubmit }: { onSubmit: (data: any) => void }) {
                                                     <Input
                                                         type="number"
                                                         placeholder="5000"
-                                                        className="h-14 rounded-2xl border-slate-200/60 pe-16 ps-6 font-bold"
+                                                        className="h-12 rounded-xl border-slate-200/60 pe-16 ps-5 font-bold text-sm"
                                                         {...field}
                                                     />
-                                                    <span className="absolute end-6 top-1/2 -translate-y-1/2 text-sm font-black text-slate-400">
+                                                    <span className="absolute end-6 top-1/2 -translate-y-1/2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                                                         ج.م
                                                     </span>
                                                 </div>
@@ -272,15 +272,15 @@ export function RequestWizard({ onSubmit }: { onSubmit: (data: any) => void }) {
                             <form id="step2-form" onSubmit={form2.handleSubmit(onStep2Submit)} className="space-y-10">
 
                                 <FormField control={form2.control} name="description" render={({ field }) => (
-                                    <FormItem className="space-y-4">
-                                        <FormLabel className="text-base font-black text-slate-800 flex items-center gap-2">
-                                            <div className="w-1 h-5 bg-warm-green rounded-full" />
+                                    <FormItem className="space-y-4 text-start">
+                                        <FormLabel className="text-sm font-bold text-slate-800 flex items-center gap-2">
+                                            <div className="w-1 h-4 bg-warm-green rounded-full" />
                                             شرح الحالة بالتفصيل
                                         </FormLabel>
                                         <FormControl>
                                             <Textarea
                                                 placeholder="اروي لنا قصتك بوضوح، على سبيل المثال: 'أنا أم لأربعة أيتام، ولدينا حكم إخلاء من السكن لعدم سداد الإيجار لمدة 6 أشهر...'"
-                                                className="min-h-[200px] text-lg rounded-[2.5rem] border-slate-200/60 p-8 leading-relaxed font-bold resize-none focus:ring-4 focus:ring-warm-green/5 bg-slate-50/30"
+                                                className="min-h-[180px] text-base rounded-[1.5rem] border-slate-200/60 p-6 leading-relaxed font-bold resize-none focus:ring-4 focus:ring-warm-green/5 bg-slate-50/30"
                                                 {...field}
                                             />
                                         </FormControl>
@@ -289,9 +289,9 @@ export function RequestWizard({ onSubmit }: { onSubmit: (data: any) => void }) {
                                 )} />
 
                                 {/* File Upload Zone - RTL Aware */}
-                                <div>
-                                    <FormLabel className="text-base font-black text-slate-800 flex items-center gap-2 mb-6">
-                                        <div className="w-1 h-5 bg-warm-green rounded-full" />
+                                <div className="text-start">
+                                    <FormLabel className="text-sm font-bold text-slate-800 flex items-center gap-2 mb-6">
+                                        <div className="w-1 h-4 bg-warm-green rounded-full" />
                                         المستندات المؤيدة (هام جداً)
                                     </FormLabel>
 
@@ -303,14 +303,14 @@ export function RequestWizard({ onSubmit }: { onSubmit: (data: any) => void }) {
                                             className="hidden"
                                             onChange={handleFileUpload}
                                         />
-                                        <div className="group border-4 border-dashed border-slate-100 hover:border-warm-green/30 rounded-[3rem] p-12 text-center transition-all duration-500 hover:bg-warm-green/5 bg-slate-50/50">
-                                            <div className="w-20 h-20 rounded-[2rem] bg-white group-hover:scale-110 flex items-center justify-center mx-auto mb-6 transition-all shadow-xl group-hover:shadow-warm-green/20">
-                                                <UploadCloud className="w-10 h-10 text-slate-300 group-hover:text-warm-green transition-colors" />
+                                        <div className="group border-2 border-dashed border-slate-100 hover:border-warm-green/30 rounded-[2rem] p-10 text-center transition-all duration-500 hover:bg-warm-green/5 bg-slate-50/50">
+                                            <div className="w-16 h-16 rounded-[1.5rem] bg-white group-hover:scale-110 flex items-center justify-center mx-auto mb-5 transition-all shadow-md group-hover:shadow-warm-green/20">
+                                                <UploadCloud className="w-8 h-8 text-slate-300 group-hover:text-warm-green transition-colors" />
                                             </div>
-                                            <p className="text-xl font-black mb-2 text-slate-800">
+                                            <p className="text-lg font-bold mb-1.5 text-slate-800">
                                                 اسحب الملفات هنا أو <span className="text-warm-green underline underline-offset-8">اضغط لاختيارها</span>
                                             </p>
-                                            <p className="text-sm font-bold text-slate-400">PDF, JPG, PNG • الحد الأقصى 5 ميجابايت لكل ملف</p>
+                                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">PDF, JPG, PNG • الحد الأقصى 5 ميجابايت لكل ملف</p>
                                         </div>
                                     </label>
 
@@ -330,9 +330,9 @@ export function RequestWizard({ onSubmit }: { onSubmit: (data: any) => void }) {
                                                                 <FileText className="w-6 h-6 text-rose-500" />
                                                             )}
                                                         </div>
-                                                        <div className="max-w-[150px]">
-                                                            <p className="text-sm font-black text-slate-700 truncate">{file.name}</p>
-                                                            <p className="text-[10px] text-slate-400 font-bold uppercase truncate">
+                                                        <div className="max-w-[150px] text-start">
+                                                            <p className="text-sm font-bold text-slate-700 truncate">{file.name}</p>
+                                                            <p className="text-[9px] text-slate-400 font-bold uppercase truncate">
                                                                 {(file.size / 1024 / 1024).toFixed(2)} MB
                                                             </p>
                                                         </div>
@@ -362,10 +362,10 @@ export function RequestWizard({ onSubmit }: { onSubmit: (data: any) => void }) {
                                 type="submit"
                                 form="step1-form"
                                 size="lg"
-                                className="bg-warm-green hover:bg-warm-green-light text-white shadow-2xl shadow-warm-green/30 rounded-2xl h-16 px-12 font-black text-lg transition-transform active:scale-95"
+                                className="bg-warm-green hover:bg-warm-green-light text-white shadow-xl shadow-warm-green/20 rounded-xl h-14 px-10 font-bold text-base transition-transform active:scale-95"
                             >
                                 الخطوة التالية
-                                <ChevronLeft className="ms-3 w-6 h-6" />
+                                <ChevronLeft className="ms-3 w-5 h-5" />
                             </Button>
                         </div>
                     ) : (
@@ -374,25 +374,25 @@ export function RequestWizard({ onSubmit }: { onSubmit: (data: any) => void }) {
                                 variant="outline"
                                 size="lg"
                                 onClick={() => setStep(1)}
-                                className="rounded-2xl h-16 px-10 font-bold border-2 border-slate-100 hover:border-slate-200 bg-white"
+                                className="rounded-xl h-14 px-8 font-bold border-2 border-slate-100 hover:border-slate-200 bg-white text-sm"
                             >
-                                <ChevronRight className="me-3 w-6 h-6" /> السابق
+                                <ChevronRight className="me-2 w-5 h-5" /> السابق
                             </Button>
                             <Button
                                 type="submit"
                                 form="step2-form"
                                 size="lg"
                                 disabled={isSubmitting}
-                                className="bg-gradient-to-l from-warm-green to-emerald-600 text-white shadow-2xl shadow-warm-green/30 rounded-2xl h-16 px-12 font-black text-lg min-w-[200px]"
+                                className="bg-gradient-to-l from-warm-green to-emerald-600 text-white shadow-xl shadow-warm-green/20 rounded-xl h-14 px-10 font-bold text-base min-w-[180px]"
                             >
                                 {isSubmitting ? (
                                     <>
-                                        <Loader2 className="w-6 h-6 me-3 animate-spin" />
+                                        <Loader2 className="w-5 h-5 me-2 animate-spin" />
                                         جاري المعالجة...
                                     </>
                                 ) : (
                                     <>
-                                        <Heart className="w-6 h-6 me-3" />
+                                        <Heart className="w-5 h-5 me-2" />
                                         تأكيد وإرسال
                                     </>
                                 )}
@@ -403,9 +403,9 @@ export function RequestWizard({ onSubmit }: { onSubmit: (data: any) => void }) {
             </Card>
 
             {/* Assistance Note */}
-            <div className="mt-12 text-center animate-in fade-in duration-1000">
-                <p className="text-slate-400 font-bold text-sm tracking-widest flex items-center justify-center gap-3">
-                    <History className="w-4 h-4" /> يتم حفظ مسودة الطلب تلقائياً لراحتك.
+            <div className="mt-10 text-center animate-in fade-in duration-1000">
+                <p className="text-slate-400 font-semibold text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-2">
+                    <History className="w-3 h-3" /> يتم حفظ مسودة الطلب تلقائياً لراحتك.
                 </p>
             </div>
         </div>

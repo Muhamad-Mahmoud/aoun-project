@@ -24,7 +24,7 @@ export function TasksCard({ tasks, title = "إجراءات مطلوبة" }: Task
         <Card className="text-start">
             <div className="border-b border-border px-6 py-4 flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-golden-orange" />
-                <h3 className="font-bold text-foreground text-sm">{title}</h3>
+                <h3 className="font-bold text-slate-800 text-sm">{title}</h3>
             </div>
             <div className="p-4">
                 <div className="space-y-2">
@@ -51,20 +51,18 @@ export function TasksCard({ tasks, title = "إجراءات مطلوبة" }: Task
                             <div className="flex-1 min-w-0 text-start">
                                 <span
                                     className={cn(
-                                        "text-sm font-medium block truncate",
-                                        task.done ? "line-through text-muted-foreground" : "text-foreground"
+                                        "text-sm font-semibold block truncate",
+                                        task.done ? "line-through text-muted-foreground" : "text-slate-900"
                                     )}
                                 >
                                     {task.text}
                                 </span>
                                 {task.urgent && !task.done && task.deadline && (
-                                    <span className="text-[10px] text-error font-bold flex items-center gap-1 mt-1">
+                                    <span className="text-[10px] text-error font-bold flex items-center gap-1 mt-1 uppercase tracking-wider">
                                         <Zap className="w-3 h-3" />
                                         {task.deadline}
                                     </span>
                                 )}
-
-
                             </div>
                         </Link>
                     ))}
