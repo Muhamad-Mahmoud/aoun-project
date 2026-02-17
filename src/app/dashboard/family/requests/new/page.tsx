@@ -6,34 +6,121 @@ import { FamilySidebar } from "@/shared/components/layout/FamilySidebar";
 import { DashboardTopBar } from "@/shared/components/layout/DashboardLayout";
 import { Card } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
-import { CheckCircle2, ChevronRight, Sparkles, HelpCircle, ArrowUpRight, ArrowDownRight, LucideIcon } from "lucide-react";
+import { CheckCircle2, ChevronRight, Sparkles, AlertCircle, AlertTriangle } from "lucide-react";
 import { RequestWizard } from "@/features/requests/components/RequestWizard";
 import Link from "next/link";
-import { cn } from "@/shared/utils";
+import { createRequest } from "@/features/requests/api/requestsApi";
+import { toast } from "sonner";
+import { ROUTES } from "@/shared/constants/routes";
+import { Alert, AlertTitle, AlertDescription } from "@/shared/ui/alert";
 
 export default function NewRequestPage() {
     const [submitted, setSubmitted] = useState(false);
+    const [requestId, setRequestId] = useState<string | null>(null);
+    const [validationError, setValidationError] = useState<string | null>(null);
 
-    const handleSubmit = (data: any) => {
-        console.log("Request Submitted:", data);
-        setSubmitted(true);
+    const handleSubmit = async (data: any) => {
+        try {
+            setValidationError(null);
+
+
+            // List of required fields that must have values
+            // Based on API specification
+            const requiredFields = [
+                { key: 'requestType', label: 'نوع الطلب' },
+                { key: 'description', label: 'وصف الطلب' },
+                { key: 'housingType', label: 'نوع السكن' },
+            ];
+
+            const booleanFields = [
+                { key: 'isWorking', label: 'حالة التوظيف' },
+                { key: 'hasInsurance', label: 'التأمين' },
+                { key: 'hasDisability', label: 'الإعاقة' },
+                { key: 'hasChronicDisease', label: 'الأمراض المزمنة' },
+                { key: 'hasCar', label: 'السيارة' },
+                { key: 'hasOtherCommitments', label: 'الالتزامات الأخرى' },
+                { key: 'registeredSocialSupport', label: 'الدعم الاجتماعي' },
+            ];
+
+            // Check required fields
+            const missingFields: string[] = [];
+            requiredFields.forEach(({ key, label }) => {
+                const value = data[key];
+                // Don't check for === 0 because numeric enums can have 0 as valid value
+                if (value === undefined || value === null || value === '') {
+                    missingFields.push(`${label} (${key})`);
+                }
+            });
+
+            // Check boolean fields have explicit values
+            booleanFields.forEach(({ key, label }) => {
+                const value = data[key];
+                if (typeof value !== 'boolean') {
+                    missingFields.push(`${label} - يجب أن تكون true أو false`);
+                }
+            });
+
+            if (missingFields.length > 0) {
+                const errorMsg = `الحقول المطلوبة التالية غير مكتملة:\n${missingFields.map((f, i) => `${i + 1}. ${f}`).join('\n')}`;
+                setValidationError(errorMsg);
+                toast.error("❌ يرجى ملء جميع الحقول المطلوبة");
+                return;
+            }
+
+            const response = await createRequest(data);
+
+            if (response && response.id) {
+                setRequestId(response.id.toString());
+                setSubmitted(true);
+                toast.success("تم إرسال طلبك بنجاح");
+            }
+        } catch (error: any) {
+            setValidationError(null);
+
+            // Extract the most meaningful error message
+            let message = error?.message || "فشل إرسال الطلب. يرجى المحاولة مرة أخرى.";
+
+            // Check if it's a validation error message with multiple errors separated by newlines
+            if (message.includes(':') && message.includes('\n')) {
+                // This is a formatted validation error with multiple errors
+                setValidationError(message);
+                toast.error("⚠️ يرجى التحقق من الأخطاء المعروضة أدناه");
+            }
+            // Check for missing required fields from API
+            else if (message.includes('مفقودة أو فارغة')) {
+                setValidationError(message);
+                toast.error("❌ حقول مطلوبة غير موجودة");
+            }
+            // Check for generic validation error message
+            else if (message.includes("validation errors") || message.includes("One or more")) {
+                // Validation error but no details - might be a backend message
+                setValidationError(message);
+                toast.error("❌ حدث خطأ في بيانات النموذج. تحقق من جميع الحقول المطلوبة");
+            }
+            // If it's the common Entity Framework error
+            else if (message.includes("saving the entity changes")) {
+                message = "حدث خطأ أثناء حفظ البيانات. يرجى التحقق من جميع الحقول المطلوبة وإعادة المحاولة.";
+                toast.error(message);
+            }
+            else {
+                toast.error(message);
+            }
+        }
     };
 
     return (
         <DashboardLayout>
             <FamilySidebar />
             <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-[#f8fafc] relative">
-                {/* Decorative background elements */}
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] -z-0 pointer-events-none" />
                 <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-warm-green/5 rounded-full blur-[100px] -z-0 pointer-events-none" />
 
                 <DashboardTopBar userType="family" />
 
                 <main className="p-4 sm:p-10 pb-20 pt-20 lg:pt-32 relative z-10">
-                    <div className="mx-auto max-w-3xl">
+                    <div className="mx-auto max-w-4xl">
                         {!submitted ? (
                             <div className="space-y-12">
-                                {/* Centered Header Section */}
                                 <div className="space-y-4 text-center">
                                     <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary font-bold text-[10px] uppercase tracking-widest">
                                         <Sparkles className="w-3.5 h-3.5" /> مساعدات رقمية
@@ -46,21 +133,30 @@ export default function NewRequestPage() {
                                     </p>
                                 </div>
 
-                                {/* Focused Form Section */}
+                                {validationError && (
+                                    <Alert variant="destructive" className="border-red-200 bg-red-50 rounded-2xl">
+                                        <AlertTriangle className="h-4 w-4" />
+                                        <AlertTitle>خطأ في البيانات المدخلة</AlertTitle>
+                                        <AlertDescription className="mt-2 text-right whitespace-pre-wrap font-medium text-red-700">
+                                            {validationError}
+                                        </AlertDescription>
+                                    </Alert>
+                                )}
+
                                 <RequestWizard onSubmit={handleSubmit} />
                             </div>
                         ) : (
-                            <Card className="max-w-xl mx-auto p-12 text-center border-none shadow-2xl rounded-[3rem] animate-in zoom-in duration-500">
-                                <div className="w-24 h-24 bg-warm-green/10 rounded-full flex items-center justify-center mx-auto mb-8">
+                            <Card className="max-w-xl mx-auto p-12 text-center border-none shadow-2xl rounded-[3rem] animate-in zoom-in duration-500 bg-white">
+                                <div className="w-24 h-24 bg-warm-green/10 rounded-full flex items-center justify-center mx-auto mb-8 shadow-inner">
                                     <CheckCircle2 className="w-12 h-12 text-warm-green" />
                                 </div>
                                 <h1 className="text-2xl font-bold mb-3 text-slate-900">تم استلام طلبك بنجاح!</h1>
                                 <p className="text-slate-500 font-medium mb-10 text-base leading-relaxed">
-                                    لقد سجلنا طلبك برقم <span className="text-slate-900 font-bold border-b-2 border-warm-green/30">#REQ-2024-002</span>.
+                                    لقد سجلنا طلبك برقم <span className="text-slate-900 font-bold border-b-2 border-warm-green/30">#REQ-{requestId || "2024-001"}</span>.
                                     جاري الآن تحويله للفريق المختص للمراجعة.
                                 </p>
                                 <div className="flex flex-col gap-3">
-                                    <Button asChild className="h-14 rounded-2xl bg-warm-green hover:bg-warm-green-light text-white font-bold text-base">
+                                    <Button asChild className="h-14 rounded-2xl bg-warm-green hover:bg-emerald-600 text-white font-bold text-base shadow-lg shadow-warm-green/20">
                                         <Link href="/dashboard/family/requests">
                                             متابعة طلباتي
                                         </Link>

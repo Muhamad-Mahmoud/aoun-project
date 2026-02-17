@@ -24,33 +24,33 @@ import type {
  */
 export async function login(credentials: LoginCredentials): Promise<LoginResponse> {
     const { email, password } = credentials;
-    const response = await apiClient.post<LoginResponse>(
+    const response = await apiClient.post<ApiResponse<LoginResponse>>(
         API_ENDPOINTS.auth.login,
         { email, password }
     );
-    return response.data;
+    return response.data.data;
 }
 
 /**
  * Register new Family
  */
 export async function registerFamily(data: RegisterFamilyRequest): Promise<RegisterResponse> {
-    const response = await apiClient.post<RegisterResponse>(
+    const response = await apiClient.post<ApiResponse<RegisterResponse>>(
         API_ENDPOINTS.auth.registerFamily,
         data
     );
-    return response.data;
+    return response.data.data;
 }
 
 /**
  * Register new Association
  */
 export async function registerAssociation(data: RegisterAssociationRequest): Promise<RegisterResponse> {
-    const response = await apiClient.post<RegisterResponse>(
+    const response = await apiClient.post<ApiResponse<RegisterResponse>>(
         API_ENDPOINTS.auth.registerAssociation,
         data
     );
-    return response.data;
+    return response.data.data;
 }
 
 /**
@@ -95,11 +95,11 @@ export async function resetPassword(data: ResetPasswordRequest): Promise<void> {
  * Refresh authentication token
  */
 export async function refreshToken(data: RefreshTokenRequest): Promise<string> {
-    const response = await apiClient.post<{ token: string }>(
+    const response = await apiClient.post<ApiResponse<{ token: string }>>(
         API_ENDPOINTS.auth.refresh,
         data // Backend likely needs the old token/refresh token
     );
-    return response.data.token;
+    return response.data.data.token;
 }
 
 /**
@@ -115,11 +115,11 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
     }
 
     try {
-        const response = await apiClient.get(API_ENDPOINTS.auth.me);
+        const response = await apiClient.get<ApiResponse<any>>(API_ENDPOINTS.auth.me);
 
         // Backend might return { data: User } or just User
         // Safe check
-        const userData = (response.data as any).data || response.data;
+        const userData = response.data.data || response.data;
 
         if (!userData || !userData.id) {
             console.warn('getCurrentUser: Invalid user data received', response.data);

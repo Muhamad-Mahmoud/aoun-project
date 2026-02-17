@@ -25,6 +25,15 @@ import { sanitizeLogData } from '../security/sanitize';
 export function setupRequestInterceptors(axiosInstance: AxiosInstance) {
     axiosInstance.interceptors.request.use(
         async (config: InternalAxiosRequestConfig) => {
+            // تعيين Content-Type بناءً على نوع البيانات
+            if (config.data) {
+                // إذا كانت البيانات FormData، دع axios يحددها تلقائياً
+                if (!(config.data instanceof FormData)) {
+                    // للبيانات العادية (JSON)، عيّن Content-Type
+                    config.headers['Content-Type'] = 'application/json';
+                }
+            }
+
             // Define public endpoints that don't need auth token
             const publicEndpoints = [
                 API_ENDPOINTS.auth.login,
@@ -52,6 +61,8 @@ export function setupRequestInterceptors(axiosInstance: AxiosInstance) {
                 logger.debug('API Request', {
                     method: config.method?.toUpperCase(),
                     url: config.url,
+                    dataType: config.data instanceof FormData ? 'FormData' : 'JSON',
+                    contentType: config.headers['Content-Type'],
                     data: sanitizeLogData(config.data),
                 });
             }
@@ -161,8 +172,30 @@ export function setupResponseInterceptors(axiosInstance: AxiosInstance) {
             // Transform error to ApiError format
             const responseData = error.response?.data as any; // Use any to access potential ProblemDetails fields
 
-            // Extract the most relevant error message
+            // Extract the most relevant error message - check multiple possible fields
             let message = responseData?.message || responseData?.detail || responseData?.title;
+            let validationErrors: Record<string, string[]> = {};
+
+            // If errors object exists (validation errors), extract them all
+            if (responseData?.errors && typeof responseData.errors === 'object') {
+                validationErrors = responseData.errors;
+                
+                if (!message) {
+                    // Combine all validation errors
+                    const allErrors: string[] = [];
+                    Object.entries(validationErrors).forEach(([field, errors]) => {
+                        const errorArray = Array.isArray(errors) ? errors : [errors];
+                        errorArray.forEach(err => {
+                            // Add field name for clarity
+                            allErrors.push(`${field}: ${err}`);
+                        });
+                    });
+                    
+                    if (allErrors.length > 0) {
+                        message = allErrors.join('\n');
+                    }
+                }
+            }
 
             if (!message) {
                 // Localize generic Axios errors or provide fallback
@@ -183,6 +216,19 @@ export function setupResponseInterceptors(axiosInstance: AxiosInstance) {
                         message = `حدث خطأ في الطلب (${error.response?.status || 'غير معروف'})`;
                     }
                 }
+            }
+
+            // Log the full response data in development for debugging
+            if (process.env.NODE_ENV === 'development') {
+                console.error('❌ API Error Response:');
+                console.table({
+                    status: error.response?.status,
+                    statusText: error.response?.statusText,
+                    url: error.response?.config.url,
+                });
+                console.error('Response Data:', responseData);
+                console.error('Extracted Message:', message);
+                logger.debug('Full error response data', responseData);
             }
 
             const apiError: ApiError = {

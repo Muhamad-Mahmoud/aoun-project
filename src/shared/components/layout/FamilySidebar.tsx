@@ -27,6 +27,24 @@ const navItems = [
 
 export function FamilySidebarContent() {
   const pathname = usePathname();
+  const [profile, setProfile] = React.useState<any>(null);
+
+  React.useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const { getFamilyProfile } = await import("@/features/families/api/familiesApi");
+        const data = await getFamilyProfile();
+        setProfile(data);
+      } catch (error) {
+        console.error("Failed to fetch profile for sidebar", error);
+      }
+    };
+    fetchProfile();
+  }, []);
+
+  const userName = profile ? `${profile.firstName} ${profile.lastName}` : "تحميل...";
+  const userStatus = profile?.isVerified ? "حساب مفعل" : "حساب أسرة";
+  const userInitials = profile?.firstName?.[0] || "أ";
 
   return (
     <div className="flex flex-col h-full bg-white">
@@ -80,11 +98,13 @@ export function FamilySidebarContent() {
         <div className="mt-4 p-4 rounded-xl bg-muted/50 border border-border">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-sm">
-              أم
+              {userInitials}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-bold text-foreground truncate">أسرة محمد علي</p>
-              <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">حساب مفعل</p>
+              <p className="text-sm font-bold text-foreground truncate">{userName}</p>
+              <p className={`text-[10px] font-medium uppercase tracking-wider ${profile?.isVerified ? "text-emerald-600" : "text-slate-400"}`}>
+                {userStatus}
+              </p>
             </div>
           </div>
         </div>

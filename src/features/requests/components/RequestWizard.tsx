@@ -1,89 +1,94 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
-import { Textarea } from "@/shared/ui/textarea";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from "@/shared/ui/form";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
+import { Form } from "@/shared/ui/form";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card";
 import {
     Loader2,
-    ChevronRight, /* Back in RTL */
-    ChevronLeft, /* Next in RTL */
-    UploadCloud,
-    CheckCircle2,
-    FileText,
+    Sparkles,
+    Briefcase,
     Heart,
+    Coins,
+    FileText,
     Stethoscope,
     GraduationCap,
     UtensilsCrossed,
     Home,
     CreditCard,
     HelpCircle,
-    Sparkles,
-    X,
-    Image as ImageIcon,
-    History
+    ChevronLeft,
+    ChevronRight,
+    Check,
 } from "lucide-react";
-import { RequestCategory, UrgencyLevel } from "../types";
 import { cn } from "@/shared/utils";
 
-// Schema for Step 1
-const step1Schema = z.object({
-    title: z.string().min(5, "العنوان يجب أن يكون 5 أحرف على الأقل"),
-    category: z.enum(['HEALTH', 'EDUCATION', 'FOOD', 'HOUSING', 'DEBT', 'OTHER'] as [string, ...string[]]),
-    amountNeeded: z.string().optional(),
-    location: z.string().min(2, "الموقع مطلوب"),
-});
+// ===== CSS Keyframes for step transitions =====
+const wizardAnimations = `
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+`;
 
-// Schema for Step 2
-const step2Schema = z.object({
-    description: z.string().min(20, "يرجى كتابة وصف تفصيلي للحالة (20 حرف على الأقل)"),
-});
+// Import extracted components
+import { requestFormSchema, defaultFormValues, RequestFormData, stepFieldNames } from "./wizard/schemas/requestSchema";
+import { Step1BasicInfo } from "./wizard/steps/Step1BasicInfo";
+import { Step2Employment } from "./wizard/steps/Step2Employment";
+import { Step3Health } from "./wizard/steps/Step3Health";
+import { Step4Financial } from "./wizard/steps/Step4Financial";
+import { Step5Attachments } from "./wizard/steps/Step5Attachments";
+import { RequestCategory, WizardStep } from "./wizard/types";
 
-type Step1Data = z.infer<typeof step1Schema>;
-type Step2Data = z.infer<typeof step2Schema>;
-
-const categories = [
-    { value: "HEALTH", label: "رعاية صحية", icon: Stethoscope, color: "text-emerald-500", bg: "bg-emerald-500/10", border: "border-emerald-500/30" },
-    { value: "EDUCATION", label: "تعليم", icon: GraduationCap, color: "text-purple-500", bg: "bg-purple-500/10", border: "border-purple-500/30" },
-    { value: "FOOD", label: "دعم غذائي", icon: UtensilsCrossed, color: "text-orange-500", bg: "bg-orange-500/10", border: "border-orange-500/30" },
-    { value: "HOUSING", label: "سكن وإيواء", icon: Home, color: "text-sky-500", bg: "bg-sky-500/10", border: "border-sky-500/30" },
-    { value: "DEBT", label: "سداد ديون", icon: CreditCard, color: "text-red-500", bg: "bg-red-500/10", border: "border-red-500/30" },
-    { value: "OTHER", label: "أخرى", icon: HelpCircle, color: "text-gray-500", bg: "bg-gray-500/10", border: "border-gray-500/30" },
+// Category definitions
+const categories: RequestCategory[] = [
+    { value: 0, label: "مساعدة مالية", icon: Coins, color: "text-blue-500", bg: "bg-blue-500/10", border: "border-blue-500/30" },
+    { value: 1, label: "رعاية صحية", icon: Stethoscope, color: "text-emerald-500", bg: "bg-emerald-500/10", border: "border-emerald-500/30" },
+    { value: 2, label: "دعم غذائي", icon: UtensilsCrossed, color: "text-orange-500", bg: "bg-orange-500/10", border: "border-orange-500/30" },
+    { value: 3, label: "سكن وإيواء", icon: Home, color: "text-sky-500", bg: "bg-sky-500/10", border: "border-sky-500/30" },
+    { value: 4, label: "تعليم", icon: GraduationCap, color: "text-purple-500", bg: "bg-purple-500/10", border: "border-purple-500/30" },
+    { value: 5, label: "فواتير وخدمات", icon: CreditCard, color: "text-red-500", bg: "bg-red-500/10", border: "border-red-500/30" },
+    { value: 6, label: "أخرى", icon: HelpCircle, color: "text-gray-500", bg: "bg-gray-500/10", border: "border-gray-500/30" },
 ];
 
+// Wizard steps definition
+const wizardSteps: WizardStep[] = [
+    { num: 1, label: "بيانات الطلب", icon: Sparkles },
+    { num: 2, label: "العمل والسكن", icon: Briefcase },
+    { num: 3, label: "الحالة الصحية", icon: Heart },
+    { num: 4, label: "الحالة المالية", icon: Coins },
+    { num: 5, label: "المرفقات", icon: FileText },
+];
+
+const TOTAL_STEPS = wizardSteps.length;
 
 export function RequestWizard({ onSubmit }: { onSubmit: (data: any) => void }) {
-    const [step, setStep] = useState(1);
-    const [formData, setFormData] = useState<Partial<Step1Data & Step2Data>>({});
+    const [currentStep, setCurrentStep] = useState(0);
+    const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
     const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const form1 = useForm<Step1Data>({ resolver: zodResolver(step1Schema), defaultValues: { ...formData } as any });
-    const form2 = useForm<Step2Data>({ resolver: zodResolver(step2Schema), defaultValues: { ...formData } as any });
+    // Single unified form
+    const form = useForm<RequestFormData>({
+        resolver: zodResolver(requestFormSchema) as any,
+        defaultValues: defaultFormValues as any,
+        mode: "onTouched",
+        reValidateMode: "onChange"
+    });
 
-    const selectedCategory = form1.watch("category");
+    // Watch values for conditional rendering
+    const selectedRequestType = form.watch("requestType");
+    const isWorking = form.watch("isWorking") ?? false;
+    const hasInsurance = form.watch("hasInsurance") ?? false;
+    const hasDisability = form.watch("hasDisability") ?? false;
+    const hasChronicDisease = form.watch("hasChronicDisease") ?? false;
+    const hasOtherCommitments = form.watch("hasOtherCommitments") ?? false;
+    const registeredSocialSupport = form.watch("registeredSocialSupport") ?? false;
+    const housingType = form.watch("housingType");
 
-    const onStep1Submit = (data: Step1Data) => {
-        setFormData((prev) => ({ ...prev, ...data }));
-        setStep(2);
-    };
-
-    const onStep2Submit = async (data: Step2Data) => {
-        setIsSubmitting(true);
-        // Simulate AI Determination
-        const aiUrgency = data.description.includes("عاجل") || data.description.includes("طارئ") ? "CRITICAL" : "MEDIUM";
-        const finalData = { ...formData, ...data, files: uploadedFiles, urgency: aiUrgency };
-        await new Promise(r => setTimeout(r, 1500)); // Simulate API/AI Processing
-        onSubmit(finalData);
-        setIsSubmitting(false);
-    };
-
+    // File upload handlers
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
         if (files) {
@@ -91,324 +96,253 @@ export function RequestWizard({ onSubmit }: { onSubmit: (data: any) => void }) {
         }
     };
 
-    const removeFile = (index: number) => {
+    const handleRemoveFile = (index: number) => {
         setUploadedFiles(prev => prev.filter((_, i) => i !== index));
     };
 
+    // Per-step validation + navigation
+    const goToNextStep = useCallback(async () => {
+        const fieldsToValidate = stepFieldNames[currentStep] || [];
+        if (fieldsToValidate.length > 0) {
+            const isValid = await form.trigger(fieldsToValidate as any);
+            if (!isValid) return;
+        }
+        setCompletedSteps(prev => new Set([...prev, currentStep]));
+        setCurrentStep(prev => Math.min(prev + 1, TOTAL_STEPS - 1));
+    }, [currentStep, form]);
+
+    const goToPreviousStep = useCallback(() => {
+        setCurrentStep(prev => Math.max(prev - 1, 0));
+    }, []);
+
+    const goToStep = useCallback(async (targetStep: number) => {
+        // Can only go back freely, or go forward if all previous steps are completed
+        if (targetStep < currentStep) {
+            setCurrentStep(targetStep);
+            return;
+        }
+        // To skip forward, validate the current step first
+        if (targetStep > currentStep) {
+            const fieldsToValidate = stepFieldNames[currentStep] || [];
+            if (fieldsToValidate.length > 0) {
+                const isValid = await form.trigger(fieldsToValidate as any);
+                if (!isValid) return;
+            }
+            setCompletedSteps(prev => new Set([...prev, currentStep]));
+            setCurrentStep(targetStep);
+        }
+    }, [currentStep, form]);
+
+    // Form submission
+    const handleSubmit = async (data: RequestFormData) => {
+        setIsSubmitting(true);
+        try {
+            await onSubmit({ ...data, attachments: uploadedFiles });
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const isLastStep = currentStep === TOTAL_STEPS - 1;
+    const isFirstStep = currentStep === 0;
+    const progressPercent = ((currentStep + 1) / TOTAL_STEPS) * 100;
+
     return (
-        <div className="max-w-3xl mx-auto px-2">
-            {/* Premium Progress Indicator - Logical Props PS/PE */}
-            <div className="relative mb-16">
-                <div className="flex items-center justify-between relative z-10">
-                    {[
-                        { num: 1, label: "بيانات الطلب", icon: FileText },
-                        { num: 2, label: "التفاصيل والمستندات", icon: UploadCloud },
-                    ].map((s, i) => (
-                        <div key={s.num} className="flex flex-col items-center flex-1">
-                            <div className={cn(
-                                "w-16 h-16 rounded-3xl flex items-center justify-center transition-all duration-700 shadow-xl",
-                                step >= s.num
-                                    ? "bg-warm-green text-white shadow-warm-green/30 scale-110"
-                                    : "bg-white text-slate-300 border border-slate-100 shadow-sm"
-                            )}>
-                                {step > s.num ? (
-                                    <CheckCircle2 className="w-8 h-8" />
-                                ) : (
-                                    <s.icon className="w-7 h-7" />
-                                )}
-                            </div>
-                            <span className={cn(
-                                "text-xs font-bold mt-4 transition-colors tracking-tight",
-                                step >= s.num ? "text-slate-900" : "text-slate-300"
-                            )}>
-                                {s.label}
-                            </span>
-                        </div>
-                    ))}
-                </div>
-                {/* Progress Line - Logical Inset PS/PE */}
-                <div className="absolute top-8 inset-x-[20%] h-1.5 bg-slate-100 rounded-full -z-0">
-                    <div
-                        className="h-full bg-warm-green rounded-full transition-all duration-1000 shadow-[0_0_15px_rgba(110,195,116,0.3)]"
-                        style={{ width: step === 1 ? '0%' : '100%' }}
-                    />
-                </div>
+        <>
+        <style>{wizardAnimations}</style>
+        <Card className="w-full max-w-4xl mx-auto shadow-xl border-0 rounded-3xl overflow-hidden mb-10" dir="rtl">
+            {/* Progress Bar */}
+            <div className="h-1 w-full bg-slate-100">
+                <div
+                    className="h-full bg-warm-green rounded-full transition-all duration-500 ease-out"
+                    style={{ width: `${progressPercent}%` }}
+                />
             </div>
 
-            <Card className="border-none shadow-[0_40px_80px_-20px_rgba(0,0,0,0.1)] bg-white rounded-[3rem] overflow-hidden relative">
-                <div className="absolute top-0 inset-x-0 h-2 bg-gradient-to-r from-warm-green via-emerald-400 to-warm-green" />
+            {/* Header */}
+            <CardHeader className="bg-gradient-to-br from-warm-green/5 to-warm-green/10 border-b border-warm-green/10 pb-6 pt-8">
+                <CardTitle className="text-2xl font-black text-slate-900 text-center">طلب مساعدة جديد</CardTitle>
+                <CardDescription className="text-center text-slate-600 mt-1">
+                    املأ البيانات بدقة لنتمكن من خدمتك بأفضل شكل
+                </CardDescription>
 
-                <CardHeader className="pb-4 pt-10 px-10">
-                    <div className="flex items-center gap-4 mb-6">
-                        <div className="w-12 h-12 rounded-2xl bg-warm-green/10 flex items-center justify-center shrink-0 shadow-inner">
-                            <Sparkles className="w-6 h-6 text-warm-green animate-pulse" />
-                        </div>
-                        <div>
-                            <CardTitle className="text-xl font-bold text-slate-900 text-start">
-                                {step === 1 ? "ما هي حاجتك اليوم؟" : "التفاصيل الداعمة"}
-                            </CardTitle>
-                            <CardDescription className="mt-1 font-semibold text-slate-400 text-start">
-                                {step === 1 ? "اختر التصنيف المناسب لطلبك لنتمكن من توجيهك للجهة المختصة." : "كلما زادت التفاصيل والمستندات، زادت سرعة دراسة حالتك."}
-                            </CardDescription>
-                        </div>
-                    </div>
-                </CardHeader>
+                {/* Step Progress Indicator */}
+                <div className="mt-8 px-2">
+                    <div className="flex items-center justify-between relative">
+                        {wizardSteps.map((step, idx) => {
+                            const isActive = idx === currentStep;
+                            const isCompleted = completedSteps.has(idx);
+                            const isPast = idx < currentStep;
 
-                <CardContent className="px-10 pb-10">
-                    {step === 1 && (
-                        <Form {...form1}>
-                            <form id="step1-form" onSubmit={form1.handleSubmit(onStep1Submit)} className="space-y-8">
-                                {/* Category Selection - RTL Grid */}
-                                <FormField control={form1.control} name="category" render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel className="text-sm font-bold text-slate-800 flex items-center gap-2 mb-4">
-                                            <div className="w-1 h-3.5 bg-warm-green rounded-full" />
-                                            تصنيف المساعدة
-                                        </FormLabel>
-                                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-                                            {categories.map((cat) => (
-                                                <div
-                                                    key={cat.value}
-                                                    onClick={() => field.onChange(cat.value)}
-                                                    className={cn(
-                                                        "relative cursor-pointer rounded-[1.5rem] border-2 p-5 transition-all duration-300 text-center flex flex-col items-center",
-                                                        selectedCategory === cat.value
-                                                            ? `${cat.border} ${cat.bg} shadow-xl shadow-indigo-500/5`
-                                                            : "border-slate-50 hover:border-slate-100 bg-slate-50/50 hover:bg-white"
-                                                    )}
-                                                >
-                                                    <div className={cn(
-                                                        "w-14 h-14 rounded-2xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110 shadow-sm",
-                                                        selectedCategory === cat.value ? "bg-white" : "bg-white"
-                                                    )}>
-                                                        <cat.icon className={cn(
-                                                            "w-7 h-7",
-                                                            selectedCategory === cat.value ? cat.color : "text-slate-300"
-                                                        )} />
-                                                    </div>
-                                                    <p className={cn(
-                                                        "font-bold text-xs tracking-tight",
-                                                        selectedCategory === cat.value ? "text-slate-900" : "text-slate-400"
-                                                    )}>
-                                                        {cat.label}
-                                                    </p>
-                                                    {selectedCategory === cat.value && (
-                                                        <div className={cn("absolute top-4 end-4 w-6 h-6 rounded-full flex items-center justify-center bg-white shadow-md")}>
-                                                            <CheckCircle2 className={cn("w-4 h-4", cat.color)} />
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            ))}
-                                        </div>
-                                        <FormMessage />
-                                    </FormItem>
-                                )} />
-
-                                <FormField control={form1.control} name="title" render={({ field }) => (
-                                    <FormItem className="space-y-3 text-start">
-                                        <FormLabel className="text-sm font-bold text-slate-800 flex items-center gap-2">
-                                            <div className="w-1 h-3.5 bg-warm-green rounded-full" />
-                                            عنوان الطلب
-                                        </FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder="مثال: مساعدة في تكاليف عملية جراحية عاجلة"
-                                                className="h-14 text-base rounded-xl border-slate-200/60 focus:border-warm-green transition-all px-6 font-bold"
-                                                {...field}
+                            return (
+                                <div key={step.num} className="flex flex-col items-center relative z-10 flex-1">
+                                    {/* Connector line (between steps) */}
+                                    {idx < TOTAL_STEPS - 1 && (
+                                        <div className="absolute top-5 right-1/2 w-full h-0.5 -z-10 translate-x-1/2">
+                                            <div
+                                                className={cn(
+                                                    "h-full rounded-full transition-all duration-500",
+                                                    isPast || isCompleted
+                                                        ? "bg-warm-green"
+                                                        : "bg-slate-200"
+                                                )}
                                             />
-                                        </FormControl>
-                                        <FormDescription className="text-[10px] font-bold text-slate-400 ps-1">اجعل العنوان مختصراً وواضحاً قدر الإمكان.</FormDescription>
-                                        <FormMessage />
-                                    </FormItem>
-                                )} />
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <FormField control={form1.control} name="location" render={({ field }) => (
-                                        <FormItem className="space-y-3 text-start">
-                                            <FormLabel className="text-sm font-bold text-slate-800 flex items-center gap-2">
-                                                <div className="w-1 h-3.5 bg-warm-green rounded-full" />
-                                                الموقع الجغرافي
-                                            </FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    placeholder="محافظة القاهرة، حي عين شمس"
-                                                    className="h-12 rounded-xl border-slate-200/60 px-5 font-bold text-sm"
-                                                    {...field}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )} />
-
-                                    <FormField control={form1.control} name="amountNeeded" render={({ field }) => (
-                                        <FormItem className="space-y-3 text-start">
-                                            <FormLabel className="text-sm font-bold text-slate-800 flex items-center gap-2">
-                                                <div className="w-1 h-3.5 bg-warm-green rounded-full" />
-                                                المبلغ التقديري
-                                            </FormLabel>
-                                            <FormControl>
-                                                <div className="relative">
-                                                    <Input
-                                                        type="number"
-                                                        placeholder="5000"
-                                                        className="h-12 rounded-xl border-slate-200/60 pe-16 ps-5 font-bold text-sm"
-                                                        {...field}
-                                                    />
-                                                    <span className="absolute end-6 top-1/2 -translate-y-1/2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                                                        ج.م
-                                                    </span>
-                                                </div>
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )} />
-                                </div>
-                            </form>
-                        </Form>
-                    )}
-
-                    {step === 2 && (
-                        <Form {...form2}>
-                            <form id="step2-form" onSubmit={form2.handleSubmit(onStep2Submit)} className="space-y-10">
-
-                                <FormField control={form2.control} name="description" render={({ field }) => (
-                                    <FormItem className="space-y-4 text-start">
-                                        <FormLabel className="text-sm font-bold text-slate-800 flex items-center gap-2">
-                                            <div className="w-1 h-4 bg-warm-green rounded-full" />
-                                            شرح الحالة بالتفصيل
-                                        </FormLabel>
-                                        <FormControl>
-                                            <Textarea
-                                                placeholder="اروي لنا قصتك بوضوح، على سبيل المثال: 'أنا أم لأربعة أيتام، ولدينا حكم إخلاء من السكن لعدم سداد الإيجار لمدة 6 أشهر...'"
-                                                className="min-h-[180px] text-base rounded-[1.5rem] border-slate-200/60 p-6 leading-relaxed font-bold resize-none focus:ring-4 focus:ring-warm-green/5 bg-slate-50/30"
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )} />
-
-                                {/* File Upload Zone - RTL Aware */}
-                                <div className="text-start">
-                                    <FormLabel className="text-sm font-bold text-slate-800 flex items-center gap-2 mb-6">
-                                        <div className="w-1 h-4 bg-warm-green rounded-full" />
-                                        المستندات المؤيدة (هام جداً)
-                                    </FormLabel>
-
-                                    <label className="block cursor-pointer">
-                                        <input
-                                            type="file"
-                                            multiple
-                                            accept=".pdf,.jpg,.jpeg,.png"
-                                            className="hidden"
-                                            onChange={handleFileUpload}
-                                        />
-                                        <div className="group border-2 border-dashed border-slate-100 hover:border-warm-green/30 rounded-[2rem] p-10 text-center transition-all duration-500 hover:bg-warm-green/5 bg-slate-50/50">
-                                            <div className="w-16 h-16 rounded-[1.5rem] bg-white group-hover:scale-110 flex items-center justify-center mx-auto mb-5 transition-all shadow-md group-hover:shadow-warm-green/20">
-                                                <UploadCloud className="w-8 h-8 text-slate-300 group-hover:text-warm-green transition-colors" />
-                                            </div>
-                                            <p className="text-lg font-bold mb-1.5 text-slate-800">
-                                                اسحب الملفات هنا أو <span className="text-warm-green underline underline-offset-8">اضغط لاختيارها</span>
-                                            </p>
-                                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">PDF, JPG, PNG • الحد الأقصى 5 ميجابايت لكل ملف</p>
-                                        </div>
-                                    </label>
-
-                                    {/* RTL Uploaded Files List */}
-                                    {uploadedFiles.length > 0 && (
-                                        <div className="mt-8 grid gap-4 grid-cols-1 md:grid-cols-2">
-                                            {uploadedFiles.map((file, index) => (
-                                                <div
-                                                    key={index}
-                                                    className="flex items-center justify-between bg-white border border-slate-100 rounded-[1.5rem] ps-6 pe-4 py-4 group hover:shadow-xl transition-all shadow-sm"
-                                                >
-                                                    <div className="flex items-center gap-4">
-                                                        <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center">
-                                                            {file.type.includes('image') ? (
-                                                                <ImageIcon className="w-6 h-6 text-sky-500" />
-                                                            ) : (
-                                                                <FileText className="w-6 h-6 text-rose-500" />
-                                                            )}
-                                                        </div>
-                                                        <div className="max-w-[150px] text-start">
-                                                            <p className="text-sm font-bold text-slate-700 truncate">{file.name}</p>
-                                                            <p className="text-[9px] text-slate-400 font-bold uppercase truncate">
-                                                                {(file.size / 1024 / 1024).toFixed(2)} MB
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                    <Button
-                                                        type="button"
-                                                        variant="ghost"
-                                                        onClick={() => removeFile(index)}
-                                                        className="h-10 w-10 p-0 text-slate-300 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all"
-                                                    >
-                                                        <X className="w-5 h-5" />
-                                                    </Button>
-                                                </div>
-                                            ))}
                                         </div>
                                     )}
+
+                                    {/* Step circle */}
+                                    <button
+                                        type="button"
+                                        onClick={() => goToStep(idx)}
+                                        className={cn(
+                                            "w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 border-2 shrink-0",
+                                            isActive
+                                                ? "bg-warm-green border-warm-green text-white shadow-lg shadow-warm-green/30 scale-110"
+                                                : isCompleted || isPast
+                                                    ? "bg-warm-green/10 border-warm-green text-warm-green"
+                                                    : "bg-white border-slate-200 text-slate-400"
+                                        )}
+                                    >
+                                        {isCompleted || isPast ? (
+                                            <Check className="w-4 h-4" />
+                                        ) : (
+                                            <step.icon className="w-4 h-4" />
+                                        )}
+                                    </button>
+
+                                    {/* Step label */}
+                                    <span
+                                        className={cn(
+                                            "text-[10px] font-bold mt-2 text-center transition-colors duration-300 whitespace-nowrap",
+                                            isActive
+                                                ? "text-warm-green"
+                                                : isPast || isCompleted
+                                                    ? "text-slate-600"
+                                                    : "text-slate-400"
+                                        )}
+                                    >
+                                        {step.label}
+                                    </span>
                                 </div>
-                            </form>
-                        </Form>
-                    )}
-                </CardContent>
+                            );
+                        })}
+                    </div>
+                </div>
+            </CardHeader>
 
-                <CardFooter className="flex justify-between border-t border-slate-50 p-10 bg-slate-50/50">
-                    {step === 1 ? (
-                        <div className="flex-1 flex justify-end">
-                            <Button
-                                type="submit"
-                                form="step1-form"
-                                size="lg"
-                                className="bg-warm-green hover:bg-warm-green-light text-white shadow-xl shadow-warm-green/20 rounded-xl h-14 px-10 font-bold text-base transition-transform active:scale-95"
-                            >
-                                الخطوة التالية
-                                <ChevronLeft className="ms-3 w-5 h-5" />
-                            </Button>
-                        </div>
-                    ) : (
-                        <>
-                            <Button
-                                variant="outline"
-                                size="lg"
-                                onClick={() => setStep(1)}
-                                className="rounded-xl h-14 px-8 font-bold border-2 border-slate-100 hover:border-slate-200 bg-white text-sm"
-                            >
-                                <ChevronRight className="me-2 w-5 h-5" /> السابق
-                            </Button>
-                            <Button
-                                type="submit"
-                                form="step2-form"
-                                size="lg"
-                                disabled={isSubmitting}
-                                className="bg-gradient-to-l from-warm-green to-emerald-600 text-white shadow-xl shadow-warm-green/20 rounded-xl h-14 px-10 font-bold text-base min-w-[180px]"
-                            >
-                                {isSubmitting ? (
-                                    <>
-                                        <Loader2 className="w-5 h-5 me-2 animate-spin" />
-                                        جاري المعالجة...
-                                    </>
-                                ) : (
-                                    <>
-                                        <Heart className="w-5 h-5 me-2" />
-                                        تأكيد وإرسال
-                                    </>
+            <CardContent className="p-6 sm:p-8">
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(handleSubmit)}>
+                        {/* Step Content with transition */}
+                        <div className="min-h-[400px]">
+                            <div key={currentStep} className="space-y-6" style={{ animation: "fadeSlideUp 0.35s ease-out both" }}>
+                                {/* Section Header */}
+                                <div className="flex items-center gap-3 border-b border-slate-100 pb-3">
+                                    {(() => {
+                                        const StepIcon = wizardSteps[currentStep].icon;
+                                        return <StepIcon className="w-5 h-5 text-warm-green" />;
+                                    })()}
+                                    <h3 className="text-lg font-black text-slate-800">
+                                        {currentStep === 0 && "بيانات الطلب الأساسية"}
+                                        {currentStep === 1 && "الحالة المهنية والسكن"}
+                                        {currentStep === 2 && "الحالة الصحية"}
+                                        {currentStep === 3 && "الحالة المالية والالتزامات"}
+                                        {currentStep === 4 && "المرفقات والوثائق"}
+                                    </h3>
+                                    <span className="text-xs font-medium text-slate-400 mr-auto">
+                                        {currentStep + 1} / {TOTAL_STEPS}
+                                    </span>
+                                </div>
+
+                                {/* Step Components */}
+                                {currentStep === 0 && (
+                                    <Step1BasicInfo
+                                        control={form.control}
+                                        selectedRequestType={selectedRequestType}
+                                        categories={categories}
+                                    />
                                 )}
-                            </Button>
-                        </>
-                    )}
-                </CardFooter>
-            </Card>
+                                {currentStep === 1 && (
+                                    <Step2Employment
+                                        control={form.control}
+                                        isWorking={isWorking}
+                                    />
+                                )}
+                                {currentStep === 2 && (
+                                    <Step3Health
+                                        control={form.control}
+                                        hasInsurance={hasInsurance}
+                                        hasDisability={hasDisability}
+                                        hasChronicDisease={hasChronicDisease}
+                                    />
+                                )}
+                                {currentStep === 3 && (
+                                    <Step4Financial
+                                        control={form.control}
+                                        hasOtherCommitments={hasOtherCommitments}
+                                        registeredSocialSupport={registeredSocialSupport}
+                                        housingType={housingType}
+                                    />
+                                )}
+                                {currentStep === 4 && (
+                                    <Step5Attachments
+                                        uploadedFiles={uploadedFiles}
+                                        onFileUpload={handleFileUpload}
+                                        onRemoveFile={handleRemoveFile}
+                                    />
+                                )}
+                            </div>
+                        </div>
+                    </form>
+                </Form>
+            </CardContent>
 
-            {/* Assistance Note */}
-            <div className="mt-10 text-center animate-in fade-in duration-1000">
-                <p className="text-slate-400 font-semibold text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-2">
-                    <History className="w-3 h-3" /> يتم حفظ مسودة الطلب تلقائياً لراحتك.
-                </p>
-            </div>
-        </div>
+            {/* Footer with Navigation */}
+            <CardFooter className="flex items-center justify-between p-6 sm:p-8 bg-slate-50/50 border-t border-slate-100 gap-4">
+                {/* Previous Button */}
+                <Button
+                    type="button"
+                    variant="outline"
+                    onClick={goToPreviousStep}
+                    disabled={isFirstStep}
+                    className={cn(
+                        "rounded-xl h-12 px-6 font-bold transition-all duration-200 border-slate-200",
+                        isFirstStep ? "opacity-0 pointer-events-none" : "hover:bg-slate-100"
+                    )}
+                >
+                    <ChevronRight className="w-4 h-4 ml-2" />
+                    السابق
+                </Button>
+
+                {/* Next / Submit Button */}
+                {isLastStep ? (
+                    <Button
+                        type="submit"
+                        onClick={form.handleSubmit(handleSubmit)}
+                        disabled={isSubmitting}
+                        className="bg-warm-green hover:bg-warm-green/90 rounded-xl px-10 h-12 text-base font-bold shadow-lg shadow-warm-green/20 min-w-[180px] transition-all duration-200"
+                    >
+                        {isSubmitting ? (
+                            <>
+                                <Loader2 className="w-5 h-5 ml-2 animate-spin" />
+                                جاري الإرسال...
+                            </>
+                        ) : (
+                            "إرسال الطلب"
+                        )}
+                    </Button>
+                ) : (
+                    <Button
+                        type="button"
+                        onClick={goToNextStep}
+                        className="bg-warm-green hover:bg-warm-green/90 rounded-xl px-10 h-12 text-base font-bold shadow-lg shadow-warm-green/20 min-w-[160px] transition-all duration-200"
+                    >
+                        التالي
+                        <ChevronLeft className="w-4 h-4 mr-2" />
+                    </Button>
+                )}
+            </CardFooter>
+        </Card>
+        </>
     );
 }
-

@@ -15,14 +15,6 @@
 - **Forms**: Custom Form Hooks with Real-time Validation
 - **Network**: Fetch API with Interceptors
 
-### Backend (Core System)
-- **Framework**: ASP.NET Core 8 Web API
-- **Database**: SQL Server (optimised with Partitioning)
-- **ORM**: Entity Framework Core
-- **Architecture**: Onion/Clean Architecture
-- **Background Processing**: Hangfire
-- **Payments**: Stripe Integration
-
 ---
 
 ## 🌟 Comprehensive Feature List
@@ -55,21 +47,14 @@ A fully responsive, informational landing page designed to build trust and guide
 ### 4. Core Services
 - **Aid Requests**: System for families to submit and track requests for assistance (`src/features/requests`).
 - **Donation Management**: Secure processing of donations via Stripe.
-- **Tour/Provider Management**: Backend systems for managing service providers.
 
 ### 5. Advanced UI/UX Experience
-- **Responsive Navigation**:
-    - **Desktop**: Clean top-bar with dropdown user menus.
-    - **Mobile**: Custom **Floating Glass Card** menu for easy thumb access.
-- **Native RTL Support**: Fully optimized for Arabic layout and typography (Cairo Font).
-- **Smart Notifications**: "Clean & Light" Toaster system for success/error feedback.
+- **Typography Standardisation**: Professional typographic hierarchy using optimized font weights (`Bold` & `Semibold` instead of `Black`) for a cleaner, more readable interface.
+- **Enhanced RTL Navigation**:
+    - **Physical Anchoring**: Sidebars specifically anchored to the right in Arabic mode for natural flow.
+    - **Refined Close Mechanism**: Intuitively positioned close buttons on the inner edge of sidebars for better thumb accessibility.
+- **Simplified "New Request" Flow**: A focused, centered form wizard designed for maximum usability and minimal distraction.
 - **Modern Aesthetics**: Glassmorphism effects, smooth transitions, and a premium color palette (Nile Blue & Gold).
-
-### 6. Backend Architecture & Infrastructure
-- **Database Partitioning**: Data is logically separated into schemas (`Identity`, `Tours`, `Billing`, `Infra`) for better organization and performance.
-- **Robust Error Handling**: Centralized global exception handler ensuring consistent API responses.
-- **Background Jobs**: Automated tasks using **Hangfire** for sending emails and cleaning up data.
-- **Advanced Search**: Specification Pattern implementation for filtering doctors, services, and aid requests.
 
 ---
 
@@ -94,16 +79,7 @@ src/
 └── lib/                 # Configurations (API Client, Constants)
 ```
 
-### Backend (ASP.NET Core)
-```
-Solution/
-├── Core/                # Domain Entities, Interfaces, Enums
-├── Application/         # Business Logic, DTOs, Services
-├── Infrastructure/      # EF Core Context, Migrations, Ext. Services
-└── API/                 # Controllers, Middleware, Filters
-```
-
 ---
 
 ## 🤝 Current Status
-The platform is currently in **Active Development**. The Core Identity and Profile modules are complete, with ongoing work in the Service Booking and Donation modules.
+The platform is currently in **Active Development**. The Core Identity and Profile modules are complete, focusing on the UI/UX and feature implementation.

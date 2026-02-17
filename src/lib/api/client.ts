@@ -16,7 +16,6 @@ const createApiClient = (): AxiosInstance => {
         timeout: API_CONFIG.timeout,
         withCredentials: API_CONFIG.withCredentials,
         headers: {
-            'Content-Type': 'application/json',
             'Accept': 'application/json',
         },
     });

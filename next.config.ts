@@ -34,7 +34,7 @@ const nextConfig: NextConfig = {
           },
           {
             key: "Content-Security-Policy",
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://api.dicebear.com https://aoun-api.runasp.net; font-src 'self' data:; frame-ancestors 'none'; connect-src 'self' https://aoun-api.runasp.net;",
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://api.dicebear.com https://aoun-api.runasp.net http://localhost:5204 http://127.0.0.1:5204; font-src 'self' data:; frame-ancestors 'none'; connect-src 'self' https://aoun-api.runasp.net http://localhost:5204 http://127.0.0.1:5204;",
           },
         ],
       },
@@ -51,6 +51,16 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "aoun-api.runasp.net",
+      },
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "5204",
+      },
+      {
+        protocol: "http",
+        hostname: "127.0.0.1",
+        port: "5204",
       },
     ],
   },

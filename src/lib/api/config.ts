@@ -2,7 +2,7 @@ import { env } from '@/env';
 
 export const API_CONFIG = {
     // Point to external API
-    baseURL: 'https://aoun-api.runasp.net',
+    baseURL: env.NEXT_PUBLIC_API_URL || 'http://localhost:5204',
     version: 'v1',
     timeout: 30000,
     withCredentials: false,
@@ -43,6 +43,19 @@ export const API_ENDPOINTS = {
         get: (id: string) => `/api/organization/${id}`,
         update: '/api/organization',
         members: '/api/organization/members',
+    },
+
+    // Families endpoints
+    families: {
+        profile: '/api/Families/profile',
+        statistics: '/api/Families/statistics',
+    },
+
+    // Requests endpoints
+    requests: {
+        base: '/api/Requests',
+        getById: (id: string | number) => `/api/Requests/${id}`,
+        cancel: (id: string | number) => `/api/Requests/${id}/cancel`,
     },
 } as const;
 
