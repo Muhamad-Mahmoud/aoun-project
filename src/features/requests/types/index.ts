@@ -45,13 +45,13 @@ export interface LivingConditionDto {
     housingType?: number;
     hasCar?: boolean;
     rentMonthly?: number;
-    monthlyExpenses?: number;
-    utilitiesMonthly?: number;
+    monthlyExpenses: number;
+    utilitiesMonthly: number;
     hasOtherCommitments?: boolean;
     otherCommitmentsType?: string;
     otherCommitmentsAmount?: number;
-    householdMonthlySpending?: number;
-    annualPayment?: number;
+    householdMonthlySpending: number;
+    annualPayment: number;
 }
 
 export interface SocialSupportDto {
@@ -98,7 +98,9 @@ export interface AidRequest {
     title?: string;
     location?: string;
     updatedAt?: string;
-    documents?: RequestAttachmentDto[];
+    attachments?: RequestAttachmentDto[];
+    needScore?: number;
+    priorityScore?: number;
 }
 
 // ===== Create Request Payload =====
@@ -130,13 +132,13 @@ export interface CreateAidRequestPayload {
     housingType: number;
     hasCar: boolean;
     rentMonthly?: number;
-    monthlyExpenses?: number;
-    utilitiesMonthly?: number;
+    monthlyExpenses: number;
+    utilitiesMonthly: number;
     hasOtherCommitments: boolean;
     otherCommitmentsType?: string;
     otherCommitmentsAmount?: number;
-    householdMonthlySpending?: number;
-    annualPayment?: number;
+    householdMonthlySpending: number;
+    annualPayment: number;
     registeredSocialSupport: boolean;
     socialSupportAmount?: number;
     otherAidProviders?: string;

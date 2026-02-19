@@ -34,13 +34,13 @@ export interface LivingConditionDto {
     housingType: number;
     hasCar: boolean;
     rentMonthly?: number;
-    monthlyExpenses?: number;
-    utilitiesMonthly?: number;
+    monthlyExpenses: number;
+    utilitiesMonthly: number;
     hasOtherCommitments?: boolean;
     otherCommitmentsType?: string;
     otherCommitmentsAmount?: number;
-    householdMonthlySpending?: number;
-    annualPayment?: number;
+    householdMonthlySpending: number;
+    annualPayment: number;
 }
 
 export interface HealthDataDto {

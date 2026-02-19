@@ -63,16 +63,28 @@ export const baseRequestFormSchema = z.object({
             message: "يرجى تحديد هل تمتلك سيارة أم لا"
         }),
     rentMonthly: z.coerce.number().optional(),
-    monthlyExpenses: z.coerce.number().optional(),
-    utilitiesMonthly: z.coerce.number().optional(),
+    monthlyExpenses: z.coerce.number()
+        .refine((val) => val !== undefined && val !== null, {
+            message: "إجمالي المصاريف الشهرية حقل إلزامي"
+        }),
+    utilitiesMonthly: z.coerce.number()
+        .refine((val) => val !== undefined && val !== null, {
+            message: "تكلفة المرافق (كهرباء/مياه/غاز) حقل إلزامي"
+        }),
     hasOtherCommitments: z.boolean()
         .refine((val) => val !== undefined && val !== null, {
             message: "يرجى تحديد هل يوجد التزامات أخرى أم لا"
         }),
     otherCommitmentsType: z.string().optional(),
     otherCommitmentsAmount: z.coerce.number().optional(),
-    householdMonthlySpending: z.coerce.number().optional(),
-    annualPayment: z.coerce.number().optional(),
+    householdMonthlySpending: z.coerce.number()
+        .refine((val) => val !== undefined && val !== null, {
+            message: "إجمالي إنفاق الأسرة الشهري حقل إلزامي"
+        }),
+    annualPayment: z.coerce.number()
+        .refine((val) => val !== undefined && val !== null, {
+            message: "المدفوعات السنوية الأخرى حقل إلزامي"
+        }),
     registeredSocialSupport: z.boolean()
         .refine((val) => val !== undefined && val !== null, {
             message: "يرجى تحديد هل تستفيد من الضمان الاجتماعي أم لا"
@@ -224,13 +236,13 @@ export const defaultFormValues: RequestFormData = {
     housingType: 0,
     hasCar: false,
     rentMonthly: undefined,
-    monthlyExpenses: undefined,
-    utilitiesMonthly: undefined,
+    monthlyExpenses: 0,
+    utilitiesMonthly: 0,
     hasOtherCommitments: false,
     otherCommitmentsType: "",
     otherCommitmentsAmount: undefined,
-    householdMonthlySpending: undefined,
-    annualPayment: undefined,
+    householdMonthlySpending: 0,
+    annualPayment: 0,
     registeredSocialSupport: false,
     socialSupportAmount: undefined,
     otherAidProviders: "",
