@@ -2,7 +2,7 @@ import { env } from '@/env';
 
 export const API_CONFIG = {
     // Point to external API
-    baseURL: env.NEXT_PUBLIC_API_URL || 'http://localhost:5204',
+    baseURL: env.NEXT_PUBLIC_API_URL || 'https://127.0.0.1:7189',
     version: 'v1',
     timeout: 30000,
     withCredentials: false,
