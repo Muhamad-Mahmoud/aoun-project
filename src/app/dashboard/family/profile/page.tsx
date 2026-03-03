@@ -193,7 +193,7 @@ export default function FamilyProfilePage() {
     );
 }
 
-function ProfileItem({ icon: Icon, label, value }: { icon: any, label: string, value: string }) {
+function ProfileItem({ icon: Icon, label, value }: { icon: any, label: string, value?: string }) {
     return (
         <div className="flex items-center justify-between p-5 rounded-2xl bg-slate-50 border border-slate-100 hover:border-warm-green/30 hover:bg-white hover:shadow-md transition-all duration-300 group">
             <span className="font-bold text-slate-900">{value || "غير متوفر"}</span>
