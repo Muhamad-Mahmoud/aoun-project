@@ -56,8 +56,11 @@ export function FamilyProfileForm({ initialData, onCancel, onSuccess }: FamilyPr
     const onSubmit = async (data: ProfileFormValues) => {
         setIsSubmitting(true);
         try {
-            // The API expects UpdateFamilyProfilePayload which matches ProfileFormValues exactly
-            const updated = await updateFamilyProfile(data);
+            const updated = await updateFamilyProfile({
+                ...data,
+                headNationalId: initialData.headNationalId,
+                email: initialData.email,
+            });
             toast.success("تم تحديث الملف الشخصي بنجاح");
             onSuccess(updated);
         } catch (error) {
