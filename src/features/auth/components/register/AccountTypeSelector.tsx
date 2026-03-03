@@ -15,7 +15,7 @@ export const AccountTypeSelector: React.FC<AccountTypeSelectorProps> = ({ accoun
                 type="button"
                 onClick={() => onChange("individual")}
                 className={cn(
-                    "relative p-6 rounded-2xl border-2 text-center transition-all duration-300 ease-out overflow-hidden group/card bg-white/95 backdrop-blur-md flex flex-col items-center justify-center gap-3",
+                    "relative px-4 py-4 rounded-xl border-2 text-center transition-all duration-300 ease-out overflow-hidden group/card bg-white/95 backdrop-blur-md flex flex-col items-center justify-center gap-2",
                     accountType === "individual"
                         ? "border-emerald-500 bg-emerald-50/20 shadow-[0_8px_20px_rgba(16,185,129,0.1)]"
                         : "border-slate-100 border-solid shadow-[0_4px_15px_rgba(15,23,42,0.03)] hover:shadow-[0_8px_20px_rgba(15,23,42,0.06)]"
@@ -30,20 +30,20 @@ export const AccountTypeSelector: React.FC<AccountTypeSelectorProps> = ({ accoun
                 )}
 
                 <div className={cn(
-                    "w-14 h-14 rounded-full flex items-center justify-center transition-colors duration-300 mb-2",
-                    accountType === "individual" ? "bg-emerald-100 text-emerald-600" : "bg-amber-50 text-amber-600 group-hover/card:bg-amber-100"
+                    "w-12 h-12 rounded-full flex items-center justify-center transition-colors duration-300 mb-1",
+                    accountType === "individual" ? "bg-emerald-100 text-emerald-600" : "bg-emerald-50 text-emerald-600 group-hover/card:bg-emerald-100"
                 )}>
-                    <User className="w-6 h-6" />
+                    <User className="w-5 h-5" />
                 </div>
 
-                <div className="text-center space-y-1">
+                <div className="text-center space-y-0.5">
                     <h3 className={cn(
-                        "text-lg font-bold mb-1 transition-colors",
+                        "text-[15px] font-bold transition-colors",
                         accountType === "individual" ? "text-emerald-900" : "text-slate-800"
                     )}>
                         فرد مستقل
                     </h3>
-                    <p className="text-sm text-slate-500 font-medium">
+                    <p className="text-[12px] text-slate-500 font-medium">
                         للتبرع أو التطوع
                     </p>
                 </div>
@@ -53,7 +53,7 @@ export const AccountTypeSelector: React.FC<AccountTypeSelectorProps> = ({ accoun
                 type="button"
                 onClick={() => onChange("organization")}
                 className={cn(
-                    "relative p-6 rounded-2xl border-2 text-center transition-all duration-300 ease-out overflow-hidden group/card bg-white/95 backdrop-blur-md flex flex-col items-center justify-center gap-3",
+                    "relative px-4 py-4 rounded-xl border-2 text-center transition-all duration-300 ease-out overflow-hidden group/card bg-white/95 backdrop-blur-md flex flex-col items-center justify-center gap-2",
                     accountType === "organization"
                         ? "border-emerald-500 bg-emerald-50/20 shadow-[0_8px_20px_rgba(16,185,129,0.1)]"
                         : "border-slate-100 border-solid shadow-[0_4px_15px_rgba(15,23,42,0.03)] hover:shadow-[0_8px_20px_rgba(15,23,42,0.06)]"
@@ -68,20 +68,20 @@ export const AccountTypeSelector: React.FC<AccountTypeSelectorProps> = ({ accoun
                 )}
 
                 <div className={cn(
-                    "w-14 h-14 rounded-full flex items-center justify-center transition-colors duration-300 mb-2",
-                    accountType === "organization" ? "bg-emerald-100 text-emerald-600" : "bg-amber-50 text-amber-600 group-hover/card:bg-amber-100"
+                    "w-12 h-12 rounded-full flex items-center justify-center transition-colors duration-300 mb-1",
+                    accountType === "organization" ? "bg-amber-100 text-amber-600" : "bg-amber-50 text-amber-600 group-hover/card:bg-amber-100"
                 )}>
-                    <Building2 className="w-6 h-6" />
+                    <Building2 className="w-5 h-5" />
                 </div>
 
-                <div className="text-center space-y-1">
+                <div className="text-center space-y-0.5">
                     <h3 className={cn(
-                        "text-lg font-bold mb-1 transition-colors",
-                        accountType === "organization" ? "text-emerald-900" : "text-slate-800"
+                        "text-[15px] font-bold transition-colors",
+                        accountType === "organization" ? "text-amber-900" : "text-slate-800"
                     )}>
                         جمعية / مؤسسة
                     </h3>
-                    <p className="text-sm text-slate-500 font-medium">
+                    <p className="text-[12px] text-slate-500 font-medium">
                         للشراكة وتقديم الدعم
                     </p>
                 </div>
