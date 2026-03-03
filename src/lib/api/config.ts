@@ -3,6 +3,8 @@ import { env } from '@/env';
 export const API_CONFIG = {
     // Point to external API
     baseURL: env.NEXT_PUBLIC_API_URL || 'https://127.0.0.1:7189',
+    // AI / Gemini backend (separate service)
+    aiBaseURL: env.NEXT_PUBLIC_AI_API_URL || 'http://127.0.0.1:8000',
     version: 'v1',
     timeout: 30000,
     withCredentials: false,
@@ -56,6 +58,11 @@ export const API_ENDPOINTS = {
         base: '/api/Requests',
         getById: (id: string | number) => `/api/Requests/${id}`,
         cancel: (id: string | number) => `/api/Requests/${id}/cancel`,
+    },
+
+    // AI endpoints
+    ai: {
+        chatStream: '/api/ai/chat/stream',
     },
 } as const;
 

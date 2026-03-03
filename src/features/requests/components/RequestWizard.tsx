@@ -150,24 +150,19 @@ export function RequestWizard({ onSubmit }: { onSubmit: (data: any) => void }) {
     return (
         <>
         <style>{wizardAnimations}</style>
-        <Card className="w-full max-w-4xl mx-auto shadow-xl border-0 rounded-3xl overflow-hidden mb-10" dir="rtl">
-            {/* Progress Bar */}
-            <div className="h-1 w-full bg-slate-100">
-                <div
-                    className="h-full bg-warm-green rounded-full transition-all duration-500 ease-out"
-                    style={{ width: `${progressPercent}%` }}
-                />
-            </div>
+        <Card className="w-full max-w-4xl mx-auto shadow-lg border-0 rounded-3xl overflow-hidden mb-10" dir="rtl">
 
             {/* Header */}
-            <CardHeader className="bg-gradient-to-br from-warm-green/5 to-warm-green/10 border-b border-warm-green/10 pb-6 pt-8">
-                <CardTitle className="text-2xl font-black text-slate-900 text-center">طلب مساعدة جديد</CardTitle>
-                <CardDescription className="text-center text-slate-600 mt-1">
-                    املأ البيانات بدقة لنتمكن من خدمتك بأفضل شكل
-                </CardDescription>
+            <CardHeader className="bg-gradient-to-br from-warm-green/5 to-warm-green/10 border-b border-warm-green/10 px-8 py-8 gap-4">
+                <div className="flex flex-col items-center gap-2 pb-4">
+                    <CardTitle className="text-3xl font-black text-slate-900 text-center">طلب مساعدة جديد</CardTitle>
+                    <CardDescription className="text-center text-slate-600 text-sm max-w-2xl">
+                        املأ البيانات بدقة لنتمكن من خدمتك بأفضل شكل
+                    </CardDescription>
+                </div>
 
                 {/* Step Progress Indicator */}
-                <div className="mt-8 px-2">
+                <div className="w-full pt-4">
                     <div className="flex items-center justify-between relative">
                         {wizardSteps.map((step, idx) => {
                             const isActive = idx === currentStep;
@@ -175,13 +170,13 @@ export function RequestWizard({ onSubmit }: { onSubmit: (data: any) => void }) {
                             const isPast = idx < currentStep;
 
                             return (
-                                <div key={step.num} className="flex flex-col items-center relative z-10 flex-1">
+                                <div key={step.num} className="flex flex-col items-center relative flex-1">
                                     {/* Connector line (between steps) */}
                                     {idx < TOTAL_STEPS - 1 && (
-                                        <div className="absolute top-5 right-1/2 w-full h-0.5 -z-10 translate-x-1/2">
+                                        <div className="absolute top-1/2 -right-1/2 w-full h-0.5 -z-10 -translate-y-1/2">
                                             <div
                                                 className={cn(
-                                                    "h-full rounded-full transition-all duration-500",
+                                                    "h-full transition-all duration-500",
                                                     isPast || isCompleted
                                                         ? "bg-warm-green"
                                                         : "bg-slate-200"
@@ -195,7 +190,7 @@ export function RequestWizard({ onSubmit }: { onSubmit: (data: any) => void }) {
                                         type="button"
                                         onClick={() => goToStep(idx)}
                                         className={cn(
-                                            "w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 border-2 shrink-0",
+                                            "w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 border-2 shrink-0",
                                             isActive
                                                 ? "bg-warm-green border-warm-green text-white shadow-lg shadow-warm-green/30 scale-110"
                                                 : isCompleted || isPast
@@ -204,16 +199,16 @@ export function RequestWizard({ onSubmit }: { onSubmit: (data: any) => void }) {
                                         )}
                                     >
                                         {isCompleted || isPast ? (
-                                            <Check className="w-4 h-4" />
+                                            <Check className="w-5 h-5" />
                                         ) : (
-                                            <step.icon className="w-4 h-4" />
+                                            <step.icon className="w-5 h-5" />
                                         )}
                                     </button>
 
                                     {/* Step label */}
                                     <span
                                         className={cn(
-                                            "text-[10px] font-bold mt-2 text-center transition-colors duration-300 whitespace-nowrap",
+                                            "text-[11px] font-bold mt-2.5 text-center transition-colors duration-300 whitespace-nowrap",
                                             isActive
                                                 ? "text-warm-green"
                                                 : isPast || isCompleted

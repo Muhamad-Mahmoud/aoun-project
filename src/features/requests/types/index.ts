@@ -16,7 +16,7 @@ export interface AssociationBasicDto {
 
 // ===== Nested DTOs from Family profile =====
 export interface EmploymentDataDto {
-    isWorking?: boolean;
+    isWorking: boolean;
     workingType?: number;
     employmentType?: number;
     jobTitle?: string;
@@ -25,29 +25,29 @@ export interface EmploymentDataDto {
     workDescription?: string;
     workLocation?: string;
     yearsAtJob?: number;
-    isLookingForJob?: boolean;
+    isLookingForJob: boolean;
     needsTraining?: boolean;
     estimatedIncomeMonthly?: number;
     unEmploymentReason?: string;
 }
 
 export interface HealthDataDto {
-    hasInsurance?: boolean;
+    hasInsurance: boolean;
     insuranceType?: string;
-    hasDisability?: boolean;
+    hasDisability: boolean;
     disabilityType?: string;
-    hasChronicDisease?: boolean;
+    hasChronicDisease: boolean;
     chronicDiseaseType?: string;
     medicalCostMonthly?: number;
 }
 
 export interface LivingConditionDto {
-    housingType?: number;
-    hasCar?: boolean;
+    housingType: number;
+    hasCar: boolean;
     rentMonthly?: number;
     monthlyExpenses: number;
     utilitiesMonthly: number;
-    hasOtherCommitments?: boolean;
+    hasOtherCommitments: boolean;
     otherCommitmentsType?: string;
     otherCommitmentsAmount?: number;
     householdMonthlySpending: number;
@@ -55,7 +55,7 @@ export interface LivingConditionDto {
 }
 
 export interface SocialSupportDto {
-    registeredSocialSupport?: boolean;
+    registeredSocialSupport: boolean;
     socialSupportAmount?: number;
     otherAidProviders?: string;
     otherAidType?: string;

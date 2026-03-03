@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { Header } from "@/shared/components/layout/Header";
 import { Footer } from "@/shared/components/layout/Footer";
+import { ChatWidget } from "@/features/chat/components";
 
 export default function LayoutContent({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
@@ -17,6 +18,9 @@ export default function LayoutContent({ children }: { children: React.ReactNode 
                 {children}
             </main>
             {!hideLayout && <Footer />}
+            
+            {/* Global Chat AI — Available everywhere except auth pages */}
+            {!isAuth && <ChatWidget />}
         </>
     );
 }

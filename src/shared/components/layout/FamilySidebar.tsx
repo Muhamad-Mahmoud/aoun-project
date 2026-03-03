@@ -11,7 +11,8 @@ import {
   User,
   Settings,
   LogOut,
-  ChevronLeft
+  ChevronLeft,
+  MessageCircle
 } from "lucide-react";
 
 import { cn } from "@/shared/utils";
@@ -21,6 +22,7 @@ const navItems = [
   { label: "لوحة التحكم", href: "/dashboard/family", icon: LayoutDashboard },
   { label: "طلباتي", href: "/dashboard/family/requests", icon: FileText },
   { label: "طلب جديد", href: "/dashboard/family/requests/new", icon: PlusCircle },
+  { label: "المساعد الذكي", href: "/dashboard/family/chat", icon: MessageCircle },
   { label: "الملف الشخصي", href: "/dashboard/family/profile", icon: User },
   { label: "الإعدادات", href: "/dashboard/family/settings", icon: Settings },
 ];

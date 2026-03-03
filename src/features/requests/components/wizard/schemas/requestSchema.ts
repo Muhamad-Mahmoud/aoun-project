@@ -30,9 +30,12 @@ export const baseRequestFormSchema = z.object({
     workDescription: z.string().optional(),
     workLocation: z.string().optional(),
     yearsAtJob: z.coerce.number().optional(),
-    isLookingForJob: z.boolean().optional(),
+    isLookingForJob: z.boolean()
+        .refine((val) => val !== undefined && val !== null, {
+            message: "هل تبحث عن عمل؟ (حقل إلزامي) - يرجى تحديد نعم أو لا"
+        }),
     needsTraining: z.boolean().optional(),
-    estimatedIncomeMonthly: z.coerce.number().optional(),
+    estimatedIncomeMonthly: z.coerce.number().optional().nullable(),
     unEmploymentReason: z.string().optional(),
 
     // Step 3: Health Information
@@ -139,13 +142,10 @@ export const requestFormSchema = baseRequestFormSchema.superRefine((data, ctx) =
             ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["workDescription"], message: "وصف طبيعة العمل مطلوب" });
         }
     } 
-    // 3️⃣ لو IsWorking == false -> UnemploymentReason, EstimatedIncomeMonthly required
+    // 3️⃣ لو IsWorking == false -> UnemploymentReason required
     else {
         if (!data.unEmploymentReason || data.unEmploymentReason.trim() === "") {
             ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["unEmploymentReason"], message: "سبب عدم العمل مطلوب" });
-        }
-        if (data.estimatedIncomeMonthly === undefined || data.estimatedIncomeMonthly === null) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["estimatedIncomeMonthly"], message: "الدخل الشهري المتوقع مطلوب" });
         }
     }
 
@@ -224,7 +224,8 @@ export const defaultFormValues: RequestFormData = {
     workLocation: "",
     yearsAtJob: undefined,
     isLookingForJob: false,
-    needsTraining: false,
+    needsTraining: undefined,
+    estimatedIncomeMonthly: null,
     unEmploymentReason: "",
     hasInsurance: false,
     insuranceType: "",
@@ -259,8 +260,8 @@ export const stepFieldNames: Record<number, (keyof RequestFormData)[]> = {
     1: [
         "location", "isWorking", "workingType", "employmentType",
         "jobTitle", "company", "salaryMonthly", "workDescription",
-        "workLocation", "yearsAtJob", "unEmploymentReason",
-        "estimatedIncomeMonthly"
+        "workLocation", "yearsAtJob", "isLookingForJob", "needsTraining",
+        "unEmploymentReason", "estimatedIncomeMonthly"
     ],
     2: [
         "hasInsurance", "insuranceType", "hasDisability",

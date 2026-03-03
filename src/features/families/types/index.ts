@@ -63,16 +63,16 @@ export interface SocialSupportDto {
 
 export interface FamilyProfile {
     id: number;
-    headNationalId?: string;
+    headNationalId: string;
     firstName: string;
     lastName: string;
-    email?: string;
+    email: string;
     phone: string;
     country: string;
     governorate: string;
     city: string;
-    neighborhood: string;
-    isVerified?: boolean;
+    neighborhood?: string;
+    isVerified: boolean;
     verificationDate?: string;
     familyMembers: FamilyMemberDto[];
     employmentData?: EmploymentDataDto | null;
@@ -82,13 +82,15 @@ export interface FamilyProfile {
 }
 
 export interface UpdateFamilyProfilePayload {
+    headNationalId: string;
     firstName: string;
     lastName: string;
+    email: string;
     phone: string;
     country: string;
     governorate: string;
     city: string;
-    neighborhood: string;
+    neighborhood?: string;
 }
 
 export interface FamilyStatistics {
