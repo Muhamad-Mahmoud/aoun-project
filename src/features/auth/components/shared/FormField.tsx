@@ -26,7 +26,7 @@ export const FormField: React.FC<FormFieldProps> = ({
 }) => {
     return (
         <div className="space-y-2">
-            <Label htmlFor={id} className="text-base font-bold text-right w-full block text-foreground">
+            <Label htmlFor={id} className="text-sm font-semibold text-right w-full block text-slate-800">
                 {label}
             </Label>
             <Input
@@ -36,9 +36,9 @@ export const FormField: React.FC<FormFieldProps> = ({
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
                 className={cn(
-                    "h-11",
+                    "h-[52px] text-[15px] rounded-xl border-slate-200 bg-slate-50 focus-visible:ring-4 focus-visible:ring-emerald-500/20 focus-visible:border-emerald-500 transition-all hover:bg-slate-100/50 focus:bg-white",
                     dir === "ltr" ? "text-left" : "text-right",
-                    error && "border-destructive focus:border-destructive focus:ring-destructive/20"
+                    error && "border-destructive focus-visible:border-destructive focus-visible:ring-destructive/20"
                 )}
                 dir={dir}
                 aria-invalid={!!error}

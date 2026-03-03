@@ -1,7 +1,8 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight } from "lucide-react";
+import { Button } from "@/shared/ui/button";
+import { ArrowRight, ChevronRight, ShieldCheck } from "lucide-react";
 
 interface AuthWrapperProps {
     children: React.ReactNode;
@@ -29,22 +30,22 @@ export const AuthWrapper: React.FC<AuthWrapperProps> = ({
                 <div className="absolute top-8 right-8 z-20">
                     <Link
                         href="/"
-                        className="group flex items-center gap-2 text-slate-400 hover:text-primary transition-all font-bold text-sm"
+                        className="group flex items-center gap-2.5 text-slate-400 hover:text-primary transition-all font-bold text-[13px] opacity-80 hover:opacity-100"
                     >
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        <Image src="/logo.png" alt="" width={20} height={10} className="h-4 w-auto grayscale group-hover:grayscale-0 transition-all opacity-70" />
                         العودة للرئيسية
+                        <ArrowRight className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
                     </Link>
                 </div>
 
                 <div className="flex-1 flex items-center justify-center p-6 md:p-10 lg:p-16">
-                    <div className="w-full max-w-[620px] space-y-6 animate-fade-in py-8">
-                        {/* Header Section */}
-                        <div className="text-center space-y-3">
-                            <h1 className="text-4xl font-black text-slate-900 tracking-tight">
+                    <div className="w-full max-w-[540px] animate-fade-in py-8">
+                        <div className="text-center mb-10">
+                            <h1 className="text-[38px] leading-[1.2] font-extrabold text-slate-900 tracking-tight transition-all">
                                 {title}
                             </h1>
                             {description && (
-                                <p className="text-lg text-slate-500 font-bold leading-relaxed">
+                                <p className="text-[15px] leading-relaxed text-slate-500 font-normal mt-4 px-4">
                                     {description}
                                 </p>
                             )}
@@ -55,14 +56,14 @@ export const AuthWrapper: React.FC<AuthWrapperProps> = ({
                             {children}
                         </div>
 
-                        {/* Footer Section */}
+                        {/* Footer Section - Design System Spacing (20px) */}
                         {(footerText || footerLinkText) && (
-                            <div className="text-center pt-6 border-t border-slate-50">
-                                <span className="text-slate-400 font-bold text-base">{footerText} </span>
+                            <div className="text-center mt-5">
+                                <span className="text-slate-400 font-medium text-sm">{footerText} </span>
                                 {footerLinkText && footerLinkHref && (
                                     <Link
                                         href={footerLinkHref}
-                                        className="text-primary hover:text-primary/80 font-black text-base hover:underline underline-offset-8 transition-all"
+                                        className="text-emerald-600 hover:text-emerald-700 font-extrabold text-sm hover:underline underline-offset-4 transition-all"
                                     >
                                         {footerLinkText}
                                     </Link>
@@ -74,9 +75,9 @@ export const AuthWrapper: React.FC<AuthWrapperProps> = ({
             </div>
 
             {/* Left Side: Hero Area (Fixed) */}
-            <div className="hidden lg:flex lg:w-[40%] h-full relative bg-[#0e1525] overflow-hidden items-center justify-center border-l border-white/5">
+            <div className="hidden lg:flex lg:w-[45%] h-full relative bg-[#0e1525] overflow-hidden items-center justify-center border-l border-white/5">
                 {/* Visual Elements */}
-                <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
+                <div className="absolute inset-0 opacity-[0.08]" style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
 
                 {/* Glows */}
                 <div className="absolute top-0 left-0 w-96 h-96 bg-primary/10 rounded-full blur-[100px] -ml-48 -mt-48" />
@@ -95,24 +96,34 @@ export const AuthWrapper: React.FC<AuthWrapperProps> = ({
                                 className="h-28 w-auto"
                             />
                         </Link>
-
-                        {/* Badge */}
-                        <div className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-white text-xs font-black">
-                            <span className="w-2 h-2 rounded-full bg-[#f59e0b] shadow-[0_0_8px_#f59e0b]" />
-                            منصة إنسانية ذكية
-                        </div>
                     </div>
 
                     {/* Text Content */}
-                    <div className="space-y-6">
-                        <h2 className="text-5xl font-black text-white leading-[1.3] tracking-tight">
-                            معاً نصنع <span className="text-primary">الأمل</span>
+                    <div className="text-center mt-12 mb-16 relative z-10 px-8">
+                        <div className="inline-flex items-center justify-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold mb-6">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                            منصة إنسانية ذكية
+                        </div>
+                        <h2 className="text-[42px] font-extrabold tracking-tight text-white mb-6">
+                            معاً نصنع <span className="text-emerald-500">الأمل</span>
                             <br />
-                            ونبني المستقبل.
+                            ونبني <span className="text-emerald-600">المستقبل.</span>
                         </h2>
-                        <p className="text-lg text-slate-400 font-bold leading-relaxed max-w-sm mx-auto opacity-80">
-                            انضم إلى آلاف المتطوعين والجمعيات الخيرية في مصر. نضمن وصول مساعدتك لمستحقيها بشفافية تامة.
+                        <p className="text-[16px] leading-loose text-slate-300 max-w-md mx-auto">
+                            انضم إلى آلاف المتطوعين والجمعيات الخيرية في مصر.
+                            <br />
+                            نضمن وصول مساعدتك لمستحقيها بشفافية تامة.
                         </p>
+
+                        <div className="mt-10">
+                            <Button
+                                variant="outline"
+                                className="bg-slate-900/40 border-slate-700 text-white hover:bg-slate-800/60 hover:text-white rounded-full h-[48px] px-8 text-sm font-semibold transition-all duration-300 shadow-[0_8px_20px_rgba(0,0,0,0.2)] hover:shadow-[0_12px_25px_rgba(0,0,0,0.3)] group"
+                            >
+                                <ArrowRight className="ml-2 h-4 w-4 stroke-[1.5] group-hover:-translate-x-1 transition-transform" />
+                                تعرف أكثر على عون
+                            </Button>
+                        </div>
                     </div>
                 </div>
 

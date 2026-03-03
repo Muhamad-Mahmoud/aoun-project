@@ -150,8 +150,8 @@ export function setupResponseInterceptors(axiosInstance: AxiosInstance) {
                     // Refresh failed, redirect to login
                     logger.error('Token refresh failed', refreshError);
                     if (typeof window !== 'undefined') {
-                        removeSecureToken('auth_token');
-                        removeSecureToken('refresh_token');
+                        await removeSecureToken('auth_token');
+                        await removeSecureToken('refresh_token');
                         // Only redirect if on a protected page (not on public pages)
                         const currentPath = window.location.pathname;
                         const isPublicPage = currentPath === '/' ||

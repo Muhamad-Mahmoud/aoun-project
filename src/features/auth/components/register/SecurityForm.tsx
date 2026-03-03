@@ -15,10 +15,10 @@ export const SecurityForm: React.FC<SecurityFormProps> = ({ formData, errors, on
     const [showPassword, setShowPassword] = useState(false);
 
     return (
-        <div className="space-y-6">
-            <div className="p-8 md:p-10 rounded-3xl bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden">
-                {/* Background Pattern */}
-                <div className="absolute inset-0 opacity-[0.2] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px)', backgroundSize: '16px 16px' }} />
+        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 fill-mode-both">
+            <div className="p-8 md:p-10 rounded-2xl bg-white/95 backdrop-blur-md border border-slate-100 shadow-[0_8px_30px_rgba(15,23,42,0.06)] hover:shadow-[0_12px_45px_rgba(15,23,42,0.08)] transition-all duration-300 ease-out relative overflow-hidden group/card z-10 text-right">
+                {/* Background Pattern - Subtle */}
+                <div className="absolute inset-0 opacity-[0.05] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#16a34a 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
 
                 <div className="space-y-8 relative z-10">
                     {/* Password Fields */}
@@ -37,7 +37,7 @@ export const SecurityForm: React.FC<SecurityFormProps> = ({ formData, errors, on
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-4 top-[48px] text-slate-400 hover:text-primary transition-colors"
+                                className="absolute left-4 top-[42px] text-slate-400 hover:text-emerald-600 transition-all p-2 rounded-lg hover:bg-slate-100"
                             >
                                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                             </button>
@@ -67,7 +67,7 @@ export const SecurityForm: React.FC<SecurityFormProps> = ({ formData, errors, on
                                     onCheckedChange={(val) => {
                                         onChange("acceptTerms", !!val);
                                     }}
-                                    className="w-6 h-6 rounded-lg border-2 border-slate-200 data-[state=checked]:bg-primary data-[state=checked]:border-primary transition-all"
+                                    className="w-6 h-6 rounded-lg border-2 border-slate-200 data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600 transition-all"
                                 />
                             </div>
                             <div className="space-y-1">

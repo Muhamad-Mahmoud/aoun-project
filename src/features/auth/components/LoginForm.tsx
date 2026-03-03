@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 import Link from "next/link";
 
 import { Input } from "@/shared/ui/input";
@@ -19,6 +19,7 @@ export function LoginForm() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [rememberMe, setRememberMe] = useState(false);
+    const [isPending, startTransition] = useTransition();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -40,11 +41,13 @@ export function LoginForm() {
             rememberMe,
         };
 
-        await onSubmit(credentials);
+        startTransition(async () => {
+            await onSubmit(credentials);
+        });
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 fill-mode-both">
             {error && (
                 <ErrorDisplay
                     message={error}
@@ -52,62 +55,67 @@ export function LoginForm() {
                 />
             )}
 
-            {/* Form Card - Matching Registration Style */}
-            <div className="p-5 rounded-xl bg-gradient-to-br from-primary/[0.03] via-primary/[0.01] to-transparent border border-primary/10 shadow-sm backdrop-blur-sm">
-                <div className="space-y-4">
-                    {/* Email Field */}
+            {/* Form Card - Premium SaaS Glassmorphism */}
+            <div className="p-8 md:px-10 md:py-9 rounded-2xl bg-white/95 backdrop-blur-md border border-slate-100 shadow-[0_8px_30px_rgba(15,23,42,0.06)] hover:shadow-[0_12px_45px_rgba(15,23,42,0.08)] transition-all duration-300 ease-out relative overflow-hidden group/card z-10">
+                {/* Internal Section Header */}
+                <div className="text-center mb-8 border-b border-slate-200 pb-5 -mx-10">
+                    <span className="text-xs font-bold text-slate-400 uppercase tracking-[0.12em] block">
+                        تسجيل الدخول إلى حسابك
+                    </span>
+                </div>
+                
+                <div className="space-y-[18px] relative z-10">
                     <div className="space-y-2">
-                        <Label htmlFor="email" className="text-base font-bold text-right w-full block text-foreground">
+                        <Label htmlFor="email" className="text-sm font-semibold text-right w-full block text-slate-800">
                             البريد الإلكتروني
                         </Label>
-                        <div className="relative">
+                        <div className="relative group">
+                            <Mail strokeWidth={1.5} className="absolute right-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-emerald-500 transition-colors z-10" />
                             <Input
                                 id="email"
                                 type="email"
-                                placeholder="name@example.com"
+                                placeholder="أدخل البريد الإلكتروني"
                                 required
                                 value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                className="text-left pl-10 h-11"
-                                dir="ltr"
+                                onChange={(e) => setEmail(e.target.value)}      
+                                className="text-right pr-11 pl-4 h-[52px] text-[15px] rounded-xl border-slate-200 focus-visible:ring-4 focus-visible:ring-emerald-500/20 focus-visible:border-emerald-500 transition-all bg-slate-50 hover:bg-slate-100/50 focus:bg-white"
+                                dir="rtl"
                             />
-                            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                         </div>
                     </div>
 
-                    {/* Password Field */}
                     <div className="space-y-2">
-                        <div className="flex items-center justify-between">
-                            <Label htmlFor="password" className="text-base font-bold text-foreground">
+                        <div className="flex items-center justify-between">     
+                            <Label htmlFor="password" className="text-sm font-semibold text-slate-800">
                                 كلمة المرور
                             </Label>
                             <Link
                                 href="/forgot-password"
-                                className="text-xs text-primary hover:text-primary/80 underline-offset-4 hover:underline font-medium"
+                                className="text-sm text-emerald-600 hover:text-emerald-700 underline underline-offset-4 decoration-emerald-600/30 hover:decoration-emerald-600 font-bold transition-all"
                             >
                                 نسيت كلمة المرور؟
                             </Link>
                         </div>
-                        <div className="relative">
+                        <div className="relative group">
                             <Input
                                 id="password"
-                                type={showPassword ? "text" : "password"}
-                                placeholder="••••••••"
+                                type={showPassword ? "text" : "password"}       
+                                placeholder="أدخل كلمة المرور"    
                                 required
                                 value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                className="text-left pl-10 h-11"
-                                dir="ltr"
+                                onChange={(e) => setPassword(e.target.value)}   
+                                className="text-right pr-4 pl-12 h-[52px] text-[15px] rounded-xl border-slate-200 focus-visible:ring-4 focus-visible:ring-emerald-500/20 focus-visible:border-emerald-500 transition-all bg-slate-50 hover:bg-slate-100/50 focus:bg-white"
+                                dir="rtl"
                             />
                             <button
                                 type="button"
                                 onClick={togglePassword}
-                                className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                                className="absolute left-2.5 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 transition-all z-10"
                             >
                                 {showPassword ? (
-                                    <EyeOff className="h-4 w-4" />
+                                    <EyeOff strokeWidth={1.5} className="h-4 w-4" />
                                 ) : (
-                                    <Eye className="h-4 w-4" />
+                                    <Eye strokeWidth={1.5} className="h-4 w-4" />
                                 )}
                                 <span className="sr-only">تبديل عرض كلمة المرور</span>
                             </button>
@@ -115,52 +123,43 @@ export function LoginForm() {
                     </div>
 
                     {/* Remember Me */}
-                    <div className="flex items-center gap-2 justify-end pt-2">
+                    <div className="flex items-start gap-3 pt-1">  
                         <Checkbox
                             id="remember"
-                            className="order-1"
+                            className="mt-[3px] w-[18px] h-[18px] rounded border-slate-300 data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600 transition-all"
                             checked={rememberMe}
                             onCheckedChange={(checked) => setRememberMe(checked as boolean)}
                         />
                         <label
                             htmlFor="remember"
-                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-muted-foreground order-2 cursor-pointer"
+                            className="text-sm font-bold leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-slate-700 cursor-pointer select-none text-right"
                         >
                             تذكرني
+                            <span className="block text-xs text-slate-500 font-medium mt-1.5 opacity-80">حفظ الجلسة على هذا الجهاز فقط</span>
                         </label>
                     </div>
                 </div>
             </div>
 
-            {/* Submit Button - Matching Registration Style */}
-            <div className="pt-4 border-t border-slate-100">
+            {/* Submit Button */}
+            <div className="mt-8 relative z-20">
                 <Button
-                    className="w-full font-bold h-12 rounded-xl bg-gradient-to-l from-primary to-emerald-400 hover:shadow-lg hover:shadow-primary/20 transition-all text-base text-white"
+                    className="w-full text-[15px] font-semibold flex items-center justify-center px-8 py-3.5 h-[54px] rounded-full bg-gradient-to-r from-emerald-500 to-emerald-600 shadow-[0_8px_20px_rgba(16,185,129,0.25)] hover:shadow-[0_18px_40px_rgba(16,185,129,0.45)] hover:-translate-y-[1px] transition-all duration-300 ease-out text-white group"
                     type="submit"
-                    disabled={isLoading}
+                    disabled={isLoading || isPending}
                 >
-                    {isLoading ? (
+                    {(isLoading || isPending) ? (
                         <>
-                            <Loader2 className="ml-2 h-5 w-5 animate-spin" />
+                            <Loader2 strokeWidth={1.5} className="ml-2 h-5 w-5 animate-spin" />   
                             جاري تسجيل الدخول...
                         </>
                     ) : (
-                        <>
-                            تسجيل الدخول
-                            <ChevronLeft className="ml-2 h-5 w-5" />
-                        </>
+                        <div className="flex items-center justify-center gap-2 group w-full relative">
+                            <LogIn strokeWidth={1.5} className="w-5 h-5 text-emerald-100 group-hover:text-white group-hover:scale-110 transition-all" />
+                            <span>تسجيل الدخول</span>
+                        </div>
                     )}
                 </Button>
-            </div>
-
-            {/* Forgot Password Link */}
-            <div className="text-center">
-                <Link
-                    href="/forgot-password"
-                    className="text-sm font-bold text-warm-green hover:text-warm-green-light transition-colors"
-                >
-                    نسيت كلمة المرور؟
-                </Link>
             </div>
         </form>
     );

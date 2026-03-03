@@ -69,9 +69,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             setToken(null);
             setIsAuthenticated(false);
 
-            // Clear storage using secure functions
-            removeSecureToken('auth_token');
-            removeSecureToken('refresh_token');
+            // Clear storage using secure async functions
+            await removeSecureToken('auth_token');
+            await removeSecureToken('refresh_token');
+            
             // Ensure cookies are also cleared just in case
             document.cookie = "auth_token=; path=/; max-age=0; SameSite=Lax";
 

@@ -106,13 +106,9 @@ export async function refreshToken(data: RefreshTokenRequest): Promise<string> {
  * Get current user session
  */
 export async function getCurrentUser(): Promise<AuthUser | null> {
-    // First check if we have a token - if not, no need to call API
-    if (typeof window !== 'undefined') {
-        const token = sessionStorage.getItem('auth_token');
-        if (!token) {
-            return null;
-        }
-    }
+    // Rely on token interceptors and cookie mechanics on the edge.
+    // Assuming interceptors append the cookie for SSR/CSR context, we hit the API.
+    // If we're strictly on client side, we can also query the token action if needed.
 
     try {
         const response = await apiClient.get<ApiResponse<any>>(API_ENDPOINTS.auth.me);
@@ -143,12 +139,12 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
 }
 
 /**
- * Check if user is authenticated
+ * Check if user is authenticated (Server/Client boundary safe via token presence checking)
  */
-export function isAuthenticated(): boolean {
-    // This should ideally check the store or cookie/local storage existence
+export async function isAuthenticated(): Promise<boolean> {
     if (typeof window !== 'undefined') {
-        const token = sessionStorage.getItem('auth_token'); // Using sessionStorage now
+        const { getSecureToken } = await import('@/lib/security/tokenStorage');
+        const token = await getSecureToken('auth_token');
         return !!token;
     }
     return false;

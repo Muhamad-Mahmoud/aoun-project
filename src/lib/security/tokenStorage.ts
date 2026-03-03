@@ -1,8 +1,9 @@
 /**
  * Token Storage Security
- * Encrypts authentication tokens before storing in sessionStorage
- * Uses Web Crypto API for hardware-accelerated, zero-cost encryption
+ * Utilizes Next.js Server Actions to safely store tokens inside HttpOnly Cookies.
  */
+
+import { storeTokenAction, getTokenAction, removeTokenAction } from "@/app/actions/authActions";
 
 const ENCRYPTION_KEY_NAME = 'aoun_token_key';
 const IV_LENGTH = 12; // 96 bits for GCM
@@ -17,21 +18,13 @@ let cachedKey: CryptoKey | null = null;
 // TODO: Implement proper key exchange or persistent key derivation if encryption is strictly required
 
 export async function setSecureToken(key: string, token: string): Promise<void> {
-    // Storing as plain text (or base64) for now because in-memory key is lost on reload
-    // caused the token to be unreadable.
-    sessionStorage.setItem(key, btoa(token));
+    await storeTokenAction(key, token);
 }
 
 export async function getSecureToken(key: string): Promise<string | null> {
-    const value = sessionStorage.getItem(key);
-    if (!value) return null;
-    try {
-        return atob(value);
-    } catch {
-        return value;
-    }
+    return await getTokenAction(key);
 }
 
-export function removeSecureToken(key: string): void {
-    sessionStorage.removeItem(key);
+export async function removeSecureToken(key: string): Promise<void> {
+    await removeTokenAction(key);
 }
