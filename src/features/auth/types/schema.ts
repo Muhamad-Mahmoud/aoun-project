@@ -8,7 +8,7 @@ export const loginSchema = z.object({
     password: z
         .string()
         .min(1, { message: "كلمة المرور مطلوبة" })
-        .min(6, { message: "كلمة المرور يجب أن تكون 6 أحرف على الأقل" }),
+        .min(8, { message: "كلمة المرور يجب أن تكون 8 أحرف على الأقل" }),
     rememberMe: z.boolean().default(false).optional(),
 });
 

@@ -1,5 +1,6 @@
 import { jwtVerify } from 'jose';
 import { env } from '@/env';
+import { logger } from '@/lib/logger';
 
 export async function verifyToken(token: string): Promise<boolean> {
     if (!token) return false;
@@ -11,7 +12,7 @@ export async function verifyToken(token: string): Promise<boolean> {
         await jwtVerify(token, secret);
         return true;
     } catch (error) {
-        console.error('Token verification failed:', error);
+        logger.error('Token verification failed', error);
         return false;
     }
 }

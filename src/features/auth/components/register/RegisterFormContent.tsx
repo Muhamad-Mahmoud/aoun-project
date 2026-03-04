@@ -52,7 +52,7 @@ export function RegisterFormContent() {
 
     const [isPending, startTransition] = useTransition();
 
-    const handleAccountTypeChangeWithTransition = (type: any) => {
+    const handleAccountTypeChangeWithTransition = (type: "individual" | "organization") => {
         startTransition(() => {
             handleAccountTypeChange(type);
         });

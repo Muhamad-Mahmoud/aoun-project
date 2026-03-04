@@ -75,8 +75,9 @@ function ResetPasswordContent() {
             setTimeout(() => {
                 router.push(ROUTES.AUTH.LOGIN);
             }, 3000);
-        } catch (error: any) {
-            toast.error(error?.message || "حدث خطأ. حاول مرة أخرى.");
+        } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : "حدث خطأ. حاول مرة أخرى.";
+            toast.error(message);
             logger.error("Reset password error", error);
         } finally {
             setIsLoading(false);

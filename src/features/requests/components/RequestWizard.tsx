@@ -41,6 +41,7 @@ import { Step3Health } from "./wizard/steps/Step3Health";
 import { Step4Financial } from "./wizard/steps/Step4Financial";
 import { Step5Attachments } from "./wizard/steps/Step5Attachments";
 import { RequestCategory, WizardStep } from "./wizard/types";
+import { toast } from "sonner";
 
 // Category definitions
 const categories: RequestCategory[] = [
@@ -64,16 +65,27 @@ const wizardSteps: WizardStep[] = [
 
 const TOTAL_STEPS = wizardSteps.length;
 
-export function RequestWizard({ onSubmit }: { onSubmit: (data: any) => void }) {
+/** File upload constraints */
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const ALLOWED_FILE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
+const MAX_FILES = 10;
+
+interface RequestWizardProps {
+    onSubmit: (data: RequestFormData & { attachments: File[] }) => void;
+}
+
+export function RequestWizard({ onSubmit }: RequestWizardProps) {
     const [currentStep, setCurrentStep] = useState(0);
     const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
     const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Single unified form
+    // Note: `as any` on resolver is required due to Zod superRefine + z.coerce
+    // producing `unknown` types that are incompatible with react-hook-form's Resolver type.
     const form = useForm<RequestFormData>({
         resolver: zodResolver(requestFormSchema) as any,
-        defaultValues: defaultFormValues as any,
+        defaultValues: defaultFormValues,
         mode: "onTouched",
         reValidateMode: "onChange"
     });
@@ -88,11 +100,35 @@ export function RequestWizard({ onSubmit }: { onSubmit: (data: any) => void }) {
     const registeredSocialSupport = form.watch("registeredSocialSupport") ?? false;
     const housingType = form.watch("housingType");
 
-    // File upload handlers
+    // File upload handlers with validation
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
-        if (files) {
-            setUploadedFiles(prev => [...prev, ...Array.from(files)]);
+        if (!files) return;
+
+        const newFiles = Array.from(files);
+
+        // Check total file count
+        if (uploadedFiles.length + newFiles.length > MAX_FILES) {
+            toast.error(`الحد الأقصى ${MAX_FILES} ملفات. لديك بالفعل ${uploadedFiles.length} ملف.`);
+            return;
+        }
+
+        // Validate each file
+        const validFiles: File[] = [];
+        for (const file of newFiles) {
+            if (file.size > MAX_FILE_SIZE) {
+                toast.error(`الملف "${file.name}" أكبر من 5MB — تم تجاهله.`);
+                continue;
+            }
+            if (!ALLOWED_FILE_TYPES.includes(file.type)) {
+                toast.error(`نوع الملف "${file.name}" غير مدعوم. الأنواع المسموحة: JPG, PNG, WebP, PDF`);
+                continue;
+            }
+            validFiles.push(file);
+        }
+
+        if (validFiles.length > 0) {
+            setUploadedFiles(prev => [...prev, ...validFiles]);
         }
     };
 

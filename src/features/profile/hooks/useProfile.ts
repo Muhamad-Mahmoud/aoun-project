@@ -17,14 +17,8 @@ export const useProfile = () => {
                 const data = await getMyProfile();
                 setProfile(data);
                 setError(null);
-            } catch (err: any) {
+            } catch (err: unknown) {
                 logger.error('Failed to fetch profile', err);
-                console.error('Profile Fetch Error Debug:', {
-                    status: err.response?.status,
-                    data: err.response?.data,
-                    url: err.config?.url,
-                    message: err.message
-                });
                 setError('فشل تحميل بيانات الملف الشخصي');
                 setProfile(null);
             } finally {

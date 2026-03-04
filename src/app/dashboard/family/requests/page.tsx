@@ -85,8 +85,9 @@ export default function FamilyRequestsPage() {
             setRequests(result.items || []);
             setTotalPages(result.totalPages || 1);
             setTotalCount(result.totalCount || 0);
-        } catch (err: any) {
-            setError(err?.message || "فشل تحميل الطلبات");
+        } catch (err: unknown) {
+            const message = err instanceof Error ? err.message : "فشل تحميل الطلبات";
+            setError(message);
             setRequests([]);
         } finally {
             setLoading(false);
@@ -117,8 +118,9 @@ export default function FamilyRequestsPage() {
             await cancelRequest(id);
             toast.success("تم إلغاء الطلب بنجاح");
             fetchRequests();
-        } catch (err: any) {
-            toast.error(err?.message || "فشل إلغاء الطلب");
+        } catch (err: unknown) {
+            const message = err instanceof Error ? err.message : "فشل إلغاء الطلب";
+            toast.error(message);
         } finally {
             setCancellingId(null);
         }

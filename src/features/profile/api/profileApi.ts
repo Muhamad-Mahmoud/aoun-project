@@ -34,13 +34,24 @@ export async function updateProfile(data: Partial<UserProfile | OrganizationProf
 }
 
 export async function uploadAvatar(file: File): Promise<string> {
+    // Validate file before uploading
+    const MAX_AVATAR_SIZE = 5 * 1024 * 1024; // 5MB
+    const ALLOWED_AVATAR_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+
+    if (file.size > MAX_AVATAR_SIZE) {
+        throw new Error('حجم الصورة أكبر من 5MB. يرجى اختيار صورة أصغر.');
+    }
+    if (!ALLOWED_AVATAR_TYPES.includes(file.type)) {
+        throw new Error('نوع الملف غير مدعوم. الأنواع المسموحة: JPG, PNG, WebP, GIF');
+    }
+
     const formData = new FormData();
     formData.append('avatar', file);
 
     const response = await apiClient.post<ApiResponse<{ url: string }>>(
         API_ENDPOINTS.profile.avatar,
-        formData,
-        { headers: { 'Content-Type': 'multipart/form-data' } }
+        formData
+        // Note: Do NOT set Content-Type manually — axios auto-sets it with boundary for FormData
     );
 
     return response.data.data.url;

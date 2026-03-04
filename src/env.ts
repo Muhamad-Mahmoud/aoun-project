@@ -1,7 +1,11 @@
 import { z } from 'zod';
 
+/**
+ * Environment variable schema
+ * JWT_SECRET has NO default — must be explicitly set in all environments.
+ */
 const envSchema = z.object({
-    JWT_SECRET: z.string().min(1, 'JWT_SECRET is required').default('default_build_secret'),
+    JWT_SECRET: z.string().min(32, 'JWT_SECRET must be at least 32 characters'),
     NEXT_PUBLIC_API_URL: z.string().url('Invalid NEXT_PUBLIC_API_URL').default('http://localhost:3000'),
     NEXT_PUBLIC_AI_API_URL: z.string().url('Invalid NEXT_PUBLIC_AI_API_URL').default('http://127.0.0.1:8000'),
     NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
@@ -14,27 +18,25 @@ const processEnv = {
     NODE_ENV: process.env.NODE_ENV,
 };
 
-// Validate environment variables - only throw error if strictly necessary
+// Validate environment variables
 const parsed = envSchema.safeParse(processEnv);
 
 if (!parsed.success) {
+    const errors = parsed.error.flatten().fieldErrors;
+
     if (process.env.NODE_ENV === 'production') {
-        console.warn(
-            '⚠️ Missing production environment variables. Using defaults for build stage.',
-            parsed.error.flatten().fieldErrors
-        );
+        // In production, FAIL the build — never silently use weak defaults
+        console.error('❌ FATAL: Missing required production environment variables:', errors);
+        throw new Error('Missing required production environment variables. Build aborted.');
     } else {
-        console.error(
-            '❌ Invalid environment variables:',
-            parsed.error.flatten().fieldErrors
-        );
-        throw new Error('Invalid environment variables');
+        // In development/test, warn but allow fallback for non-secret vars
+        console.warn('⚠️ Missing environment variables:', errors);
     }
 }
 
-export const env = parsed.data || {
-    JWT_SECRET: process.env.JWT_SECRET || 'default_build_secret',
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
-    NEXT_PUBLIC_AI_API_URL: process.env.NEXT_PUBLIC_AI_API_URL || 'http://127.0.0.1:8000',
-    NODE_ENV: process.env.NODE_ENV || 'development',
+export const env = parsed.data ?? {
+    JWT_SECRET: process.env.JWT_SECRET ?? '',
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000',
+    NEXT_PUBLIC_AI_API_URL: process.env.NEXT_PUBLIC_AI_API_URL ?? 'http://127.0.0.1:8000',
+    NODE_ENV: (process.env.NODE_ENV as 'development' | 'test' | 'production') ?? 'development',
 };

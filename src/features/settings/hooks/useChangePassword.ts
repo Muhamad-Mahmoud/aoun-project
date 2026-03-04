@@ -53,9 +53,9 @@ export function useChangePassword() {
             toast.success("تم تغيير كلمة المرور بنجاح!");
             logger.info("Password changed successfully");
             reset();
-        } catch (error: any) {
-            toast.error(error?.message || "فشل تغيير كلمة المرور. حاول مرة أخرى.");
-            logger.error("Change password error", error);
+        } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : "فشل تغيير كلمة المرور. حاول مرة أخرى.";
+            toast.error(message);
         } finally {
             setIsLoading(false);
         }

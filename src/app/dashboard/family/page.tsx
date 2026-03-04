@@ -17,6 +17,7 @@ import { getFamilyStatistics } from "@/features/families/api/familiesApi";
 import { getRequests, getRequestById } from "@/features/requests/api/requestsApi";
 import type { FamilyStatistics } from "@/features/families/types";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { resolveStatus, statusConfig as statusDisplayConfig, categoryConfig } from "@/features/requests/config/requestConfig";
 
@@ -105,7 +106,7 @@ export default function FamilyDashboardPage() {
                             createdDaysAgo: Math.floor((Date.now() - new Date(fullDetails.createdAt).getTime()) / (1000 * 60 * 60 * 24))
                         });
                     } catch (err) {
-                        console.error("Failed to fetch active request details", err);
+                        logger.warn("Failed to fetch active request details");
                     }
                 }
 
@@ -128,7 +129,7 @@ export default function FamilyDashboardPage() {
                 setRecentRequests(historyItems);
 
             } catch (error) {
-                console.error("Failed to fetch dashboard data:", error);
+                logger.error("Failed to fetch dashboard data:", error);
                 toast.error("حدث خطأ أثناء تحميل البيانات");
             } finally {
                 setLoadingStats(false);

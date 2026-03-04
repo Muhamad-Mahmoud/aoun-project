@@ -4,7 +4,8 @@
 
 import { apiClient } from '@/lib/api/client';
 import { API_ENDPOINTS } from '@/lib/api/config';
-import type { ApiResponse } from '@/lib/api/types';
+import type { ApiResponse, ApiError } from '@/lib/api/types';
+import { logger } from '@/lib/logger';
 import type {
     AidRequest,
     CreateAidRequestPayload,
@@ -38,27 +39,22 @@ export async function createRequest(payload: CreateAidRequestPayload): Promise<A
             formData
         );
         return response.data.data;
-    } catch (error: any) {
-        const errorData = error.response?.data;
-        console.error('Request submission failed:', error.response?.status, errorData);
+    } catch (error: unknown) {
+        logger.error('Request submission failed', error);
 
+        const apiError = error as ApiError;
         let errorMessage = 'حدث خطأ أثناء حفظ البيانات.';
 
-        if (error.response?.status === 400 && errorData) {
-            const errors = errorData.errors;
-            if (errors) {
-                if (Array.isArray(errors)) {
-                    errorMessage = "فشل التحقق من البيانات:\n" + errors.map((m: string) => `- ${m}`).join('\n');
-                } else if (typeof errors === 'object') {
-                    errorMessage = "فشل التحقق من البيانات:\n" + Object.entries(errors)
-                        .map(([field, msgs]) => `- ${field}: ${Array.isArray(msgs) ? msgs.join(', ') : msgs}`)
-                        .join('\n');
-                }
-            } else if (errorData.message) {
-                errorMessage = errorData.message;
+        if (apiError.statusCode === 400 && apiError.errors) {
+            const errors = apiError.errors;
+            const allErrors = Object.entries(errors)
+                .map(([field, msgs]) => `- ${field}: ${Array.isArray(msgs) ? msgs.join(', ') : msgs}`)
+                .join('\n');
+            if (allErrors) {
+                errorMessage = "فشل التحقق من البيانات:\n" + allErrors;
             }
-        } else if (error.message) {
-            errorMessage = error.message;
+        } else if (apiError.message) {
+            errorMessage = apiError.message;
         }
 
         throw new Error(errorMessage);

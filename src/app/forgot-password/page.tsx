@@ -49,9 +49,9 @@ export default function ForgotPasswordPage() {
             setTimeout(() => {
                 router.push(`/verify-code?email=${encodeURIComponent(data.email)}`);
             }, 2000);
-        } catch (error: any) {
-            toast.error(error?.message || "حدث خطأ. حاول مرة أخرى.");
-            logger.error("Forgot password error", error);
+        } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : "حدث خطأ. حاول مرة أخرى.";
+            toast.error(message);
         } finally {
             setIsLoading(false);
         }

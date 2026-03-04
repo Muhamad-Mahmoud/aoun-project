@@ -14,6 +14,15 @@ jest.mock('@/env', () => ({
     }
 }));
 
+jest.mock('@/lib/logger', () => ({
+    logger: {
+        error: jest.fn(),
+        warn: jest.fn(),
+        info: jest.fn(),
+        debug: jest.fn(),
+    }
+}));
+
 describe('verifyToken', () => {
     beforeEach(() => {
         jest.clearAllMocks();

@@ -1,15 +1,33 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
+import dynamic from "next/dynamic";
 import { Header } from "@/shared/components/layout/Header";
 import { Footer } from "@/shared/components/layout/Footer";
-import { ChatWidget } from "@/features/chat/components";
+import { useAuthContext } from "@/shared/providers";
+
+// Lazy load ChatWidget — defers ChatWindow, react-markdown, streaming hook to a separate chunk
+const ChatWidget = dynamic(
+    () => import("@/features/chat/components/ChatWidget").then(m => ({ default: m.ChatWidget })),
+    { ssr: false }
+);
 
 export default function LayoutContent({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
+    const router = useRouter();
+    const { isAuthenticated, isLoading } = useAuthContext();
+
     const isDashboard = pathname?.startsWith("/dashboard");
-    const isAuth = pathname === "/login" || pathname === "/register" || pathname === "/forgot-password";
+    const isAuth = pathname === "/login" || pathname === "/register" || pathname === "/forgot-password" || pathname === "/reset-password" || pathname === "/verify-code";
     const hideLayout = isDashboard || isAuth;
+
+    // Redirect authenticated users away from auth pages
+    useEffect(() => {
+        if (!isLoading && isAuthenticated && isAuth) {
+            router.push("/dashboard");
+        }
+    }, [isLoading, isAuthenticated, isAuth, router]);
 
     return (
         <>
@@ -19,7 +37,7 @@ export default function LayoutContent({ children }: { children: React.ReactNode 
             </main>
             {!hideLayout && <Footer />}
             
-            {/* Global Chat AI — Available everywhere except auth pages */}
+            {/* Global Chat AI — Available only for non-auth pages */}
             {!isAuth && <ChatWidget />}
         </>
     );

@@ -10,6 +10,7 @@ import { CheckCircle2, ChevronRight, Sparkles, AlertCircle, AlertTriangle } from
 import { RequestWizard } from "@/features/requests/components/RequestWizard";
 import Link from "next/link";
 import { createRequest } from "@/features/requests/api/requestsApi";
+import type { RequestFormData } from "@/features/requests/components/wizard/schemas/requestSchema";
 import { toast } from "sonner";
 import { ROUTES } from "@/shared/constants/routes";
 import { Alert, AlertTitle, AlertDescription } from "@/shared/ui/alert";
@@ -19,7 +20,7 @@ export default function NewRequestPage() {
     const [requestId, setRequestId] = useState<string | null>(null);
     const [validationError, setValidationError] = useState<string | null>(null);
 
-    const handleSubmit = async (data: any) => {
+    const handleSubmit = async (data: RequestFormData & { attachments?: File[] }) => {
         try {
             setValidationError(null);
 
@@ -44,8 +45,9 @@ export default function NewRequestPage() {
 
             // Check required fields
             const missingFields: string[] = [];
+            const dataRecord = data as unknown as Record<string, unknown>;
             requiredFields.forEach(({ key, label }) => {
-                const value = data[key];
+                const value = dataRecord[key];
                 // Don't check for === 0 because numeric enums can have 0 as valid value
                 if (value === undefined || value === null || value === '') {
                     missingFields.push(`${label} (${key})`);
@@ -54,7 +56,7 @@ export default function NewRequestPage() {
 
             // Check boolean fields have explicit values
             booleanFields.forEach(({ key, label }) => {
-                const value = data[key];
+                const value = dataRecord[key];
                 if (typeof value !== 'boolean') {
                     missingFields.push(`${label} - يجب أن تكون true أو false`);
                 }
@@ -67,18 +69,20 @@ export default function NewRequestPage() {
                 return;
             }
 
-            const response = await createRequest(data);
+            // Note: Zod schema uses null for optional numeric fields, but API expects undefined.
+            // createRequest handles this conversion internally.
+            const response = await createRequest(data as Parameters<typeof createRequest>[0]);
 
             if (response && response.id) {
                 setRequestId(response.id.toString());
                 setSubmitted(true);
                 toast.success("تم إرسال طلبك بنجاح");
             }
-        } catch (error: any) {
+        } catch (error: unknown) {
             setValidationError(null);
 
             // Extract the most meaningful error message
-            let message = error?.message || "فشل إرسال الطلب. يرجى المحاولة مرة أخرى.";
+            let message = error instanceof Error ? error.message : "فشل إرسال الطلب. يرجى المحاولة مرة أخرى.";
 
             // Check if it's a validation error message with multiple errors separated by newlines
             if (message.includes(':') && message.includes('\n')) {

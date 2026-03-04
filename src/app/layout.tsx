@@ -56,6 +56,8 @@ export default function RootLayout({
                 <link rel="dns-prefetch" href="https://aoun-api.runasp.net" />
                 <link rel="preconnect" href="https://aoun-api.runasp.net" crossOrigin="anonymous" />
                 <link rel="preconnect" href="https://api.dicebear.com" />
+                <link rel="dns-prefetch" href="https://muhammadmahmoud-awn-ai-service.hf.space" />
+                <link rel="preconnect" href="https://muhammadmahmoud-awn-ai-service.hf.space" crossOrigin="anonymous" />
                 {/* CSRF Protection Hint - Signals backend to use SameSite=Strict cookies */}
                 <meta name="csrf-protection" content="SameSite=Strict; Secure" />
             </head>

@@ -31,6 +31,9 @@ export function Header() {
     ];
 
     useEffect(() => {
+        // Only observe sections on the homepage — no sections exist on other pages
+        if (pathname !== "/") return;
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach((entry) => {
                 if (entry.isIntersecting) {
@@ -43,7 +46,7 @@ export function Header() {
         sections.forEach((section) => observer.observe(section));
 
         return () => observer.disconnect();
-    }, []);
+    }, [pathname]);
 
     const isActive = (href: string) => {
         if (pathname !== "/") return false;

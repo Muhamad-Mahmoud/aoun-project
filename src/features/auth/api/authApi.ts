@@ -111,7 +111,7 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
     // If we're strictly on client side, we can also query the token action if needed.
 
     try {
-        const response = await apiClient.get<ApiResponse<any>>(API_ENDPOINTS.auth.me);
+        const response = await apiClient.get<ApiResponse<AuthUser & { userType?: string }>>(API_ENDPOINTS.auth.me);
 
         // Backend might return { data: User } or just User
         // Safe check

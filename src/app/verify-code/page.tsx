@@ -54,8 +54,9 @@ function VerifyCodeContent() {
 
             // Redirect to reset password page
             router.push(`/reset-password?email=${encodeURIComponent(email)}&code=${encodeURIComponent(data.code)}`);
-        } catch (error: any) {
-            toast.error(error?.message || "الكود غير صحيح. حاول مرة أخرى.");
+        } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : "الكود غير صحيح. حاول مرة أخرى.";
+            toast.error(message);
             logger.error("Verify code error", error);
         } finally {
             setIsLoading(false);
@@ -69,8 +70,9 @@ function VerifyCodeContent() {
         try {
             await forgotPassword({ email });
             toast.success("تم إعادة إرسال الكود!");
-        } catch (error: any) {
-            toast.error(error?.message || "فشل إعادة الإرسال. حاول مرة أخرى.");
+        } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : "فشل إعادة الإرسال. حاول مرة أخرى.";
+            toast.error(message);
         } finally {
             setIsResending(false);
         }

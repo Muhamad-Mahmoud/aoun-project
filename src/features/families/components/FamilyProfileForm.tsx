@@ -18,6 +18,7 @@ import {
 import { Input } from "@/shared/ui/input";
 import { Loader2, Save, X } from "lucide-react";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 const profileSchema = z.object({
     firstName: z.string().min(2, "الاسم الأول يجب أن يكون حرفين على الأقل"),
@@ -64,7 +65,7 @@ export function FamilyProfileForm({ initialData, onCancel, onSuccess }: FamilyPr
             toast.success("تم تحديث الملف الشخصي بنجاح");
             onSuccess(updated);
         } catch (error) {
-            console.error("Failed to update profile:", error);
+            logger.error("Failed to update profile:", error);
             toast.error("فشل تحديث الملف الشخصي");
         } finally {
             setIsSubmitting(false);

@@ -52,6 +52,8 @@ import {
 } from "@/features/requests/config/requestConfig";
 import type { RequestDetailResponse } from "@/features/requests/types";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
+import type { LucideIcon } from "lucide-react";
 
 // ===== CSS Keyframes =====
 const animationStyles = `
@@ -68,7 +70,7 @@ const animationStyles = `
 `;
 
 // ===== Section Info Row =====
-function InfoRow({ label, value, index = 0 }: { label: string; value: any; index?: number }) {
+function InfoRow({ label, value, index = 0 }: { label: string; value: React.ReactNode; index?: number }) {
     if (value === undefined || value === null || value === "") return null;
     const display = typeof value === "boolean" ? (value ? "نعم" : "لا") : String(value);
     return (
@@ -83,7 +85,7 @@ function InfoRow({ label, value, index = 0 }: { label: string; value: any; index
 }
 
 // ===== Section Card =====
-function SectionCard({ icon: Icon, title, color, children, delay = 0 }: { icon: any; title: string; color: string; children: React.ReactNode; delay?: number }) {
+function SectionCard({ icon: Icon, title, color, children, delay = 0 }: { icon: LucideIcon; title: string; color: string; children: React.ReactNode; delay?: number }) {
     return (
         <Card className="animate-fade-slide-up border-slate-100 rounded-2xl overflow-hidden" style={{ animationDelay: `${delay}ms` }}>
             <div className={cn("h-1 w-full", color)} />
@@ -168,8 +170,9 @@ export default function RequestDetailsPage() {
             setError(null);
             const data = await getRequestById(id);
             setRequest(data);
-        } catch (err: any) {
-            setError(err?.message || "فشل تحميل تفاصيل الطلب");
+        } catch (err: unknown) {
+            const message = err instanceof Error ? err.message : "فشل تحميل تفاصيل الطلب";
+            setError(message);
         } finally {
             setLoading(false);
         }
@@ -186,8 +189,9 @@ export default function RequestDetailsPage() {
             await cancelRequest(id);
             toast.success("تم إلغاء الطلب بنجاح");
             fetchRequest();
-        } catch (err: any) {
-            toast.error(err?.message || "فشل إلغاء الطلب");
+        } catch (err: unknown) {
+            const message = err instanceof Error ? err.message : "فشل إلغاء الطلب";
+            toast.error(message);
         } finally {
             setCancelling(false);
         }

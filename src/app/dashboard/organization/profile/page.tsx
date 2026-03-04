@@ -72,7 +72,7 @@ export default function OrganizationProfilePage() {
     );
 }
 
-function ProfileItem({ icon: Icon, label, value }: { icon: any, label: string, value: string }) {
+function ProfileItem({ icon: Icon, label, value }: { icon: React.ComponentType<{ className?: string }>, label: string, value: string }) {
     return (
         <div className="flex items-center justify-between p-4 rounded-xl bg-muted/30 border border-transparent hover:border-secondary/20 transition-all">
             <span className="font-bold">{value}</span>

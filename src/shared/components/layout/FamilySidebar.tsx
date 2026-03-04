@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { logger } from "@/lib/logger";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
@@ -29,7 +30,7 @@ const navItems = [
 
 export function FamilySidebarContent() {
   const pathname = usePathname();
-  const [profile, setProfile] = React.useState<any>(null);
+  const [profile, setProfile] = React.useState<{ firstName?: string; lastName?: string; isVerified?: boolean } | null>(null);
 
   React.useEffect(() => {
     const fetchProfile = async () => {
@@ -38,7 +39,7 @@ export function FamilySidebarContent() {
         const data = await getFamilyProfile();
         setProfile(data);
       } catch (error) {
-        console.error("Failed to fetch profile for sidebar", error);
+        logger.warn("Failed to fetch profile for sidebar");
       }
     };
     fetchProfile();

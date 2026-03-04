@@ -10,6 +10,7 @@ import { getFamilyProfile } from "@/features/families/api/familiesApi";
 import { FamilyProfileForm } from "@/features/families/components/FamilyProfileForm";
 import type { FamilyProfile } from "@/features/families/types";
 import { Skeleton } from "@/shared/ui/skeleton";
+import { logger } from "@/lib/logger";
 
 export default function FamilyProfilePage() {
     const [profile, setProfile] = useState<FamilyProfile | null>(null);
@@ -28,7 +29,7 @@ export default function FamilyProfilePage() {
             setProfile(data);
             setError(null);
         } catch (err) {
-            console.error("Failed to fetch family profile:", err);
+            logger.warn("Failed to fetch family profile");
             setError("فشل تحميل بيانات الملف الشخصي");
         } finally {
             setIsLoading(false);
@@ -193,7 +194,7 @@ export default function FamilyProfilePage() {
     );
 }
 
-function ProfileItem({ icon: Icon, label, value }: { icon: any, label: string, value?: string }) {
+function ProfileItem({ icon: Icon, label, value }: { icon: React.ComponentType<{ className?: string }>, label: string, value?: string }) {
     return (
         <div className="flex items-center justify-between p-5 rounded-2xl bg-slate-50 border border-slate-100 hover:border-warm-green/30 hover:bg-white hover:shadow-md transition-all duration-300 group">
             <span className="font-bold text-slate-900">{value || "غير متوفر"}</span>

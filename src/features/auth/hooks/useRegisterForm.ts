@@ -112,22 +112,19 @@ export const useRegisterForm = () => {
             return;
         }
 
-        console.log("handleSubmit triggered");
+        logger.debug("handleSubmit triggered");
         setAttemptedSubmit(true);
 
         try {
-            console.log("Validating step...");
             const isValid = validateCurrentStep();
-            console.log("Validation result:", isValid, "Current Errors:", errors);
 
             if (!isValid) {
-                console.warn("Validation failed preventing submission");
+                logger.warn("Validation failed preventing submission");
                 toast.error("يرجى التأكد من ملء جميع الحقول المطلوبة بشكل صحيح");
                 return;
             }
 
             setIsLoading(true);
-            console.log("Starting API submission with data:", formData);
 
             let response;
             // Common fields are already in formData, just map specifics
@@ -150,7 +147,7 @@ export const useRegisterForm = () => {
                     governorate,
                     neighborhood: formData.neighborhood,
                 };
-                console.log("Sending Individual Data:", familyData);
+                logger.debug("Sending Individual registration");
                 response = await registerFamily(familyData);
             } else {
                 const associationData: RegisterAssociationRequest = {
@@ -165,22 +162,20 @@ export const useRegisterForm = () => {
                     capacity: Number(formData.capacity) || 0,
                     coverageNotes: formData.coverageNotes,
                 };
-                console.log("Sending Association Data:", associationData);
+                logger.debug("Sending Association registration");
                 response = await registerAssociation(associationData);
             }
 
-            console.log("API Response received:", response);
             logger.info("Registration successful", { userId: response?.userId });
 
             // Auto-Login
             try {
-                console.log("Attempting Auto-Login...");
                 const loginData: LoginCredentials = {
                     email,
                     password
                 };
                 const loginResponse = await login(loginData);
-                console.log("Login Response:", loginResponse);
+                logger.debug("Auto-login response received");
 
                 if (loginResponse.token) {
                     await authLogin(loginResponse.token, loginResponse.refreshToken);
@@ -198,14 +193,12 @@ export const useRegisterForm = () => {
                     router.push(ROUTES.AUTH.LOGIN);
                 }
             } catch (loginError) {
-                console.error("Auto-login failed:", loginError);
                 logger.error("Auto-login failed after registration", loginError);
                 toast.success("تم إنشاء الحساب بنجاح، الرجاء تسجيل الدخول");
                 router.push(ROUTES.AUTH.LOGIN);
             }
 
-        } catch (err: any) {
-            console.error("Critical Error in handleSubmit:", err);
+        } catch (err: unknown) {
             logger.error("Registration critical error", err);
 
             // Handle standard API errors
@@ -229,7 +222,7 @@ export const useRegisterForm = () => {
         } finally {
             setIsLoading(false);
         }
-    }, [validateCurrentStep, formData, router, errors]);
+    }, [validateCurrentStep, formData, router, authLogin, nextStep, currentStep, totalSteps]);
 
     const togglePassword = useCallback(() => {
         setShowPassword(prev => !prev);

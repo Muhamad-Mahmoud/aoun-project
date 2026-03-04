@@ -12,7 +12,7 @@ interface ChatBubbleProps {
     isStreaming: boolean;
 }
 
-export function ChatBubble({ message, isLast, isStreaming }: ChatBubbleProps) {
+export const ChatBubble = React.memo(function ChatBubble({ message, isLast, isStreaming }: ChatBubbleProps) {
     const isUser = message.role === "user";
     const showCursor = isLast && !isUser && isStreaming;
     const showDots = !isUser && !message.content && isStreaming;
@@ -150,4 +150,4 @@ export function ChatBubble({ message, isLast, isStreaming }: ChatBubbleProps) {
             </div>
         </div>
     );
-}
+});

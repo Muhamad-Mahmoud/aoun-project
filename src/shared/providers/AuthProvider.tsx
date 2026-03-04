@@ -5,7 +5,7 @@
 
 "use client";
 
-import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { getCurrentUser, logout as logoutApi } from '@/features/auth/api/authApi';
 import type { AuthUser } from '@/features/auth/types';
@@ -69,12 +69,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             setToken(null);
             setIsAuthenticated(false);
 
-            // Clear storage using secure async functions
+            // Clear storage using secure async functions (HttpOnly cookies removed via Server Actions)
             await removeSecureToken('auth_token');
             await removeSecureToken('refresh_token');
-            
-            // Ensure cookies are also cleared just in case
-            document.cookie = "auth_token=; path=/; max-age=0; SameSite=Lax";
 
             router.push(ROUTES.AUTH.LOGIN);
         }
@@ -100,7 +97,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 logger.warn('Login successful but failed to fetch user details');
             }
         } catch (e) {
-            console.error("Login Error inside provider", e);
+            logger.error("Login Error inside provider", e);
         }
     }, []);
 
@@ -108,7 +105,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(newUser);
     }, []);
 
-    const value = {
+    const value = useMemo(() => ({
         user,
         token,
         isAuthenticated,
@@ -116,7 +113,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         logout,
         updateUser,
         login,
-    };
+    }), [user, token, isAuthenticated, isLoading, logout, updateUser, login]);
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

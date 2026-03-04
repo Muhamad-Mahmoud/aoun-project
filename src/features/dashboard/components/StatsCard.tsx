@@ -1,6 +1,7 @@
 // Stats Card Component for Dashboard
 "use client";
 
+import React from "react";
 import { Card } from "@/shared/ui/card";
 import { ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { LucideIcon } from "lucide-react";
@@ -20,7 +21,7 @@ interface StatsCardProps {
     stat: StatItem;
 }
 
-export function StatsCard({ stat }: StatsCardProps) {
+export const StatsCard = React.memo(function StatsCard({ stat }: StatsCardProps) {
     return (
         <Card className="p-5 text-start border-slate-100 bg-white hover:border-primary/20 transition-all group overflow-hidden relative">
             <div className="flex items-center gap-4">
@@ -48,4 +49,4 @@ export function StatsCard({ stat }: StatsCardProps) {
             </div>
         </Card>
     );
-}
+});

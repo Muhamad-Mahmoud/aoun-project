@@ -24,9 +24,9 @@ export function sanitizeHtml(input: string): string {
  * Redacts specified fields
  */
 export function sanitizeLogData(
-    data: any,
-    sensitiveFields: string[] = ['password', 'token', 'refreshToken', 'accessToken', 'secret']
-): any {
+    data: unknown,
+    sensitiveFields: string[] = ['password', 'token', 'refreshToken', 'accessToken', 'secret', 'confirmPassword']
+): unknown {
     if (!data || typeof data !== 'object') {
         return data;
     }
@@ -37,8 +37,8 @@ export function sanitizeLogData(
     }
 
     // Handle objects
-    const sanitized: any = {};
-    for (const [key, value] of Object.entries(data)) {
+    const sanitized: Record<string, unknown> = {};
+    for (const [key, value] of Object.entries(data as Record<string, unknown>)) {
         const lowerKey = key.toLowerCase();
         const isSensitive = sensitiveFields.some(field => lowerKey.includes(field.toLowerCase()));
 

@@ -220,15 +220,13 @@ export function setupResponseInterceptors(axiosInstance: AxiosInstance) {
 
             // Log the full response data in development for debugging
             if (process.env.NODE_ENV === 'development') {
-                console.error('❌ API Error Response:');
-                console.table({
+                logger.debug('❌ API Error Response:', {
                     status: error.response?.status,
                     statusText: error.response?.statusText,
                     url: error.response?.config.url,
                 });
-                console.error('Response Data:', responseData);
-                console.error('Extracted Message:', message);
-                logger.debug('Full error response data', responseData);
+                logger.debug('Response Data:', responseData);
+                logger.debug('Extracted Message:', message);
             }
 
             const apiError: ApiError = {

@@ -41,11 +41,32 @@ function validateIndividualStep1(data: FormData): FormErrors {
     return errors;
 }
 
+/**
+ * Password complexity regex patterns
+ */
+const passwordPatterns = {
+    uppercase: /[A-Z]/,
+    lowercase: /[a-z]/,
+    number: /[0-9]/,
+    specialChar: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/,
+};
+
 function validateSecurityStep(data: FormData): FormErrors {
     const errors: FormErrors = {};
 
     if (!data.password || data.password.length < 8) {
         errors.password = ERROR_MESSAGES.PASSWORD_SHORT;
+    } else {
+        // Password complexity checks
+        if (!passwordPatterns.uppercase.test(data.password)) {
+            errors.password = 'كلمة المرور يجب أن تحتوي على حرف كبير واحد على الأقل';
+        } else if (!passwordPatterns.lowercase.test(data.password)) {
+            errors.password = 'كلمة المرور يجب أن تحتوي على حرف صغير واحد على الأقل';
+        } else if (!passwordPatterns.number.test(data.password)) {
+            errors.password = 'كلمة المرور يجب أن تحتوي على رقم واحد على الأقل';
+        } else if (!passwordPatterns.specialChar.test(data.password)) {
+            errors.password = 'كلمة المرور يجب أن تحتوي على رمز خاص واحد على الأقل (!@#$%^&*)';
+        }
     }
 
     if (data.password !== data.confirmPassword) {

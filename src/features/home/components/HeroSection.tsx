@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Button } from "@/shared/ui/button";
 import { ArrowLeft, Users, Building2, MapPin, ShieldCheck, Award, Clock, Heart, CheckCircle, BrainCircuit } from "lucide-react";
 import Link from "next/link";
@@ -214,12 +214,32 @@ interface StatCardProps {
 function StatCard({ icon: Icon, number, suffix, label, colorClass, bgClass, delay }: StatCardProps) {
   const [count, setCount] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  // Only start counter animation when the card is visible in viewport
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect(); // Only animate once
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
-    let counter: NodeJS.Timeout | null = null;
+    if (!isVisible) return;
 
+    let counter: NodeJS.Timeout | null = null;
     const timer = setTimeout(() => {
-      setIsVisible(true);
       let start = 0;
       const duration = 2000;
       const increment = number / (duration / 16);
@@ -239,10 +259,11 @@ function StatCard({ icon: Icon, number, suffix, label, colorClass, bgClass, dela
       clearTimeout(timer);
       if (counter) clearInterval(counter);
     };
-  }, [number, delay]);
+  }, [isVisible, number, delay]);
 
   return (
     <div
+      ref={ref}
       className={`!text-center transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
     >
       <div className={`w-14 h-14 mx-auto mb-4 rounded-2xl ${bgClass} flex items-center justify-center transition-transform hover:scale-110 duration-300`}>

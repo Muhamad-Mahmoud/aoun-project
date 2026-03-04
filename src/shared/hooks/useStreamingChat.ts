@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
+import { logger } from "@/lib/logger";
 
 export interface ChatMessage {
     role: "user" | "model";
@@ -16,11 +17,23 @@ interface UseStreamingChatOptions {
 
 const STORAGE_KEY = "aoun_chat_messages";
 
+/**
+ * Simple Base64 obfuscation to prevent casual plaintext snooping
+ * This is NOT encryption — just basic obfuscation for localStorage.
+ */
+function encode(data: string): string {
+    try { return btoa(unescape(encodeURIComponent(data))); } catch { return data; }
+}
+function decode(data: string): string {
+    try { return decodeURIComponent(escape(atob(data))); } catch { return data; }
+}
+
 function loadMessages(key: string): ChatMessage[] {
     if (typeof window === "undefined") return [];
     try {
         const stored = localStorage.getItem(key);
-        return stored ? (JSON.parse(stored) as ChatMessage[]) : [];
+        if (!stored) return [];
+        return JSON.parse(decode(stored)) as ChatMessage[];
     } catch {
         return [];
     }
@@ -31,7 +44,7 @@ function saveMessages(key: string, messages: ChatMessage[]) {
     try {
         // Keep only last 50 messages to avoid storage bloat
         const toSave = messages.slice(-50);
-        localStorage.setItem(key, JSON.stringify(toSave));
+        localStorage.setItem(key, encode(JSON.stringify(toSave)));
     } catch {
         // Storage full or unavailable — fail silently
     }
@@ -52,6 +65,12 @@ export function useStreamingChat({
     );
     const [isStreaming, setIsStreaming] = useState(false);
     const abortRef = useRef<AbortController | null>(null);
+    const messagesRef = useRef<ChatMessage[]>(messages);
+
+    // Keep ref in sync
+    useEffect(() => {
+        messagesRef.current = messages;
+    }, [messages]);
 
     // Persist messages to localStorage whenever they change
     useEffect(() => {
@@ -78,7 +97,7 @@ export function useStreamingChat({
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                         message: userMessage,
-                        history: messages.slice(-20),
+                        history: messagesRef.current.slice(-20),
                     }),
                     signal: abortRef.current.signal,
                 });
@@ -123,7 +142,7 @@ export function useStreamingChat({
 
                         if (raw === "data: [DONE]") break;
                         if (raw.startsWith("data: [ERROR]")) {
-                            console.error("Stream error:", raw);
+                            logger.warn("Stream error received");
                             break;
                         }
                         if (!raw.startsWith("data: ")) continue;
@@ -138,13 +157,24 @@ export function useStreamingChat({
                             content = jsonStr; // fallback for non-JSON
                         }
 
-                        flush(content);
+                        // تقسيم أي نص كبير (زي الردود المحفوظة في الكاش) لقطع صغيرة من 4 حروف
+                        // عشان نضمن إن التأثير يبان دايماً كلمة بكلمة، حتى لو السيرفر بعت الرد كله في لحظة واحدة
+                        const tokens = content.match(/[\s\S]{1,4}/g) || [];
+                        for (const token of tokens) {
+                            // لو المستخدم داس "إيقاف" نوقف الطباعة فوراً
+                            if (abortRef.current?.signal.aborted) break;
+                            
+                            flush(token);
+                            
+                            // تأخير من 15 ل 35 ملي ثانية بين كل 4 حروف
+                            await new Promise((resolve) => setTimeout(resolve, 15 + Math.random() * 20));
+                        }
                     }
                 }
             } catch (error: unknown) {
                 const err = error as Error;
                 if (err.name !== "AbortError") {
-                    console.error("Streaming failed:", err);
+                    logger.error("Streaming failed", err);
                     setMessages((prev) => {
                         const updated = [...prev];
                         updated[updated.length - 1] = {
@@ -159,7 +189,7 @@ export function useStreamingChat({
                 abortRef.current = null;
             }
         },
-        [apiUrl, messages, isStreaming],
+        [apiUrl, isStreaming],
     );
 
     /** Cancel the current streaming response */

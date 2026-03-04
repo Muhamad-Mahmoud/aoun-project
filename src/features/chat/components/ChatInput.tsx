@@ -12,7 +12,7 @@ interface ChatInputProps {
     hasMessages: boolean;
 }
 
-export function ChatInput({ onSend, onCancel, isStreaming }: ChatInputProps) {
+export const ChatInput = React.memo(function ChatInput({ onSend, onCancel, isStreaming }: ChatInputProps) {
     const [input, setInput] = useState("");
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -97,4 +97,4 @@ export function ChatInput({ onSend, onCancel, isStreaming }: ChatInputProps) {
             </p>
         </div>
     );
-}
+});

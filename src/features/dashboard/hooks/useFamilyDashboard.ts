@@ -1,3 +1,8 @@
+/**
+ * ⚠️ WARNING: This hook contains HARDCODED MOCK DATA for prototyping.
+ * TODO: Replace all static data with real API calls (e.g. getFamilyStatistics(),
+ * getActiveRequest(), getRequestHistory()) before deploying to production.
+ */
 // Custom Hook for Family Dashboard Data and Logic
 "use client";
 
