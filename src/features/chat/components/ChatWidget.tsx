@@ -26,28 +26,28 @@ export function ChatWidget() {
 
     return (
         <div 
-            className="fixed bottom-6 left-6 z-[9999] flex flex-col items-end gap-4 pointer-events-none w-fit max-w-[calc(100vw-48px)]" 
+            className="fixed bottom-6 left-6 z-[9999] flex flex-col items-end gap-4 pointer-events-none" 
             dir="rtl"
             style={{ left: '24px', right: 'auto', bottom: '24px' }}
             data-widget="global-chat"
         >
-            {/* Chat Window Overlay */}
+            {/* Chat Window Overlay - Conditionally rendered to ensure it doesn't block when closed */}
             <div
                 className={cn(
                     "w-[92vw] sm:w-[420px] h-[600px] max-h-[80vh] bg-background/95 backdrop-blur-xl rounded-[32px] shadow-[0_25px_60px_rgba(0,0,0,0.2)] border border-white/20 overflow-hidden transition-all duration-500 origin-bottom-left",
                     isOpen 
                         ? "opacity-100 scale-100 translate-y-0 pointer-events-auto block" 
-                        : "opacity-0 scale-90 translate-y-10 pointer-events-none hidden"
+                        : "opacity-0 scale-90 translate-y-10 pointer-events-none invisible pointer-events-none h-0 w-0"
                 )}
             >
-                <ChatWindow className="border-none shadow-none bg-transparent h-full" />
+                {isOpen && <ChatWindow className="border-none shadow-none bg-transparent h-full" />}
             </div>
 
             {/* Floating Toggle Button */}
             <button
                 onClick={toggleChat}
                 className={cn(
-                    "group relative w-16 h-16 rounded-[22px] flex items-center justify-center transition-all duration-300 shadow-2xl active:scale-95 overflow-hidden ring-4 ring-white/10 pointer-events-auto",
+                    "group relative w-16 h-16 rounded-[22px] flex items-center justify-center transition-all duration-300 shadow-2xl active:scale-95 overflow-hidden ring-4 ring-white/10 pointer-events-auto shrink-0",
                     isOpen
                         ? "bg-muted text-foreground"
                         : "bg-primary/90 backdrop-blur-md text-white hover:bg-warm-green-dark hover:opacity-100 hover:shadow-primary/40 hover:-translate-y-1.5"
