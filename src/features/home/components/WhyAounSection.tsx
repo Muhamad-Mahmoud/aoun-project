@@ -1,4 +1,3 @@
-"use client";
 
 import { MapPinned, Target, Zap, ShieldCheck } from "lucide-react";
 import { colors } from "@/shared/constants";

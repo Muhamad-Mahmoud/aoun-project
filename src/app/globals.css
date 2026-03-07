@@ -322,10 +322,6 @@
         background-attachment: fixed;
     }
 
-    /* Soft Image Loading Animation (Safe Fade) */
-    img {
-        animation: smooth-fade-in 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    }
 }
 
 /* Hide Next.js Dev Indicators */

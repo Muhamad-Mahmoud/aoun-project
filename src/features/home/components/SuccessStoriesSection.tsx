@@ -1,4 +1,3 @@
-"use client";
 
 import { Quote, MapPin, Heart } from "lucide-react";
 import { storyCategoryColors } from "@/shared/constants";

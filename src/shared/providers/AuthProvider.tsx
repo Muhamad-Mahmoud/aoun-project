@@ -36,13 +36,18 @@ export function AuthProvider({ children, initialIsAuthenticated = false, initial
     const [user, setUser] = useState<AuthUser | null>(initialUser);
     const [token, setToken] = useState<string | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState(initialIsAuthenticated);
-    const [isLoading, setIsLoading] = useState(!initialIsAuthenticated && initialUser === null);
+    const [isLoading, setIsLoading] = useState(initialIsAuthenticated && initialUser === null);
 
     useEffect(() => {
         const initAuth = async () => {
-            // If we already have initial state, we might still want to refresh/validate,
-            // but we can skip the initial loading block for logged out users or known users.
-            if (initialIsAuthenticated && user) {
+            // If no token from server, we are definitely NOT loading a user
+            if (!initialIsAuthenticated) {
+                setIsLoading(false);
+                return;
+            }
+
+            // If we already have initial state, skip loading
+            if (initialIsAuthenticated && initialUser) {
                 setIsLoading(false);
                 return;
             }

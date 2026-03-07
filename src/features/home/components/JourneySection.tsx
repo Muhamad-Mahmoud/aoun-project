@@ -1,4 +1,3 @@
-"use client";
 
 import { UserPlus, FileText, BrainCircuit, Building2, CheckCircle2, ArrowLeft } from "lucide-react";
 import Link from "next/link";
