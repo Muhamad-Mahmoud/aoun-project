@@ -570,3 +570,14 @@ nextjs-portal {
 .typing-cursor {
     animation: blink 0.8s step-end infinite;
 }
+
+/* --- Vercel Toolbar Fix --- 
+   This toolbar often blocks mobile interactions by creating a full-screen invisible layer.
+   We force-disable its interference with our layout.
+*/
+#preact-border-shadow-host,
+[data-vercel-toolbar] {
+  pointer-events: none !important;
+  display: none !important;
+  visibility: hidden !important;
+}
