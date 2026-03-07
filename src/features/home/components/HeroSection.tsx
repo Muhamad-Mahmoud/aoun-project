@@ -27,7 +27,7 @@ export function HeroSection() {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-12 max-w-7xl z-10">
 
-        <div className="grid grid-cols-1 lg:grid-cols-[60%_40%] gap-12 lg:gap-16 items-center flex-col-reverse">
+        <div className="grid grid-cols-1 lg:grid-cols-[60%_40%] gap-12 lg:gap-16 items-center">
 
           {/* Content Column - 60% */}
           <div className="text-right space-y-6 lg:space-y-8 order-2 lg:order-1">
@@ -51,7 +51,7 @@ export function HeroSection() {
             </p>
 
             {/* CTA Buttons - Enhanced Size & Design */}
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center justify-center lg:justify-start opacity-0 animate-fade-in-up delay-300">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center justify-center lg:justify-start opacity-0 animate-fade-in-up delay-300 relative z-[100]">
               {/* Primary CTA - Larger & More Prominent */}
               <Link href="/register" className="w-full sm:w-auto">
                 <Button className="w-full sm:w-auto h-14 lg:h-16 text-base lg:text-[17px] font-semibold px-8 rounded-xl gap-3 text-white bg-gradient-to-l from-warm-green via-warm-green/90 to-sky-blue hover:from-warm-green-dark hover:via-warm-green hover:to-sky-blue-dark shadow-[0_8px_20px_hsla(var(--warm-green)/0.3)] hover:shadow-[0_8px_30px_hsla(var(--warm-green)/0.5)] transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 animate-pulse-subtle">
