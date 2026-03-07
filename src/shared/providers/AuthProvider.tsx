@@ -25,15 +25,28 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export function AuthProvider({ children }: { children: ReactNode }) {
+interface AuthProviderProps {
+    children: ReactNode;
+    initialIsAuthenticated?: boolean;
+    initialUser?: AuthUser | null;
+}
+
+export function AuthProvider({ children, initialIsAuthenticated = false, initialUser = null }: AuthProviderProps) {
     const router = useRouter();
-    const [user, setUser] = useState<AuthUser | null>(null);
+    const [user, setUser] = useState<AuthUser | null>(initialUser);
     const [token, setToken] = useState<string | null>(null);
-    const [isAuthenticated, setIsAuthenticated] = useState(false); // Add explicit state
-    const [isLoading, setIsLoading] = useState(true);
+    const [isAuthenticated, setIsAuthenticated] = useState(initialIsAuthenticated);
+    const [isLoading, setIsLoading] = useState(!initialIsAuthenticated && initialUser === null);
 
     useEffect(() => {
         const initAuth = async () => {
+            // If we already have initial state, we might still want to refresh/validate,
+            // but we can skip the initial loading block for logged out users or known users.
+            if (initialIsAuthenticated && user) {
+                setIsLoading(false);
+                return;
+            }
+
             try {
                 setIsLoading(true);
                 const currentUser = await getCurrentUser();
@@ -55,7 +68,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         };
 
         initAuth();
-    }, []);
+    }, [initialIsAuthenticated, user]);
 
     const logout = useCallback(async () => {
         try {

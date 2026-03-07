@@ -45,11 +45,17 @@ export const metadata: Metadata = {
     manifest: "/manifest.json",
 };
 
-export default function RootLayout({
+import { cookies } from "next/headers";
+
+export default async function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("auth_token");
+    const isAuthenticated = !!token;
+
     return (
         <html lang="ar" dir="rtl">
             <head>
@@ -62,7 +68,7 @@ export default function RootLayout({
                 <meta name="csrf-protection" content="SameSite=Strict; Secure" />
             </head>
             <body className={font.className}>
-                <AuthProvider>
+                <AuthProvider initialIsAuthenticated={isAuthenticated}>
 
                     <LayoutContent>
                         {children}
