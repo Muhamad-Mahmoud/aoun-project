@@ -32,13 +32,10 @@ export default function LayoutContent({ children }: { children: React.ReactNode 
     return (
         <>
             {!hideLayout && <Header />}
-            <main className={!hideLayout ? "min-h-screen" : ""}>
-                {children}
-            </main>
+            <main className={!hideLayout ? "min-h-screen" : ""}>{children}</main>
             {!hideLayout && <Footer />}
-            
-            {/* Global Chat AI — Available only for non-auth pages */}
-            {!isAuth && <ChatWidget />}
+            {/* ChatWidget intentionally not auto-mounted in Phase 1 to reduce initial JS and hydration cost.
+                It can be reintroduced later behind an explicit user-triggered button. */}
         </>
     );
 }

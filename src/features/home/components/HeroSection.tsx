@@ -1,24 +1,21 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
 import { Button } from "@/shared/ui/button";
-import { ArrowLeft, Users, Building2, MapPin, ShieldCheck, Award, Clock, Heart, CheckCircle, BrainCircuit } from "lucide-react";
+import { ArrowLeft, Users, Building2, MapPin, ShieldCheck, Award, Clock, CheckCircle, BrainCircuit } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { colors } from "@/shared/constants";
 
 export function HeroSection() {
-
   return (
     <section
       id="hero"
       className="relative overflow-hidden min-h-[calc(100dvh-72px)] flex flex-col items-center justify-center py-20 lg:py-24"
       dir="rtl"
       style={{
-        background: 'linear-gradient(to bottom, hsl(var(--warm-green-pale)) 0%, hsl(var(--warm-white)) 100%)'
+        background: "linear-gradient(to bottom, hsl(var(--warm-green-pale)) 0%, hsl(var(--warm-white)) 100%)",
       }}
     >
-
       {/* Background Decorative Elements - Soft & Minimal */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-warm-green/3 rounded-full blur-[100px]"></div>
@@ -26,12 +23,9 @@ export function HeroSection() {
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-12 max-w-7xl z-10">
-
         <div className="grid grid-cols-1 lg:grid-cols-[60%_40%] gap-12 lg:gap-16 items-center">
-
           {/* Content Column - 60% */}
           <div className="text-right space-y-6 lg:space-y-8 order-2 lg:order-1">
-
             {/* AI Badge */}
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-sky-blue/10 border border-sky-blue/20 text-sky-blue-dark text-sm font-bold transition-all duration-700 hover:scale-105 cursor-default opacity-0 animate-fade-in-up">
               <BrainCircuit className="w-4 h-4 text-sky-blue" />
@@ -60,7 +54,6 @@ export function HeroSection() {
                 </Button>
               </Link>
 
-
               {/* Secondary CTA - Enhanced Design */}
               <Link href="/register?type=organization" className="w-full sm:w-auto">
                 <Button
@@ -75,7 +68,6 @@ export function HeroSection() {
 
             {/* Trust Indicators - Enhanced Design */}
             <div className="flex flex-wrap gap-2 sm:gap-3 opacity-0 animate-fade-in delay-500">
-
               {/* Government Badge - Enhanced */}
               <div className={`group flex items-center gap-2 bg-white/80 backdrop-blur-sm border ${colors.warmGreen.borderLight} px-4 py-2.5 lg:px-5 lg:py-3 rounded-xl text-[13px] lg:text-[14px] font-medium ${colors.warmGreen.textDark} shadow-sm hover:-translate-y-0.5 transition-all duration-250`}>
                 <ShieldCheck className="w-4 h-4 lg:w-5 lg:h-5" />
@@ -113,11 +105,11 @@ export function HeroSection() {
                       alt="عون - منصة تربط الأسر المحتاجة بالجمعيات الخيرية"
                       fill
                       priority
+                      fetchPriority="high"
                       sizes="(max-width: 768px) 100vw, 40vw"
                       className="object-cover"
                     />
                   </div>
-
 
                   {/* Floating Stats - Enhanced */}
                   <div className="absolute -top-4 -right-4 lg:-top-6 lg:-right-6 bg-white border-2 border-sky-blue/20 rounded-xl px-3 py-2 lg:px-4 lg:py-2.5 shadow-lg scale-90 lg:scale-100">
@@ -150,129 +142,60 @@ export function HeroSection() {
       {/* Statistics Section - Trust Signals */}
       <div className="mt-20 lg:mt-24 px-6 py-10 lg:px-12 lg:py-14 rounded-[2rem] bg-white border border-border/50 shadow-[0_10px_40px_hsla(var(--text-primary)/0.03)] opacity-0 animate-fade-in-up delay-700">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16">
-
-          <StatCard
+          <StaticStatCard
             icon={Users}
-            number={1200}
-            suffix="+"
+            number="١,٢٠٠+"
             label="أسرة مستفيدة"
             colorClass="text-warm-green"
             bgClass="bg-warm-green/10"
-            delay={600}
           />
-          <StatCard
+          <StaticStatCard
             icon={Building2}
-            number={85}
-            suffix="+"
+            number="٨٥+"
             label="جهة شريكة"
             colorClass="text-sky-blue"
             bgClass="bg-sky-blue/10"
-            delay={700}
           />
-          <StatCard
+          <StaticStatCard
             icon={MapPin}
-            number={27}
-            suffix=""
+            number="٢٧"
             label="محافظة مصرية"
             colorClass="text-sky-blue"
             bgClass="bg-sky-blue/10"
-            delay={800}
           />
-          <StatCard
+          <StaticStatCard
             icon={CheckCircle}
-            number={98}
-            suffix="%"
+            number="٩٨٪"
             label="نسبة نجاح"
             colorClass="text-warm-green"
             bgClass="bg-warm-green/10"
-            delay={900}
           />
         </div>
       </div>
-
-
     </section>
   );
 }
 
-// StatCard Component - Refined & Minimal
-interface StatCardProps {
+interface StaticStatCardProps {
   icon: React.ElementType;
-  number: number;
-  suffix: string;
+  number: string;
   label: string;
   colorClass: string;
   bgClass: string;
-  delay: number;
 }
 
-function StatCard({ icon: Icon, number, suffix, label, colorClass, bgClass, delay }: StatCardProps) {
-  const [count, setCount] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  // Only start counter animation when the card is visible in viewport
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect(); // Only animate once
-        }
-      },
-      { threshold: 0.3 }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (!isVisible) return;
-
-    let counter: NodeJS.Timeout | null = null;
-    const timer = setTimeout(() => {
-      let start = 0;
-      const duration = 2000;
-      const increment = number / (duration / 16);
-
-      counter = setInterval(() => {
-        start += increment;
-        if (start >= number) {
-          setCount(number);
-          if (counter) clearInterval(counter);
-        } else {
-          setCount(Math.floor(start));
-        }
-      }, 16);
-    }, delay);
-
-    return () => {
-      clearTimeout(timer);
-      if (counter) clearInterval(counter);
-    };
-  }, [isVisible, number, delay]);
-
+function StaticStatCard({ icon: Icon, number, label, colorClass, bgClass }: StaticStatCardProps) {
   return (
-    <div
-      ref={ref}
-      className={`!text-center transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
-    >
+    <div className="!text-center transition-all duration-500 opacity-100 translate-y-0">
       <div className={`w-14 h-14 mx-auto mb-4 rounded-2xl ${bgClass} flex items-center justify-center transition-transform hover:scale-110 duration-300`}>
         <Icon className={`w-7 h-7 ${colorClass}`} />
       </div>
 
       <div className={`text-3xl lg:text-4xl font-black mb-1 ${colorClass}`}>
-        {count.toLocaleString('ar-EG')}{suffix}
+        {number}
       </div>
 
-      <div className="text-[15px] text-muted-foreground font-bold">
-        {label}
-      </div>
+      <div className="text-[15px] text-muted-foreground font-bold">{label}</div>
     </div>
   );
 }
-

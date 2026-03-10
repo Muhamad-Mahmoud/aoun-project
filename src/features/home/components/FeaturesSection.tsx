@@ -1,5 +1,3 @@
-"use client";
-
 import { FileSearch, Brain, BarChart3, Network } from "lucide-react";
 
 const features = [

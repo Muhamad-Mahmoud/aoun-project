@@ -311,7 +311,6 @@
 
     html {
         direction: rtl;
-        scroll-behavior: smooth;
     }
 
     body {
@@ -319,7 +318,6 @@
         background-image:
             radial-gradient(circle at 50% 0%, hsl(var(--primary) / 0.05) 0%, transparent 60%),
             radial-gradient(circle at 100% 100%, hsl(var(--accent) / 0.03) 0%, transparent 40%);
-        background-attachment: fixed;
     }
 
 }
@@ -450,6 +448,16 @@ nextjs-portal {
 
     .spacing-4xl {
         gap: 128px;
+    }
+}
+
+/* Respect reduced-motion preferences to lower animation and transition cost */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
     }
 }
 

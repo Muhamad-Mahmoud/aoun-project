@@ -1,5 +1,3 @@
-"use client";
-
 import { Heart, Stethoscope, UtensilsCrossed, Users, ArrowLeft } from "lucide-react";
 import Link from 'next/link';
 import { Button } from "@/shared/ui/button";

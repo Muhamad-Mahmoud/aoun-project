@@ -1,6 +1,9 @@
 import dynamic from "next/dynamic";
 import { HeroSection } from "@/features/home/components/HeroSection";
 
+// Cache the marketing home page for 1 hour – improves TTFB
+export const revalidate = 3600;
+
 // Below-the-fold sections — lazy loaded for faster initial paint
 const WhyAounSection = dynamic(() => import("@/features/home/components/WhyAounSection").then(mod => mod.WhyAounSection));
 const JourneySection = dynamic(() => import("@/features/home/components/JourneySection").then(mod => mod.JourneySection));
