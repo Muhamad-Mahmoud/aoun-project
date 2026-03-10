@@ -77,7 +77,7 @@ export const AuthWrapper: React.FC<AuthWrapperProps> = ({
             {/* Left Side: Hero Area (Fixed) */}
             <div className="hidden lg:flex lg:w-[45%] h-full relative bg-[#0e1525] overflow-hidden items-center justify-center border-l border-white/5">
                 {/* Visual Elements */}
-                <div className="absolute inset-0 opacity-[0.08]" style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+                <div className="absolute inset-0 opacity-[0.08] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
 
                 {/* Glows */}
                 <div className="absolute top-0 left-0 w-96 h-96 bg-primary/10 rounded-full blur-[100px] -ml-48 -mt-48" />

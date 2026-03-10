@@ -62,7 +62,7 @@ export function SuccessStoriesSection() {
                                 style={{ animationDelay: `${index * 100}ms` }}
                             >
                                 {/* Gradient Background */}
-                                <div className={`absolute inset-0 bg-gradient-to-br ${colorScheme.gradient} opacity-[0.03] -z-10`}></div>
+                                <div className={`absolute inset-0 bg-gradient-to-br ${colorScheme.gradient} opacity-[0.03] -z-10 pointer-events-none`}></div>
 
                                 {/* Quote Icon */}
                                 <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${colorScheme.gradient} flex items-center justify-center mb-6 shadow-lg`}>
@@ -89,7 +89,7 @@ export function SuccessStoriesSection() {
                                 </div>
 
                                 {/* Decorative Heart */}
-                                <div className="absolute bottom-4 left-4 opacity-5">
+                                <div className="absolute bottom-4 left-4 opacity-5 pointer-events-none">
                                     <Heart className="w-20 h-20 text-vibrant-cyan" fill="currentColor" />
                                 </div>
                             </div>

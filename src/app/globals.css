@@ -324,6 +324,12 @@
             radial-gradient(circle at 100% 100%, hsl(var(--accent) / 0.03) 0%, transparent 40%);
     }
 
+    /* Global safeguard: decorative layers with negative z-index must never capture touch/pointer events.
+       This prevents invisible overlays from blocking taps on real mobile devices. */
+    .-z-10, .-z-20, .-z-30, .-z-40, .-z-50,
+    [class*="-z-"] {
+        pointer-events: none;
+    }
 }
 
 /* Hide Next.js Dev Indicators */
