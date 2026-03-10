@@ -19,9 +19,13 @@ export default function LayoutContent({ children }: { children: React.ReactNode 
     const { isAuthenticated, isLoading } = useAuthContext();
 
     const isDashboard = pathname?.startsWith("/dashboard");
-    const isAuth = pathname === "/login" || pathname === "/register" || pathname === "/forgot-password" || pathname === "/reset-password" || pathname === "/verify-code";
+    const isAuth =
+        pathname === "/login" ||
+        pathname === "/register" ||
+        pathname === "/forgot-password" ||
+        pathname === "/reset-password" ||
+        pathname === "/verify-code";
     const hideLayout = isDashboard || isAuth;
-    const isHome = pathname === "/";
 
     // Redirect authenticated users away from auth pages
     useEffect(() => {
@@ -35,8 +39,8 @@ export default function LayoutContent({ children }: { children: React.ReactNode 
             {!hideLayout && <Header />}
             <main className={!hideLayout ? "min-h-screen" : ""}>{children}</main>
             {!hideLayout && <Footer />}
-            {/* Show global chat widget on marketing pages (e.g. home) only */}
-            {!hideLayout && isHome && <ChatWidget />}
+            {/* Show global chat widget on all non-dashboard / non-auth pages */}
+            {!hideLayout && <ChatWidget />}
         </>
     );
 }

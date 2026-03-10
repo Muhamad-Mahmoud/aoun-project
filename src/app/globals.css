@@ -309,6 +309,11 @@
         @apply border-border outline-ring/50;
     }
 
+    /* Ensure main Next.js app stays interactive even if external overlays mount as siblings of #__next (e.g. Vercel/analytics toolbars) */
+    body > div:not(#__next) {
+        pointer-events: none !important;
+    }
+
     html {
         direction: rtl;
     }
