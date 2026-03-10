@@ -26,20 +26,17 @@ export function ChatWidget() {
 
     return (
         <>
-            {/* Chat Window Overlay */}
-            <div
-                className={cn(
-                    "fixed bottom-[88px] sm:bottom-[104px] w-[92vw] sm:w-[420px] h-[min(600px,80vh)] max-h-[80vh] bg-background/95 backdrop-blur-xl rounded-[24px] sm:rounded-[32px] shadow-[0_25px_60px_rgba(0,0,0,0.2)] border border-white/20 overflow-hidden transition-all duration-500 flex flex-col",
-                    isOpen
-                        ? "opacity-100 translate-y-0 pointer-events-auto visible z-[60]"
-                        : "opacity-0 translate-y-10 pointer-events-none invisible -z-50"
-                )}
-                dir="rtl"
-                style={{ left: "24px", right: "auto" }}
-                data-widget="global-chat-window"
-            >
-                <ChatWindow onClose={toggleChat} className="border-none shadow-none bg-transparent h-full" />
-            </div>
+            {/* Chat Window Overlay - only mounted when open to avoid any hidden layers blocking taps */}
+            {isOpen && (
+                <div
+                    className="fixed bottom-[88px] sm:bottom-[104px] w-[92vw] sm:w-[420px] h-[min(600px,80vh)] max-h-[80vh] bg-background/95 backdrop-blur-xl rounded-[24px] sm:rounded-[32px] shadow-[0_25px_60px_rgba(0,0,0,0.2)] border border-white/20 overflow-hidden flex flex-col z-[60]"
+                    dir="rtl"
+                    style={{ left: "24px", right: "auto" }}
+                    data-widget="global-chat-window"
+                >
+                    <ChatWindow onClose={toggleChat} className="border-none shadow-none bg-transparent h-full" />
+                </div>
+            )}
 
             {/* Floating Toggle Button */}
             <button
