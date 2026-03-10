@@ -19,8 +19,15 @@ export const ChatInput = React.memo(function ChatInput({ onSend, onCancel, isStr
     useEffect(() => {
         const el = textareaRef.current;
         if (!el) return;
-        el.style.height = "auto";
-        el.style.height = `${Math.min(el.scrollHeight, 130)}px`;
+
+        // Defer resize to the next frame to reduce layout thrash on input
+        const frame = window.requestAnimationFrame(() => {
+            if (!el) return;
+            el.style.height = "auto";
+            el.style.height = `${Math.min(el.scrollHeight, 130)}px`;
+        });
+
+        return () => window.cancelAnimationFrame(frame);
     }, [input]);
 
     const handleSubmit = (e?: React.FormEvent) => {

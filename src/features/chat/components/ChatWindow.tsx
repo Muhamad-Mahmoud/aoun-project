@@ -29,12 +29,15 @@ export function ChatWindow({ className, onClose }: ChatWindowProps) {
     const hasMessages = messages.length > 0;
 
     useEffect(() => {
-        if (scrollRef.current) {
-            scrollRef.current.scrollTo({
-                top: scrollRef.current.scrollHeight,
-                behavior: "smooth",
-            });
-        }
+        const node = scrollRef.current;
+        if (!node) return;
+
+        // Use requestAnimationFrame to avoid forced synchronous layout thrash
+        const frame = window.requestAnimationFrame(() => {
+            node.scrollTop = node.scrollHeight;
+        });
+
+        return () => window.cancelAnimationFrame(frame);
     }, [messages]);
 
     return (

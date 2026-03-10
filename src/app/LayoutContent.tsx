@@ -21,6 +21,7 @@ export default function LayoutContent({ children }: { children: React.ReactNode 
     const isDashboard = pathname?.startsWith("/dashboard");
     const isAuth = pathname === "/login" || pathname === "/register" || pathname === "/forgot-password" || pathname === "/reset-password" || pathname === "/verify-code";
     const hideLayout = isDashboard || isAuth;
+    const isHome = pathname === "/";
 
     // Redirect authenticated users away from auth pages
     useEffect(() => {
@@ -34,8 +35,8 @@ export default function LayoutContent({ children }: { children: React.ReactNode 
             {!hideLayout && <Header />}
             <main className={!hideLayout ? "min-h-screen" : ""}>{children}</main>
             {!hideLayout && <Footer />}
-            {/* ChatWidget intentionally not auto-mounted in Phase 1 to reduce initial JS and hydration cost.
-                It can be reintroduced later behind an explicit user-triggered button. */}
+            {/* Show global chat widget on marketing pages (e.g. home) only */}
+            {!hideLayout && isHome && <ChatWidget />}
         </>
     );
 }
