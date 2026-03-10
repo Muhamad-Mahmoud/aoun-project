@@ -1,15 +1,16 @@
 "use client";
 
 import React from "react";
-import { Sparkles, Trash2 } from "lucide-react";
+import { Sparkles, Trash2, X } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 
 interface ChatHeaderProps {
     onClear: () => void;
     hasMessages: boolean;
+    onClose?: () => void;
 }
 
-export function ChatHeader({ onClear, hasMessages }: ChatHeaderProps) {
+export function ChatHeader({ onClear, hasMessages, onClose }: ChatHeaderProps) {
     return (
         <div className="flex items-center justify-between px-6 py-4 border-b border-border/50 bg-card">
             {/* Left: Identity */}
@@ -32,17 +33,30 @@ export function ChatHeader({ onClear, hasMessages }: ChatHeaderProps) {
             </div>
 
             {/* Right: Actions */}
-            {hasMessages && (
-                <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={onClear}
-                    className="text-muted-foreground/60 hover:text-muted-foreground hover:bg-muted/60 rounded-xl gap-1.5 text-xs font-semibold h-8 px-3"
-                >
-                    <Trash2 className="w-3.5 h-3.5" />
-                    محادثة جديدة
-                </Button>
-            )}
+            <div className="flex items-center gap-1 sm:gap-2">
+                {hasMessages && (
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={onClear}
+                        className="text-muted-foreground/60 hover:text-foreground hover:bg-muted/60 rounded-xl gap-1.5 text-xs font-semibold h-8 px-2 sm:px-3"
+                    >
+                        <Trash2 className="w-3.5 h-3.5" />
+                        <span className="hidden sm:inline">محادثة جديدة</span>
+                    </Button>
+                )}
+                {onClose && (
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={onClose}
+                        className="text-muted-foreground/60 hover:text-foreground hover:bg-destructive/10 hover:text-destructive rounded-xl h-8 w-8 p-0 shrink-0"
+                        title="إغلاق المحادثة"
+                    >
+                        <X className="w-4 h-4" />
+                    </Button>
+                )}
+            </div>
         </div>
     );
 }

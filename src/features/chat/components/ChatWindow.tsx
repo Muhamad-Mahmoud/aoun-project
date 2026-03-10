@@ -17,9 +17,10 @@ const SUGGESTIONS = [
 
 interface ChatWindowProps {
     className?: string;
+    onClose?: () => void;
 }
 
-export function ChatWindow({ className }: ChatWindowProps) {
+export function ChatWindow({ className, onClose }: ChatWindowProps) {
     const apiUrl = `${API_CONFIG.aiBaseURL}${API_ENDPOINTS.ai.chatStream}`;
     const { messages, isStreaming, sendMessage, cancelStream, clearChat } =
         useStreamingChat({ apiUrl });
@@ -39,7 +40,7 @@ export function ChatWindow({ className }: ChatWindowProps) {
     return (
         <div className={cn("flex flex-col h-full bg-background rounded-2xl border border-border/50 shadow-md overflow-hidden", className)}>
             {/* Header */}
-            <ChatHeader onClear={clearChat} hasMessages={hasMessages} />
+            <ChatHeader onClear={clearChat} hasMessages={hasMessages} onClose={onClose} />
 
             {/* Messages */}
             <div

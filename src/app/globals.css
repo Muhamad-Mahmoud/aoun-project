@@ -571,13 +571,21 @@ nextjs-portal {
     animation: blink 0.8s step-end infinite;
 }
 
-/* --- Vercel Toolbar Fix --- 
-   This toolbar often blocks mobile interactions by creating a full-screen invisible layer.
-   We force-disable its interference with our layout.
+/* --- Vercel / Next Dev Overlays & Toolbar Fix ---
+   Some Vercel / Next.js dev and observability overlays create full-screen
+   layers that can block taps on mobile (especially around the bottom area
+   where our chat widget and primary CTAs live).
+   We aggressively neutralize their pointer events so our UI stays clickable.
 */
 #preact-border-shadow-host,
-[data-vercel-toolbar] {
-  pointer-events: none !important;
-  display: none !important;
-  visibility: hidden !important;
+[data-vercel-toolbar],
+nextjs-portal,
+[data-nextjs-dev-overlay],
+[data-nextjs-toast],
+[data-nextjs-scroll-focus-boundary],
+#__next-build-watcher {
+    pointer-events: none !important;
+    display: none !important;
+    visibility: hidden !important;
+    z-index: -1 !important;
 }
