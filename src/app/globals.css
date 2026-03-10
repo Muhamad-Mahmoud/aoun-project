@@ -590,7 +590,6 @@ nextjs-portal {
 */
 #preact-border-shadow-host,
 [data-vercel-toolbar],
-[data-vercel*],
 vercel-live-feedback,
 vercel-feedback,
 nextjs-portal,
