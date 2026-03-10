@@ -43,15 +43,15 @@ export function ChatWidget() {
                 onClick={toggleChat}
                 data-widget="global-chat-button"
                 className={cn(
-                    "fixed bottom-6 z-[9999] group w-14 h-14 sm:w-16 sm:h-16 rounded-[20px] sm:rounded-[22px] flex items-center justify-center transition-all duration-300 shadow-2xl active:scale-95 overflow-hidden ring-4 ring-white/10 shrink-0 pointer-events-auto",
+                    "fixed bottom-6 z-[9999] group w-14 h-14 sm:w-16 sm:h-16 rounded-[20px] sm:rounded-[22px] flex items-center justify-center transition-all duration-300 shadow-2xl active:scale-95 overflow-hidden ring-4 ring-white/10 shrink-0 pointer-events-auto relative",
                     isOpen
                         ? "bg-muted text-foreground"
                         : "bg-primary/90 backdrop-blur-md text-white hover:bg-warm-green-dark hover:opacity-100 hover:shadow-primary/40 hover:-translate-y-1.5"
                 )}
                 style={{ left: '24px', right: 'auto' }}
             >
-                {/* Internal Glow */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent opacity-50" />
+                {/* Internal Glow - constrained to button only and non-interactive */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent opacity-50 pointer-events-none" />
 
                 {isOpen ? (
                     <X className="w-7 h-7 relative z-10" />
@@ -69,7 +69,7 @@ export function ChatWidget() {
                 
                 {/* Subtle Shine Animation */}
                 {!isOpen && (
-                    <div className="absolute top-0 -left-[100%] w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:left-[100%] transition-all duration-700" />
+                    <div className="absolute top-0 -left-[100%] w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:left-[100%] transition-all duration-700 pointer-events-none" />
                 )}
             </button>
         </>
