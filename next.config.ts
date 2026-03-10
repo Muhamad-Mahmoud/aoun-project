@@ -80,6 +80,8 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ["lucide-react", "framer-motion", "sonner"],
   },
+  // Disable dev indicators to prevent overlay injections on mobile
+  devIndicators: false,
 };
 
 export default nextConfig;

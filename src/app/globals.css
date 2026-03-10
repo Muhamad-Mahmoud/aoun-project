@@ -311,10 +311,14 @@
 
     html {
         direction: rtl;
+        /* Prevent grey overlay on mobile tap */
+        -webkit-tap-highlight-color: transparent;
     }
 
     body {
         @apply bg-background text-foreground font-sans antialiased;
+        /* Disable double-tap-to-zoom so taps register instantly */
+        touch-action: manipulation;
         background-image:
             radial-gradient(circle at 50% 0%, hsl(var(--primary) / 0.05) 0%, transparent 60%),
             radial-gradient(circle at 100% 100%, hsl(var(--accent) / 0.03) 0%, transparent 40%);
@@ -580,20 +584,35 @@ nextjs-portal {
 }
 
 /* --- Vercel / Next Dev Overlays & Toolbar Fix ---
-   Some Vercel / Next.js dev and observability overlays create full-screen
-   layers that can block taps on mobile (especially around the bottom area
-   where our chat widget and primary CTAs live).
-   We aggressively neutralize their pointer events so our UI stays clickable.
+   Vercel injects toolbars, analytics widgets, and feedback overlays that
+   create invisible full-screen layers on mobile — blocking ALL touch events.
+   We aggressively collapse and neutralize every known injected element.
 */
 #preact-border-shadow-host,
 [data-vercel-toolbar],
+[data-vercel*],
+vercel-live-feedback,
+vercel-feedback,
 nextjs-portal,
 [data-nextjs-dev-overlay],
 [data-nextjs-toast],
+[data-nextjs-toast-wrapper],
 [data-nextjs-scroll-focus-boundary],
-#__next-build-watcher {
+#__next-build-watcher,
+#__next-build-indicator {
     pointer-events: none !important;
     display: none !important;
     visibility: hidden !important;
     z-index: -1 !important;
+    position: fixed !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    opacity: 0 !important;
+}
+
+/* Catch-all: ensure the first child of body (our app root) always
+   receives pointer events, even if third-party scripts inject siblings. */
+body > :first-child {
+    pointer-events: auto !important;
 }
