@@ -7,17 +7,17 @@ import { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse, AxiosError } 
 import { ApiError } from './types';
 import { logger } from '../logger';
 import { refreshToken } from '@/features/auth/api/authApi';
-import { ROUTES } from '@/shared/constants/routes';
+import { ROUTES, PUBLIC_ROUTES } from '@/shared/constants/routes';
+import { TOKEN_STORAGE_KEY, REFRESH_TOKEN_STORAGE_KEY, API_ENDPOINTS } from './config';
+import { getSecureToken, setSecureToken, removeSecureToken } from '../security/tokenStorage';
+import { sanitizeLogData } from '../security/sanitize';
+import { APP_EVENTS, dispatchAppEvent } from '../../shared/utils/events';
 
 // Type for API error response data
 interface ErrorResponseData {
     message?: string;
     errors?: Record<string, string[]>;
 }
-
-import { TOKEN_STORAGE_KEY, API_ENDPOINTS } from './config';
-import { getSecureToken, setSecureToken, removeSecureToken } from '../security/tokenStorage';
-import { sanitizeLogData } from '../security/sanitize';
 
 /**
  * Setup request interceptors
@@ -106,24 +106,19 @@ export function setupResponseInterceptors(axiosInstance: AxiosInstance) {
                 try {
                     // Get refresh token from encrypted storage
                     const refreshTokenValue = typeof window !== 'undefined'
-                        ? await getSecureToken('refresh_token')
+                        ? await getSecureToken(REFRESH_TOKEN_STORAGE_KEY)
                         : null;
 
                     if (!refreshTokenValue) {
                         // No refresh token available, user needs to re-login
                         if (typeof window !== 'undefined') {
-                            removeSecureToken('auth_token');
-                            // Only redirect if on a protected page (not on public pages)
+                            await removeSecureToken(TOKEN_STORAGE_KEY);
+                            // Only redirect if on a protected page
                             const currentPath = window.location.pathname;
-                            const isPublicPage = currentPath === '/' ||
-                                currentPath.includes('/login') ||
-                                currentPath.includes('/register') ||
-                                currentPath.includes('/forgot-password') ||
-                                currentPath.includes('/reset-password') ||
-                                currentPath.includes('/verify-code');
+                            const isPublicPage = PUBLIC_ROUTES.some(route => currentPath === route);
 
                             if (!isPublicPage) {
-                                window.location.href = ROUTES.AUTH.LOGIN;
+                                dispatchAppEvent(APP_EVENTS.AUTH_UNAUTHORIZED);
                             }
                         }
                         return Promise.reject(error);
@@ -150,19 +145,14 @@ export function setupResponseInterceptors(axiosInstance: AxiosInstance) {
                     // Refresh failed, redirect to login
                     logger.error('Token refresh failed', refreshError);
                     if (typeof window !== 'undefined') {
-                        await removeSecureToken('auth_token');
-                        await removeSecureToken('refresh_token');
-                        // Only redirect if on a protected page (not on public pages)
+                        await removeSecureToken(TOKEN_STORAGE_KEY);
+                        await removeSecureToken(REFRESH_TOKEN_STORAGE_KEY);
+                        // Only redirect if on a protected page
                         const currentPath = window.location.pathname;
-                        const isPublicPage = currentPath === '/' ||
-                            currentPath.includes('/login') ||
-                            currentPath.includes('/register') ||
-                            currentPath.includes('/forgot-password') ||
-                            currentPath.includes('/reset-password') ||
-                            currentPath.includes('/verify-code');
+                        const isPublicPage = PUBLIC_ROUTES.some(route => currentPath === route);
 
                         if (!isPublicPage) {
-                            window.location.href = ROUTES.AUTH.LOGIN;
+                            dispatchAppEvent(APP_EVENTS.AUTH_UNAUTHORIZED);
                         }
                     }
                     return Promise.reject(refreshError);
@@ -170,23 +160,20 @@ export function setupResponseInterceptors(axiosInstance: AxiosInstance) {
             }
 
             // Transform error to ApiError format
-            const responseData = error.response?.data as any; // Use any to access potential ProblemDetails fields
+            const responseData = error.response?.data as any;
 
-            // Extract the most relevant error message - check multiple possible fields
+            // Extract the most relevant error message
             let message = responseData?.message || responseData?.detail || responseData?.title;
             let validationErrors: Record<string, string[]> = {};
 
-            // If errors object exists (validation errors), extract them all
             if (responseData?.errors && typeof responseData.errors === 'object') {
                 validationErrors = responseData.errors;
                 
                 if (!message) {
-                    // Combine all validation errors
                     const allErrors: string[] = [];
                     Object.entries(validationErrors).forEach(([field, errors]) => {
                         const errorArray = Array.isArray(errors) ? errors : [errors];
                         errorArray.forEach(err => {
-                            // Add field name for clarity
                             allErrors.push(`${field}: ${err}`);
                         });
                     });
@@ -198,7 +185,6 @@ export function setupResponseInterceptors(axiosInstance: AxiosInstance) {
             }
 
             if (!message) {
-                // Localize generic Axios errors or provide fallback
                 if (error.message === 'Network Error') {
                     message = 'خطأ في الاتصال بالشبكة، يرجى التحقق من الإنترنت';
                 } else if (error.response?.status === 401) {
@@ -211,14 +197,12 @@ export function setupResponseInterceptors(axiosInstance: AxiosInstance) {
                     message = 'حدث خطأ في الخادم، يرجى المحاولة لاحقاً';
                 } else {
                     message = error.message || 'حدث خطأ غير متوقع';
-                    // Strip "Request failed with status code" if it slips through
                     if (message.includes('Request failed with status code')) {
                         message = `حدث خطأ في الطلب (${error.response?.status || 'غير معروف'})`;
                     }
                 }
             }
 
-            // Log the full response data in development for debugging
             if (process.env.NODE_ENV === 'development') {
                 logger.debug('❌ API Error Response:', {
                     status: error.response?.status,

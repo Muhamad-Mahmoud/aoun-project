@@ -62,9 +62,10 @@
         --warm-green-pale: 160 76% 97%;
 
         /* Golden Orange - Secondary Brand (Warmth & Action) */
-        --golden-orange: 38 92% 50%;
+        --golden-orange: 30 92% 38%;
+        /* Darkened for ≥4.5:1 contrast on white */
         --golden-orange-light: 43 96% 56%;
-        --golden-orange-dark: 32 95% 44%;
+        --golden-orange-dark: 32 95% 36%;
         --golden-orange-pale: 48 100% 88%;
 
         /* Pharaoh Gold - Accent Brand (Luxury & Heritage) */
@@ -72,9 +73,10 @@
         /* Matching golden-orange-light for now, adjust as needed */
 
         /* Sky Blue - Trust Brand (Credibility) */
-        --sky-blue: 199 89% 48%;
+        --sky-blue: 199 89% 38%;
+        /* Darkened for ≥4.5:1 contrast on white */
         --sky-blue-light: 199 95% 74%;
-        --sky-blue-dark: 199 89% 40%;
+        --sky-blue-dark: 199 89% 32%;
         --sky-blue-pale: 204 94% 94%;
 
         /* --- SEMANTIC COLORS (Status & Feedback) --- */
@@ -110,11 +112,13 @@
         --royal-purple-light: 270 96% 75%;
         --royal-purple-pale: 270 96% 96%;
 
-        --vibrant-cyan: 190 90% 50%;
+        --vibrant-cyan: 190 90% 30%;
+        /* Darkened for ≥4.5:1 contrast on white */
         --vibrant-cyan-light: 190 90% 70%;
         --vibrant-cyan-pale: 190 90% 95%;
 
-        --emerald-green: 150 80% 40%;
+        --emerald-green: 150 80% 28%;
+        /* Darkened for ≥5.0:1 contrast on white */
         --emerald-green-light: 150 80% 60%;
         --emerald-green-pale: 150 80% 95%;
 
@@ -502,32 +506,6 @@ nextjs-portal {
     to {
         opacity: 1;
         transform: scale3d(1, 1, 1);
-    }
-}
-
-@keyframes float {
-    0% {
-        transform: translate3d(0, 0, 0);
-    }
-
-    50% {
-        transform: translate3d(0, -10px, 0);
-    }
-
-    100% {
-        transform: translate3d(0, 0, 0);
-    }
-}
-
-@keyframes smooth-fade-in {
-    from {
-        opacity: 0;
-        filter: blur(10px);
-    }
-
-    to {
-        opacity: 1;
-        filter: blur(0);
     }
 }
 

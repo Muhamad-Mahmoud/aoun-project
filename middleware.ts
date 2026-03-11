@@ -52,35 +52,31 @@ export async function middleware(request: NextRequest) {
     }
 
     // 2. Route Protection Logic
-    // DISABLED: We are using sessionStorage for tokens (Client-Side), so Server-Side Middleware cannot check auth status.
-    // Client-side components (AuthProvider) must handle protection.
-
-    /*
     // Define route types
     const isAuthPage = pathname.startsWith(ROUTES.AUTH.LOGIN) ||
         pathname.startsWith(ROUTES.AUTH.REGISTER) ||
-        pathname.startsWith(ROUTES.AUTH.FORGOT_PASSWORD);
+        pathname.startsWith(ROUTES.AUTH.FORGOT_PASSWORD) ||
+        pathname.startsWith(ROUTES.AUTH.RESET_PASSWORD) ||
+        pathname.startsWith(ROUTES.AUTH.VERIFY_CODE);
 
-    const isProtectedPage = PROTECTED_ROUTES.some(route => pathname.startsWith(route));
+    // We consider a route protected if it's NOT a public route and it's NOT the home page
+    const isPublicPage = PUBLIC_ROUTES.some(route => pathname === route);
+    const isProtectedPage = !isPublicPage && !pathname.startsWith('/api') && !pathname.startsWith('/_next');
 
-    // Verify token
-    let isValidToken = false;
-    if (token) {
-        isValidToken = await verifyToken(token.value);
-    }
+    // Simple existence check for auth_token in middleware (actual verification happens in Secure actions or API)
+    const isAuthenticated = !!token;
 
     // Redirect to login if accessing protected page without valid token
-    if (isProtectedPage && !isValidToken) {
+    if (isProtectedPage && !isAuthenticated) {
         const loginUrl = new URL(ROUTES.AUTH.LOGIN, request.url);
         loginUrl.searchParams.set('redirect', pathname);
         return NextResponse.redirect(loginUrl);
     }
 
     // Redirect to home if accessing auth pages with token
-    if (isAuthPage && isValidToken) {
+    if (isAuthPage && isAuthenticated) {
         return NextResponse.redirect(new URL(ROUTES.HOME, request.url));
     }
-    */
 
     return NextResponse.next();
 }

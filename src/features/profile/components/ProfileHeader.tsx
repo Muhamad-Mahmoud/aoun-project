@@ -55,11 +55,13 @@ export function ProfileHeader({
                             <Camera className="h-4 w-4" />
                         )}
                         <input
+                            id="profile-image-upload"
                             type="file"
                             accept="image/*"
                             onChange={handleFileChange}
-                            className="hidden"
+                            className="sr-only"
                             disabled={isUploadingImage}
+                            aria-label="تغيير الصورة الشخصية"
                         />
                     </label>
                 </div>

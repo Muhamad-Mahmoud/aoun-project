@@ -5,6 +5,7 @@ import { ArrowLeft, Users, Building2, MapPin, ShieldCheck, Award, Clock, CheckCi
 import Link from "next/link";
 import Image from "next/image";
 import { colors } from "@/shared/constants";
+import { useCountUp } from "@/shared/hooks/useCountUp";
 
 export function HeroSection() {
   return (
@@ -142,28 +143,28 @@ export function HeroSection() {
       {/* Statistics Section - Trust Signals */}
       <div className="mt-20 lg:mt-24 px-6 py-10 lg:px-12 lg:py-14 rounded-[2rem] bg-white border border-border/50 shadow-[0_10px_40px_hsla(var(--text-primary)/0.03)] opacity-0 animate-fade-in-up delay-700">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16">
-          <StaticStatCard
+          <AnimatedStatCard
             icon={Users}
             number="١,٢٠٠+"
             label="أسرة مستفيدة"
             colorClass="text-warm-green"
             bgClass="bg-warm-green/10"
           />
-          <StaticStatCard
+          <AnimatedStatCard
             icon={Building2}
             number="٨٥+"
             label="جهة شريكة"
             colorClass="text-sky-blue"
             bgClass="bg-sky-blue/10"
           />
-          <StaticStatCard
+          <AnimatedStatCard
             icon={MapPin}
             number="٢٧"
             label="محافظة مصرية"
             colorClass="text-sky-blue"
             bgClass="bg-sky-blue/10"
           />
-          <StaticStatCard
+          <AnimatedStatCard
             icon={CheckCircle}
             number="٩٨٪"
             label="نسبة نجاح"
@@ -176,7 +177,7 @@ export function HeroSection() {
   );
 }
 
-interface StaticStatCardProps {
+interface AnimatedStatCardProps {
   icon: React.ElementType;
   number: string;
   label: string;
@@ -184,7 +185,9 @@ interface StaticStatCardProps {
   bgClass: string;
 }
 
-function StaticStatCard({ icon: Icon, number, label, colorClass, bgClass }: StaticStatCardProps) {
+function AnimatedStatCard({ icon: Icon, number, label, colorClass, bgClass }: AnimatedStatCardProps) {
+  const animatedValue = useCountUp(number);
+  
   return (
     <div className="!text-center transition-all duration-500 opacity-100 translate-y-0">
       <div className={`w-14 h-14 mx-auto mb-4 rounded-2xl ${bgClass} flex items-center justify-center transition-transform hover:scale-110 duration-300`}>
@@ -192,7 +195,7 @@ function StaticStatCard({ icon: Icon, number, label, colorClass, bgClass }: Stat
       </div>
 
       <div className={`text-3xl lg:text-4xl font-black mb-1 ${colorClass}`}>
-        {number}
+        {animatedValue}
       </div>
 
       <div className="text-[15px] text-muted-foreground font-bold">{label}</div>

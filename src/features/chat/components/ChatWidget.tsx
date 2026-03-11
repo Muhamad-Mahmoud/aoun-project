@@ -71,6 +71,10 @@ export function ChatWidget() {
             {/* Chat Window - strictly separated from button to avoid nested wrapper bugs */}
             {isOpen && (
                 <div
+                    id="chat-window"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label="نافذة المحادثة"
                     className="fixed bottom-[88px] sm:bottom-[104px] left-6 w-[92vw] sm:w-[420px] h-[min(600px,80vh)] max-h-[80vh] bg-background/95 backdrop-blur-xl rounded-[24px] sm:rounded-[32px] shadow-[0_25px_60px_rgba(0,0,0,0.2)] border border-white/20 overflow-hidden flex flex-col pointer-events-auto"
                     style={{ zIndex: 9999 }}
                     dir="rtl"
@@ -90,6 +94,8 @@ export function ChatWidget() {
                     onClick={toggleChat}
                     data-widget="global-chat-button"
                     aria-label={isOpen ? "إغلاق المحادثة" : "فتح المحادثة"}
+                    aria-expanded={isOpen}
+                    aria-controls="chat-window"
                     className={cn(
                         "group w-14 h-14 sm:w-16 sm:h-16 rounded-[20px] sm:rounded-[22px] flex items-center justify-center transition-all duration-300 shadow-2xl active:scale-95 overflow-hidden ring-4 ring-white/10 shrink-0 relative select-none",
                         isOpen
