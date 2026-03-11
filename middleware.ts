@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { verifyToken } from '@/lib/auth';
-import { ROUTES, PROTECTED_ROUTES } from '@/shared/constants/routes';
+import { ROUTES, PROTECTED_ROUTES, PUBLIC_ROUTES } from '@/shared/constants/routes';
 import { env } from '@/env';
 
 /**
