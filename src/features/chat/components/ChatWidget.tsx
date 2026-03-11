@@ -68,7 +68,10 @@ export function ChatWidget() {
 
             {/* Toggle Button - fixed to bottom-left *exactly* where it should be */}
             <div 
-                className="fixed bottom-6 left-6 z-[9999] pointer-events-auto flex items-end justify-end"
+                className={cn(
+                    "fixed bottom-6 left-6 pointer-events-auto flex items-end justify-end",
+                    isOpen ? "z-[9999]" : "z-50"
+                )}
                 data-widget="global-chat-button-wrapper"
             >
                 <button
