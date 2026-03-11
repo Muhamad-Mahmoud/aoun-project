@@ -48,7 +48,7 @@ export function ChatWidget() {
             {/* Backdrop Overlay - Mobile/Tablet only. Completely unmounts when closed. */}
             {isOpen && (
                 <div 
-                    className="fixed inset-0 z-[9998] bg-black/40 backdrop-blur-sm transition-opacity block lg:hidden"
+                    className="fixed inset-0 w-screen h-screen z-[9998] bg-black/60 transition-opacity block lg:hidden"
                     onClick={() => setIsOpen(false)}
                     aria-hidden="true"
                     data-widget="chat-backdrop"
