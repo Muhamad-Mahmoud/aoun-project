@@ -12,15 +12,25 @@ import { ChatWindow } from "./ChatWindow";
 export function ChatWidget() {
     const [isOpen, setIsOpen] = useState(false);
     const [showBadge, setShowBadge] = useState(false);
+    const [isMounted, setIsMounted] = useState(false);
+
+    // Ensure we only render the UI after React has hydrated on the client
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
     // Initial badge pop
     useEffect(() => {
+        if (!isMounted) return;
         const timer = setTimeout(() => setShowBadge(true), 3000);
         return () => clearTimeout(timer);
-    }, []);
+    }, [isMounted]);
 
     // Manage body scroll lock when chat is open - ONLY on mobile/tablet
     useEffect(() => {
+        // Run safely only on client side after mount or state change
+        if (typeof window === 'undefined') return;
+
         const isMobileOrTablet = window.innerWidth < 1024; // Tailwind 'lg' breakpoint
         
         if (isOpen && isMobileOrTablet) {
@@ -31,7 +41,7 @@ export function ChatWidget() {
             document.documentElement.style.overflow = "";
         }
 
-        // Cleanup on unmount
+        // Cleanup on unmount or when isOpen changes
         return () => {
             document.body.style.overflow = "";
             document.documentElement.style.overflow = "";
@@ -42,6 +52,10 @@ export function ChatWidget() {
         setIsOpen(!isOpen);
         if (!isOpen) setShowBadge(false);
     };
+
+    // Strict Hydration Mismatch Prevention: Render absolutely nothing on the SSR server.
+    // Ensure the DOM is fully constructed and hydrated on the client before injecting floating UI.
+    if (!isMounted) return null;
 
     return (
         <>
