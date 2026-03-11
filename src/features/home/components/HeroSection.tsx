@@ -33,14 +33,14 @@ export function HeroSection() {
             </div>
 
             {/* Main Headline - Enhanced Size & Typography */}
-            <h1 className="text-3xl sm:text-4xl lg:text-[56px] font-bold leading-[1.3] lg:leading-[1.2] text-foreground opacity-0 animate-fade-in-up">
+            <h1 className="text-3xl sm:text-4xl lg:text-[56px] font-bold leading-[1.3] lg:leading-[1.2] text-foreground">
               نُوصّل <span className="text-warm-green">المساعدة</span>
               <br className="hidden sm:block" />
               إلى كل أسرة بأمان وسرعة
             </h1>
 
             {/* Subheadline - Concise & Direct */}
-            <p className="text-base sm:text-lg lg:text-[20px] text-muted-foreground leading-relaxed max-w-2xl opacity-0 animate-fade-in delay-100">
+            <p className="text-base sm:text-lg lg:text-[20px] text-muted-foreground leading-relaxed max-w-2xl">
               منصة رقمية تربط الأسر المحتاجة بالجمعيات الموثوقة في دقائق، لتجربة إنسانية كريمة
             </p>
 
@@ -48,7 +48,7 @@ export function HeroSection() {
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center justify-center lg:justify-start opacity-0 animate-fade-in-up delay-300 relative z-[100]">
               {/* Primary CTA - Larger & More Prominent */}
               <Link href="/register" className="w-full sm:w-auto">
-                <Button className="w-full sm:w-auto h-14 lg:h-16 text-base lg:text-[17px] font-semibold px-8 rounded-xl gap-3 text-white bg-gradient-to-l from-warm-green via-warm-green/90 to-sky-blue hover:from-warm-green-dark hover:via-warm-green hover:to-sky-blue-dark shadow-[0_8px_20px_hsla(var(--warm-green)/0.3)] hover:shadow-[0_8px_30px_hsla(var(--warm-green)/0.5)] transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 animate-pulse-subtle">
+                <Button className="w-full sm:w-auto h-14 lg:h-16 text-base lg:text-[17px] font-semibold px-8 rounded-xl gap-3 text-white bg-gradient-to-l from-warm-green via-warm-green/90 to-sky-blue hover:from-warm-green-dark hover:via-warm-green hover:to-sky-blue-dark shadow-[0_8px_20px_hsla(var(--warm-green)/0.3)] hover:shadow-[0_8px_30px_hsla(var(--warm-green)/0.5)] transition-[background,box-shadow,transform] duration-300 hover:scale-[1.02] hover:-translate-y-1">
                   اطلب مساعدة الآن
                   <ArrowLeft className="w-5 h-5" />
                 </Button>
@@ -58,7 +58,7 @@ export function HeroSection() {
               <Link href="/register?type=organization" className="w-full sm:w-auto">
                 <Button
                   variant="outline"
-                  className="w-full sm:w-auto h-14 text-base lg:text-[17px] font-semibold px-7 rounded-xl border-2 border-warm-green/40 hover:border-warm-green hover:bg-warm-green hover:text-white text-warm-green transition-all duration-300 hover:scale-[1.02] gap-2.5"
+                  className="w-full sm:w-auto h-14 text-base lg:text-[17px] font-semibold px-7 rounded-xl border-2 border-warm-green/40 hover:border-warm-green hover:bg-warm-green hover:text-white text-warm-green transition-[background-color,border-color,color,transform] duration-300 hover:scale-[1.02] gap-2.5"
                 >
                   <Building2 className="w-5 h-5" />
                   انضم كجمعية
@@ -69,19 +69,19 @@ export function HeroSection() {
             {/* Trust Indicators - Enhanced Design */}
             <div className="flex flex-wrap gap-2 sm:gap-3 opacity-0 animate-fade-in delay-500">
               {/* Government Badge - Enhanced */}
-              <div className={`group flex items-center gap-2 bg-white/80 backdrop-blur-sm border ${colors.warmGreen.borderLight} px-4 py-2.5 lg:px-5 lg:py-3 rounded-xl text-[13px] lg:text-[14px] font-medium ${colors.warmGreen.textDark} shadow-sm hover:-translate-y-0.5 transition-all duration-250`}>
+              <div className={`group flex items-center gap-2 bg-white/80 backdrop-blur-sm border ${colors.warmGreen.borderLight} px-4 py-2.5 lg:px-5 lg:py-3 rounded-xl text-[13px] lg:text-[14px] font-medium ${colors.warmGreen.textDark} shadow-sm hover:-translate-y-0.5 transition-transform duration-250`}>
                 <ShieldCheck className="w-4 h-4 lg:w-5 lg:h-5" />
                 <span>معتمد من وزارة التضامن</span>
               </div>
 
               {/* Rating - Enhanced */}
-              <div className={`group flex items-center gap-2 bg-white/80 backdrop-blur-sm border ${colors.goldenOrange.borderLight} px-4 py-2.5 lg:px-5 lg:py-3 rounded-xl text-[13px] lg:text-[14px] font-medium ${colors.goldenOrange.textDark} shadow-sm hover:-translate-y-0.5 transition-all duration-250`}>
+              <div className={`group flex items-center gap-2 bg-white/80 backdrop-blur-sm border ${colors.goldenOrange.borderLight} px-4 py-2.5 lg:px-5 lg:py-3 rounded-xl text-[13px] lg:text-[14px] font-medium ${colors.goldenOrange.textDark} shadow-sm hover:-translate-y-0.5 transition-transform duration-250`}>
                 <Award className="w-4 h-4 lg:w-5 lg:h-5" />
                 <span>تقييم 4.9/5</span>
               </div>
 
               {/* Response Time - Enhanced */}
-              <div className={`group flex items-center gap-2 bg-white/80 backdrop-blur-sm border ${colors.skyBlue.borderLight} px-4 py-2.5 lg:px-5 lg:py-3 rounded-xl text-[13px] lg:text-[14px] font-medium ${colors.skyBlue.textDark} shadow-sm hover:-translate-y-0.5 transition-all duration-250`}>
+              <div className={`group flex items-center gap-2 bg-white/80 backdrop-blur-sm border ${colors.skyBlue.borderLight} px-4 py-2.5 lg:px-5 lg:py-3 rounded-xl text-[13px] lg:text-[14px] font-medium ${colors.skyBlue.textDark} shadow-sm hover:-translate-y-0.5 transition-transform duration-250`}>
                 <Clock className="w-4 h-4 lg:w-5 lg:h-5" />
                 <span>استجابة خلال 24 ساعة</span>
               </div>

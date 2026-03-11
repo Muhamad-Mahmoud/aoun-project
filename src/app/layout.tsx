@@ -60,7 +60,6 @@ export default async function RootLayout({
         <html lang="ar" dir="rtl">
             <head>
                 <link rel="dns-prefetch" href="https://aoun-api.runasp.net" />
-                <link rel="preconnect" href="https://aoun-api.runasp.net" crossOrigin="anonymous" />
                 {/* Keep external services as dns-prefetch only to avoid unused preconnect warnings */}
                 <link rel="dns-prefetch" href="https://api.dicebear.com" />
                 <link rel="dns-prefetch" href="https://muhammadmahmoud-awn-ai-service.hf.space" />

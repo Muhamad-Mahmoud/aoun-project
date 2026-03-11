@@ -113,9 +113,10 @@ export function Header() {
                         <Image
                             src="/logo.png"
                             alt="عون - منصة العون للأسر المحتاجة"
-                            width={160}
-                            height={56}
+                            width={131}
+                            height={46}
                             priority
+                            sizes="131px"
                             className="h-14 w-auto object-contain transition-[transform,opacity] duration-300 group-hover:scale-105"
                         />
                     </Link>

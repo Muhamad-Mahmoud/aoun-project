@@ -39,6 +39,7 @@ export function ChatHeader({ onClear, hasMessages, onClose }: ChatHeaderProps) {
                         variant="ghost"
                         size="sm"
                         onClick={onClear}
+                        aria-label="محادثة جديدة"
                         className="text-muted-foreground/60 hover:text-foreground hover:bg-muted/60 rounded-xl gap-1.5 text-xs font-semibold h-8 px-2 sm:px-3"
                     >
                         <Trash2 className="w-3.5 h-3.5" />
@@ -50,6 +51,7 @@ export function ChatHeader({ onClear, hasMessages, onClose }: ChatHeaderProps) {
                         variant="ghost"
                         size="sm"
                         onClick={onClose}
+                        aria-label="إغلاق المحادثة"
                         className="text-muted-foreground/60 hover:text-foreground hover:bg-destructive/10 hover:text-destructive rounded-xl h-8 w-8 p-0 shrink-0"
                         title="إغلاق المحادثة"
                     >

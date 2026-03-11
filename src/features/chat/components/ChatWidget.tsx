@@ -89,6 +89,7 @@ export function ChatWidget() {
                 <button
                     onClick={toggleChat}
                     data-widget="global-chat-button"
+                    aria-label={isOpen ? "إغلاق المحادثة" : "فتح المحادثة"}
                     className={cn(
                         "group w-14 h-14 sm:w-16 sm:h-16 rounded-[20px] sm:rounded-[22px] flex items-center justify-center transition-all duration-300 shadow-2xl active:scale-95 overflow-hidden ring-4 ring-white/10 shrink-0 relative select-none",
                         isOpen

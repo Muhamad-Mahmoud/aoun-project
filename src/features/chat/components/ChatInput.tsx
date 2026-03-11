@@ -77,7 +77,7 @@ export const ChatInput = React.memo(function ChatInput({ onSend, onCancel, isStr
                             type="button"
                             onClick={onCancel}
                             className="flex-shrink-0 mb-0.5 w-9 h-9 rounded-xl flex items-center justify-center bg-destructive/10 hover:bg-destructive/20 text-destructive transition-colors"
-                            title="إيقاف"
+                            aria-label="إيقاف الرد"
                         >
                             <Square className="w-3.5 h-3.5 fill-current" />
                         </button>
@@ -92,6 +92,7 @@ export const ChatInput = React.memo(function ChatInput({ onSend, onCancel, isStr
                                     : "bg-muted/50 text-muted-foreground/30 cursor-not-allowed"
                             )}
                             title="إرسال"
+                            aria-label="إرسال الرسالة"
                         >
                             <Send className="w-4 h-4 rotate-180" />
                         </button>
