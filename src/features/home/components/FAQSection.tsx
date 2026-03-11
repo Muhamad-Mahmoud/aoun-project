@@ -37,8 +37,8 @@ export function FAQSection() {
 
         <section id="faq" className="py-24 md:py-32 bg-warm-white relative overflow-hidden">
             {/* Background */}
-            <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl -z-10"></div>
-            <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-3xl -z-10"></div>
+            <div className="absolute top-0 left-0 w-[500px] h-[500px] max-w-[100vw] bg-primary/5 rounded-full blur-3xl -z-10 overflow-hidden"></div>
+            <div className="absolute bottom-0 right-0 w-[400px] h-[400px] max-w-[100vw] bg-secondary/5 rounded-full blur-3xl -z-10 overflow-hidden"></div>
 
             <div className="container mx-auto px-4 max-w-[1000px]" dir="rtl">
                 {/* Header */}

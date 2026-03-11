@@ -18,8 +18,8 @@ export function HeroSection() {
     >
       {/* Background Decorative Elements - Soft & Minimal */}
       <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-warm-green/3 rounded-full blur-[100px]"></div>
-        <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] bg-golden-orange/5 rounded-full blur-[80px]"></div>
+        <div className="absolute top-0 right-1/4 w-[500px] h-[500px] max-w-[100vw] bg-warm-green/3 rounded-full blur-[100px] overflow-hidden"></div>
+        <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] max-w-[100vw] bg-golden-orange/5 rounded-full blur-[80px] overflow-hidden"></div>
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-12 max-w-7xl z-10">
