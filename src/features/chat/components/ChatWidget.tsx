@@ -13,10 +13,30 @@ export function ChatWidget() {
     const [isOpen, setIsOpen] = useState(false);
     const [showBadge, setShowBadge] = useState(false);
 
+    // Initial badge pop
     useEffect(() => {
         const timer = setTimeout(() => setShowBadge(true), 3000);
         return () => clearTimeout(timer);
     }, []);
+
+    // Manage body scroll lock when chat is open - ONLY on mobile/tablet
+    useEffect(() => {
+        const isMobileOrTablet = window.innerWidth < 1024; // Tailwind 'lg' breakpoint
+        
+        if (isOpen && isMobileOrTablet) {
+            document.body.style.overflow = "hidden";
+            document.documentElement.style.overflow = "hidden"; // for older iOS Safari
+        } else {
+            document.body.style.overflow = "";
+            document.documentElement.style.overflow = "";
+        }
+
+        // Cleanup on unmount
+        return () => {
+            document.body.style.overflow = "";
+            document.documentElement.style.overflow = "";
+        };
+    }, [isOpen]);
 
     const toggleChat = () => {
         setIsOpen(!isOpen);
@@ -25,6 +45,16 @@ export function ChatWidget() {
 
     return (
         <>
+            {/* Backdrop Overlay - Mobile/Tablet only. Completely unmounts when closed. */}
+            {isOpen && (
+                <div 
+                    className="fixed inset-0 z-[9998] bg-black/40 backdrop-blur-sm transition-opacity block lg:hidden"
+                    onClick={() => setIsOpen(false)}
+                    aria-hidden="true"
+                    data-widget="chat-backdrop"
+                />
+            )}
+
             {/* Chat Window - strictly separated from button to avoid nested wrapper bugs */}
             {isOpen && (
                 <div
