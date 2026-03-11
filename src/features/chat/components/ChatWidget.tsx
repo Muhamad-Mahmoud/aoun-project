@@ -75,7 +75,7 @@ export function ChatWidget() {
                     onClick={toggleChat}
                     data-widget="global-chat-button"
                     className={cn(
-                        "group w-14 h-14 sm:w-16 sm:h-16 rounded-[20px] sm:rounded-[22px] flex items-center justify-center transition-all duration-300 shadow-2xl active:scale-95 overflow-hidden ring-4 ring-white/10 shrink-0 relative",
+                        "group w-14 h-14 sm:w-16 sm:h-16 rounded-[20px] sm:rounded-[22px] flex items-center justify-center transition-all duration-300 shadow-2xl active:scale-95 overflow-hidden ring-4 ring-white/10 shrink-0 relative select-none",
                         isOpen
                             ? "bg-muted text-foreground"
                             : "bg-primary/90 backdrop-blur-md text-white hover:bg-warm-green-dark hover:shadow-primary/40 hover:-translate-y-1.5"
@@ -84,9 +84,9 @@ export function ChatWidget() {
                     <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent opacity-50 pointer-events-none" />
 
                     {isOpen ? (
-                        <X className="w-7 h-7 relative z-10" />
+                        <X className="w-7 h-7 relative z-10 pointer-events-none" />
                     ) : (
-                        <div className="relative">
+                        <div className="relative pointer-events-none">
                             <MessageCircle className="w-8 h-8 fill-current opacity-30 absolute -inset-0.5 scale-110 blur-[2px]" />
                             <MessageCircle className="w-8 h-8 relative z-10 drop-shadow-sm" />
                             {showBadge && (

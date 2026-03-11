@@ -2,16 +2,10 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
-import dynamic from "next/dynamic";
 import { Header } from "@/shared/components/layout/Header";
 import { Footer } from "@/shared/components/layout/Footer";
 import { useAuthContext } from "@/shared/providers";
-
-// Lazy load ChatWidget — defers ChatWindow, react-markdown, streaming hook to a separate chunk
-const ChatWidget = dynamic(
-    () => import("@/features/chat/components/ChatWidget").then(m => ({ default: m.ChatWidget })),
-    { ssr: false }
-);
+import { ChatWidget } from "@/features/chat/components/ChatWidget";
 
 export default function LayoutContent({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
