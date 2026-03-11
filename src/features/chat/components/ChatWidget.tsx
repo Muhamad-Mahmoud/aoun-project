@@ -26,14 +26,12 @@ export function ChatWidget() {
         return () => clearTimeout(timer);
     }, [isMounted]);
 
-    // Manage body scroll lock when chat is open - ONLY on mobile/tablet
+    // Manage body scroll lock when chat is open
     useEffect(() => {
         // Run safely only on client side after mount or state change
         if (typeof window === 'undefined') return;
 
-        const isMobileOrTablet = window.innerWidth < 1024; // Tailwind 'lg' breakpoint
-        
-        if (isOpen && isMobileOrTablet) {
+        if (isOpen) {
             document.body.style.overflow = "hidden";
             document.documentElement.style.overflow = "hidden"; // for older iOS Safari
         } else {
@@ -62,7 +60,8 @@ export function ChatWidget() {
             {/* Backdrop Overlay - Mobile/Tablet only. Completely unmounts when closed. */}
             {isOpen && (
                 <div 
-                    className="fixed inset-0 w-screen h-screen z-[9998] bg-black/60 transition-opacity block lg:hidden"
+                    className="fixed inset-0 w-screen h-screen bg-black/60 lg:bg-black/30 transition-opacity block"
+                    style={{ zIndex: 9998, touchAction: 'none', overscrollBehavior: 'contain' }}
                     onClick={() => setIsOpen(false)}
                     aria-hidden="true"
                     data-widget="chat-backdrop"
@@ -72,7 +71,8 @@ export function ChatWidget() {
             {/* Chat Window - strictly separated from button to avoid nested wrapper bugs */}
             {isOpen && (
                 <div
-                    className="fixed bottom-[88px] sm:bottom-[104px] left-6 z-[9999] w-[92vw] sm:w-[420px] h-[min(600px,80vh)] max-h-[80vh] bg-background/95 backdrop-blur-xl rounded-[24px] sm:rounded-[32px] shadow-[0_25px_60px_rgba(0,0,0,0.2)] border border-white/20 overflow-hidden flex flex-col pointer-events-auto"
+                    className="fixed bottom-[88px] sm:bottom-[104px] left-6 w-[92vw] sm:w-[420px] h-[min(600px,80vh)] max-h-[80vh] bg-background/95 backdrop-blur-xl rounded-[24px] sm:rounded-[32px] shadow-[0_25px_60px_rgba(0,0,0,0.2)] border border-white/20 overflow-hidden flex flex-col pointer-events-auto"
+                    style={{ zIndex: 9999 }}
                     dir="rtl"
                     data-widget="global-chat-window"
                 >
@@ -82,10 +82,8 @@ export function ChatWidget() {
 
             {/* Toggle Button - fixed to bottom-left *exactly* where it should be */}
             <div 
-                className={cn(
-                    "fixed bottom-6 left-6 pointer-events-auto flex items-end justify-end",
-                    isOpen ? "z-[9999]" : "z-50"
-                )}
+                className="fixed bottom-6 left-6 pointer-events-auto flex items-end justify-end"
+                style={{ zIndex: isOpen ? 9999 : 50 }}
                 data-widget="global-chat-button-wrapper"
             >
                 <button
