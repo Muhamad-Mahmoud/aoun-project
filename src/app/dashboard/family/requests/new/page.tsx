@@ -121,20 +121,26 @@ export default function NewRequestPage() {
 
                 <DashboardTopBar userType="family" />
 
-                <main className="p-4 sm:p-10 pb-20 pt-20 lg:pt-32 relative z-10">
+                <main className="p-4 sm:px-10 pb-20 pt-20 lg:pt-28 relative z-10">
                     <div className="mx-auto max-w-4xl">
                         {!submitted ? (
-                            <div className="space-y-12">
-                                <div className="space-y-4 text-center">
-                                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary font-bold text-[10px] uppercase tracking-widest">
-                                        <Sparkles className="w-3.5 h-3.5" /> مساعدات رقمية
+                            <div className="space-y-5">
+                                {/* Compact Page Header */}
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                                            <Sparkles className="w-5 h-5" />
+                                        </div>
+                                        <div>
+                                            <h1 className="text-[22px] font-black text-slate-900 tracking-tight leading-tight">طلب مساعدة جديد</h1>
+                                            <p className="text-[13px] text-slate-500 font-medium mt-0.5">أدخل بياناتك بدقة لدراسة حالتك وتحديد نوع الدعم المناسب</p>
+                                        </div>
                                     </div>
-                                    <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 leading-tight">
-                                        طلب مساعدة <span className="text-primary">جديد</span>
-                                    </h1>
-                                    <p className="text-lg text-slate-500 font-medium max-w-xl mx-auto leading-relaxed">
-                                        نحن هنا لنقف بجانبك. املأ البيانات التالية بدقة لنتمكن من دراسة حالتك وتقديم الدعم المناسب.
-                                    </p>
+                                    
+                                    <Link href="/dashboard/family/requests" className="hidden sm:flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-slate-600 transition-colors">
+                                        <ChevronRight className="w-4 h-4" />
+                                        طلباتي 
+                                    </Link>
                                 </div>
 
                                 {validationError && (

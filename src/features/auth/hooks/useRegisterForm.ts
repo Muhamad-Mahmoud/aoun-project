@@ -12,7 +12,6 @@ import { registerFamily, registerAssociation, login } from "../api/authApi";
 import type { RegisterFamilyRequest, RegisterAssociationRequest, LoginCredentials } from "../types";
 import type { ApiError } from "@/lib/api/types";
 import { useAuthContext } from "@/shared/providers";
-import { TOKEN_STORAGE_KEY } from "@/lib/api/config";
 import { ROUTES } from "@/shared/constants/routes";
 import { toast } from "sonner"; // Assuming sonner is used, or use valid notification approach
 
@@ -178,17 +177,12 @@ export const useRegisterForm = () => {
                 logger.debug("Auto-login response received");
 
                 if (loginResponse.token) {
-                    await authLogin(loginResponse.token, loginResponse.refreshToken);
+                    await authLogin(loginResponse.token, loginResponse.refreshToken, loginResponse.user);
 
                     logger.info("Auto-login successful");
                     toast.success("تم إنشاء الحساب وتسجيل الدخول بنجاح");
-
-                    // Force a hard reload to ensure clean state and auth provider re-init
-                    setTimeout(() => {
-                        window.location.href = ROUTES.HOME;
-                    }, 500);
+                    router.replace(ROUTES.DASHBOARD.HOME);
                 } else {
-                    // Fallback if no token returned
                     toast.success("تم إنشاء الحساب بنجاح");
                     router.push(ROUTES.AUTH.LOGIN);
                 }

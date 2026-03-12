@@ -5,7 +5,8 @@
 
 import { apiClient } from '@/lib/api/client';
 import { API_ENDPOINTS } from '@/lib/api/config';
-import type { ApiResponse } from '@/lib/api/types'; // You might need to check if this exists/matches
+import type { ApiError, ApiResponse } from '@/lib/api/types';
+import { logger } from '@/lib/logger';
 import type {
     LoginCredentials,
     LoginResponse,
@@ -18,6 +19,13 @@ import type {
     RefreshTokenRequest,
     AuthUser,
 } from '../types';
+
+function isUnauthorizedError(error: unknown): error is ApiError {
+    return typeof error === 'object' &&
+        error !== null &&
+        'statusCode' in error &&
+        (error as ApiError).statusCode === 401;
+}
 
 /**
  * Login user with credentials
@@ -95,6 +103,28 @@ export async function resetPassword(data: ResetPasswordRequest): Promise<void> {
  * Refresh authentication token
  */
 export async function refreshToken(data: RefreshTokenRequest): Promise<string> {
+    if (typeof window !== 'undefined') {
+        const response = await fetch('/api/auth/refresh', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'Accept': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            const payload = await response.json().catch(() => null);
+            throw {
+                message: payload?.message || 'Failed to refresh session',
+                statusCode: response.status,
+                errors: payload?.errors,
+            } satisfies ApiError;
+        }
+
+        const payload = await response.json().catch(() => null);
+        return payload?.token;
+    }
+
     const response = await apiClient.post<ApiResponse<{ token: string }>>(
         API_ENDPOINTS.auth.refresh,
         data // Backend likely needs the old token/refresh token
@@ -106,35 +136,31 @@ export async function refreshToken(data: RefreshTokenRequest): Promise<string> {
  * Get current user session
  */
 export async function getCurrentUser(): Promise<AuthUser | null> {
-    // Rely on token interceptors and cookie mechanics on the edge.
-    // Assuming interceptors append the cookie for SSR/CSR context, we hit the API.
-    // If we're strictly on client side, we can also query the token action if needed.
-
     try {
-        const response = await apiClient.get<ApiResponse<AuthUser & { userType?: string }>>(API_ENDPOINTS.auth.me);
-
-        // Backend might return { data: User } or just User
-        // Safe check
-        const userData = response.data.data || response.data;
+        const response = await apiClient.get(API_ENDPOINTS.auth.me);
+        const responseData = response.data as any;
+        const userData = responseData?.data?.data || responseData?.data || responseData;
 
         if (!userData || !userData.id) {
-            console.warn('getCurrentUser: Invalid user data received', response.data);
+            logger.warn('getCurrentUser returned an invalid payload', responseData);
             return null;
         }
 
-        // Map API response to AuthUser format
-        // API returns "userType" but we use "role" in the frontend
         const authUser: AuthUser = {
             id: userData.id,
             email: userData.email,
-            name: userData.name,
-            role: userData.userType || userData.role || 'Family' // Map userType to role
+            name: userData.name || userData.firstName || 'مستخدم',
+            role: userData.userType || userData.role || 'Family'
         };
 
         return authUser;
     } catch (error) {
-        // console.error('getCurrentUser failed', error);
-        return null;
+        if (isUnauthorizedError(error)) {
+            return null;
+        }
+
+        logger.error('getCurrentUser API call failed', error);
+        throw error;
     }
 }
 
@@ -142,11 +168,25 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
  * Check if user is authenticated (Server/Client boundary safe via token presence checking)
  */
 export async function isAuthenticated(): Promise<boolean> {
-    if (typeof window !== 'undefined') {
-        const { getSecureToken } = await import('@/lib/security/tokenStorage');
-        const token = await getSecureToken('auth_token');
-        return !!token;
+    if (typeof window === 'undefined') {
+        return false;
     }
-    return false;
+
+    try {
+        const response = await fetch('/api/auth/session', {
+            method: 'GET',
+            credentials: 'same-origin',
+            cache: 'no-store',
+        });
+
+        if (!response.ok) {
+            return false;
+        }
+
+        const payload = await response.json().catch(() => null);
+        return Boolean(payload?.authenticated);
+    } catch {
+        return false;
+    }
 }
 

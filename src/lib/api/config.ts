@@ -1,6 +1,9 @@
 export const API_CONFIG = {
-    // Point to external API
-    baseURL: process.env.NEXT_PUBLIC_API_URL || '',
+    // Browser requests should go through the Next.js proxy so HttpOnly auth cookies
+    // can be translated into Authorization headers in middleware.
+    baseURL: typeof window === 'undefined'
+        ? (process.env.NEXT_PUBLIC_API_URL || '')
+        : '/api/proxy',
     // AI / Gemini backend (separate service)
     aiBaseURL: process.env.NEXT_PUBLIC_AI_API_URL || '',
     version: 'v1',

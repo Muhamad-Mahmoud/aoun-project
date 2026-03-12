@@ -6,10 +6,9 @@
 import { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import { ApiError } from './types';
 import { logger } from '../logger';
-import { refreshToken } from '@/features/auth/api/authApi';
-import { ROUTES, PUBLIC_ROUTES } from '@/shared/constants/routes';
+import { PUBLIC_ROUTES } from '@/shared/constants/routes';
 import { TOKEN_STORAGE_KEY, REFRESH_TOKEN_STORAGE_KEY, API_ENDPOINTS } from './config';
-import { getSecureToken, setSecureToken, removeSecureToken } from '../security/tokenStorage';
+import { removeSecureToken } from '../security/tokenStorage';
 import { sanitizeLogData } from '../security/sanitize';
 import { APP_EVENTS, dispatchAppEvent } from '../../shared/utils/events';
 
@@ -31,28 +30,6 @@ export function setupRequestInterceptors(axiosInstance: AxiosInstance) {
                 if (!(config.data instanceof FormData)) {
                     // للبيانات العادية (JSON)، عيّن Content-Type
                     config.headers['Content-Type'] = 'application/json';
-                }
-            }
-
-            // Define public endpoints that don't need auth token
-            const publicEndpoints = [
-                API_ENDPOINTS.auth.login,
-                API_ENDPOINTS.auth.registerFamily,
-                API_ENDPOINTS.auth.registerAssociation,
-                API_ENDPOINTS.auth.forgotPassword,
-                API_ENDPOINTS.auth.resetPassword,
-                API_ENDPOINTS.auth.verifyResetCode,
-            ];
-
-            // Check if current request URL matches any public endpoint
-            const isPublicEndpoint = config.url && publicEndpoints.some(endpoint => config.url?.includes(endpoint));
-
-            // Attach token if available and NOT a public endpoint
-            if (typeof window !== 'undefined' && !isPublicEndpoint) {
-                // Use encrypted token storage
-                const token = await getSecureToken(TOKEN_STORAGE_KEY);
-                if (token) {
-                    config.headers.Authorization = `Bearer ${token}`;
                 }
             }
 
@@ -97,23 +74,33 @@ export function setupResponseInterceptors(axiosInstance: AxiosInstance) {
             const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
 
             // Handle 401 Unauthorized - try token refresh
-            // Skip refresh logic for login endpoint to avoid loops
             const isLoginRequest = originalRequest.url?.includes(API_ENDPOINTS.auth.login);
+            const isRefreshRequest = originalRequest.url?.includes('/api/auth/refresh') ||
+                originalRequest.url?.includes(API_ENDPOINTS.auth.refresh);
 
-            if (error.response?.status === 401 && !originalRequest._retry && !isLoginRequest) {
+            if (error.response?.status === 401 && !originalRequest._retry && !isLoginRequest && !isRefreshRequest) {
                 originalRequest._retry = true;
 
                 try {
-                    // Get refresh token from encrypted storage
-                    const refreshTokenValue = typeof window !== 'undefined'
-                        ? await getSecureToken(REFRESH_TOKEN_STORAGE_KEY)
-                        : null;
+                    if (typeof window === 'undefined') {
+                        return Promise.reject(error);
+                    }
 
-                    if (!refreshTokenValue) {
-                        // No refresh token available, user needs to re-login
-                        if (typeof window !== 'undefined') {
+                    const refreshResponse = await fetch('/api/auth/refresh', {
+                        method: 'POST',
+                        credentials: 'same-origin',
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                    });
+
+                    const refreshPayload = await refreshResponse.json().catch(() => null);
+
+                    if (!refreshResponse.ok) {
+                        if (refreshResponse.status === 401) {
                             await removeSecureToken(TOKEN_STORAGE_KEY);
-                            // Only redirect if on a protected page
+                            await removeSecureToken(REFRESH_TOKEN_STORAGE_KEY);
+
                             const currentPath = window.location.pathname;
                             const isPublicPage = PUBLIC_ROUTES.some(route => currentPath === route);
 
@@ -121,40 +108,20 @@ export function setupResponseInterceptors(axiosInstance: AxiosInstance) {
                                 dispatchAppEvent(APP_EVENTS.AUTH_UNAUTHORIZED);
                             }
                         }
-                        return Promise.reject(error);
+
+                        return Promise.reject(refreshPayload ?? error);
                     }
 
-                    // Attempt to refresh the token
-                    const currentToken = await getSecureToken(TOKEN_STORAGE_KEY);
-                    const response = await refreshToken({
-                        token: currentToken || '',
-                        refreshToken: refreshTokenValue
-                    });
+                    const refreshedToken = refreshPayload?.token;
+                    const usesProxy = originalRequest.baseURL?.startsWith('/api/proxy');
 
-                    // Save new token using encrypted storage
-                    if (response && typeof window !== 'undefined') {
-                        await setSecureToken(TOKEN_STORAGE_KEY, response);
-
-                        // Retry original request with new token
-                        if (originalRequest.headers) {
-                            originalRequest.headers.Authorization = `Bearer ${response}`;
-                        }
-                        return axiosInstance(originalRequest);
+                    if (refreshedToken && originalRequest.headers && !usesProxy) {
+                        originalRequest.headers.Authorization = `Bearer ${refreshedToken}`;
                     }
+
+                    return axiosInstance(originalRequest);
                 } catch (refreshError) {
-                    // Refresh failed, redirect to login
                     logger.error('Token refresh failed', refreshError);
-                    if (typeof window !== 'undefined') {
-                        await removeSecureToken(TOKEN_STORAGE_KEY);
-                        await removeSecureToken(REFRESH_TOKEN_STORAGE_KEY);
-                        // Only redirect if on a protected page
-                        const currentPath = window.location.pathname;
-                        const isPublicPage = PUBLIC_ROUTES.some(route => currentPath === route);
-
-                        if (!isPublicPage) {
-                            dispatchAppEvent(APP_EVENTS.AUTH_UNAUTHORIZED);
-                        }
-                    }
                     return Promise.reject(refreshError);
                 }
             }
@@ -209,7 +176,7 @@ export function setupResponseInterceptors(axiosInstance: AxiosInstance) {
                     statusText: error.response?.statusText,
                     url: error.response?.config.url,
                 });
-                logger.debug('Response Data:', responseData);
+                logger.debug('Response Data:', JSON.stringify(responseData, null, 2));
                 logger.debug('Extracted Message:', message);
             }
 

@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAuthContext } from "@/shared/providers";
 import { Loader2 } from "lucide-react";
+import { ROUTES } from "@/shared/constants/routes";
 
 export default function DashboardLayout({
     children,
@@ -12,12 +13,14 @@ export default function DashboardLayout({
 }) {
     const { isAuthenticated, isLoading } = useAuthContext();
     const router = useRouter();
+    const pathname = usePathname();
 
     useEffect(() => {
         if (!isLoading && !isAuthenticated) {
-            router.push("/login");
+            const redirect = pathname || "/dashboard";
+            router.replace(`${ROUTES.AUTH.LOGIN}?redirect=${encodeURIComponent(redirect)}`);
         }
-    }, [isLoading, isAuthenticated, router]);
+    }, [isLoading, isAuthenticated, pathname, router]);
 
     if (isLoading) {
         return (

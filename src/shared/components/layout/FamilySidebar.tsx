@@ -68,20 +68,20 @@ export function FamilySidebarContent() {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center justify-between p-3.5 rounded-xl transition-all duration-300 group",
+                "flex items-center justify-between py-3.5 px-4 transition-all duration-300 group",
                 isActive
-                  ? "bg-primary/10 text-primary shadow-sm border border-primary/20"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  ? "bg-emerald-50 text-emerald-600 border-r-4 border-r-emerald-500 rounded-s-xl"
+                  : "text-slate-500 hover:bg-slate-50 hover:text-slate-900 rounded-xl border-r-4 border-transparent"
               )}
             >
               <div className="flex items-center gap-3">
                 <div className={cn(
                   "p-2 rounded-lg transition-colors",
-                  isActive ? "bg-primary text-white" : "bg-muted group-hover:bg-primary/10 group-hover:text-primary"
+                  isActive ? "bg-emerald-500 text-white shadow-sm" : "bg-white border border-slate-100 group-hover:bg-slate-100 group-hover:text-slate-900"
                 )}>
                   <Icon className="w-5 h-5" />
                 </div>
-                <span className="font-bold text-sm">{item.label}</span>
+                <span className="font-bold text-sm tracking-wide">{item.label}</span>
               </div>
               {isActive && <ChevronLeft className="w-4 h-4" />}
             </Link>

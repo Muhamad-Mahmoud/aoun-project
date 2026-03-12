@@ -86,9 +86,16 @@ export const housingLabels: Record<number, string> = {
 };
 
 export const workingTypeLabels: Record<number, string> = {
-    1: "قطاع حكومي", 2: "قطاع خاص", 3: "عمل حر",
+    0: "دوام كامل",
+    1: "دوام جزئي",
+    2: "عقد مؤقت",
+    3: "عمل حر",
+    4: "متدرب",
 };
 
 export const employmentTypeLabels: Record<number, string> = {
-    1: "دوام كامل", 2: "دوام جزئي", 3: "عقد مؤقت",
+    0: "قطاع خاص",
+    1: "قطاع حكومي",
+    2: "منظمة غير ربحية",
+    3: "عمل حر/مستقل",
 };

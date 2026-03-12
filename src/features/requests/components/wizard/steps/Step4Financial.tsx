@@ -1,275 +1,297 @@
-"use client";
-
 import { Control } from "react-hook-form";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
 import { Input } from "@/shared/ui/input";
-import { Checkbox } from "@/shared/ui/checkbox";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
+import { Switch } from "@/shared/ui/switch";
 import { RequestFormData } from "../schemas/requestSchema";
+import { Wallet, Receipt, Home, Building2 } from "lucide-react";
+import { cn } from "@/shared/utils";
 
 interface Step4FinancialProps {
     control: Control<RequestFormData>;
-    hasOtherCommitments: boolean;
     registeredSocialSupport: boolean;
     housingType: number;
+    hasOtherCommitments: boolean;
 }
 
-export function Step4Financial({ control, hasOtherCommitments, registeredSocialSupport, housingType }: Step4FinancialProps) {
-    const isRent = housingType === 1;
+export function Step4Financial({ control, registeredSocialSupport, housingType, hasOtherCommitments }: Step4FinancialProps) {
+    
+    // Helper for input styling
+    const inputClassName = "h-12 rounded-xl border-slate-200 bg-white hover:border-slate-300 focus:bg-white focus:ring-2 focus:ring-warm-green/10 focus:border-warm-green/40 shadow-sm transition-all duration-300 px-4 text-[14px] font-medium placeholder:text-slate-400";
+    
+    // Helper for section headers
+    const SectionHeader = ({ title, icon: Icon }: { title: string, icon: any }) => (
+        <div className="flex items-center gap-2 mb-4 pb-3 border-b border-slate-100/80">
+            <div className="w-7 h-7 rounded-lg bg-warm-green/10 flex items-center justify-center text-warm-green">
+                <Icon className="w-3.5 h-3.5" />
+            </div>
+            <h4 className="text-[15px] font-black text-slate-800">{title}</h4>
+        </div>
+    );
 
     return (
-        <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Housing Type */}
-                <FormField
-                    control={control}
-                    name="housingType"
-                    render={({ field }) => (
-                        <FormItem className="text-start col-span-full">
-                            <FormLabel className="text-sm font-bold text-slate-800 flex items-center gap-2">
-                                <div className="w-1 h-3.5 bg-warm-green rounded-full" />
-                                نوع السكن <span className="text-red-500 mr-1">*</span>
-                            </FormLabel>
-                            <Select
-                                onValueChange={(val) => field.onChange(Number(val))}
-                                value={field.value?.toString() ?? ""}
-                            >
-                                <SelectTrigger className="rounded-xl h-12">
-                                    <SelectValue placeholder="اختر نوع السكن" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="0">ملك</SelectItem>
-                                    <SelectItem value="1">إيجار</SelectItem>
-                                    <SelectItem value="2">مستضاف</SelectItem>
-                                    <SelectItem value="3">إيواء اضطراري</SelectItem>
-                                    <SelectItem value="4">أخرى</SelectItem>
-                                </SelectContent>
-                            </Select>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
-                {/* Has Car */}
-                <FormField
-                    control={control}
-                    name="hasCar"
-                    render={({ field }) => (
-                        <FormItem className="space-y-2 col-span-full">
-                            <div className="flex items-center gap-3 p-4 bg-slate-50/50 rounded-2xl border border-slate-100">
-                                <FormControl>
-                                    <Checkbox
-                                        checked={!!field.value}
-                                        onCheckedChange={(checked) => field.onChange(checked === true)}
-                                    />
-                                </FormControl>
-                                <FormLabel className="text-sm font-bold text-slate-800">
-                                    هل تمتلك سيارة؟ <span className="text-red-500 mr-1">*</span>
+        <div className="space-y-6 sm:space-y-8">
+            
+            {/* 1. Basic Expenses Section */}
+            <div className="bg-slate-50/50 p-4 sm:p-5 rounded-[1.5rem] border border-slate-100/80 shadow-sm">
+                <SectionHeader title="المصروفات الأساسية" icon={Wallet} />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                    <FormField
+                        control={control}
+                        name="monthlyExpenses"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel className="text-[13px] font-bold text-slate-700">
+                                    إجمالي المصاريف الشهرية <span className="text-rose-500">*</span>
                                 </FormLabel>
-                            </div>
-                            <FormMessage className="px-4" />
-                        </FormItem>
-                    )}
-                />
-
-                {/* Monthly Expenses */}
-                <FormField
-                    control={control}
-                    name="monthlyExpenses"
-                    render={({ field }) => (
-                        <FormItem className="text-start">
-                            <FormLabel className="text-xs font-bold text-slate-700">المصاريف الشهرية الكلية</FormLabel>
-                            <FormControl>
-                                <Input type="number" placeholder="المبلغ بالجنيه" className="rounded-xl h-11" {...field} value={field.value ?? ""} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
-                {/* Monthly Rent */}
-                <FormField
-                    control={control}
-                    name="rentMonthly"
-                    render={({ field }) => (
-                        <FormItem className="text-start">
-                            <FormLabel className="text-xs font-bold text-slate-700">
-                                الإيجار الشهري {isRent && <span className="text-red-500 mr-1">*</span>}
-                            </FormLabel>
-                            <FormControl>
-                                <Input type="number" className="rounded-xl h-11" placeholder="المبلغ بالجنيه" {...field} value={field.value ?? ""} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-            </div>
-
-            {/* Other Commitments Section */}
-            <div className="space-y-4 pt-4 border-t border-slate-100">
-                <FormField
-                    control={control}
-                    name="hasOtherCommitments"
-                    render={({ field }) => (
-                        <FormItem className="space-y-2">
-                            <div className="flex items-center gap-3 p-4 bg-slate-50/50 rounded-2xl border border-slate-100">
                                 <FormControl>
-                                    <Checkbox
-                                        checked={!!field.value}
-                                        onCheckedChange={(checked) => field.onChange(checked === true)}
-                                    />
-                                </FormControl>
-                                <FormLabel className="text-sm font-bold text-slate-800">
-                                    عليك التزامات أو ديون أخرى؟ <span className="text-red-500 mr-1">*</span>
-                                </FormLabel>
-                            </div>
-                            <FormMessage className="px-4" />
-                        </FormItem>
-                    )}
-                />
-                
-                {hasOtherCommitments && (
-                    <div className="flex gap-4 px-4 bg-slate-50 p-4 rounded-xl">
-                        <FormField
-                            control={control}
-                            name="otherCommitmentsType"
-                            render={({ field }) => (
-                                <FormItem className="flex-1 shrink-0">
-                                    <FormLabel className="text-xs font-bold mb-2 block text-slate-700">
-                                        نوع الالتزام <span className="text-red-500 mr-1">*</span>
-                                    </FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="مثال: دين شخصي"
-                                            className="rounded-xl h-10"
-                                            {...field}
-                                            value={field.value ?? ""}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={control}
-                            name="otherCommitmentsAmount"
-                            render={({ field }) => (
-                                <FormItem className="w-32 shrink-0">
-                                    <FormLabel className="text-xs font-bold mb-2 block text-slate-700">
-                                        المبلغ <span className="text-red-500 mr-1">*</span>
-                                    </FormLabel>
-                                    <FormControl>
+                                    <div className="relative">
                                         <Input
                                             type="number"
-                                            placeholder="00"
-                                            className="rounded-xl h-10"
+                                            placeholder="مثال: 3500"
+                                            className={inputClassName}
                                             {...field}
                                             value={field.value ?? ""}
+                                            onChange={e => field.onChange(e.target.valueAsNumber || 0)}
                                         />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
-                )}
-
-                {/* Social Support */}
-                <FormField
-                    control={control}
-                    name="registeredSocialSupport"
-                    render={({ field }) => (
-                        <FormItem className="space-y-2 pt-4 border-t border-slate-100">
-                            <div className="flex items-center gap-3 p-4 bg-slate-50/50 rounded-2xl border border-slate-100">
-                                <FormControl>
-                                    <Checkbox
-                                        checked={!!field.value}
-                                        onCheckedChange={(checked) => field.onChange(checked === true)}
-                                    />
+                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">ريال</span>
+                                    </div>
                                 </FormControl>
-                                <FormLabel className="text-sm font-bold text-slate-800">
-                                    مسجل في الدعم الاجتماعي؟ <span className="text-red-500 mr-1">*</span>
-                                </FormLabel>
-                            </div>
-                            <FormMessage className="px-4" />
-                        </FormItem>
-                    )}
-                />
-                {registeredSocialSupport && (
+                                <FormMessage className="text-rose-500 text-xs" />
+                            </FormItem>
+                        )}
+                    />
+
                     <FormField
                         control={control}
-                        name="socialSupportAmount"
+                        name="utilitiesMonthly"
                         render={({ field }) => (
-                            <FormItem className="px-4 bg-slate-50 p-4 rounded-xl">
-                                <FormLabel className="text-xs font-bold mb-2 block text-slate-700">
-                                    مبلغ الدعم الشهري <span className="text-red-500 mr-1">*</span>
+                            <FormItem>
+                                <FormLabel className="text-[13px] font-bold text-slate-700">
+                                    فواتير الخدمات الشهرية (كهرباء، ماء...) <span className="text-rose-500">*</span>
                                 </FormLabel>
                                 <FormControl>
-                                    <Input
-                                        type="number"
-                                        placeholder="المبلغ بالجنيه"
-                                        className="rounded-xl h-10"
-                                        {...field}
-                                        value={field.value ?? ""}
-                                    />
+                                    <div className="relative">
+                                        <Input
+                                            type="number"
+                                            placeholder="مثال: 450"
+                                            className={inputClassName}
+                                            {...field}
+                                            value={field.value ?? ""}
+                                            onChange={e => field.onChange(e.target.valueAsNumber || 0)}
+                                        />
+                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">ريال</span>
+                                    </div>
                                 </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                )}
-            </div>
-
-            {/* Other Aid Section */}
-            <div className="space-y-4 pt-4 border-t border-slate-100">
-                <FormLabel className="text-sm font-bold text-slate-800 flex items-center gap-2">
-                    <div className="w-1 h-3.5 bg-warm-green rounded-full" />
-                    هل تتلقى مساعدات من جهات أخرى؟ (جمعيات / أفراد)
-                </FormLabel>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-slate-50/50 p-4 rounded-xl border border-dashed border-slate-200">
-                    {/* Provider */}
-                    <FormField
-                        control={control}
-                        name="otherAidProviders"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel className="text-xs font-bold text-slate-700">الجهة المقدمة للمساعدة</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="اسم الجمعية / الشخص" className="rounded-xl" {...field} value={field.value ?? ""} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    {/* Type */}
-                    <FormField
-                        control={control}
-                        name="otherAidType"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel className="text-xs font-bold text-slate-700">نوع المساعدة</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="مالية / عينية / ..." className="rounded-xl" {...field} value={field.value ?? ""} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    {/* Amount */}
-                    <FormField
-                        control={control}
-                        name="otherAidAmount"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel className="text-xs font-bold text-slate-700">مبلغ المساعدة (تقريبي)</FormLabel>
-                                <FormControl>
-                                    <Input type="number" placeholder="00" className="rounded-xl" {...field} value={field.value ?? ""} />
-                                </FormControl>
-                                <FormMessage />
+                                <FormMessage className="text-rose-500 text-xs" />
                             </FormItem>
                         )}
                     />
                 </div>
+            </div>
+
+            {/* 2. Housing & Accommodations */}
+            <div className="bg-slate-50/50 p-4 sm:p-5 rounded-[1.5rem] border border-slate-100/80 shadow-sm">
+                <SectionHeader title="الوضع السكني والإيجارات" icon={Home} />
+                
+                <FormField
+                    control={control}
+                    name="housingType"
+                    render={({ field }) => (
+                        <FormItem className="mb-5">
+                            <FormLabel className="text-[13px] font-bold text-slate-700 mb-2.5 block">
+                                نوع السكن الحالي <span className="text-rose-500">*</span>
+                            </FormLabel>
+                            <FormControl>
+                                <div className="grid grid-cols-2 lg:grid-cols-5 gap-2.5">
+                                    {[
+                                        { val: 0, label: "ملك" },
+                                        { val: 1, label: "إيجار" },
+                                        { val: 2, label: "استضافة" },
+                                        { val: 3, label: "سكن طوارئ" },
+                                        { val: 4, label: "أخرى" },
+                                    ].map((opt) => {
+                                        const isActive = field.value === opt.val;
+                                        return (
+                                            <div
+                                                key={opt.val}
+                                                onClick={() => field.onChange(opt.val)}
+                                                className={cn(
+                                                    "cursor-pointer text-center py-2.5 px-3 rounded-lg border-2 font-bold text-[13px] transition-all duration-200 select-none",
+                                                    isActive
+                                                        ? "bg-warm-green/10 border-warm-green text-warm-green shadow-[0_2px_10px_rgba(134,181,65,0.1)]"
+                                                        : "bg-white border-slate-100 text-slate-600 hover:border-slate-200 hover:bg-slate-50/80"
+                                                )}
+                                            >
+                                                {opt.label}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </FormControl>
+                            <FormMessage className="text-rose-500 text-xs" />
+                        </FormItem>
+                    )}
+                />
+
+                {/* Show Rent only if housing is Rented (1) */}
+                {housingType === 1 && (
+                    <FormField
+                        control={control}
+                        name="rentMonthly"
+                        render={({ field }) => (
+                            <FormItem className="pt-2 animate-in fade-in slide-in-from-top-2">
+                                <FormLabel className="text-[13px] font-bold text-slate-700">
+                                    قيمة الإيجار الشهري <span className="text-rose-500">*</span>
+                                </FormLabel>
+                                <FormControl>
+                                    <div className="relative md:max-w-sm">
+                                        <Input
+                                            type="number"
+                                            placeholder="أدخل قيمة الإيجار"
+                                            className={inputClassName}
+                                            {...field}
+                                            value={field.value ?? ""}
+                                            onChange={e => field.onChange(e.target.valueAsNumber || 0)}
+                                        />
+                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">ريال</span>
+                                    </div>
+                                </FormControl>
+                                <FormMessage className="text-rose-500 text-xs" />
+                            </FormItem>
+                        )}
+                    />
+                )}
+            </div>
+
+            {/* 3. Support & Commitments (Grid) */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                
+                {/* Social Support Block */}
+                <div className="bg-slate-50/50 p-4 sm:p-5 rounded-[1.5rem] border border-slate-100/80 shadow-sm flex flex-col">
+                    <div className="flex items-center justify-between mb-5">
+                        <div className="flex items-center gap-2">
+                            <div className="w-7 h-7 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500">
+                                <Building2 className="w-3.5 h-3.5" />
+                            </div>
+                            <h4 className="text-[14px] font-black text-slate-800">الضمان الاجتماعي</h4>
+                        </div>
+                        <FormField
+                            control={control}
+                            name="registeredSocialSupport"
+                            render={({ field }) => (
+                                <FormItem className="flex items-center m-0 space-y-0">
+                                    <FormControl>
+                                        <Switch
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                            className="data-[state=checked]:bg-blue-500 scale-90"
+                                        />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+                    
+                    {registeredSocialSupport && (
+                        <FormField
+                            control={control}
+                            name="socialSupportAmount"
+                            render={({ field }) => (
+                                <FormItem className="mt-auto animate-in fade-in zoom-in-95">
+                                    <FormLabel className="text-[12px] font-bold text-slate-600">القيمة الشهرية للدعم</FormLabel>
+                                    <FormControl>
+                                        <div className="relative">
+                                            <Input
+                                                type="number"
+                                                placeholder="0"
+                                                className={cn(inputClassName, "focus:ring-blue-500/10 focus:border-blue-500/40")}
+                                                {...field}
+                                                value={field.value ?? ""}
+                                                onChange={e => field.onChange(e.target.valueAsNumber || null)}
+                                            />
+                                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400">ريال</span>
+                                        </div>
+                                    </FormControl>
+                                    <FormMessage className="text-xs text-rose-500" />
+                                </FormItem>
+                            )}
+                        />
+                    )}
+                </div>
+
+                {/* Other Commitments Block */}
+                <div className="bg-slate-50/50 p-4 sm:p-5 rounded-[1.5rem] border border-slate-100/80 shadow-sm flex flex-col">
+                    <div className="flex items-center justify-between mb-5">
+                        <div className="flex items-center gap-2">
+                            <div className="w-7 h-7 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-500">
+                                <Receipt className="w-3.5 h-3.5" />
+                            </div>
+                            <h4 className="text-[14px] font-black text-slate-800">التزامات وقروض</h4>
+                        </div>
+                        <FormField
+                            control={control}
+                            name="hasOtherCommitments"
+                            render={({ field }) => (
+                                <FormItem className="flex items-center m-0 space-y-0">
+                                    <FormControl>
+                                        <Switch
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                            className="data-[state=checked]:bg-purple-500 scale-90"
+                                        />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+                    
+                    {hasOtherCommitments && (
+                        <div className="grid grid-cols-2 gap-3 mt-auto animate-in fade-in zoom-in-95">
+                            <FormField
+                                control={control}
+                                name="otherCommitmentsType"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="text-[12px] font-bold text-slate-600">نوع الالتزام</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="قرض، أقساط..."
+                                                className={cn(inputClassName, "focus:ring-purple-500/10 focus:border-purple-500/40")}
+                                                {...field}
+                                                value={field.value ?? ""}
+                                            />
+                                        </FormControl>
+                                        <FormMessage className="text-xs text-rose-500" />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={control}
+                                name="otherCommitmentsAmount"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="text-[12px] font-bold text-slate-600">القيمة الشهرية</FormLabel>
+                                        <FormControl>
+                                            <div className="relative">
+                                                <Input
+                                                    type="number"
+                                                    placeholder="0"
+                                                    className={cn(inputClassName, "focus:ring-purple-500/10 focus:border-purple-500/40 pr-3 pl-10")}
+                                                    {...field}
+                                                    value={field.value ?? ""}
+                                                    onChange={e => field.onChange(e.target.valueAsNumber || null)}
+                                                />
+                                                <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400">ريال</span>
+                                            </div>
+                                        </FormControl>
+                                        <FormMessage className="text-xs text-rose-500" />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                    )}
+                </div>
+
             </div>
         </div>
     );

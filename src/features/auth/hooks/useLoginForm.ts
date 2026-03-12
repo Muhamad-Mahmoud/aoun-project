@@ -6,7 +6,7 @@
  */
 
 import { useState, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { logger } from "@/lib/logger";
@@ -21,6 +21,7 @@ export const useLoginForm = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
+    const searchParams = useSearchParams();
     const { login: authLogin } = useAuthContext();
 
     const form = useForm<LoginSchema>({
@@ -36,6 +37,16 @@ export const useLoginForm = () => {
         setShowPassword((prev) => !prev);
     }, []);
 
+    const getRedirectTarget = useCallback(() => {
+        const redirect = searchParams?.get('redirect');
+
+        if (redirect && redirect.startsWith('/') && !redirect.startsWith('//')) {
+            return redirect;
+        }
+
+        return ROUTES.DASHBOARD.HOME;
+    }, [searchParams]);
+
     const onSubmit = async (data: LoginSchema) => {
         setIsLoading(true);
         setError(null);
@@ -44,11 +55,10 @@ export const useLoginForm = () => {
             const response = await login(data);
             logger.debug("Login successful", { userId: response.user.id });
 
-            // Update Auth Context and Storage (Fetches user details internally)
-            await authLogin(response.token, response.refreshToken);
+            // Update Auth Context and Storage (Saves user to avoid fetching it again)
+            await authLogin(response.token, response.refreshToken, response.user);
 
-            // Redirect to home or dashboard
-            router.push(ROUTES.HOME);
+            router.replace(getRedirectTarget());
         } catch (err) {
             const apiError = err as ApiError;
             const errorMessage = apiError.message || 'فشل تسجيل الدخول. يرجى المحاولة مرة أخرى.';

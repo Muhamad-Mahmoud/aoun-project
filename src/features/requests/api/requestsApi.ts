@@ -17,21 +17,115 @@ import type {
 export async function createRequest(payload: CreateAidRequestPayload): Promise<AidRequest> {
     const formData = new FormData();
 
-    // Append regular fields (convert camelCase → PascalCase for ASP.NET)
+    // Map camelCase to PascalCase for API compatibility
+    const fieldMapping: Record<string, string> = {
+        requestType: 'RequestType',
+        otherRequestType: 'OtherRequestType',
+        description: 'Description',
+        isWorking: 'IsWorking',
+        workingType: 'WorkingType',
+        employmentType: 'EmploymentType',
+        jobTitle: 'JobTitle',
+        company: 'Company',
+        salaryMonthly: 'SalaryMonthly',
+        workDescription: 'WorkDescription',
+        unEmploymentReason: 'UnEmploymentReason',
+        hasInsurance: 'HasInsurance',
+        insuranceType: 'InsuranceType',
+        hasDisability: 'HasDisability',
+        disabilityType: 'DisabilityType',
+        hasChronicDisease: 'HasChronicDisease',
+        chronicDiseaseType: 'ChronicDiseaseType',
+        medicalCostMonthly: 'MedicalCostMonthly',
+        housingType: 'HousingType',
+        rentMonthly: 'RentMonthly',
+        hasCar: 'HasCar',
+        monthlyExpenses: 'MonthlyExpenses',
+        utilitiesMonthly: 'UtilitiesMonthly',
+        registeredSocialSupport: 'RegisteredSocialSupport',
+        socialSupportAmount: 'SocialSupportAmount',
+        otherAidProviders: 'OtherAidProviders',
+        otherAidType: 'OtherAidType',
+        otherAidAmount: 'OtherAidAmount',
+        location: 'Location',
+        yearsAtJob: 'YearsAtJob',
+        estimatedIncomeMonthly: 'EstimatedIncomeMonthly',
+        isLookingForJob: 'IsLookingForJob',
+        needsTraining: 'NeedsTraining',
+        workLocation: 'WorkLocation',
+        hasOtherCommitments: 'HasOtherCommitments',
+        otherCommitmentsType: 'OtherCommitmentsType',
+        otherCommitmentsAmount: 'OtherCommitmentsAmount',
+        householdMonthlySpending: 'HouseholdMonthlySpending',
+        annualPayment: 'AnnualPayment',
+    };
+
+    // Log the raw payload for deep debugging
+    console.log('🔍 [DEBUG] RAW PAYLOAD:', JSON.stringify(payload, null, 2));
+
     Object.entries(payload).forEach(([key, value]) => {
         if (key === 'attachments') return;
-        const pascalKey = key.charAt(0).toUpperCase() + key.slice(1);
-        if (value !== undefined && value !== null && value !== '') {
-            formData.append(pascalKey, typeof value === 'boolean' ? value.toString() : String(value));
+        
+        const apiFieldName = fieldMapping[key] || (key.charAt(0).toUpperCase() + key.slice(1));
+        
+        // --- 1. MANDATORY FIELDS (STRICT SWAGGER ALIGNMENT) ---
+        // These are the ONLY 10 fields marked 'required' in the Swagger POST /api/Requests DTO.
+        const mandatoryApiFields = [
+            'Description', 'HasCar', 'HasChronicDisease', 'HasDisability', 
+            'HasInsurance', 'HasOtherCommitments', 'HousingType', 
+            'IsWorking', 'RegisteredSocialSupport', 'RequestType'
+        ];
+
+        if (mandatoryApiFields.includes(apiFieldName)) {
+            // Send as-is
+            const valToSend = (value === null || value === undefined) ? "" : value.toString();
+            formData.append(apiFieldName, valToSend);
+            return;
         }
+
+        // --- 2. SURGICAL FILTERING FOR OPTIONAL FIELDS ---
+        // We only send purely optional fields if they have a non-default, non-empty value.
+        // This avoids triggering database check constraints (e.g. Salary must be > 0).
+
+        // Skip null/undefined/empty immediately for optional fields
+        if (value === undefined || value === null || value === "") return;
+
+        // Skip fields that are logically irrelevant based on master toggles
+        const isWorking = payload.isWorking;
+        if (!isWorking && [
+            'workingType', 'employmentType', 'jobTitle', 'company', 
+            'salaryMonthly', 'workDescription', 'workLocation', 'yearsAtJob'
+        ].includes(key)) return;
+
+        if (isWorking && (key === 'unEmploymentReason' || key === 'estimatedIncomeMonthly')) return;
+
+        if (!payload.hasInsurance && key === 'insuranceType') return;
+        if (!payload.hasDisability && key === 'disabilityType') return;
+        if (!payload.hasChronicDisease && (key === 'chronicDiseaseType' || key === 'medicalCostMonthly')) return;
+        
+        if (payload.housingType !== 1 && key === 'rentMonthly') return; // 1 = Rent
+        if (!payload.registeredSocialSupport && key === 'socialSupportAmount') return;
+        if (!payload.hasOtherCommitments && (key === 'otherCommitmentsType' || key === 'otherCommitmentsAmount')) return;
+
+        // --- 3. VALUE-BASED FILTERING ---
+        // As requested: Only skip if null or undefined or empty string. Allow 0 and false.
+        if (value === null || value === undefined || value === "") return;
+
+        formData.append(apiFieldName, value.toString());
     });
 
-    // Append file attachments
+    // Append file attachments (Scale per Swagger lowercase)
+    // The C# controller expects [FromForm] List<IFormFile>? attachments
+    // So this key stays "attachments" without the "request." prefix
     if (payload.attachments && payload.attachments.length > 0) {
         payload.attachments.forEach((file) => {
             formData.append('attachments', file);
         });
     }
+
+    // Diagnostic logging of the final FormData
+    console.log('📤 [DEBUG] FINAL FORMDATA BEING SENT:');
+    formData.forEach((val, key) => console.log(`  - ${key}: ${val instanceof File ? `[File] ${val.name}` : val}`));
 
     try {
         const response = await apiClient.post<ApiResponse<AidRequest>>(
@@ -39,24 +133,20 @@ export async function createRequest(payload: CreateAidRequestPayload): Promise<A
             formData
         );
         return response.data.data;
-    } catch (error: unknown) {
-        logger.error('Request submission failed', error);
-
+    } catch (error: any) {
+        // Deep diagnostic logging
         const apiError = error as ApiError;
-        let errorMessage = 'حدث خطأ أثناء حفظ البيانات.';
+        console.error('❌ [CRITICAL] Request submission failed:', {
+            message: apiError.message,
+            statusCode: apiError.statusCode,
+            errors: apiError.errors ? JSON.stringify(apiError.errors, null, 2) : 'None'
+        });
 
-        if (apiError.statusCode === 400 && apiError.errors) {
-            const errors = apiError.errors;
-            const allErrors = Object.entries(errors)
-                .map(([field, msgs]) => `- ${field}: ${Array.isArray(msgs) ? msgs.join(', ') : msgs}`)
-                .join('\n');
-            if (allErrors) {
-                errorMessage = "فشل التحقق من البيانات:\n" + allErrors;
-            }
-        } else if (apiError.message) {
-            errorMessage = apiError.message;
+        if (apiError.errors) {
+            console.warn('Backend reported specific validation errors:', apiError.errors);
         }
 
+        let errorMessage = apiError.message || 'حدث خطأ أثناء حفظ البيانات.';
         throw new Error(errorMessage);
     }
 }

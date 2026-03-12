@@ -11,7 +11,7 @@ import { getCurrentUser, logout as logoutApi } from '@/features/auth/api/authApi
 import type { AuthUser } from '@/features/auth/types';
 import { logger } from '@/lib/logger';
 import { ROUTES } from '@/shared/constants/routes';
-import { setSecureToken, getSecureToken, removeSecureToken } from '@/lib/security/tokenStorage';
+import { setSecureToken, removeSecureToken } from '@/lib/security/tokenStorage';
 
 interface AuthContextType {
     user: AuthUser | null;
@@ -20,7 +20,7 @@ interface AuthContextType {
     isLoading: boolean;
     logout: () => Promise<void>;
     updateUser: (user: AuthUser | null) => void;
-    login: (token: string, refreshToken?: string) => Promise<void>;
+    login: (token: string, refreshToken?: string, user?: AuthUser) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -38,15 +38,21 @@ export function AuthProvider({ children, initialIsAuthenticated = false, initial
     const [isAuthenticated, setIsAuthenticated] = useState(initialIsAuthenticated);
     const [isLoading, setIsLoading] = useState(initialIsAuthenticated && initialUser === null);
 
+    const clearAuthState = useCallback(async () => {
+        setUser(null);
+        setToken(null);
+        setIsAuthenticated(false);
+        await removeSecureToken('auth_token');
+        await removeSecureToken('refresh_token');
+    }, []);
+
     useEffect(() => {
         const initAuth = async () => {
-            // If no token from server, we are definitely NOT loading a user
             if (!initialIsAuthenticated) {
                 setIsLoading(false);
                 return;
             }
 
-            // If we already have initial state, skip loading
             if (initialIsAuthenticated && initialUser) {
                 setIsLoading(false);
                 return;
@@ -60,64 +66,59 @@ export function AuthProvider({ children, initialIsAuthenticated = false, initial
                     setUser(currentUser);
                     setIsAuthenticated(true);
                 } else {
-                    setUser(null);
-                    setIsAuthenticated(false);
+                    logger.warn('getCurrentUser returned null - clearing auth state');
+                    await clearAuthState();
                 }
             } catch (error) {
                 logger.error('Failed to initialize auth', error);
                 setUser(null);
-                setIsAuthenticated(false);
+                setToken(null);
+                setIsAuthenticated(initialIsAuthenticated);
             } finally {
                 setIsLoading(false);
             }
         };
 
         initAuth();
-    }, [initialIsAuthenticated, user]);
+    }, [clearAuthState, initialIsAuthenticated, initialUser]);
 
     const logout = useCallback(async () => {
         try {
-            // Attempt to notify backend, but don't block cleanup if it fails
             await logoutApi().catch(err => logger.warn('Logout API failed', err));
-        } catch (error) {
-            // Ignore errors here
         } finally {
-            // ALWAYS cleanup client state
-            setUser(null);
-            setToken(null);
-            setIsAuthenticated(false);
-
-            // Clear storage using secure async functions (HttpOnly cookies removed via Server Actions)
-            await removeSecureToken('auth_token');
-            await removeSecureToken('refresh_token');
-
+            await clearAuthState();
             router.push(ROUTES.AUTH.LOGIN);
         }
-    }, [router]);
+    }, [clearAuthState, router]);
 
-    const login = useCallback(async (token: string, refreshToken?: string) => {
+    const login = useCallback(async (token: string, refreshToken?: string, loginUser?: AuthUser) => {
         try {
-            // 1. Store tokens using encrypted storage
             await setSecureToken('auth_token', token);
             if (refreshToken) {
                 await setSecureToken('refresh_token', refreshToken);
             }
+
             setToken(token);
             setIsAuthenticated(true);
 
-            // 2. Fetch full user profile
+            if (loginUser) {
+                setUser(loginUser);
+                return;
+            }
+
             const currentUser = await getCurrentUser();
             if (currentUser) {
                 setUser(currentUser);
-            } else {
-                // If fetching user fails, we might be in weird state. 
-                // But generally better to have auth state true and try.
-                logger.warn('Login successful but failed to fetch user details');
+                return;
             }
+
+            throw new Error('Login completed without a usable user profile');
         } catch (e) {
+            await clearAuthState();
             logger.error("Login Error inside provider", e);
+            throw e;
         }
-    }, []);
+    }, [clearAuthState]);
 
     const updateUser = useCallback((newUser: AuthUser | null) => {
         setUser(newUser);
