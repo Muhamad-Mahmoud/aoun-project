@@ -4,151 +4,119 @@ import { Control } from "react-hook-form";
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
 import { Input } from "@/shared/ui/input";
 import { Textarea } from "@/shared/ui/textarea";
-import { Checkbox } from "@/shared/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import { RequestFormData } from "../schemas/requestSchema";
 import { cn } from "@/shared/utils";
 import { Check } from "lucide-react";
+import { YesNoToggle } from "../ui/YesNoToggle";
 
 interface Step2EmploymentProps {
     control: Control<RequestFormData>;
     isWorking: boolean;
 }
 
+const inputCls = "h-11 rounded-xl border border-slate-200 bg-white hover:border-slate-300 focus:bg-white focus:ring-2 focus:ring-warm-green/15 focus:border-warm-green/50 shadow-sm px-4 font-medium transition-all placeholder:text-slate-400";
+const selectTriggerCls = "h-11 rounded-xl border border-slate-200 bg-white hover:border-slate-300 focus:ring-2 focus:ring-warm-green/15 focus:border-warm-green/50 shadow-sm px-4 font-medium transition-all";
+
 export function Step2Employment({ control, isWorking }: Step2EmploymentProps) {
     return (
-        <div className="space-y-6">
-            {/* Residential Location - Always visible */}
+        <div className="space-y-5">
+            {/* Location */}
             <FormField
                 control={control}
                 name="location"
                 render={({ field }) => (
                     <FormItem className="text-start">
                         <FormLabel className="text-[13px] font-bold text-slate-700">
-                            المدينة أو الحي السكني <span className="text-red-500 ml-1">*</span>
+                            المدينة أو الحي السكني <span className="text-rose-500 mr-1">*</span>
                         </FormLabel>
                         <FormControl>
                             <Input
                                 placeholder="مثال: مدينة نصر، القاهرة"
-                                className="h-12 rounded-xl border border-slate-200 bg-white hover:border-slate-300 focus:bg-white focus:ring-4 focus:ring-warm-green/10 focus:border-warm-green/40 shadow-sm px-4 font-medium transition-all duration-300 placeholder:text-slate-400"
+                                className={inputCls}
                                 {...field}
                                 value={field.value ?? ""}
                             />
                         </FormControl>
-                        <FormDescription className="text-xs text-slate-400 mt-2 font-medium">
-                            نحتاج لمعرفة منطقة سكنك الحالية لتوجيه الطلب لأقرب فرع لضمان سرعة الوصول.
+                        <FormDescription className="text-xs text-slate-400 mt-1.5">
+                            نحتاج لمعرفة منطقة سكنك لتوجيه الطلب لأقرب فرع.
                         </FormDescription>
                         <FormMessage />
                     </FormItem>
                 )}
             />
 
-            <div className="w-full h-px bg-slate-100 my-8" />
+            <div className="w-full h-px bg-slate-100" />
 
-            {/* Employment Status Toggle Card */}
+            {/* Employment Status */}
             <FormField
                 control={control}
                 name="isWorking"
-                render={({ field }) => {
-                    const isSelected = (val: boolean) => field.value === val;
-                    return (
-                        <FormItem>
-                            <FormLabel className="text-[13px] font-bold text-slate-700 mb-3 inline-block">
-                                ما هي حالتك المهنية الحالية؟ <span className="text-red-500 ml-1">*</span>
-                            </FormLabel>
-                            <div className="grid grid-cols-2 gap-3 sm:max-w-md">
-                                {/* Yes Option */}
-                                <div 
-                                    onClick={() => field.onChange(true)}
-                                    className={cn(
-                                        "cursor-pointer rounded-xl border-2 px-4 py-3 sm:py-3.5 flex items-center gap-3 transition-all duration-300 relative group",
-                                        isSelected(true) 
-                                            ? "border-emerald-500 bg-emerald-50/50 shadow-sm" 
-                                            : "border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300"
-                                    )}
-                                >
-                                    <div className={cn("w-8 h-8 rounded-full flex items-center justify-center transition-all shrink-0", isSelected(true) ? "bg-emerald-500 text-white shadow-sm" : "bg-slate-100 text-slate-400 group-hover:bg-white")}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
-                                    </div>
-                                    <span className={cn("font-bold text-[14px]", isSelected(true) ? "text-emerald-700" : "text-slate-600")}>أعمل حالياً</span>
-                                    {isSelected(true) && <Check className="w-4 h-4 text-emerald-500 absolute left-4" strokeWidth={3} />}
-                                </div>
-
-                                {/* No Option */}
-                                <div 
-                                    onClick={() => field.onChange(false)}
-                                    className={cn(
-                                        "cursor-pointer rounded-xl border-2 px-4 py-3 sm:py-3.5 flex items-center gap-3 transition-all duration-300 relative group",
-                                        isSelected(false) 
-                                            ? "border-emerald-500 bg-emerald-50/50 shadow-sm" 
-                                            : "border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300"
-                                    )}
-                                >
-                                    <div className={cn("w-8 h-8 rounded-full flex items-center justify-center transition-all shrink-0", isSelected(false) ? "bg-emerald-500 text-white shadow-sm" : "bg-slate-100 text-slate-400 group-hover:bg-white")}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                                    </div>
-                                    <span className={cn("font-bold text-[14px]", isSelected(false) ? "text-emerald-700" : "text-slate-600")}>لا أعمل</span>
-                                    {isSelected(false) && <Check className="w-4 h-4 text-emerald-500 absolute left-4" strokeWidth={3} />}
-                                </div>
-                            </div>
-                            <FormMessage className="mt-2" />
-                        </FormItem>
-                    );
-                }}
+                render={({ field }) => (
+                    <FormItem>
+                        <FormLabel className="text-[13px] font-bold text-slate-700 mb-2.5 inline-block">
+                            ما هي حالتك المهنية الحالية؟ <span className="text-rose-500 mr-1">*</span>
+                        </FormLabel>
+                        <YesNoToggle
+                            value={field.value}
+                            onChange={field.onChange}
+                            yesLabel="أعمل حالياً"
+                            noLabel="لا أعمل"
+                        />
+                        <FormMessage className="mt-2" />
+                    </FormItem>
+                )}
             />
 
-            {/* Conditional: Employment Details or Unemployment Details */}
+            {/* Conditional employment details */}
             {isWorking ? (
-                <div className="space-y-4 pt-2">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {/* Working Type: Job Schedule */}
+                <div className="space-y-4 pt-1">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <FormField
                             control={control}
                             name="workingType"
                             render={({ field }) => (
                                 <FormItem className="text-start">
                                     <FormLabel className="text-[13px] font-bold text-slate-700">
-                                        نمط العمل <span className="text-red-500 ml-1">*</span>
+                                        نمط العمل <span className="text-rose-500 mr-1">*</span>
                                     </FormLabel>
                                     <Select onValueChange={(v) => field.onChange(Number(v))} value={field.value?.toString() ?? ""}>
                                         <FormControl>
-                                            <SelectTrigger className="h-12 rounded-xl border border-slate-200 bg-white hover:border-slate-300 focus:bg-white focus:ring-4 focus:ring-warm-green/10 focus:border-warm-green/40 shadow-sm px-4 font-medium transition-all duration-300">
+                                            <SelectTrigger className={selectTriggerCls}>
                                                 <SelectValue placeholder="اختر..." />
                                             </SelectTrigger>
                                         </FormControl>
-                                        <SelectContent className="rounded-2xl border-slate-100 shadow-xl">
-                                            <SelectItem value="0" className="rounded-xl py-3 focus:bg-warm-green/10 focus:text-warm-green cursor-pointer">دوام كامل</SelectItem>
-                                            <SelectItem value="1" className="rounded-xl py-3 focus:bg-warm-green/10 focus:text-warm-green cursor-pointer">دوام جزئي</SelectItem>
-                                            <SelectItem value="2" className="rounded-xl py-3 focus:bg-warm-green/10 focus:text-warm-green cursor-pointer">عقد مؤقت</SelectItem>
-                                            <SelectItem value="3" className="rounded-xl py-3 focus:bg-warm-green/10 focus:text-warm-green cursor-pointer">عمل حر</SelectItem>
-                                            <SelectItem value="4" className="rounded-xl py-3 focus:bg-warm-green/10 focus:text-warm-green cursor-pointer">متدرب</SelectItem>
+                                        <SelectContent className="rounded-xl border-slate-100 shadow-xl">
+                                            <SelectItem value="0" className="rounded-lg py-2.5 cursor-pointer">دوام كامل</SelectItem>
+                                            <SelectItem value="1" className="rounded-lg py-2.5 cursor-pointer">دوام جزئي</SelectItem>
+                                            <SelectItem value="2" className="rounded-lg py-2.5 cursor-pointer">عقد مؤقت</SelectItem>
+                                            <SelectItem value="3" className="rounded-lg py-2.5 cursor-pointer">عمل حر</SelectItem>
+                                            <SelectItem value="4" className="rounded-lg py-2.5 cursor-pointer">متدرب</SelectItem>
                                         </SelectContent>
                                     </Select>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
-
-                        {/* Employment Type: Sector */}
                         <FormField
                             control={control}
                             name="employmentType"
                             render={({ field }) => (
                                 <FormItem className="text-start">
                                     <FormLabel className="text-[13px] font-bold text-slate-700">
-                                        القطاع <span className="text-red-500 ml-1">*</span>
+                                        القطاع <span className="text-rose-500 mr-1">*</span>
                                     </FormLabel>
                                     <Select onValueChange={(v) => field.onChange(Number(v))} value={field.value?.toString() ?? ""}>
                                         <FormControl>
-                                            <SelectTrigger className="h-12 rounded-xl border border-slate-200 bg-white hover:border-slate-300 focus:bg-white focus:ring-4 focus:ring-warm-green/10 focus:border-warm-green/40 shadow-sm px-4 font-medium transition-all duration-300">
+                                            <SelectTrigger className={selectTriggerCls}>
                                                 <SelectValue placeholder="اختر..." />
                                             </SelectTrigger>
                                         </FormControl>
-                                        <SelectContent className="rounded-2xl border-slate-100 shadow-xl">
-                                            <SelectItem value="0" className="rounded-xl py-3 focus:bg-warm-green/10 focus:text-warm-green cursor-pointer">قطاع خاص</SelectItem>
-                                            <SelectItem value="1" className="rounded-xl py-3 focus:bg-warm-green/10 focus:text-warm-green cursor-pointer">قطاع حكومي</SelectItem>
-                                            <SelectItem value="2" className="rounded-xl py-3 focus:bg-warm-green/10 focus:text-warm-green cursor-pointer">منظمة غير ربحية</SelectItem>
-                                            <SelectItem value="3" className="rounded-xl py-3 focus:bg-warm-green/10 focus:text-warm-green cursor-pointer">عمل حر/مستقل</SelectItem>
+                                        <SelectContent className="rounded-xl border-slate-100 shadow-xl">
+                                            <SelectItem value="0" className="rounded-lg py-2.5 cursor-pointer">قطاع خاص</SelectItem>
+                                            <SelectItem value="1" className="rounded-lg py-2.5 cursor-pointer">قطاع حكومي</SelectItem>
+                                            <SelectItem value="2" className="rounded-lg py-2.5 cursor-pointer">منظمة غير ربحية</SelectItem>
+                                            <SelectItem value="3" className="rounded-lg py-2.5 cursor-pointer">عمل حر/مستقل</SelectItem>
                                         </SelectContent>
                                     </Select>
                                     <FormMessage />
@@ -157,84 +125,67 @@ export function Step2Employment({ control, isWorking }: Step2EmploymentProps) {
                         />
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {/* Job Title */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <FormField
                             control={control}
                             name="jobTitle"
                             render={({ field }) => (
                                 <FormItem className="text-start">
                                     <FormLabel className="text-[13px] font-bold text-slate-700">
-                                        المسمى الوظيفي <span className="text-red-500 ml-1">*</span>
+                                        المسمى الوظيفي <span className="text-rose-500 mr-1">*</span>
                                     </FormLabel>
                                     <FormControl>
-                                        <Input
-                                            placeholder="مثل: محاسب، عامل..."
-                                            className="h-12 rounded-xl border border-slate-200 bg-white hover:border-slate-300 focus:bg-white focus:ring-4 focus:ring-warm-green/10 focus:border-warm-green/40 shadow-sm px-4 font-medium transition-all duration-300"
-                                            {...field}
-                                            value={field.value ?? ""}
-                                        />
+                                        <Input placeholder="مثل: محاسب، عامل..." className={inputCls} {...field} value={field.value ?? ""} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
-
-                        {/* Company */}
                         <FormField
                             control={control}
                             name="company"
                             render={({ field }) => (
                                 <FormItem className="text-start">
                                     <FormLabel className="text-[13px] font-bold text-slate-700">
-                                        جهة العمل <span className="text-red-500 ml-1">*</span>
+                                        جهة العمل <span className="text-rose-500 mr-1">*</span>
                                     </FormLabel>
                                     <FormControl>
-                                        <Input
-                                            placeholder="اسم الشركة أو المحل"
-                                            className="h-12 rounded-xl border border-slate-200 bg-white hover:border-slate-300 focus:bg-white focus:ring-4 focus:ring-warm-green/10 focus:border-warm-green/40 shadow-sm px-4 font-medium transition-all duration-300"
-                                            {...field}
-                                            value={field.value ?? ""}
-                                        />
+                                        <Input placeholder="اسم الشركة أو المحل" className={inputCls} {...field} value={field.value ?? ""} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
-
-                        {/* Monthly Salary */}
                         <FormField
                             control={control}
                             name="salaryMonthly"
                             render={({ field }) => (
                                 <FormItem className="text-start">
                                     <FormLabel className="text-[13px] font-bold text-slate-700">
-                                        الراتب الشهري المتوقع <span className="text-red-500 ml-1">*</span>
+                                        الراتب الشهري <span className="text-rose-500 mr-1">*</span>
                                     </FormLabel>
                                     <FormControl>
                                         <div className="relative">
-                                            <Input type="number" className="h-12 rounded-xl border border-slate-200 bg-white hover:border-slate-300 focus:bg-white focus:ring-4 focus:ring-warm-green/10 focus:border-warm-green/40 shadow-sm px-4 pr-14 font-medium transition-all duration-300" {...field} value={field.value ?? ""} />
-                                            <span className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm">ج.م</span>
+                                            <Input type="number" className={cn(inputCls, "pl-14")} {...field} value={field.value ?? ""} />
+                                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">ج.م</span>
                                         </div>
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
-
-                        {/* Years at Job */}
                         <FormField
                             control={control}
                             name="yearsAtJob"
                             render={({ field }) => (
                                 <FormItem className="text-start">
                                     <FormLabel className="text-[13px] font-bold text-slate-700">
-                                        سنوات الخدمة <span className="text-red-500 ml-1">*</span>
+                                        سنوات الخدمة <span className="text-rose-500 mr-1">*</span>
                                     </FormLabel>
                                     <FormControl>
                                         <div className="relative">
-                                            <Input type="number" className="h-12 rounded-xl border border-slate-200 bg-white hover:border-slate-300 focus:bg-white focus:ring-4 focus:ring-warm-green/10 focus:border-warm-green/40 shadow-sm px-4 pr-16 font-medium transition-all duration-300" {...field} value={field.value ?? ""} />
-                                            <span className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm">سنة</span>
+                                            <Input type="number" className={cn(inputCls, "pl-16")} {...field} value={field.value ?? ""} />
+                                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">سنة</span>
                                         </div>
                                     </FormControl>
                                     <FormMessage />
@@ -243,19 +194,18 @@ export function Step2Employment({ control, isWorking }: Step2EmploymentProps) {
                         />
                     </div>
 
-                    {/* Work Description */}
                     <FormField
                         control={control}
                         name="workDescription"
                         render={({ field }) => (
                             <FormItem className="text-start">
                                 <FormLabel className="text-[13px] font-bold text-slate-700">
-                                    وصف طبيعة العمل <span className="text-red-500 ml-1">*</span>
+                                    وصف طبيعة العمل <span className="text-rose-500 mr-1">*</span>
                                 </FormLabel>
                                 <FormControl>
                                     <Textarea
                                         placeholder="اشرح ماذا تفعل في عملك بشكل مبسط..."
-                                        className="min-h-[120px] rounded-[1.5rem] p-6 border-0 bg-slate-50 hover:bg-slate-100/50 focus:bg-white focus:ring-4 focus:ring-warm-green/10 shadow-inner font-medium transition-all duration-300"
+                                        className="min-h-[100px] rounded-xl p-4 border border-slate-200 focus:ring-2 focus:ring-warm-green/15 focus:border-warm-green/50 transition-all resize-none placeholder:text-slate-400"
                                         {...field}
                                         value={field.value ?? ""}
                                     />
@@ -265,7 +215,6 @@ export function Step2Employment({ control, isWorking }: Step2EmploymentProps) {
                         )}
                     />
 
-                    {/* Work Location */}
                     <FormField
                         control={control}
                         name="workLocation"
@@ -275,12 +224,7 @@ export function Step2Employment({ control, isWorking }: Step2EmploymentProps) {
                                     مكان العمل
                                 </FormLabel>
                                 <FormControl>
-                                    <Input
-                                        placeholder="مثال: وسط البلد، المعادي..."
-                                        className="h-12 rounded-xl border border-slate-200 bg-white hover:border-slate-300 focus:bg-white focus:ring-4 focus:ring-warm-green/10 focus:border-warm-green/40 shadow-sm px-4 font-medium transition-all duration-300"
-                                        {...field}
-                                        value={field.value ?? ""}
-                                    />
+                                    <Input placeholder="مثال: وسط البلد، المعادي..." className={inputCls} {...field} value={field.value ?? ""} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -288,20 +232,19 @@ export function Step2Employment({ control, isWorking }: Step2EmploymentProps) {
                     />
                 </div>
             ) : (
-                <div className="space-y-4 pt-2">
-                    {/* Unemployment Reason */}
+                <div className="space-y-4 pt-1">
                     <FormField
                         control={control}
                         name="unEmploymentReason"
                         render={({ field }) => (
                             <FormItem className="text-start">
                                 <FormLabel className="text-[13px] font-bold text-slate-700">
-                                    سبب عدم العمل <span className="text-red-500 ml-1">*</span>
+                                    سبب عدم العمل <span className="text-rose-500 mr-1">*</span>
                                 </FormLabel>
                                 <FormControl>
                                     <Textarea
-                                        className="min-h-[120px] rounded-[1.5rem] p-6 border-0 bg-slate-50 hover:bg-slate-100/50 focus:bg-white focus:ring-4 focus:ring-red-500/10 shadow-inner font-medium transition-all duration-300"
-                                        placeholder="اذكر سبب عدم توافر عمل حالياً لتساعدنا في فهم حالتك..."
+                                        className="min-h-[100px] rounded-xl p-4 border border-slate-200 focus:ring-2 focus:ring-rose-500/10 focus:border-rose-300 transition-all resize-none placeholder:text-slate-400"
+                                        placeholder="اذكر سبب عدم توافر عمل حالياً..."
                                         {...field}
                                         value={field.value ?? ""}
                                     />
@@ -311,19 +254,18 @@ export function Step2Employment({ control, isWorking }: Step2EmploymentProps) {
                         )}
                     />
 
-                    {/* Estimated Income */}
                     <FormField
                         control={control}
                         name="estimatedIncomeMonthly"
                         render={({ field }) => (
                             <FormItem className="text-start">
                                 <FormLabel className="text-[13px] font-bold text-slate-700">
-                                    الدخل الشهري المتوقع <span className="text-red-500 ml-1">*</span>
+                                    الدخل الشهري المتوقع <span className="text-rose-500 mr-1">*</span>
                                 </FormLabel>
                                 <FormControl>
-                                    <div className="relative">
-                                        <Input type="number" className="h-14 rounded-2xl border-0 bg-slate-50 hover:bg-slate-100/50 focus:bg-white focus:ring-4 focus:ring-red-500/10 shadow-inner px-5 pr-14 font-medium transition-all duration-300" {...field} value={field.value ?? ""} />
-                                        <span className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm">ج.م</span>
+                                    <div className="relative max-w-xs">
+                                        <Input type="number" className={cn(inputCls, "pl-14")} {...field} value={field.value ?? ""} />
+                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">ج.م</span>
                                     </div>
                                 </FormControl>
                                 <FormMessage />
@@ -331,24 +273,24 @@ export function Step2Employment({ control, isWorking }: Step2EmploymentProps) {
                         )}
                     />
 
-                    {/* Job Search Preferences (Styled as big buttons) */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                    {/* Job search preferences */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <FormField
                             control={control}
                             name="isLookingForJob"
                             render={({ field }) => (
                                 <FormItem>
-                                    <div 
+                                    <div
                                         onClick={() => field.onChange(!field.value)}
                                         className={cn(
-                                            "cursor-pointer flex items-center gap-4 p-4 rounded-2xl border-2 transition-all duration-300",
-                                            field.value 
-                                                ? "border-sky-500 bg-sky-500/5 text-sky-700 shadow-sm"
+                                            "cursor-pointer flex items-center gap-3 p-3.5 rounded-xl border-2 transition-all duration-200 select-none",
+                                            field.value
+                                                ? "border-sky-500 bg-sky-50 text-sky-700 shadow-sm"
                                                 : "border-slate-100 bg-white hover:border-slate-200"
                                         )}
                                     >
-                                        <div className={cn("w-6 h-6 rounded-md flex items-center justify-center border-2 transition-all", field.value ? "bg-sky-500 border-sky-500 text-white" : "border-slate-300 bg-white")}>
-                                            {field.value && <Check className="w-4 h-4" />}
+                                        <div className={cn("w-5 h-5 rounded-md flex items-center justify-center border-2 transition-all shrink-0", field.value ? "bg-sky-500 border-sky-500 text-white" : "border-slate-300 bg-white")}>
+                                            {field.value && <Check className="w-3 h-3" />}
                                         </div>
                                         <FormLabel className="text-sm font-bold cursor-pointer m-0">أرغب في البحث عن وظيفة</FormLabel>
                                     </div>
@@ -360,17 +302,17 @@ export function Step2Employment({ control, isWorking }: Step2EmploymentProps) {
                             name="needsTraining"
                             render={({ field }) => (
                                 <FormItem>
-                                    <div 
+                                    <div
                                         onClick={() => field.onChange(!field.value)}
                                         className={cn(
-                                            "cursor-pointer flex items-center gap-4 p-4 rounded-2xl border-2 transition-all duration-300",
-                                            field.value 
-                                                ? "border-purple-500 bg-purple-500/5 text-purple-700 shadow-sm"
+                                            "cursor-pointer flex items-center gap-3 p-3.5 rounded-xl border-2 transition-all duration-200 select-none",
+                                            field.value
+                                                ? "border-purple-500 bg-purple-50 text-purple-700 shadow-sm"
                                                 : "border-slate-100 bg-white hover:border-slate-200"
                                         )}
                                     >
-                                        <div className={cn("w-6 h-6 rounded-md flex items-center justify-center border-2 transition-all", field.value ? "bg-purple-500 border-purple-500 text-white" : "border-slate-300 bg-white")}>
-                                            {field.value && <Check className="w-4 h-4" />}
+                                        <div className={cn("w-5 h-5 rounded-md flex items-center justify-center border-2 transition-all shrink-0", field.value ? "bg-purple-500 border-purple-500 text-white" : "border-slate-300 bg-white")}>
+                                            {field.value && <Check className="w-3 h-3" />}
                                         </div>
                                         <FormLabel className="text-sm font-bold cursor-pointer m-0">أحتاج لتدريب مهني</FormLabel>
                                     </div>

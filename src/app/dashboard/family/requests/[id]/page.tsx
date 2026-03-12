@@ -39,6 +39,10 @@ import {
     Copy,
     Printer,
     MapPin,
+    Paperclip,
+    TrendingUp,
+    Coins,
+    Info,
 } from "lucide-react";
 import { cn } from "@/shared/utils";
 import { getRequestById, cancelRequest } from "@/features/requests/api/requestsApi";
@@ -58,80 +62,81 @@ import type { LucideIcon } from "lucide-react";
 // ===== CSS Keyframes =====
 const animationStyles = `
 @keyframes fadeSlideUp {
-  from { opacity: 0; transform: translateY(16px); }
+  from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
 }
-.animate-fade-slide-up {
-  animation: fadeSlideUp 0.4s ease-out both;
+.anim-up {
+  animation: fadeSlideUp 0.35s ease-out both;
 }
 @keyframes scoreRingFill {
   from { stroke-dashoffset: 283; }
 }
 `;
 
-// ===== Section Info Row =====
-function InfoRow({ label, value, index = 0 }: { label: string; value: React.ReactNode; index?: number }) {
+// ===== Field Component — clean label + value =====
+function Field({ label, value, colSpan = 1 }: { label: string; value: React.ReactNode; colSpan?: number }) {
     if (value === undefined || value === null || value === "") return null;
-    const display = typeof value === "boolean" ? (value ? "نعم" : "لا") : String(value);
+    const display = typeof value === "boolean" ? (value ? "نعم" : "لا") : value;
     return (
-        <div className={cn(
-            "flex items-start gap-3 py-2.5 px-3 rounded-lg transition-colors",
-            index % 2 === 0 ? "bg-slate-50/60" : "bg-transparent"
-        )}>
-            <span className="text-xs font-bold text-slate-400 min-w-[110px] shrink-0">{label}</span>
-            <span className="text-sm font-bold text-slate-700">{display}</span>
+        <div className={cn("flex flex-col gap-1", colSpan === 2 && "sm:col-span-2")}>
+            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{label}</span>
+            <span className="text-[13px] font-semibold text-slate-800 bg-white rounded-lg px-3 py-2 flex items-center border border-slate-100 min-h-[34px]">
+                {display}
+            </span>
         </div>
     );
 }
 
-// ===== Section Card =====
-function SectionCard({ icon: Icon, title, color, children, delay = 0 }: { icon: LucideIcon; title: string; color: string; children: React.ReactNode; delay?: number }) {
+// ===== Section Card — consistent with wizard SectionCard =====
+function Section({ icon: Icon, title, iconColor = "text-warm-green", iconBg = "bg-warm-green/10", children, delay = 0 }: {
+    icon: LucideIcon; title: string; iconColor?: string; iconBg?: string; children: React.ReactNode; delay?: number;
+}) {
     return (
-        <Card className="animate-fade-slide-up border-slate-100 rounded-2xl overflow-hidden" style={{ animationDelay: `${delay}ms` }}>
-            <div className={cn("h-1 w-full", color)} />
-            <div className="p-6">
-                <h3 className="text-sm font-black text-slate-800 flex items-center gap-2 mb-4 pb-3 border-b border-slate-100">
-                    <Icon className="w-4 h-4 text-slate-600" />
-                    {title}
-                </h3>
-                <div className="space-y-0.5">{children}</div>
+        <div className="anim-up bg-slate-50/60 rounded-2xl border border-slate-100 p-4 sm:p-5" style={{ animationDelay: `${delay}ms` }}>
+            <div className="flex items-center gap-2.5 mb-4 pb-3 border-b border-slate-100">
+                <span className={cn("w-7 h-7 rounded-lg flex items-center justify-center shrink-0", iconBg, iconColor)}>
+                    <Icon className="w-3.5 h-3.5" />
+                </span>
+                <h4 className="text-[14px] font-black text-slate-800 leading-none">{title}</h4>
             </div>
-        </Card>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {children}
+            </div>
+        </div>
     );
 }
 
-// ===== Score Ring Component =====
-function ScoreRing({ value, max = 100, label, color }: { value: number; max?: number; label: string; color: "blue" | "amber" }) {
-    const radius = 40;
-    const circumference = 2 * Math.PI * radius;
-    const percentage = Math.min((value / max) * 100, 100);
-    const offset = circumference - (percentage / 100) * circumference;
-
+// ===== Compact Score Pill =====
+function ScorePill({ value, label, color }: { value: number; label: string; color: "blue" | "amber" }) {
     const colors = {
-        blue: { stroke: "stroke-blue-500", bg: "from-blue-50 to-blue-100/50", border: "border-blue-100", text: "text-blue-600", sub: "text-blue-400" },
-        amber: { stroke: "stroke-amber-500", bg: "from-amber-50 to-amber-100/50", border: "border-amber-100", text: "text-amber-600", sub: "text-amber-400" },
+        blue: { bg: "bg-blue-50", border: "border-blue-100", text: "text-blue-600", sub: "text-blue-400", ring: "text-blue-500" },
+        amber: { bg: "bg-amber-50", border: "border-amber-100", text: "text-amber-600", sub: "text-amber-400", ring: "text-amber-500" },
     };
     const c = colors[color];
+    const radius = 18;
+    const circumference = 2 * Math.PI * radius;
+    const pct = Math.min(value, 100);
+    const offset = circumference - (pct / 100) * circumference;
 
     return (
-        <div className={cn("flex flex-col items-center gap-3 px-6 py-5 rounded-2xl bg-gradient-to-br border min-w-[150px]", c.bg, c.border)}>
-            <div className="relative w-24 h-24">
-                <svg className="w-24 h-24 -rotate-90" viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r={radius} fill="none" stroke="currentColor" strokeWidth="6" className="text-slate-200/60" />
+        <div className={cn("flex items-center gap-3 px-4 py-3 rounded-xl border", c.bg, c.border)}>
+            <div className="relative w-11 h-11 shrink-0">
+                <svg className="w-11 h-11 -rotate-90" viewBox="0 0 44 44">
+                    <circle cx="22" cy="22" r={radius} fill="none" stroke="currentColor" strokeWidth="3" className="text-slate-200/60" />
                     <circle
-                        cx="50" cy="50" r={radius}
-                        fill="none" strokeWidth="6" strokeLinecap="round"
-                        className={c.stroke}
+                        cx="22" cy="22" r={radius}
+                        fill="none" strokeWidth="3" strokeLinecap="round"
+                        className={c.ring}
                         strokeDasharray={circumference}
                         strokeDashoffset={offset}
-                        style={{ animation: "scoreRingFill 1s ease-out forwards" }}
+                        style={{ animation: "scoreRingFill 0.8s ease-out forwards" }}
                     />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                    <span className={cn("text-2xl font-black", c.text)}>{value}</span>
+                    <span className={cn("text-sm font-black", c.text)}>{value}</span>
                 </div>
             </div>
-            <p className={cn("text-[11px] font-bold", c.sub)}>{label}</p>
+            <span className={cn("text-xs font-bold", c.sub)}>{label}</span>
         </div>
     );
 }
@@ -206,6 +211,11 @@ export default function RequestDetailsPage() {
         window.print();
     };
 
+    const formatCurrency = (v: number | null | undefined) => {
+        if (v === undefined || v === null) return undefined;
+        return `${v.toLocaleString()} ج.م`;
+    };
+
     // ===== Loading State =====
     if (loading) {
         return (
@@ -213,25 +223,19 @@ export default function RequestDetailsPage() {
                 <FamilySidebar />
                 <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-gradient-to-b from-slate-50 to-white" dir="rtl">
                     <DashboardTopBar userType="family" />
-                    <main className="p-4 sm:p-10 pb-20 pt-20 lg:pt-32">
-                        <div className="mx-auto max-w-4xl space-y-6">
+                    <main className="p-4 sm:p-8 pb-20 pt-20 lg:pt-28">
+                        <div className="mx-auto max-w-4xl space-y-5">
                             <div className="flex items-center gap-4">
-                                <Skeleton className="w-12 h-12 rounded-2xl" />
+                                <Skeleton className="w-11 h-11 rounded-xl" />
                                 <div className="space-y-2 flex-1">
-                                    <Skeleton className="h-6 w-40" />
-                                    <Skeleton className="h-4 w-24" />
+                                    <Skeleton className="h-5 w-40" />
+                                    <Skeleton className="h-3 w-24" />
                                 </div>
                             </div>
-                            <Card className="rounded-2xl p-8">
-                                <div className="space-y-4">
-                                    <Skeleton className="h-6 w-1/3" />
-                                    <Skeleton className="h-4 w-full" />
-                                    <Skeleton className="h-4 w-2/3" />
-                                </div>
-                            </Card>
+                            <Skeleton className="h-48 rounded-2xl" />
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <Skeleton className="h-48 rounded-2xl" />
-                                <Skeleton className="h-48 rounded-2xl" />
+                                <Skeleton className="h-44 rounded-2xl" />
+                                <Skeleton className="h-44 rounded-2xl" />
                             </div>
                         </div>
                     </main>
@@ -247,16 +251,16 @@ export default function RequestDetailsPage() {
                 <FamilySidebar />
                 <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-gradient-to-b from-slate-50 to-white" dir="rtl">
                     <DashboardTopBar userType="family" />
-                    <main className="p-4 sm:p-10 pb-20 pt-20 lg:pt-32">
+                    <main className="p-4 sm:p-8 pb-20 pt-20 lg:pt-28">
                         <div className="mx-auto max-w-4xl">
-                            <Card className="p-12 text-center rounded-2xl border-red-200 bg-red-50">
-                                <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
-                                <p className="text-lg font-bold text-red-600 mb-4">{error || "الطلب غير موجود"}</p>
+                            <div className="p-10 text-center rounded-2xl border border-red-200 bg-red-50">
+                                <AlertCircle className="w-10 h-10 text-red-400 mx-auto mb-3" />
+                                <p className="text-base font-bold text-red-600 mb-4">{error || "الطلب غير موجود"}</p>
                                 <div className="flex gap-3 justify-center">
                                     <Button variant="outline" onClick={() => router.back()} className="rounded-xl"><ArrowRight className="w-4 h-4 ml-2" />العودة</Button>
                                     <Button onClick={fetchRequest} className="rounded-xl bg-warm-green hover:bg-warm-green/90">إعادة المحاولة</Button>
                                 </div>
-                            </Card>
+                            </div>
                         </div>
                     </main>
                 </div>
@@ -278,12 +282,10 @@ export default function RequestDetailsPage() {
     const living = request.livingCondition;
     const social = request.socialSupport;
 
-    // Progress index for lifecycle
     const currentStepIndex = lifecycleSteps.findIndex(s => s.key === statusKey);
 
     return (
         <>
-        {/* Inject animation keyframes */}
         <style>{animationStyles}</style>
 
         <DashboardLayout>
@@ -291,49 +293,42 @@ export default function RequestDetailsPage() {
             <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-gradient-to-b from-slate-50 to-white print:bg-white" dir="rtl">
                 <DashboardTopBar userType="family" />
 
-                <main className="p-4 sm:p-10 pb-20 pt-20 lg:pt-32 relative z-10">
-                    <div className="mx-auto max-w-4xl space-y-8">
+                <main className="p-4 sm:p-8 pb-20 pt-20 lg:pt-28 relative z-10">
+                    <div className="mx-auto max-w-4xl space-y-6">
 
-                        {/* ===== Header ===== */}
-                        <div className="animate-fade-slide-up flex flex-col sm:flex-row sm:items-start justify-between gap-6">
-                            <div className="flex items-start gap-4">
-                                <Button variant="ghost" onClick={() => router.back()} className="w-12 h-12 rounded-2xl bg-white shadow-sm border border-slate-100 hover:bg-slate-50 shrink-0 print:hidden">
-                                    <ArrowRight className="w-5 h-5" />
+                        {/* ===== Compact Header ===== */}
+                        <div className="anim-up flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div className="flex items-center gap-3">
+                                <Button variant="ghost" onClick={() => router.back()} className="w-10 h-10 rounded-xl bg-white shadow-sm border border-slate-100 hover:bg-slate-50 shrink-0 print:hidden p-0">
+                                    <ArrowRight className="w-4 h-4" />
                                 </Button>
-                                <div className="space-y-2">
+                                <div className="space-y-1.5">
                                     <div className="flex items-center gap-2 flex-wrap">
-                                        {/* Copyable ID badge */}
+                                        <h1 className="text-xl sm:text-2xl font-black text-slate-900">تفاصيل الطلب</h1>
                                         <button
                                             onClick={copyRequestId}
-                                            className="group flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-500 border-none font-black text-[10px] px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
+                                            className="group flex items-center gap-1 bg-slate-100 hover:bg-slate-200 text-slate-500 border-none font-black text-[10px] px-2.5 py-1 rounded-md transition-colors cursor-pointer"
                                             title="انسخ رقم الطلب"
                                         >
                                             #{request.id}
-                                            <Copy className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                            <Copy className="w-2.5 h-2.5 opacity-0 group-hover:opacity-100 transition-opacity" />
                                         </button>
-                                        <Badge variant="outline" className={cn("text-[11px] font-bold border px-3 py-1 rounded-full gap-1.5", status.bg, status.color)}>
+                                        <Badge variant="outline" className={cn("text-[10px] font-bold border px-2.5 py-0.5 rounded-full gap-1", status.bg, status.color)}>
                                             <StatusIcon className="w-3 h-3" />
                                             {status.label}
                                         </Badge>
                                         {request.priority && (
                                             <Badge variant="outline" className="text-[10px] font-bold border-amber-200 bg-amber-50 text-amber-600 px-2 py-0.5 rounded-full gap-1">
-                                                <Star className="w-3 h-3" />
+                                                <Star className="w-2.5 h-2.5" />
                                                 {request.priority}
                                             </Badge>
                                         )}
                                     </div>
-                                    <h1 className="text-2xl sm:text-3xl font-black text-slate-900">تفاصيل الطلب</h1>
-                                    <div className="flex items-center gap-3 text-xs text-slate-400 font-medium flex-wrap">
+                                    <div className="flex items-center gap-2.5 text-[11px] text-slate-400 font-medium flex-wrap">
                                         <span className="flex items-center gap-1">
                                             <Clock className="w-3 h-3" />
                                             {request.createdAt ? new Date(request.createdAt).toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' }) : "—"}
                                         </span>
-                                        {request.decisionAt && (
-                                            <>
-                                                <span className="text-slate-200">•</span>
-                                                <span>القرار: {new Date(request.decisionAt).toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
-                                            </>
-                                        )}
                                         {request.location && (
                                             <>
                                                 <span className="text-slate-200">•</span>
@@ -347,38 +342,38 @@ export default function RequestDetailsPage() {
                                 </div>
                             </div>
                             <div className="flex items-center gap-2 shrink-0 print:hidden">
-                                <Button variant="outline" size="sm" onClick={handlePrint} className="rounded-xl h-10 px-4 font-bold text-xs text-slate-500 border-slate-200 hover:bg-slate-50">
-                                    <Printer className="w-4 h-4 ml-1.5" />
+                                <Button variant="outline" size="sm" onClick={handlePrint} className="rounded-xl h-9 px-3 font-bold text-[11px] text-slate-500 border-slate-200 hover:bg-slate-50">
+                                    <Printer className="w-3.5 h-3.5 ml-1.5" />
                                     طباعة
                                 </Button>
                                 {canCancel && (
-                                    <Button variant="outline" onClick={() => setShowCancelDialog(true)} disabled={cancelling} className="rounded-xl border-red-200 text-red-500 hover:bg-red-50 hover:text-red-600 h-10 px-5 font-bold text-xs">
-                                        {cancelling ? <Loader2 className="w-4 h-4 animate-spin ml-2" /> : <Ban className="w-4 h-4 ml-2" />}
+                                    <Button variant="outline" onClick={() => setShowCancelDialog(true)} disabled={cancelling} className="rounded-xl border-red-200 text-red-500 hover:bg-red-50 hover:text-red-600 h-9 px-4 font-bold text-[11px]">
+                                        {cancelling ? <Loader2 className="w-3.5 h-3.5 animate-spin ml-1.5" /> : <Ban className="w-3.5 h-3.5 ml-1.5" />}
                                         إلغاء الطلب
                                     </Button>
                                 )}
                             </div>
                         </div>
 
-                        {/* ===== Status Lifecycle Timeline ===== */}
+                        {/* ===== Status Timeline ===== */}
                         {!isTerminal && (
-                            <Card className="animate-fade-slide-up border-slate-100 rounded-2xl p-6" style={{ animationDelay: "80ms" }}>
-                                <div className="flex items-center justify-between gap-2">
+                            <div className="anim-up bg-white rounded-2xl border border-slate-100 p-5 shadow-sm" style={{ animationDelay: "60ms" }}>
+                                <div className="flex items-center justify-between gap-1">
                                     {lifecycleSteps.map((step, idx) => {
                                         const isActive = step.key === statusKey;
                                         const isDone = idx < currentStepIndex;
                                         return (
                                             <React.Fragment key={step.key}>
-                                                <div className="flex flex-col items-center gap-2 min-w-[80px]">
+                                                <div className="flex flex-col items-center gap-1.5 min-w-[70px]">
                                                     <div className={cn(
-                                                        "w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 text-xs font-black",
+                                                        "w-7 h-7 rounded-full flex items-center justify-center transition-all duration-500 text-[10px] font-black",
                                                         isDone
                                                             ? "bg-emerald-500 text-white"
                                                             : isActive
-                                                                ? "bg-warm-green text-white shadow-lg shadow-warm-green/30 scale-110"
+                                                                ? "bg-warm-green text-white shadow-md shadow-warm-green/25 scale-110"
                                                                 : "bg-slate-100 text-slate-400"
                                                     )}>
-                                                        {isDone ? <CheckCircle2 className="w-4 h-4" /> : idx + 1}
+                                                        {isDone ? <CheckCircle2 className="w-3.5 h-3.5" /> : idx + 1}
                                                     </div>
                                                     <span className={cn(
                                                         "text-[10px] font-bold text-center whitespace-nowrap",
@@ -388,7 +383,7 @@ export default function RequestDetailsPage() {
                                                     </span>
                                                 </div>
                                                 {idx < lifecycleSteps.length - 1 && (
-                                                    <div className="flex-1 h-0.5 rounded-full min-w-[20px] bg-slate-200 overflow-hidden">
+                                                    <div className="flex-1 h-[3px] rounded-full min-w-[16px] bg-slate-100 overflow-hidden self-start mt-[14px]">
                                                         <div
                                                             className={cn(
                                                                 "h-full rounded-full transition-all duration-700 ease-out",
@@ -401,212 +396,205 @@ export default function RequestDetailsPage() {
                                         );
                                     })}
                                 </div>
-                            </Card>
+                            </div>
                         )}
 
-                        {/* Terminal status badge (Rejected / Cancelled) */}
+                        {/* Terminal status */}
                         {isTerminal && (
-                            <Card className={cn(
-                                "animate-fade-slide-up rounded-2xl p-5 flex items-center gap-4",
-                                statusKey === "REJECTED" ? "bg-red-50 border-red-200" : "bg-gray-50 border-gray-200"
-                            )} style={{ animationDelay: "80ms" }}>
-                                <StatusIcon className={cn("w-6 h-6", status.color)} />
+                            <div className={cn(
+                                "anim-up rounded-2xl p-4 flex items-center gap-3",
+                                statusKey === "REJECTED" ? "bg-red-50 border border-red-200" : "bg-gray-50 border border-gray-200"
+                            )} style={{ animationDelay: "60ms" }}>
+                                <StatusIcon className={cn("w-5 h-5", status.color)} />
                                 <div>
                                     <p className={cn("text-sm font-black", status.color)}>{status.label}</p>
                                     {request.decisionReason && (
-                                        <p className="text-xs text-slate-500 mt-1">{request.decisionReason}</p>
+                                        <p className="text-xs text-slate-500 mt-0.5">{request.decisionReason}</p>
                                     )}
                                 </div>
-                            </Card>
+                            </div>
                         )}
 
-                        {/* ===== Main Info Card ===== */}
-                        <Card className="animate-fade-slide-up border-slate-100 rounded-3xl overflow-hidden shadow-lg" style={{ animationDelay: "150ms" }}>
-                            <div className="h-1.5 w-full bg-gradient-to-r from-warm-green via-emerald-400 to-warm-green/60" />
-                            <CardContent className="p-6 sm:p-8 space-y-6">
-                                <div className="flex flex-wrap items-center gap-3">
-                                    <div className={cn("flex items-center gap-2 px-3 py-1.5 rounded-xl border border-transparent", cat.bg)}>
-                                        <CatIcon className={cn("w-4 h-4", cat.color)} />
-                                        <span className={cn("text-xs font-bold", cat.color)}>{cat.label}</span>
+                        {/* ===== Request Overview Card ===== */}
+                        <div className="anim-up bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden" style={{ animationDelay: "120ms" }}>
+                            <div className="h-1 w-full bg-gradient-to-r from-warm-green via-emerald-400 to-warm-green/40" />
+                            <div className="p-5 sm:p-6 space-y-5">
+                                {/* Tags row */}
+                                <div className="flex flex-wrap items-center gap-2">
+                                    <div className={cn("flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-transparent text-xs font-bold", cat.bg, cat.color)}>
+                                        <CatIcon className="w-3.5 h-3.5" />
+                                        {cat.label}
                                     </div>
                                     {request.otherRequestType && (
-                                        <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-100">
-                                            <span className="text-xs font-bold text-slate-600">{request.otherRequestType}</span>
+                                        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-100 text-xs font-bold text-slate-600">
+                                            {request.otherRequestType}
                                         </div>
                                     )}
                                     {request.predictedAssistanceType && (
-                                        <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-purple-50 border border-purple-100">
-                                            <span className="text-xs font-bold text-purple-600">نوع المساعدة المقترح: {request.predictedAssistanceType}</span>
+                                        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-purple-50 border border-purple-100 text-xs font-bold text-purple-600">
+                                            نوع المساعدة المقترح: {request.predictedAssistanceType}
                                         </div>
                                     )}
                                 </div>
 
                                 {/* Description */}
-                                <div className="space-y-3">
-                                    <h3 className="text-sm font-black text-slate-800 flex items-center gap-2">
-                                        <div className="w-1 h-4 bg-warm-green rounded-full" />
+                                <div className="space-y-2">
+                                    <h3 className="text-[13px] font-black text-slate-800 flex items-center gap-2">
+                                        <div className="w-1 h-3.5 bg-warm-green rounded-full" />
                                         وصف الحالة
                                     </h3>
-                                    <div className="p-5 rounded-2xl bg-slate-50/50 border border-slate-100">
-                                        <p className="text-sm font-medium text-slate-600 leading-relaxed whitespace-pre-wrap">
+                                    <div className="p-4 rounded-xl bg-slate-50/70 border border-slate-100">
+                                        <p className="text-[13px] font-medium text-slate-600 leading-relaxed whitespace-pre-wrap">
                                             {request.description || "لا يوجد وصف"}
                                         </p>
                                     </div>
                                 </div>
 
-                                {/* Decision Reason (not terminal — shown inline for non-terminal) */}
+                                {/* Decision Reason (non-terminal) */}
                                 {!isTerminal && request.decisionReason && (
-                                    <div className="space-y-3">
-                                        <h3 className="text-sm font-black text-slate-800 flex items-center gap-2">
-                                            <div className="w-1 h-4 bg-amber-400 rounded-full" />
+                                    <div className="space-y-2">
+                                        <h3 className="text-[13px] font-black text-slate-800 flex items-center gap-2">
+                                            <div className="w-1 h-3.5 bg-amber-400 rounded-full" />
                                             سبب القرار
                                         </h3>
-                                        <div className="p-5 rounded-2xl bg-amber-50/50 border border-amber-100">
-                                            <p className="text-sm font-medium text-amber-700 leading-relaxed">{request.decisionReason}</p>
+                                        <div className="p-4 rounded-xl bg-amber-50/60 border border-amber-100">
+                                            <p className="text-[13px] font-medium text-amber-700 leading-relaxed">{request.decisionReason}</p>
                                         </div>
                                     </div>
                                 )}
 
-                                {/* Scores — Circular Progress Rings */}
+                                {/* Scores — compact pills side by side */}
                                 {(request.needScore != null || request.priorityScore != null) && (
-                                    <div className="flex gap-4 flex-wrap">
+                                    <div className="flex gap-3 flex-wrap">
                                         {request.needScore != null && (
-                                            <ScoreRing value={request.needScore} label="درجة الاحتياج" color="blue" />
+                                            <ScorePill value={request.needScore} label="درجة الاحتياج" color="blue" />
                                         )}
                                         {request.priorityScore != null && (
-                                            <ScoreRing value={request.priorityScore} label="درجة الأولوية" color="amber" />
+                                            <ScorePill value={request.priorityScore} label="درجة الأولوية" color="amber" />
                                         )}
                                     </div>
                                 )}
 
                                 {/* Handled By */}
                                 {request.handledBy && (
-                                    <div className="flex items-center gap-3 p-4 rounded-xl bg-green-50 border border-green-100">
-                                        <Shield className="w-5 h-5 text-green-600 shrink-0" />
+                                    <div className="flex items-center gap-3 p-3.5 rounded-xl bg-emerald-50 border border-emerald-100">
+                                        <Shield className="w-4 h-4 text-emerald-600 shrink-0" />
                                         <div>
-                                            <p className="text-xs font-bold text-green-500">تمت المعالجة بواسطة</p>
-                                            <p className="text-sm font-black text-green-700">{request.handledBy.name}</p>
-                                            <p className="text-[10px] text-green-500">{request.handledBy.email}</p>
+                                            <p className="text-[10px] font-bold text-emerald-500">تمت المعالجة بواسطة</p>
+                                            <p className="text-[13px] font-black text-emerald-700">{request.handledBy.name}</p>
+                                            <p className="text-[10px] text-emerald-500">{request.handledBy.email}</p>
                                         </div>
                                     </div>
                                 )}
-                            </CardContent>
-                        </Card>
+                            </div>
+                        </div>
 
                         {/* ===== Details Grid ===== */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                             {/* Employment */}
                             {emp && (
-                                <SectionCard icon={Briefcase} title="الحالة المهنية" color="bg-blue-500" delay={200}>
-                                    <InfoRow label="يعمل حالياً" value={emp.isWorking} index={0} />
+                                <Section icon={Briefcase} title="الحالة المهنية" iconColor="text-blue-500" iconBg="bg-blue-50" delay={180}>
+                                    <Field label="حالة التوظيف" value={
+                                        <span className={cn("px-2 py-0.5 rounded-full text-[11px] font-bold inline-flex items-center", emp.isWorking ? "bg-emerald-100 text-emerald-700" : "bg-rose-100 text-rose-700")}>
+                                            {emp.isWorking ? "يعمل" : "لا يعمل"}
+                                        </span>
+                                    } />
                                     {emp.isWorking && (
                                         <>
-                                            <InfoRow label="نوع العمل" value={emp.workingType != null ? workingTypeLabels[emp.workingType] : undefined} index={1} />
-                                            <InfoRow label="نوع التوظيف" value={emp.employmentType != null ? employmentTypeLabels[emp.employmentType] : undefined} index={2} />
-                                            <InfoRow label="المسمى الوظيفي" value={emp.jobTitle} index={3} />
-                                            <InfoRow label="جهة العمل" value={emp.company} index={4} />
-                                            <InfoRow label="الراتب الشهري" value={emp.salaryMonthly != null ? `${emp.salaryMonthly} ج.م` : undefined} index={5} />
-                                            <InfoRow label="وصف العمل" value={emp.workDescription} index={6} />
-                                            <InfoRow label="موقع العمل" value={emp.workLocation} index={7} />
-                                            <InfoRow label="سنوات الخدمة" value={emp.yearsAtJob} index={8} />
+                                            <Field label="نوع العمل" value={emp.workingType != null ? workingTypeLabels[emp.workingType] : undefined} />
+                                            <Field label="نوع التوظيف" value={emp.employmentType != null ? employmentTypeLabels[emp.employmentType] : undefined} />
+                                            <Field label="المسمى الوظيفي" value={emp.jobTitle} />
+                                            <Field label="جهة العمل" value={emp.company} />
+                                            <Field label="الراتب الشهري" value={formatCurrency(emp.salaryMonthly)} />
+                                            <Field label="سنوات الخدمة" value={emp.yearsAtJob} />
+                                            <Field label="وصف العمل" colSpan={2} value={emp.workDescription} />
+                                            <Field label="موقع العمل" colSpan={2} value={emp.workLocation} />
                                         </>
                                     )}
                                     {!emp.isWorking && (
                                         <>
-                                            <InfoRow label="سبب عدم العمل" value={emp.unEmploymentReason} index={1} />
-                                            <InfoRow label="يبحث عن عمل" value={emp.isLookingForJob} index={2} />
-                                            <InfoRow label="يحتاج تدريب" value={emp.needsTraining} index={3} />
-                                            <InfoRow label="الدخل المتوقع" value={emp.estimatedIncomeMonthly != null ? `${emp.estimatedIncomeMonthly} ج.م` : undefined} index={4} />
+                                            <Field label="سبب عدم العمل" value={emp.unEmploymentReason} colSpan={2} />
+                                            <Field label="يبحث عن عمل" value={emp.isLookingForJob} />
+                                            <Field label="يحتاج تدريب" value={emp.needsTraining} />
+                                            <Field label="الدخل المتوقع" value={formatCurrency(emp.estimatedIncomeMonthly)} />
                                         </>
                                     )}
-                                </SectionCard>
+                                </Section>
                             )}
 
                             {/* Health */}
                             {health && (
-                                <SectionCard icon={Heart} title="الحالة الصحية" color="bg-rose-500" delay={260}>
-                                    <InfoRow label="تأمين طبي" value={health.hasInsurance} index={0} />
-                                    {health.hasInsurance && <InfoRow label="نوع التأمين" value={health.insuranceType} index={1} />}
-                                    <InfoRow label="إعاقة" value={health.hasDisability} index={2} />
-                                    {health.hasDisability && <InfoRow label="نوع الإعاقة" value={health.disabilityType} index={3} />}
-                                    <InfoRow label="مرض مزمن" value={health.hasChronicDisease} index={4} />
+                                <Section icon={Heart} title="الحالة الصحية" iconColor="text-rose-500" iconBg="bg-rose-50" delay={230}>
+                                    <Field label="تأمين طبي" value={health.hasInsurance ? <span className="text-emerald-600">نعم{health.insuranceType ? ` (${health.insuranceType})` : ''}</span> : "لا يوجد"} />
+                                    <Field label="إعاقة" value={health.hasDisability ? <span className="text-purple-600">نعم{health.disabilityType ? ` (${health.disabilityType})` : ''}</span> : "لا يوجد"} />
+                                    <Field label="مرض مزمن" value={health.hasChronicDisease ? <span className="text-rose-600">نعم{health.chronicDiseaseType ? ` (${health.chronicDiseaseType})` : ''}</span> : "لا يوجد"} />
                                     {health.hasChronicDisease && (
-                                        <>
-                                            <InfoRow label="نوع المرض" value={health.chronicDiseaseType} index={5} />
-                                            <InfoRow label="تكلفة العلاج" value={health.medicalCostMonthly != null ? `${health.medicalCostMonthly} ج.م` : undefined} index={6} />
-                                        </>
+                                        <Field label="التكلفة الطبية الشهرية" value={formatCurrency(health.medicalCostMonthly)} />
                                     )}
-                                </SectionCard>
+                                </Section>
                             )}
 
                             {/* Living Conditions */}
                             {living && (
-                                <SectionCard icon={Home} title="الحالة المعيشية" color="bg-sky-500" delay={320}>
-                                    <InfoRow label="نوع السكن" value={living.housingType != null ? housingLabels[living.housingType] || String(living.housingType) : undefined} index={0} />
-                                    <InfoRow label="يمتلك سيارة" value={living.hasCar} index={1} />
-                                    <InfoRow label="الإيجار الشهري" value={living.rentMonthly != null ? `${living.rentMonthly} ج.م` : undefined} index={2} />
-                                    <InfoRow label="المصاريف الشهرية" value={living.monthlyExpenses != null ? `${living.monthlyExpenses} ج.م` : undefined} index={3} />
-                                    <InfoRow label="فواتير شهرية" value={living.utilitiesMonthly != null ? `${living.utilitiesMonthly} ج.م` : undefined} index={4} />
-                                    <InfoRow label="إنفاق الأسرة" value={living.householdMonthlySpending != null ? `${living.householdMonthlySpending} ج.م` : undefined} index={5} />
-                                    <InfoRow label="دفع سنوي" value={living.annualPayment != null ? `${living.annualPayment} ج.م` : undefined} index={6} />
-                                    <InfoRow label="التزامات أخرى" value={living.hasOtherCommitments} index={7} />
+                                <Section icon={Home} title="السكن والمعيشة" iconColor="text-sky-500" iconBg="bg-sky-50" delay={280}>
+                                    <Field label="نوع السكن" value={living.housingType != null ? housingLabels[living.housingType] || String(living.housingType) : undefined} />
+                                    <Field label="يمتلك سيارة" value={living.hasCar} />
+                                    <Field label="الإيجار الشهري" value={formatCurrency(living.rentMonthly)} />
+                                    <Field label="المصاريف الشهرية" value={formatCurrency(living.monthlyExpenses)} />
+                                    <Field label="فواتير الخدمات" value={formatCurrency(living.utilitiesMonthly)} />
+                                    <Field label="إنفاق الأسرة" value={formatCurrency(living.householdMonthlySpending)} />
+                                    <Field label="دفع سنوي" value={formatCurrency(living.annualPayment)} />
+                                    <Field label="التزامات أخرى" value={living.hasOtherCommitments} />
                                     {living.hasOtherCommitments && (
                                         <>
-                                            <InfoRow label="نوع الالتزام" value={living.otherCommitmentsType} index={8} />
-                                            <InfoRow label="مبلغ الالتزام" value={living.otherCommitmentsAmount != null ? `${living.otherCommitmentsAmount} ج.م` : undefined} index={9} />
+                                            <Field label="نوع الالتزام" value={living.otherCommitmentsType} colSpan={2} />
+                                            <Field label="مبلغ الالتزام" value={formatCurrency(living.otherCommitmentsAmount)} />
                                         </>
                                     )}
-                                </SectionCard>
+                                </Section>
                             )}
 
                             {/* Social Support */}
                             {social && (
-                                <SectionCard icon={Users} title="الدعم الاجتماعي" color="bg-violet-500" delay={380}>
-                                    <InfoRow label="مسجل بالدعم" value={social.registeredSocialSupport} index={0} />
+                                <Section icon={Users} title="الدعم الاجتماعي" iconColor="text-violet-500" iconBg="bg-violet-50" delay={330}>
+                                    <Field label="مسجل بالدعم" value={social.registeredSocialSupport} />
                                     {social.registeredSocialSupport && (
-                                        <InfoRow label="مبلغ الدعم" value={social.socialSupportAmount != null ? `${social.socialSupportAmount} ج.م` : undefined} index={1} />
+                                        <Field label="مبلغ الدعم" value={formatCurrency(social.socialSupportAmount)} />
                                     )}
-                                    <InfoRow label="جهات أخرى" value={social.otherAidProviders} index={2} />
-                                    <InfoRow label="نوع المساعدة" value={social.otherAidType} index={3} />
-                                    <InfoRow label="مبلغ المساعدة" value={social.otherAidAmount != null ? `${social.otherAidAmount} ج.م` : undefined} index={4} />
-                                </SectionCard>
+                                    <Field label="جهات أخرى" value={social.otherAidProviders} colSpan={2} />
+                                    <Field label="نوع المساعدة" value={social.otherAidType} />
+                                    <Field label="مبلغ المساعدة" value={formatCurrency(social.otherAidAmount)} />
+                                </Section>
                             )}
                         </div>
 
                         {/* ===== Attachments ===== */}
                         {request.attachments && request.attachments.length > 0 && (
-                            <Card className="animate-fade-slide-up border-slate-100 rounded-2xl overflow-hidden" style={{ animationDelay: "440ms" }}>
-                                <div className="h-1 w-full bg-warm-green" />
-                                <div className="p-6">
-                                    <h3 className="text-sm font-black text-slate-800 flex items-center gap-2 mb-4 pb-3 border-b border-slate-100">
-                                        <FileText className="w-4 h-4 text-slate-600" />
-                                        المستندات المرفقة ({request.attachments.length})
-                                    </h3>
-                                    <div className="space-y-2">
-                                        {request.attachments.map((att) => {
-                                            const FileIcon = getFileIcon(att.fileType);
-                                            return (
-                                                <div key={att.id} className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100 group hover:border-slate-200 transition-colors">
-                                                    <div className="w-9 h-9 rounded-lg bg-white border border-slate-100 flex items-center justify-center shrink-0">
-                                                        <FileIcon className="w-4 h-4 text-warm-green" />
-                                                    </div>
-                                                    <div className="flex-1 min-w-0">
-                                                        <p className="text-xs font-bold text-slate-700 truncate">{att.fileName}</p>
-                                                        <p className="text-[10px] text-slate-400">{att.fileType} • {att.uploadedAt ? new Date(att.uploadedAt).toLocaleDateString('ar-EG') : ""}</p>
-                                                    </div>
-                                                    {att.filePath && (
-                                                        <a href={att.filePath} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-warm-green hover:underline flex items-center gap-1 shrink-0">
-                                                            <Download className="w-3 h-3" />
-                                                            تحميل
-                                                        </a>
-                                                    )}
+                            <Section icon={Paperclip} title={`المستندات المرفقة (${request.attachments.length})`} iconColor="text-warm-green" iconBg="bg-warm-green/10" delay={380}>
+                                <div className="sm:col-span-2 space-y-2">
+                                    {request.attachments.map((att) => {
+                                        const FileIcon = getFileIcon(att.fileType);
+                                        return (
+                                            <div key={att.id} className="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-100 group hover:border-slate-200 transition-colors">
+                                                <div className="w-8 h-8 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
+                                                    <FileIcon className="w-3.5 h-3.5 text-warm-green" />
                                                 </div>
-                                            );
-                                        })}
-                                    </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-[12px] font-bold text-slate-700 truncate">{att.fileName}</p>
+                                                    <p className="text-[10px] text-slate-400">{att.fileType} • {att.uploadedAt ? new Date(att.uploadedAt).toLocaleDateString('ar-EG') : ""}</p>
+                                                </div>
+                                                {att.filePath && (
+                                                    <a href={att.filePath} target="_blank" rel="noopener noreferrer" className="text-[11px] font-bold text-warm-green hover:underline flex items-center gap-1 shrink-0">
+                                                        <Download className="w-3 h-3" />
+                                                        تحميل
+                                                    </a>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
                                 </div>
-                            </Card>
+                            </Section>
                         )}
                     </div>
                 </main>
@@ -616,11 +604,11 @@ export default function RequestDetailsPage() {
         {/* ===== Cancel Confirmation Dialog ===== */}
         <AlertDialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
             <AlertDialogContent className="rounded-2xl border-0 shadow-2xl sm:max-w-md" dir="rtl">
-                <AlertDialogHeader className="items-center text-center gap-4">
-                    <div className="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center mx-auto">
-                        <AlertCircle className="w-8 h-8 text-red-500" />
+                <AlertDialogHeader className="items-center text-center gap-3">
+                    <div className="w-14 h-14 rounded-full bg-red-50 flex items-center justify-center mx-auto">
+                        <AlertCircle className="w-7 h-7 text-red-500" />
                     </div>
-                    <AlertDialogTitle className="text-xl font-black text-slate-900">
+                    <AlertDialogTitle className="text-lg font-black text-slate-900">
                         تأكيد إلغاء الطلب
                     </AlertDialogTitle>
                     <AlertDialogDescription className="text-sm text-slate-500 font-medium leading-relaxed">
@@ -632,12 +620,12 @@ export default function RequestDetailsPage() {
                 <AlertDialogFooter className="flex-row-reverse gap-3 sm:flex-row-reverse pt-2">
                     <AlertDialogAction
                         onClick={handleCancel}
-                        className="bg-red-500 hover:bg-red-600 text-white rounded-xl h-11 px-6 font-bold text-sm flex-1"
+                        className="bg-red-500 hover:bg-red-600 text-white rounded-xl h-10 px-5 font-bold text-sm flex-1"
                     >
                         <Ban className="w-4 h-4 ml-2" />
                         نعم، إلغاء الطلب
                     </AlertDialogAction>
-                    <AlertDialogCancel className="rounded-xl h-11 px-6 font-bold text-sm flex-1 border-slate-200">
+                    <AlertDialogCancel className="rounded-xl h-10 px-5 font-bold text-sm flex-1 border-slate-200">
                         تراجع
                     </AlertDialogCancel>
                 </AlertDialogFooter>

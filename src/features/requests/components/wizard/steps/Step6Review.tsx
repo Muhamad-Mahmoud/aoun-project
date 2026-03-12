@@ -2,15 +2,16 @@
 
 import { RequestFormData } from "../schemas/requestSchema";
 import { RequestCategory } from "../types";
-import { Card } from "@/shared/ui/card";
-import { 
-    CheckCircle2, 
-    Briefcase, 
-    Heart, 
-    Home, 
-    Coins, 
-    MapPin, 
-    Info 
+import { SectionCard } from "../ui/SectionCard";
+import {
+    CheckCircle2,
+    Briefcase,
+    Heart,
+    Home,
+    Coins,
+    MapPin,
+    Info,
+    Paperclip,
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -23,25 +24,13 @@ interface Step6ReviewProps {
 export function Step6Review({ formData, categories, uploadedFiles }: Step6ReviewProps) {
     const selectedCategory = categories.find(c => c.value === formData.requestType);
 
-    const DefinitionItem = ({ label, value, icon: Icon }: { label: string, value: React.ReactNode, icon?: any }) => (
-        <div className="flex flex-col space-y-1">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-                {Icon && <Icon className="w-3.5 h-3.5" />}
-                {label}
-            </span>
-            <span className="text-sm font-bold text-slate-800 bg-slate-50 rounded-lg p-2.5 min-h-[40px] flex items-center">
-                {value || <span className="text-slate-400 font-medium italic">غير محدد</span>}
+    const Field = ({ label, value }: { label: string; value: React.ReactNode }) => (
+        <div className="flex flex-col gap-1">
+            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{label}</span>
+            <span className="text-[13px] font-semibold text-slate-800 bg-white rounded-lg px-3 py-2 min-h-[36px] flex items-center border border-slate-100">
+                {value || <span className="text-slate-400 italic font-normal text-xs">غير محدد</span>}
             </span>
         </div>
-    );
-
-    const SectionHeader = ({ title, icon: Icon }: { title: string, icon: any }) => (
-        <h4 className="flex items-center gap-2 text-base font-black text-slate-900 border-b border-slate-100 pb-3 mb-4">
-            <div className="w-8 h-8 rounded-full bg-warm-green/10 flex items-center justify-center text-warm-green">
-                <Icon className="w-4 h-4" />
-            </div>
-            {title}
-        </h4>
     );
 
     const formatCurrency = (amount: number | null | undefined) => {
@@ -49,131 +38,115 @@ export function Step6Review({ formData, categories, uploadedFiles }: Step6Review
         return `${amount.toLocaleString()} ريال`;
     };
 
-    const getHousingTypeLabel = (type: number) => {
-        return ["ملك", "إيجار", "استضافة", "سكن طوارئ", "أخرى"][type] || "غير محدد";
-    };
+    const housingLabels = ["ملك", "إيجار", "استضافة", "سكن طوارئ", "أخرى"];
 
     return (
-        <div className="space-y-6">
-            <motion.div 
-                initial={{ opacity: 0, y: 10 }} 
-                animate={{ opacity: 1, y: 0 }} 
-                className="bg-gradient-to-br from-warm-green/10 to-transparent p-5 rounded-2xl border border-warm-green/20 mb-8 flex items-start gap-4"
+        <div className="space-y-4">
+            {/* Ready banner */}
+            <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex items-center gap-3 p-4 bg-emerald-50 rounded-xl border border-emerald-100"
             >
-                <div className="bg-white p-2 rounded-full shadow-sm">
-                    <CheckCircle2 className="w-6 h-6 text-warm-green" />
+                <div className="w-8 h-8 bg-white rounded-full shadow-sm flex items-center justify-center shrink-0">
+                    <CheckCircle2 className="w-5 h-5 text-emerald-500" />
                 </div>
                 <div>
-                    <h3 className="font-bold text-slate-900 text-lg">جاهز للإرسال!</h3>
-                    <p className="text-sm text-slate-600 font-medium mt-1">
-                        يرجى مراجعة بياناتك بدقة قبل الإرسال النهائي للتأكد من صحتها وسرعة معالجة الطلب.
-                    </p>
+                    <p className="font-bold text-slate-900 text-[15px]">جاهز للإرسال!</p>
+                    <p className="text-xs text-slate-500 mt-0.5">تحقق من البيانات أدناه قبل الإرسال النهائي.</p>
                 </div>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Basic Info */}
-                <Card className="p-6 border-0 shadow-[0_2px_10px_rgba(0,0,0,0.02)] ring-1 ring-slate-100 rounded-2xl bg-white/50 backdrop-blur-sm">
-                    <SectionHeader title="البيانات الأساسية" icon={Info} />
-                    <div className="space-y-4">
-                        <DefinitionItem 
-                            label="تصنيف المساعدة" 
+                <SectionCard title="البيانات الأساسية" icon={Info}>
+                    <div className="space-y-3">
+                        <Field
+                            label="تصنيف المساعدة"
                             value={
-                                <div className={`flex items-center gap-2 ${selectedCategory?.color}`}>
+                                <span className={`flex items-center gap-2 ${selectedCategory?.color}`}>
                                     {selectedCategory && <selectedCategory.icon className="w-4 h-4" />}
                                     {formData.requestType === 6 ? formData.otherRequestType : selectedCategory?.label}
-                                </div>
-                            } 
+                                </span>
+                            }
                         />
-                        <DefinitionItem 
-                            label="المدينة / المنطقة" 
-                            value={formData.location} 
-                            icon={MapPin} 
+                        <Field
+                            label="المدينة / المنطقة"
+                            value={
+                                <span className="flex items-center gap-1.5">
+                                    <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                                    {formData.location}
+                                </span>
+                            }
                         />
-                        <DefinitionItem label="وصف الحالة" value={<p className="whitespace-pre-wrap text-sm leading-relaxed">{formData.description}</p>} />
+                        <Field label="وصف الحالة" value={<p className="whitespace-pre-wrap text-[13px] leading-relaxed">{formData.description}</p>} />
                     </div>
-                </Card>
+                </SectionCard>
 
                 {/* Employment */}
-                <Card className="p-6 border-0 shadow-[0_2px_10px_rgba(0,0,0,0.02)] ring-1 ring-slate-100 rounded-2xl bg-white/50 backdrop-blur-sm">
-                    <SectionHeader title="الحالة المهنية والسكن" icon={Briefcase} />
-                    <div className="space-y-4">
-                        <DefinitionItem 
-                            label="حالة التوظيف" 
+                <SectionCard title="الحالة المهنية والسكن" icon={Briefcase}>
+                    <div className="space-y-3">
+                        <Field
+                            label="حالة التوظيف"
                             value={
-                                <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${formData.isWorking ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}`}>
+                                <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${formData.isWorking ? "bg-emerald-100 text-emerald-700" : "bg-rose-100 text-rose-700"}`}>
                                     {formData.isWorking ? "يعمل" : "لا يعمل"}
                                 </span>
-                            } 
+                            }
                         />
                         {formData.isWorking ? (
                             <>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <DefinitionItem label="المسمى الوظيفي" value={formData.jobTitle} />
-                                    <DefinitionItem label="الدخل الشهري" value={formatCurrency(formData.salaryMonthly)} />
+                                <div className="grid grid-cols-2 gap-3">
+                                    <Field label="المسمى الوظيفي" value={formData.jobTitle} />
+                                    <Field label="الدخل الشهري" value={formatCurrency(formData.salaryMonthly)} />
                                 </div>
-                                <DefinitionItem label="جهة العمل" value={formData.company} />
+                                <Field label="جهة العمل" value={formData.company} />
                             </>
                         ) : (
-                            <DefinitionItem label="سبب عدم العمل" value={formData.unEmploymentReason} />
+                            <Field label="سبب عدم العمل" value={formData.unEmploymentReason} />
                         )}
-                        <DefinitionItem label="نوع السكن" value={getHousingTypeLabel(formData.housingType)} icon={Home} />
+                        <Field label="نوع السكن" value={housingLabels[formData.housingType] ?? "غير محدد"} />
                     </div>
-                </Card>
+                </SectionCard>
 
                 {/* Health */}
-                <Card className="p-6 border-0 shadow-[0_2px_10px_rgba(0,0,0,0.02)] ring-1 ring-slate-100 rounded-2xl bg-white/50 backdrop-blur-sm">
-                    <SectionHeader title="الحالة الصحية" icon={Heart} />
-                    <div className="grid grid-cols-2 gap-4">
-                        <DefinitionItem 
-                            label="تأمين طبي" 
-                            value={formData.hasInsurance ? <span className="text-emerald-600">نعم ({formData.insuranceType})</span> : "لا يوجد"} 
-                        />
-                        <DefinitionItem 
-                            label="أمراض مزمنة" 
-                            value={formData.hasChronicDisease ? <span className="text-rose-600">نعم ({formData.chronicDiseaseType})</span> : "لا يوجد"} 
-                        />
-                        <DefinitionItem 
-                            label="إعاقة" 
-                            value={formData.hasDisability ? <span className="text-purple-600">نعم ({formData.disabilityType})</span> : "لا يوجد"} 
-                        />
+                <SectionCard title="الحالة الصحية" icon={Heart} iconColor="text-rose-500" iconBg="bg-rose-50">
+                    <div className="grid grid-cols-2 gap-3">
+                        <Field label="تأمين طبي" value={formData.hasInsurance ? <span className="text-emerald-600">نعم ({formData.insuranceType})</span> : "لا يوجد"} />
+                        <Field label="أمراض مزمنة" value={formData.hasChronicDisease ? <span className="text-rose-600">نعم ({formData.chronicDiseaseType})</span> : "لا يوجد"} />
+                        <Field label="إعاقة" value={formData.hasDisability ? <span className="text-purple-600">نعم ({formData.disabilityType})</span> : "لا يوجد"} />
                         {formData.hasChronicDisease && (
-                            <DefinitionItem label="التكلفة الطبية الشهرية" value={formatCurrency(formData.medicalCostMonthly)} />
+                            <Field label="التكلفة الطبية الشهرية" value={formatCurrency(formData.medicalCostMonthly)} />
                         )}
                     </div>
-                </Card>
+                </SectionCard>
 
                 {/* Financial */}
-                <Card className="p-6 border-0 shadow-[0_2px_10px_rgba(0,0,0,0.02)] ring-1 ring-slate-100 rounded-2xl bg-white/50 backdrop-blur-sm">
-                    <SectionHeader title="الوضع المالي" icon={Coins} />
-                    <div className="grid grid-cols-2 gap-4">
-                        <DefinitionItem label="إجمالي المصاريف الشهرية" value={formatCurrency(formData.monthlyExpenses)} />
+                <SectionCard title="الوضع المالي" icon={Coins} iconColor="text-amber-500" iconBg="bg-amber-50">
+                    <div className="grid grid-cols-2 gap-3">
+                        <Field label="إجمالي المصاريف" value={formatCurrency(formData.monthlyExpenses)} />
                         {formData.housingType === 1 && (
-                            <DefinitionItem label="الإيجار الشهري" value={formatCurrency(formData.rentMonthly)} />
+                            <Field label="الإيجار الشهري" value={formatCurrency(formData.rentMonthly)} />
                         )}
-                        <DefinitionItem label="فواتير الخدمات" value={formatCurrency(formData.utilitiesMonthly)} />
+                        <Field label="فواتير الخدمات" value={formatCurrency(formData.utilitiesMonthly)} />
                         {formData.registeredSocialSupport && (
-                            <DefinitionItem label="قيمة الدعم الاجتماعي" value={formatCurrency(formData.socialSupportAmount)} />
+                            <Field label="الدعم الاجتماعي" value={formatCurrency(formData.socialSupportAmount)} />
                         )}
                     </div>
-                </Card>
+                </SectionCard>
             </div>
 
-            {/* Attachments Summary */}
+            {/* Attachments */}
             {uploadedFiles.length > 0 && (
-                <Card className="p-6 border-0 shadow-[0_2px_10px_rgba(0,0,0,0.02)] ring-1 ring-slate-100 rounded-2xl bg-white/50 backdrop-blur-sm mt-6">
-                    <div className="flex items-center gap-2 mb-2">
-                        <h4 className="text-base font-black text-slate-900">المرفقات</h4>
-                        <span className="bg-warm-green/10 text-warm-green text-xs font-bold px-2 py-0.5 rounded-full">
-                            {uploadedFiles.length} ملفات
-                        </span>
-                    </div>
-                    <ul className="text-sm font-medium text-slate-600 list-disc list-inside space-y-1">
+                <SectionCard title={`المرفقات (${uploadedFiles.length})`} icon={Paperclip}>
+                    <ul className="flex flex-wrap gap-2">
                         {uploadedFiles.map((f, i) => (
-                            <li key={i}>{f.name}</li>
+                            <li key={i} className="text-xs font-medium text-slate-600 bg-white border border-slate-100 px-3 py-1.5 rounded-lg">
+                                {f.name}
+                            </li>
                         ))}
                     </ul>
-                </Card>
+                </SectionCard>
             )}
         </div>
     );

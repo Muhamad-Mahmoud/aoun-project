@@ -5,6 +5,7 @@ import { Switch } from "@/shared/ui/switch";
 import { RequestFormData } from "../schemas/requestSchema";
 import { Wallet, Receipt, Home, Building2 } from "lucide-react";
 import { cn } from "@/shared/utils";
+import { SectionCard } from "../ui/SectionCard";
 
 interface Step4FinancialProps {
     control: Control<RequestFormData>;
@@ -13,28 +14,15 @@ interface Step4FinancialProps {
     hasOtherCommitments: boolean;
 }
 
-export function Step4Financial({ control, registeredSocialSupport, housingType, hasOtherCommitments }: Step4FinancialProps) {
-    
-    // Helper for input styling
-    const inputClassName = "h-12 rounded-xl border-slate-200 bg-white hover:border-slate-300 focus:bg-white focus:ring-2 focus:ring-warm-green/10 focus:border-warm-green/40 shadow-sm transition-all duration-300 px-4 text-[14px] font-medium placeholder:text-slate-400";
-    
-    // Helper for section headers
-    const SectionHeader = ({ title, icon: Icon }: { title: string, icon: any }) => (
-        <div className="flex items-center gap-2 mb-4 pb-3 border-b border-slate-100/80">
-            <div className="w-7 h-7 rounded-lg bg-warm-green/10 flex items-center justify-center text-warm-green">
-                <Icon className="w-3.5 h-3.5" />
-            </div>
-            <h4 className="text-[15px] font-black text-slate-800">{title}</h4>
-        </div>
-    );
+const inputCls = "h-11 rounded-xl border border-slate-200 bg-white hover:border-slate-300 focus:ring-2 focus:ring-warm-green/15 focus:border-warm-green/50 shadow-sm transition-all px-4 text-[14px] font-medium placeholder:text-slate-400";
 
+export function Step4Financial({ control, registeredSocialSupport, housingType, hasOtherCommitments }: Step4FinancialProps) {
     return (
-        <div className="space-y-6 sm:space-y-8">
-            
-            {/* 1. Basic Expenses Section */}
-            <div className="bg-slate-50/50 p-4 sm:p-5 rounded-[1.5rem] border border-slate-100/80 shadow-sm">
-                <SectionHeader title="المصروفات الأساسية" icon={Wallet} />
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+        <div className="space-y-5">
+
+            {/* 1. Basic Expenses */}
+            <SectionCard title="المصروفات الأساسية" icon={Wallet}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <FormField
                         control={control}
                         name="monthlyExpenses"
@@ -45,41 +33,26 @@ export function Step4Financial({ control, registeredSocialSupport, housingType, 
                                 </FormLabel>
                                 <FormControl>
                                     <div className="relative">
-                                        <Input
-                                            type="number"
-                                            placeholder="مثال: 3500"
-                                            className={inputClassName}
-                                            {...field}
-                                            value={field.value ?? ""}
-                                            onChange={e => field.onChange(e.target.valueAsNumber || 0)}
-                                        />
-                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">ريال</span>
+                                        <Input type="number" placeholder="مثال: 3500" className={inputCls} {...field} value={field.value ?? ""} onChange={e => field.onChange(e.target.valueAsNumber || 0)} />
+                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">ريال</span>
                                     </div>
                                 </FormControl>
                                 <FormMessage className="text-rose-500 text-xs" />
                             </FormItem>
                         )}
                     />
-
                     <FormField
                         control={control}
                         name="utilitiesMonthly"
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel className="text-[13px] font-bold text-slate-700">
-                                    فواتير الخدمات الشهرية (كهرباء، ماء...) <span className="text-rose-500">*</span>
+                                    فواتير الخدمات الشهرية <span className="text-rose-500">*</span>
                                 </FormLabel>
                                 <FormControl>
                                     <div className="relative">
-                                        <Input
-                                            type="number"
-                                            placeholder="مثال: 450"
-                                            className={inputClassName}
-                                            {...field}
-                                            value={field.value ?? ""}
-                                            onChange={e => field.onChange(e.target.valueAsNumber || 0)}
-                                        />
-                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">ريال</span>
+                                        <Input type="number" placeholder="مثال: 450" className={inputCls} {...field} value={field.value ?? ""} onChange={e => field.onChange(e.target.valueAsNumber || 0)} />
+                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">ريال</span>
                                     </div>
                                 </FormControl>
                                 <FormMessage className="text-rose-500 text-xs" />
@@ -87,27 +60,25 @@ export function Step4Financial({ control, registeredSocialSupport, housingType, 
                         )}
                     />
                 </div>
-            </div>
+            </SectionCard>
 
-            {/* 2. Housing & Accommodations */}
-            <div className="bg-slate-50/50 p-4 sm:p-5 rounded-[1.5rem] border border-slate-100/80 shadow-sm">
-                <SectionHeader title="الوضع السكني والإيجارات" icon={Home} />
-                
+            {/* 2. Housing */}
+            <SectionCard title="الوضع السكني" icon={Home}>
                 <FormField
                     control={control}
                     name="housingType"
                     render={({ field }) => (
-                        <FormItem className="mb-5">
-                            <FormLabel className="text-[13px] font-bold text-slate-700 mb-2.5 block">
-                                نوع السكن الحالي <span className="text-rose-500">*</span>
+                        <FormItem className="mb-4">
+                            <FormLabel className="text-[13px] font-bold text-slate-700 mb-2 block">
+                                نوع السكن <span className="text-rose-500">*</span>
                             </FormLabel>
                             <FormControl>
-                                <div className="grid grid-cols-2 lg:grid-cols-5 gap-2.5">
+                                <div className="flex flex-wrap gap-2">
                                     {[
                                         { val: 0, label: "ملك" },
                                         { val: 1, label: "إيجار" },
                                         { val: 2, label: "استضافة" },
-                                        { val: 3, label: "سكن طوارئ" },
+                                        { val: 3, label: "طوارئ" },
                                         { val: 4, label: "أخرى" },
                                     ].map((opt) => {
                                         const isActive = field.value === opt.val;
@@ -116,10 +87,10 @@ export function Step4Financial({ control, registeredSocialSupport, housingType, 
                                                 key={opt.val}
                                                 onClick={() => field.onChange(opt.val)}
                                                 className={cn(
-                                                    "cursor-pointer text-center py-2.5 px-3 rounded-lg border-2 font-bold text-[13px] transition-all duration-200 select-none",
+                                                    "cursor-pointer py-2 px-4 rounded-lg border-2 font-bold text-[13px] transition-all duration-200 select-none",
                                                     isActive
-                                                        ? "bg-warm-green/10 border-warm-green text-warm-green shadow-[0_2px_10px_rgba(134,181,65,0.1)]"
-                                                        : "bg-white border-slate-100 text-slate-600 hover:border-slate-200 hover:bg-slate-50/80"
+                                                        ? "bg-warm-green/10 border-warm-green text-warm-green"
+                                                        : "bg-white border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50"
                                                 )}
                                             >
                                                 {opt.label}
@@ -133,27 +104,19 @@ export function Step4Financial({ control, registeredSocialSupport, housingType, 
                     )}
                 />
 
-                {/* Show Rent only if housing is Rented (1) */}
                 {housingType === 1 && (
                     <FormField
                         control={control}
                         name="rentMonthly"
                         render={({ field }) => (
-                            <FormItem className="pt-2 animate-in fade-in slide-in-from-top-2">
+                            <FormItem className="animate-in fade-in slide-in-from-top-2 duration-300">
                                 <FormLabel className="text-[13px] font-bold text-slate-700">
                                     قيمة الإيجار الشهري <span className="text-rose-500">*</span>
                                 </FormLabel>
                                 <FormControl>
-                                    <div className="relative md:max-w-sm">
-                                        <Input
-                                            type="number"
-                                            placeholder="أدخل قيمة الإيجار"
-                                            className={inputClassName}
-                                            {...field}
-                                            value={field.value ?? ""}
-                                            onChange={e => field.onChange(e.target.valueAsNumber || 0)}
-                                        />
-                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">ريال</span>
+                                    <div className="relative max-w-xs">
+                                        <Input type="number" placeholder="أدخل قيمة الإيجار" className={inputCls} {...field} value={field.value ?? ""} onChange={e => field.onChange(e.target.valueAsNumber || 0)} />
+                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">ريال</span>
                                     </div>
                                 </FormControl>
                                 <FormMessage className="text-rose-500 text-xs" />
@@ -161,55 +124,38 @@ export function Step4Financial({ control, registeredSocialSupport, housingType, 
                         )}
                     />
                 )}
-            </div>
+            </SectionCard>
 
-            {/* 3. Support & Commitments (Grid) */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-                
+            {/* 3. Support & Commitments */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+
                 {/* Social Support Block */}
-                <div className="bg-slate-50/50 p-4 sm:p-5 rounded-[1.5rem] border border-slate-100/80 shadow-sm flex flex-col">
-                    <div className="flex items-center justify-between mb-5">
-                        <div className="flex items-center gap-2">
-                            <div className="w-7 h-7 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500">
-                                <Building2 className="w-3.5 h-3.5" />
-                            </div>
-                            <h4 className="text-[14px] font-black text-slate-800">الضمان الاجتماعي</h4>
-                        </div>
+                <SectionCard icon={Building2} iconColor="text-sky-500" iconBg="bg-sky-500/10">
+                    <div className="flex items-center justify-between mb-4">
+                        <span className="text-[14px] font-black text-slate-800">الضمان الاجتماعي</span>
                         <FormField
                             control={control}
                             name="registeredSocialSupport"
                             render={({ field }) => (
                                 <FormItem className="flex items-center m-0 space-y-0">
                                     <FormControl>
-                                        <Switch
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                            className="data-[state=checked]:bg-blue-500 scale-90"
-                                        />
+                                        <Switch checked={field.value} onCheckedChange={field.onChange} className="data-[state=checked]:bg-sky-500" />
                                     </FormControl>
                                 </FormItem>
                             )}
                         />
                     </div>
-                    
                     {registeredSocialSupport && (
                         <FormField
                             control={control}
                             name="socialSupportAmount"
                             render={({ field }) => (
-                                <FormItem className="mt-auto animate-in fade-in zoom-in-95">
+                                <FormItem className="animate-in fade-in zoom-in-95">
                                     <FormLabel className="text-[12px] font-bold text-slate-600">القيمة الشهرية للدعم</FormLabel>
                                     <FormControl>
                                         <div className="relative">
-                                            <Input
-                                                type="number"
-                                                placeholder="0"
-                                                className={cn(inputClassName, "focus:ring-blue-500/10 focus:border-blue-500/40")}
-                                                {...field}
-                                                value={field.value ?? ""}
-                                                onChange={e => field.onChange(e.target.valueAsNumber || null)}
-                                            />
-                                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400">ريال</span>
+                                            <Input type="number" placeholder="0" className={cn(inputCls, "focus:ring-sky-500/10 focus:border-sky-500/40")} {...field} value={field.value ?? ""} onChange={e => field.onChange(e.target.valueAsNumber || null)} />
+                                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">ريال</span>
                                         </div>
                                     </FormControl>
                                     <FormMessage className="text-xs text-rose-500" />
@@ -217,36 +163,26 @@ export function Step4Financial({ control, registeredSocialSupport, housingType, 
                             )}
                         />
                     )}
-                </div>
+                </SectionCard>
 
-                {/* Other Commitments Block */}
-                <div className="bg-slate-50/50 p-4 sm:p-5 rounded-[1.5rem] border border-slate-100/80 shadow-sm flex flex-col">
-                    <div className="flex items-center justify-between mb-5">
-                        <div className="flex items-center gap-2">
-                            <div className="w-7 h-7 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-500">
-                                <Receipt className="w-3.5 h-3.5" />
-                            </div>
-                            <h4 className="text-[14px] font-black text-slate-800">التزامات وقروض</h4>
-                        </div>
+                {/* Commitments Block */}
+                <SectionCard icon={Receipt} iconColor="text-purple-500" iconBg="bg-purple-500/10">
+                    <div className="flex items-center justify-between mb-4">
+                        <span className="text-[14px] font-black text-slate-800">التزامات وقروض</span>
                         <FormField
                             control={control}
                             name="hasOtherCommitments"
                             render={({ field }) => (
                                 <FormItem className="flex items-center m-0 space-y-0">
                                     <FormControl>
-                                        <Switch
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                            className="data-[state=checked]:bg-purple-500 scale-90"
-                                        />
+                                        <Switch checked={field.value} onCheckedChange={field.onChange} className="data-[state=checked]:bg-purple-500" />
                                     </FormControl>
                                 </FormItem>
                             )}
                         />
                     </div>
-                    
                     {hasOtherCommitments && (
-                        <div className="grid grid-cols-2 gap-3 mt-auto animate-in fade-in zoom-in-95">
+                        <div className="grid grid-cols-2 gap-3 animate-in fade-in zoom-in-95">
                             <FormField
                                 control={control}
                                 name="otherCommitmentsType"
@@ -254,12 +190,7 @@ export function Step4Financial({ control, registeredSocialSupport, housingType, 
                                     <FormItem>
                                         <FormLabel className="text-[12px] font-bold text-slate-600">نوع الالتزام</FormLabel>
                                         <FormControl>
-                                            <Input
-                                                placeholder="قرض، أقساط..."
-                                                className={cn(inputClassName, "focus:ring-purple-500/10 focus:border-purple-500/40")}
-                                                {...field}
-                                                value={field.value ?? ""}
-                                            />
+                                            <Input placeholder="قرض، أقساط..." className={cn(inputCls, "focus:ring-purple-500/10 focus:border-purple-500/40")} {...field} value={field.value ?? ""} />
                                         </FormControl>
                                         <FormMessage className="text-xs text-rose-500" />
                                     </FormItem>
@@ -273,14 +204,7 @@ export function Step4Financial({ control, registeredSocialSupport, housingType, 
                                         <FormLabel className="text-[12px] font-bold text-slate-600">القيمة الشهرية</FormLabel>
                                         <FormControl>
                                             <div className="relative">
-                                                <Input
-                                                    type="number"
-                                                    placeholder="0"
-                                                    className={cn(inputClassName, "focus:ring-purple-500/10 focus:border-purple-500/40 pr-3 pl-10")}
-                                                    {...field}
-                                                    value={field.value ?? ""}
-                                                    onChange={e => field.onChange(e.target.valueAsNumber || null)}
-                                                />
+                                                <Input type="number" placeholder="0" className={cn(inputCls, "focus:ring-purple-500/10 focus:border-purple-500/40 pl-10")} {...field} value={field.value ?? ""} onChange={e => field.onChange(e.target.valueAsNumber || null)} />
                                                 <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400">ريال</span>
                                             </div>
                                         </FormControl>
@@ -290,8 +214,7 @@ export function Step4Financial({ control, registeredSocialSupport, housingType, 
                             />
                         </div>
                     )}
-                </div>
-
+                </SectionCard>
             </div>
         </div>
     );
