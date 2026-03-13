@@ -48,7 +48,7 @@ export default function OrganizationDashboardPage() {
 
     // Default fallbacks in case API data is shaped differently or empty
     const tasks: Task[] = Array.isArray(undertakings?.tasks) ? undertakings.tasks : [];
-    const activities: TimelineItem[] = Array.isArray(analytics?.activities) ? analytics.activities : [];
+    const activities: TimelineItem[] = Array.isArray((analytics as any)?.activities) ? (analytics as any).activities : [];
 
     return (
         <DashboardLayout>
