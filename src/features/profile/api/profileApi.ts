@@ -16,7 +16,7 @@ export async function getUserProfile(userId: string): Promise<UserProfile> {
 
 export async function getOrganizationProfile(orgId: string): Promise<OrganizationProfile> {
     const response = await apiClient.get<ApiResponse<OrganizationProfile>>(
-        API_ENDPOINTS.organization.get(orgId)
+        API_ENDPOINTS.association.profile
     );
     return response.data.data;
 }
