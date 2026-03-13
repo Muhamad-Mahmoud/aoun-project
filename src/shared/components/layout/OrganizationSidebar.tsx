@@ -15,6 +15,7 @@ import {
   ChevronLeft,
   Search
 } from "lucide-react";
+import { motion } from "framer-motion";
 
 import { cn } from "@/shared/utils";
 import { Button } from "@/shared/ui/button";
@@ -36,7 +37,7 @@ export function OrganizationSidebarContent() {
       {/* Logo area */}
       <div className="p-8 border-b border-border/50">
         <Link href="/" className="flex items-center gap-3">
-          <Image src="/logo.png" alt="عون" width={96} height={48} className="h-12 w-auto" />
+          <Image src="/logo.png" alt="عون" width={96} height={48} className="h-12" />
         </Link>
       </div>
 
@@ -50,20 +51,29 @@ export function OrganizationSidebarContent() {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center justify-between p-3.5 rounded-xl transition-all duration-300 group",
+                "flex items-center justify-between p-3 rounded-xl transition-all duration-300 group relative",
                 isActive
-                  ? "bg-secondary/10 text-secondary shadow-sm border border-secondary/20"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  ? "bg-secondary/10 text-secondary"
+                  : "text-muted-foreground hover:bg-slate-50 hover:text-foreground"
               )}
             >
+              {isActive && (
+                <motion.div 
+                  layoutId="active-pill"
+                  className="absolute left-0 top-2 bottom-2 w-1 bg-secondary rounded-r-full"
+                />
+              )}
               <div className="flex items-center gap-3">
                 <div className={cn(
-                  "p-2 rounded-lg transition-colors",
-                  isActive ? "bg-secondary text-white" : "bg-muted group-hover:bg-secondary/10 group-hover:text-secondary"
+                  "p-2 rounded-lg transition-all duration-300",
+                  isActive ? "bg-secondary text-white shadow-md scale-110" : "bg-slate-50 group-hover:bg-secondary/10 group-hover:text-secondary"
                 )}>
                   <Icon className="w-5 h-5" />
                 </div>
-                <span className="font-bold text-sm">{item.label}</span>
+                <span className={cn(
+                  "text-sm transition-all duration-300",
+                  isActive ? "font-black" : "font-bold"
+                )}>{item.label}</span>
               </div>
               {isActive && <ChevronLeft className="w-4 h-4" />}
             </Link>

@@ -41,11 +41,21 @@ export const API_ENDPOINTS = {
         reviews: '/api/profile/reviews',
     },
 
-    // Organization endpoints
-    organization: {
-        get: (id: string) => `/api/organization/${id}`,
-        update: '/api/organization',
-        members: '/api/organization/members',
+    // Association endpoints
+    association: {
+        profile: '/api/Associations/profile',
+        requests: '/api/Associations/requests',
+        requestById: (id: string | number) => `/api/Associations/requests/${id}`,
+        acceptRequest: (id: string | number) => `/api/Associations/requests/${id}/accept`,
+        rejectRequest: (id: string | number) => `/api/Associations/requests/${id}/reject`,
+    },
+
+    // Dashboard endpoints
+    dashboard: {
+        association: {
+            undertakings: '/api/Dashboard/Association/undertakings',
+            analytics: '/api/Dashboard/Association/analytics',
+        }
     },
 
     // Families endpoints

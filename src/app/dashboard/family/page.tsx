@@ -145,8 +145,8 @@ export default function FamilyDashboardPage() {
             <FamilySidebar />
             <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-[#f8fafc]" dir="rtl">
                 <DashboardTopBar userType="family" />
-                <main className="pb-20 pt-20 lg:pt-32 relative z-10">
-                    <div className="space-y-10 px-6 lg:px-10">
+                <main className="pb-20 pt-6 lg:pt-8 relative z-10">
+                    <div className="space-y-6 px-6 lg:px-10">
                         {/* Welcome Section */}
                         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 animate-in fade-in slide-in-from-top-4 duration-700">
                             <div className="space-y-1">
