@@ -13,8 +13,10 @@ export async function middleware(request: NextRequest) {
     // 1. API Proxy Logic (Improved with direct fetch for better external proxying)
     if (pathname.startsWith('/api/proxy')) {
         const targetPath = pathname.replace('/api/proxy', '');
-        const baseUrl = env.NEXT_PUBLIC_API_URL || 'https://aoun-api.runasp.net';
-        const targetUrl = `${baseUrl}${targetPath}${request.nextUrl.search}`;
+        const baseUrl = env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:5204';
+        let targetUrl = `${baseUrl}${targetPath}${request.nextUrl.search}`;
+        // Fix for Node.js 18+ preferring IPv6 (::1) which breaks local ASP.NET connections
+        targetUrl = targetUrl.replace('localhost', '127.0.0.1');
         
         console.log(`[Proxy Log] ${request.method} ${pathname} -> ${targetUrl}`);
 

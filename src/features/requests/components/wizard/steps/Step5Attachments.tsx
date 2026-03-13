@@ -3,7 +3,7 @@
 import { X, UploadCloud, ImageIcon, FileText, AlertCircle } from "lucide-react";
 import { Input } from "@/shared/ui/input";
 import { Button } from "@/shared/ui/button";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/utils/cn";
 
 interface Step5AttachmentsProps {
     uploadedFiles: File[];
