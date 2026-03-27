@@ -43,6 +43,15 @@ export const API_ENDPOINTS = {
         changePassword: '/api/User/change-password',
     },
 
+    // Profile endpoints (General profile queries)
+    profile: {
+        get: (id: string) => `/api/profile/${id}`,
+        update: '/api/profile',
+        avatar: '/api/profile/avatar',
+        bookings: '/api/profile/bookings',
+        reviews: '/api/profile/reviews',
+    },
+
     // Association endpoints
     association: {
         profile: '/api/Associations/profile',
