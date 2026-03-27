@@ -69,51 +69,48 @@ export async function createRequest(payload: CreateAidRequestPayload): Promise<A
         if (key === 'attachments') return;
         
         const apiFieldName = fieldMapping[key] || (key.charAt(0).toUpperCase() + key.slice(1));
-        
-        // --- 1. MANDATORY FIELDS (STRICT SWAGGER ALIGNMENT) ---
-        // These are the ONLY 10 fields marked 'required' in the Swagger POST /api/Requests DTO.
-        const mandatoryApiFields = [
-            'Description', 'HasCar', 'HasChronicDisease', 'HasDisability', 
-            'HasInsurance', 'HasOtherCommitments', 'HousingType', 
-            'IsWorking', 'RegisteredSocialSupport', 'RequestType'
-        ];
 
-        if (mandatoryApiFields.includes(apiFieldName)) {
-            // Send as-is
-            const valToSend = (value === null || value === undefined) ? "" : value.toString();
-            formData.append(apiFieldName, valToSend);
-            return;
+        let finalValue = value;
+
+        // Reset conditional fields instead of dropping them
+        // Employment
+        if (!payload.isWorking && ['workingType', 'employmentType', 'salaryMonthly', 'yearsAtJob', 'estimatedIncomeMonthly'].includes(key)) {
+            finalValue = 0;
+        } else if (!payload.isWorking && ['jobTitle', 'company', 'workDescription', 'workLocation'].includes(key)) {
+            finalValue = "";
+        } else if (payload.isWorking && ['unEmploymentReason'].includes(key)) {
+            finalValue = "";
+        }
+        
+        // Health
+        if (!payload.hasInsurance && key === 'insuranceType') finalValue = "";
+        if (!payload.hasDisability && key === 'disabilityType') finalValue = "";
+        if (!payload.hasChronicDisease && key === 'chronicDiseaseType') finalValue = "";
+        if (!payload.hasChronicDisease && key === 'medicalCostMonthly') finalValue = 0;
+        
+        // Living
+        if (payload.housingType !== "Rented" && key === 'rentMonthly') finalValue = 0;
+        if (!payload.hasOtherCommitments && key === 'otherCommitmentsType') finalValue = "";
+        if (!payload.hasOtherCommitments && key === 'otherCommitmentsAmount') finalValue = 0;
+        
+        // Social Support & Other Aid
+        if (!payload.registeredSocialSupport && key === 'socialSupportAmount') finalValue = 0;
+        if (!payload.otherAidProviders && key === 'otherAidProviders') finalValue = "";
+        if (!payload.otherAidType && key === 'otherAidType') finalValue = "";
+        if (!payload.otherAidAmount && key === 'otherAidAmount') finalValue = 0;
+
+        // Force '0' for missing numbers, empty string for missing strings
+        const numericFields = ['workingType', 'employmentType', 'salaryMonthly', 'yearsAtJob', 'estimatedIncomeMonthly', 'medicalCostMonthly', 'rentMonthly', 'monthlyExpenses', 'utilitiesMonthly', 'otherCommitmentsAmount', 'householdMonthlySpending', 'annualPayment', 'socialSupportAmount', 'otherAidAmount'];
+        
+        if (finalValue === undefined || finalValue === null || finalValue === "") {
+            if (numericFields.includes(key)) {
+                finalValue = 0;
+            } else if (typeof finalValue !== 'boolean') {
+                finalValue = "";
+            }
         }
 
-        // --- 2. SURGICAL FILTERING FOR OPTIONAL FIELDS ---
-        // We only send purely optional fields if they have a non-default, non-empty value.
-        // This avoids triggering database check constraints (e.g. Salary must be > 0).
-
-        // Skip null/undefined/empty immediately for optional fields
-        if (value === undefined || value === null || value === "") return;
-
-        // Skip fields that are logically irrelevant based on master toggles
-        const isWorking = payload.isWorking;
-        if (!isWorking && [
-            'workingType', 'employmentType', 'jobTitle', 'company', 
-            'salaryMonthly', 'workDescription', 'workLocation', 'yearsAtJob'
-        ].includes(key)) return;
-
-        if (isWorking && (key === 'unEmploymentReason' || key === 'estimatedIncomeMonthly')) return;
-
-        if (!payload.hasInsurance && key === 'insuranceType') return;
-        if (!payload.hasDisability && key === 'disabilityType') return;
-        if (!payload.hasChronicDisease && (key === 'chronicDiseaseType' || key === 'medicalCostMonthly')) return;
-        
-        if (payload.housingType !== "Rented" && key === 'rentMonthly') return; // Rented
-        if (!payload.registeredSocialSupport && key === 'socialSupportAmount') return;
-        if (!payload.hasOtherCommitments && (key === 'otherCommitmentsType' || key === 'otherCommitmentsAmount')) return;
-
-        // --- 3. VALUE-BASED FILTERING ---
-        // Allow 0 and false.
-        if (value === null || value === undefined || value === "") return;
-
-        formData.append(apiFieldName, value.toString());
+        formData.append(apiFieldName, finalValue.toString());
     });
 
     // Append file attachments (Scale per Swagger lowercase)
