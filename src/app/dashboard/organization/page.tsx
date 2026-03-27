@@ -11,6 +11,8 @@ import { Plus, Search, Award, Users, AlertCircle, Loader2, XCircle, Clock, Targe
 import { useAssociationDashboard } from "@/features/associations";
 import { type TimelineItem } from "@/shared/components/common/Timeline";
 import { MonthlyTrendChart, RequestTypeChart } from "@/features/dashboard/components/AnalyticsCharts";
+import { BrainCircuit, ActivitySquare } from "lucide-react";
+import { Card } from "@/shared/ui/card";
 
 export default function OrganizationDashboardPage() {
     const { undertakings, analytics, isLoading, error } = useAssociationDashboard();
@@ -19,7 +21,7 @@ export default function OrganizationDashboardPage() {
         return (
             <DashboardLayout>
                 <OrganizationSidebar />
-                <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-[#f8fafc]">
+                <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-slate-50">
                     <DashboardTopBar userType="organization" />
                     <div className="flex-1 flex items-center justify-center">
                         <Loader2 className="w-10 h-10 animate-spin text-primary" />
@@ -33,7 +35,7 @@ export default function OrganizationDashboardPage() {
         return (
             <DashboardLayout>
                 <OrganizationSidebar />
-                <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-[#f8fafc]">
+                <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-slate-50">
                     <DashboardTopBar userType="organization" />
                     <div className="flex-1 flex items-center justify-center text-destructive">
                         <div className="text-center">
@@ -53,7 +55,7 @@ export default function OrganizationDashboardPage() {
     return (
         <DashboardLayout>
             <OrganizationSidebar />
-            <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-[#f8fafc]">
+            <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-slate-50">
                 <DashboardTopBar userType="organization" />
                 <main className="pb-20 pt-6 lg:pt-8 relative z-10">
                     <div className="space-y-6 px-6 lg:px-10">
@@ -63,59 +65,100 @@ export default function OrganizationDashboardPage() {
                                 <p className="text-sm text-slate-500 font-bold mt-1">إدارة الطلبات والحالات بفاعلية ودقة.</p>
                             </div>
 
-                            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+                            <div className="space-y-10">
+                            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                                 <StatsCard stat={{ 
                                     label: "طلبات جديدة", 
                                     value: String(analytics?.totalRequestsReceived || 0), 
                                     change: "إجمالي المستلم", 
                                     trend: "up", 
-                                    icon: Plus, iconBg: "bg-sky-blue/10", iconColor: "text-sky-blue" 
+                                    icon: Plus, iconBg: "bg-white/10", iconColor: "text-white",
+                                    isPrimary: true 
                                 }} />
                                 <StatsCard stat={{ 
                                     label: "قيد الدراسة", 
                                     value: String(analytics?.totalRequestsInReview || 0), 
                                     change: "جاري البحث", 
                                     trend: "neutral", 
-                                    icon: Search, iconBg: "bg-golden-orange/10", iconColor: "text-golden-orange" 
-                                }} />
-                                <StatsCard stat={{ 
-                                    label: "طلبات مرفوضة", 
-                                    value: String(analytics?.totalRequestsRejected || 0), 
-                                    change: "لم تستوف الشروط", 
-                                    trend: "down", 
-                                    icon: XCircle, iconBg: "bg-red-500/10", iconColor: "text-red-500" 
+                                    icon: Search, iconBg: "bg-amber-50", iconColor: "text-amber-500" 
                                 }} />
                                 <StatsCard stat={{ 
                                     label: "مساعدات معتمدة", 
                                     value: String(analytics?.totalRequestsApproved || 0), 
                                     change: "تمت الموافقة", 
                                     trend: "up", 
-                                    icon: Award, iconBg: "bg-warm-green/10", iconColor: "text-warm-green" 
+                                    icon: Award, iconBg: "bg-emerald-50", iconColor: "text-emerald-500" 
                                 }} />
                                 <StatsCard stat={{ 
-                                    label: "متوسط الاحتياج", 
-                                    value: `${Math.round(analytics?.averageMetrics?.averageNeedScore || 0)}`, 
-                                    change: "من ١٠٠ نقطة", 
-                                    trend: "neutral", 
-                                    icon: Target, iconBg: "bg-royal-purple/10", iconColor: "text-royal-purple" 
+                                    label: "طلبات مرفوضة", 
+                                    value: String(analytics?.totalRequestsRejected || 0), 
+                                    change: "لم تستوف الشروط", 
+                                    trend: "down", 
+                                    icon: XCircle, iconBg: "bg-rose-50", iconColor: "text-rose-500" 
                                 }} />
                             </div>
 
-                            {/* The Quick Actions section was removed as requested */}
+                            {/* Section: Insights AI */}
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-2 mb-4 mt-10">
+                                    <div className="w-1.5 h-6 bg-slate-800 rounded-full" />
+                                    <h2 className="text-xl font-black text-slate-900">توزيع الطلبات والمساعدات</h2>
+                                </div>
+                                <div className="grid gap-6 md:grid-cols-3">
+                                    {/* AI Progress Card 1 */}
+                                    <Card className="p-6 flex flex-col sm:flex-row items-start sm:items-center gap-6 rounded-[24px] border border-slate-100 shadow-sm bg-white hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+                                        <div className="w-16 h-16 rounded-[18px] bg-purple-50 text-purple-600 border border-purple-100 flex items-center justify-center shrink-0">
+                                            <BrainCircuit strokeWidth={2.5} className="w-8 h-8" />
+                                        </div>
+                                        <div className="flex-1 space-y-3 w-full">
+                                            <div className="flex justify-between items-center w-full">
+                                                <h4 className="text-sm font-black text-slate-500">معدل معالجة الذكاء الاصطناعي</h4>
+                                                <span className="text-2xl font-black text-slate-900 tabular-nums">{Math.round(analytics?.aiProcessingRate || 0)}%</span>
+                                            </div>
+                                            <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                                                <div className="h-full bg-gradient-to-r from-purple-400 to-purple-600 rounded-full shadow-sm relative" style={{ width: `${Math.round(analytics?.aiProcessingRate || 0)}%` }}>
+                                                    <div className="absolute inset-0 bg-white/20 animate-pulse" />
+                                                </div>
+                                            </div>
+                                            <p className="text-xs font-bold text-slate-400">حالات منسقة وموثقة آلياً</p>
+                                        </div>
+                                    </Card>
+                                    
+                                    {/* AI Progress Card 2 */}
+                                    <Card className="p-6 flex flex-col sm:flex-row items-start sm:items-center gap-6 rounded-[24px] border border-slate-100 shadow-sm bg-white hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+                                        <div className="w-16 h-16 rounded-[18px] bg-indigo-50 text-indigo-600 border border-indigo-100 flex items-center justify-center shrink-0">
+                                            <ActivitySquare strokeWidth={2.5} className="w-8 h-8" />
+                                        </div>
+                                        <div className="flex-1 space-y-3 w-full">
+                                            <div className="flex justify-between items-center w-full">
+                                                <h4 className="text-sm font-black text-slate-500">متوسط دقة التقييم (Confidence)</h4>
+                                                <span className="text-2xl font-black text-slate-900 tabular-nums">{Math.round(analytics?.averageAiConfidence || 0)}%</span>
+                                            </div>
+                                            <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                                                <div className="h-full bg-gradient-to-r from-indigo-400 to-indigo-600 rounded-full shadow-sm relative" style={{ width: `${Math.round(analytics?.averageAiConfidence || 0)}%` }}>
+                                                    <div className="absolute inset-0 bg-white/20 animate-pulse" />
+                                                </div>
+                                            </div>
+                                            <p className="text-xs font-bold text-slate-400">درجة الوثوق الفنية بقرارات النظام</p>
+                                        </div>
+                                    </Card>
+                                </div>
+                            </div>
+                            </div>
 
-                            <div className="grid gap-6 lg:grid-cols-12 space-y-0">
+                            <div className="grid gap-6 lg:grid-cols-12 space-y-0 mt-10">
                                 <div className="lg:col-span-8 space-y-4">
-                                    <div className="flex items-center gap-2 mb-3">
-                                        <div className="w-1 h-5 bg-sky-blue rounded-full" />
-                                        <h2 className="text-lg font-black text-slate-900">معدل الطلبات شهرياً</h2>
+                                    <div className="flex items-center gap-2 mb-4">
+                                        <div className="w-1.5 h-6 bg-sky-blue rounded-full" />
+                                        <h2 className="text-xl font-black text-slate-900">معدل الطلبات شهرياً</h2>
                                     </div>
-                                    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 mb-6">
+                                    <Card className="p-6 border border-slate-200/60 shadow-sm rounded-[24px]">
                                         <MonthlyTrendChart data={analytics?.requestsByMonth || {}} />
-                                    </div>
+                                    </Card>
 
-                                    <div className="flex items-center gap-2 mb-3">
-                                        <div className="w-1 h-5 bg-primary rounded-full" />
-                                        <h2 className="text-lg font-black text-slate-900">المهام العاجلة</h2>
+                                    <div className="flex items-center gap-2 mb-4 mt-10">
+                                        <div className="w-1.5 h-6 bg-primary rounded-full" />
+                                        <h2 className="text-xl font-black text-slate-900">المهام العاجلة</h2>
                                     </div>
                                     {tasks.length > 0 ? (
                                         <TasksCard tasks={tasks} />
@@ -126,19 +169,19 @@ export default function OrganizationDashboardPage() {
                                     )}
                                 </div>
                                 <div className="lg:col-span-4 space-y-6">
-                                    <div className="flex items-center gap-2 mb-3">
-                                        <div className="w-1 h-5 bg-warm-green rounded-full" />
-                                        <h2 className="text-lg font-black text-slate-900">توزيع الطلبات</h2>
+                                    <div className="flex items-center gap-2 mb-4">
+                                        <div className="w-1.5 h-6 bg-warm-green rounded-full" />
+                                        <h2 className="text-xl font-black text-slate-900">توزيع الطلبات</h2>
                                     </div>
-                                    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
+                                    <Card className="p-6 border border-slate-200/60 shadow-sm rounded-[24px]">
                                         <RequestTypeChart data={analytics?.requestsByType || {}} />
-                                    </div>
+                                    </Card>
 
-                                    <div className="flex items-center gap-2 mb-4 pt-6">
+                                    <div className="flex items-center gap-2 mb-4 mt-10">
                                         <div className="w-1.5 h-6 bg-royal-purple rounded-full" />
-                                        <h2 className="text-xl font-bold text-slate-900">أكثر مجالات الاحتياج (المناطق)</h2>
+                                        <h2 className="text-xl font-black text-slate-900">أكثر مجالات الاحتياج (المناطق)</h2>
                                     </div>
-                                    <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-6 space-y-5 pt-6">
+                                    <Card className="p-6 border border-slate-200/60 shadow-sm rounded-[24px]">
                                         {analytics?.topNeedAreas && analytics.topNeedAreas.length > 0 ? (
                                             analytics.topNeedAreas.map((area, idx) => {
                                                 const displayArea = area.area === 'string' ? 'عام' : area.area;
@@ -163,11 +206,46 @@ export default function OrganizationDashboardPage() {
                                         ) : (
                                             <div className="text-center py-4 text-slate-500 text-sm">لا توجد بيانات كافية حالياً.</div>
                                         )}
+                                    </Card>
+                                    <div className="space-y-4">
+                                    <div className="flex items-center gap-2 mb-4 mt-10">
+                                        <div className="w-1.5 h-6 bg-golden-orange rounded-full" />
+                                        <h2 className="text-xl font-black text-slate-900">مستويات الاحتياج (الذكاء الاصطناعي)</h2>
+                                    </div>
+                                    <Card className="p-6 border border-slate-200/60 shadow-sm rounded-[24px]">
+                                        {analytics?.needLevelDistribution && Object.keys(analytics.needLevelDistribution).length > 0 ? (
+                                            Object.entries(analytics.needLevelDistribution).map(([level, count], idx) => {
+                                                const totalRequests = analytics.totalRequestsReceived || 1;
+                                                const percentage = Math.round((count / totalRequests) * 100);
+                                                const displayLevel = level === 'High' ? 'مرتفع' : level === 'Medium' ? 'متوسط' : level === 'Low' ? 'منخفض' : level;
+                                                const colorClass = level === 'High' ? 'bg-red-500' : level === 'Medium' ? 'bg-amber-500' : 'bg-green-500';
+                                                return (
+                                                    <div key={idx} className="space-y-2">
+                                                        <div className="flex flex-row-reverse justify-between items-center text-sm font-medium">
+                                                            <div className="flex flex-row-reverse items-center gap-2">
+                                                                <div className={`w-2.5 h-2.5 rounded-full ${colorClass}`} />
+                                                                <span className="font-semibold text-slate-700">{displayLevel}</span>
+                                                            </div>
+                                                            <div className="flex items-center gap-2 text-slate-700 font-bold text-xs" dir="ltr">
+                                                                <span>{percentage}%</span>
+                                                                <span className="text-slate-400 font-normal">({count})</span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden flex justify-start" dir="rtl">
+                                                            <div className={`h-full ${colorClass} rounded-full transition-all duration-1000`} style={{ width: `${percentage}%` }} />
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })
+                                        ) : (
+                                            <div className="text-center py-4 text-slate-500 text-sm">لا توجد تصنيفات حالياً.</div>
+                                        )}
+                                    </Card>
                                     </div>
                                     
-                                    <div className="flex items-center gap-2 mb-4 pt-6">
-                                        <div className="w-1.5 h-6 bg-golden-orange rounded-full" />
-                                        <h2 className="text-xl font-bold text-slate-900">آخر النشاطات</h2>
+                                    <div className="flex items-center gap-2 mb-4 mt-10">
+                                        <div className="w-1.5 h-6 bg-slate-800 rounded-full" />
+                                        <h2 className="text-xl font-black text-slate-900">آخر النشاطات</h2>
                                     </div>
                                     {activities.length > 0 ? (
                                         <RecentActivityCard activities={activities} />

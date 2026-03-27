@@ -58,7 +58,7 @@ export default function OrganizationApprovedPage() {
 function ApprovedCard({ request }: { request: any }) {
     return (
         <Card className="p-5 flex flex-col gap-4 hover:border-green-500/30 transition-colors shadow-sm relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-1.5 h-full bg-green-500" />
+            <div className={`absolute top-0 right-0 w-1.5 h-full ${request.aiNeedLevel === 'High' ? 'bg-red-500' : request.aiNeedLevel === 'Medium' ? 'bg-amber-500' : request.aiNeedLevel === 'Low' ? 'bg-green-500' : 'bg-green-500'}`} />
             <div className="flex justify-between items-start">
                 <div>
                     <h3 className="font-bold text-lg">{request.familyName || request.familyHeadName}</h3>
@@ -81,6 +81,16 @@ function ApprovedCard({ request }: { request: any }) {
                 <span className="text-xs bg-slate-100 px-2 py-1 rounded-md text-slate-600 font-medium">
                     {request.requestType}
                 </span>
+                {request.aiNeedLevel && (
+                    <span className={`text-xs px-2 py-1 rounded-md font-medium border flex items-center gap-1 ${
+                        request.aiNeedLevel === 'High' ? 'bg-red-50 text-red-700 border-red-200' :
+                        request.aiNeedLevel === 'Medium' ? 'bg-amber-50 text-amber-700 border-amber-200' :
+                        'bg-green-50 text-green-700 border-green-200'
+                    }`}>
+                        الذكاء الاصطناعي: {request.aiNeedLevel === 'High' ? 'عالي' : request.aiNeedLevel === 'Medium' ? 'متوسط' : 'منخفض'}
+                        {request.aiConfidence && <span className="text-[10px] opacity-70">({Math.round(request.aiConfidence)}%)</span>}
+                    </span>
+                )}
                 <Link href={`/dashboard/organization/requests/${request.id}`} className="mr-auto">
                     <Button variant="ghost" size="sm" className="h-8 text-xs text-green-700 hover:text-green-800 hover:bg-green-50 shrink-0">
                         سجل الحالة

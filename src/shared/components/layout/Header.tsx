@@ -99,7 +99,7 @@ export function Header() {
     };
 
     return (
-        <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/90 border-b border-border/50 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
+        <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-xl border-b border-slate-100 shadow-sm shadow-slate-100/50">
             <div className="container mx-auto px-6 lg:px-12">
                 <div className="flex h-[72px] items-center justify-between gap-8 relative">
 
@@ -210,13 +210,13 @@ export function Header() {
                                 <Link href="/login">
                                     <Button
                                         variant="ghost"
-                                        className="font-medium text-[15px] px-5 h-11 rounded-lg border border-border hover:border-warm-green hover:bg-warm-green/5 hover:text-warm-green transition-all duration-250"
+                                        className="font-medium text-[15px] px-5 h-11 rounded-xl border border-border hover:border-warm-green hover:bg-warm-green/5 hover:text-warm-green transition-all duration-250"
                                     >
                                         تسجيل الدخول
                                     </Button>
                                 </Link>
                                 <Link href="/register">
-                                    <Button className="font-semibold text-[15px] px-6 h-11 rounded-lg bg-warm-green hover:bg-warm-green-light shadow-lg shadow-warm-green/20 hover:shadow-warm-green/30 hover:-translate-y-0.5 transition-[background-color,box-shadow,transform] duration-250">
+                                    <Button className="font-semibold text-[15px] px-6 h-11 rounded-xl bg-warm-green hover:bg-warm-green-light shadow-lg shadow-warm-green/20 hover:shadow-warm-green/30 hover:-translate-y-0.5 transition-[background-color,box-shadow,transform] duration-250">
                                         حساب جديد
                                     </Button>
                                 </Link>

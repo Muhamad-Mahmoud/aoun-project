@@ -102,6 +102,9 @@ export interface RequestListItemDto {
     priorityLevel: PriorityLevel | null;
     needScore: number | null;
     status: RequestStatus;
+    aiNeedLevel?: string | null;
+    aiConfidence?: number | null;
+    aiPredictionStatus?: string | null;
 }
 
 export interface RequestDetailDto {
@@ -128,6 +131,8 @@ export interface RequestDetailDto {
     governorate?: string;
     city?: string;
     neighborhood?: string;
+    aiMethod?: string | null;
+    aiErrorMessage?: string | null;
 }
 
 // Action Requests
@@ -180,6 +185,9 @@ export interface AssociationAnalyticsDto {
     requestsByMonth: Record<string, number>;
     topNeedAreas: TopNeedAreaDto[];
     averageMetrics: AverageMetricsDto;
+    aiProcessingRate?: number;
+    averageAiConfidence?: number;
+    needLevelDistribution?: Record<string, number>;
 }
 
 export interface DashboardStatsDto extends AssociationAnalyticsDto {}

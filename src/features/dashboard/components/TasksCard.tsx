@@ -2,9 +2,10 @@
 "use client";
 
 import { Card } from "@/shared/ui/card";
-import { CheckCircle2, Zap } from "lucide-react";
+import { CheckCircle2, Zap, ClipboardList } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/shared/utils";
+import { EmptyState } from "@/shared/components/common/EmptyState";
 
 export interface Task {
     text: string;
@@ -21,14 +22,22 @@ interface TasksCardProps {
 
 export function TasksCard({ tasks, title = "إجراءات مطلوبة" }: TasksCardProps) {
     return (
-        <Card className="text-start">
-            <div className="border-b border-border px-6 py-4 flex items-center gap-2">
+        <Card className="text-start rounded-2xl border-slate-100 shadow-sm bg-white overflow-hidden">
+            <div className="border-b border-slate-100 px-6 py-4 flex items-center gap-2 bg-slate-50/50">
                 <div className="w-2 h-2 rounded-full bg-golden-orange" />
                 <h3 className="font-bold text-slate-800 text-sm">{title}</h3>
             </div>
             <div className="p-4">
-                <div className="space-y-2">
-                    {tasks.map((task, i) => (
+                {tasks.length === 0 ? (
+                    <EmptyState
+                        icon={ClipboardList}
+                        title="لا توجد مهام حالياً"
+                        description="لقد أنجزت كل المهام المطلوبة منك. عمل رائع!"
+                        className="min-h-[200px] border-none bg-slate-50/50"
+                    />
+                ) : (
+                    <div className="space-y-2">
+                        {tasks.map((task, i) => (
                         <Link
                             key={i}
                             href={task.href || '#'}
@@ -66,7 +75,8 @@ export function TasksCard({ tasks, title = "إجراءات مطلوبة" }: Task
                             </div>
                         </Link>
                     ))}
-                </div>
+                    </div>
+                )}
             </div>
         </Card>
     );

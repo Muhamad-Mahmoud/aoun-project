@@ -5,6 +5,10 @@ export interface RequestAttachmentDto {
     filePath: string;
     fileType: string;
     uploadedAt: string;
+    aiOcrStatus?: string;
+    aiOcrMethod?: string;
+    aiOcrDataJson?: string;
+    aiErrorMessage?: string;
 }
 
 // ===== Association that handled the request =====

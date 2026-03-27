@@ -4,6 +4,8 @@
 import { Card } from "@/shared/ui/card";
 import { Badge } from "@/shared/ui/badge";
 import { Timeline, TimelineItem } from "@/shared/components/common/Timeline";
+import { EmptyState } from "@/shared/components/common/EmptyState";
+import { Clock } from "lucide-react";
 
 interface RecentActivityCardProps {
     activities: TimelineItem[];
@@ -12,13 +14,22 @@ interface RecentActivityCardProps {
 
 export function RecentActivityCard({ activities, badgeText = "اليوم" }: RecentActivityCardProps) {
     return (
-        <Card className="text-end">
-            <div className="border-b border-border px-6 py-4 flex flex-row-reverse justify-between items-center bg-muted/10">
-                <h3 className="text-sm font-bold text-slate-800">آخر التحديثات</h3>
-                <Badge variant="secondary" className="text-[10px] font-bold uppercase tracking-wider">{badgeText}</Badge>
+        <Card className="rounded-[24px] border border-slate-100 shadow-sm bg-white overflow-hidden hover:shadow-md transition-shadow duration-300 flex flex-col h-full">
+            <div className="border-b border-slate-100/80 px-7 py-5 flex justify-between items-center bg-slate-50/30">
+                <h3 className="text-base font-black text-slate-900">آخر النشاطات</h3>
+                <Badge variant="secondary" className="text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-500 hover:bg-slate-200">{badgeText}</Badge>
             </div>
-            <div className="p-6">
-                <Timeline items={activities} />
+            <div className="p-7 flex-1">
+                {activities.length === 0 ? (
+                    <EmptyState
+                        icon={Clock}
+                        title="لا توجد مهام عاجلة حالياً"
+                        description="لم يتم تسجيل أي تحديثات في النظام مؤخراً."
+                        className="min-h-[250px] border-none bg-transparent"
+                    />
+                ) : (
+                    <Timeline items={activities} />
+                )}
             </div>
         </Card>
     );

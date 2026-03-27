@@ -1,5 +1,5 @@
 import type { NextConfig } from "next";
-import "./src/env"; // 👈 CRITICAL: Force Env Validation on Build/Start
+import "./src/env"; //  CRITICAL: Force Env Validation on Build/Start
 
 const isProd = process.env.NODE_ENV === "production";
 

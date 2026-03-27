@@ -143,7 +143,7 @@ export default function FamilyDashboardPage() {
     return (
         <DashboardLayout>
             <FamilySidebar />
-            <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-[#f8fafc]" dir="rtl">
+            <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-slate-50" dir="rtl">
                 <DashboardTopBar userType="family" />
                 <main className="pb-20 pt-6 lg:pt-8 relative z-10">
                     <div className="space-y-6 px-6 lg:px-10">
@@ -172,9 +172,19 @@ export default function FamilyDashboardPage() {
                             ) : (
                                 <>
                                     <StatsCard stat={{
+                                        label: "إجمالي المساعدات",
+                                        value: stats?.totalAidReceived != null ? `${stats.totalAidReceived.toLocaleString()} ج.م` : "0 ج.م",
+                                        change: "الرصيد الكلي",
+                                        trend: "up",
+                                        icon: Coins,
+                                        iconBg: "bg-white/10",
+                                        iconColor: "text-white",
+                                        isPrimary: true
+                                    }} />
+                                    <StatsCard stat={{
                                         label: "إجمالي الطلبات",
                                         value: stats?.totalRequests?.toString() || "0",
-                                        change: "الكل",
+                                        change: "حجم النشاط",
                                         trend: "neutral",
                                         icon: FileText,
                                         iconBg: "bg-sky-50",
@@ -192,20 +202,11 @@ export default function FamilyDashboardPage() {
                                     <StatsCard stat={{
                                         label: "طلبات مكتملة",
                                         value: stats?.completedRequests?.toString() || "0",
-                                        change: "تم التنفيذ",
+                                        change: "تم التنفيذ بنجاح",
                                         trend: "up",
                                         icon: CheckCircle,
                                         iconBg: "bg-emerald-50",
                                         iconColor: "text-emerald-600"
-                                    }} />
-                                    <StatsCard stat={{
-                                        label: "إجمالي المساعدات",
-                                        value: stats?.totalAidReceived != null ? `${stats.totalAidReceived.toLocaleString()} ج.م` : "0 ج.م",
-                                        change: "القيمة الكلية",
-                                        trend: "up",
-                                        icon: Coins,
-                                        iconBg: "bg-purple-50",
-                                        iconColor: "text-purple-600"
                                     }} />
                                 </>
                             )}

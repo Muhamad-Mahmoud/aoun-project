@@ -8,7 +8,7 @@ import { useAssociationRequestDetail } from "@/features/associations";
 import { RequestStatus } from "@/features/associations/types";
 import { Card } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
-import { Loader2, AlertCircle, CheckCircle2, XCircle, ArrowRight, Download, FileText, User, HeartPulse, Home, Briefcase } from "lucide-react";
+import { Loader2, AlertCircle, CheckCircle2, XCircle, ArrowRight, Download, FileText, User, HeartPulse, Home, Briefcase, Bot, FileJson2 } from "lucide-react";
 import Link from "next/link";
 import { format } from "date-fns";
 import { ar } from "date-fns/locale";
@@ -322,6 +322,24 @@ export default function RequestDetailPage() {
                                             {request.predictedAssistanceType || request.requestType || 'غير محدد'}
                                         </span>
                                     </div>
+                                    
+                                    {(request.aiMethod || request.aiErrorMessage) && (
+                                        <div className="pt-4 border-t border-slate-700/50">
+                                            <span className="block text-xs text-white/60 mb-1 flex items-center gap-1">
+                                                <Bot className="w-3 h-3" />
+                                                طريقة التقييم الآلي
+                                            </span>
+                                            <p className="text-sm font-medium text-white/90">
+                                                {request.aiMethod || 'غير محدد'}
+                                            </p>
+                                            {request.aiErrorMessage && (
+                                                <div className="mt-2 bg-red-500/10 border border-red-500/20 rounded p-2 text-xs text-red-200">
+                                                    <span className="font-bold flex items-center gap-1 mb-0.5"><XCircle className="w-3 h-3" /> فشل التقييم:</span>
+                                                    {request.aiErrorMessage}
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
                             </Card>
 
@@ -370,18 +388,56 @@ export default function RequestDetailPage() {
                                             {request.attachments.length} ملفات
                                         </span>
                                     </h3>
-                                    <div className="space-y-2">
+                                    <div className="space-y-3">
                                         {request.attachments.map((file, idx) => (
-                                            <a key={idx} href={file.filePath} target="_blank" rel="noopener noreferrer" 
-                                               className="flex items-center gap-3 p-3 rounded-lg border border-slate-100 hover:border-primary/30 hover:bg-primary/5 transition-colors group">
-                                                <div className="bg-primary/10 p-2 rounded-md text-primary group-hover:bg-primary group-hover:text-white transition-colors">
-                                                    <Download className="w-4 h-4" />
-                                                </div>
-                                                <div className="overflow-hidden">
-                                                    <p className="text-sm font-medium truncate text-left" dir="ltr">{file.fileName}</p>
-                                                    <p className="text-xs text-slate-500 truncate">{file.fileType}</p>
-                                                </div>
-                                            </a>
+                                            <div key={idx} className="border border-slate-100 rounded-lg overflow-hidden group hover:border-primary/30 transition-colors bg-white">
+                                                <a href={file.filePath} target="_blank" rel="noopener noreferrer" 
+                                                   className="flex items-center gap-3 p-3 hover:bg-primary/5 transition-colors">
+                                                    <div className="bg-primary/10 p-2 rounded-md text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+                                                        <Download className="w-4 h-4" />
+                                                    </div>
+                                                    <div className="overflow-hidden flex-1">
+                                                        <p className="text-sm font-medium truncate text-left" dir="ltr">{file.fileName}</p>
+                                                        <div className="flex items-center gap-2">
+                                                            <p className="text-xs text-slate-500 truncate">{file.fileType}</p>
+                                                            {file.aiOcrStatus && (
+                                                                <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold ${
+                                                                    file.aiOcrStatus === 'Completed' ? 'bg-green-100 text-green-700' :
+                                                                    file.aiOcrStatus === 'Failed' ? 'bg-red-100 text-red-700' :
+                                                                    'bg-amber-100 text-amber-700'
+                                                                }`}>
+                                                                    OCR: {
+                                                                        file.aiOcrStatus === 'Completed' ? 'تم' :
+                                                                        file.aiOcrStatus === 'Failed' ? 'فشل' : 'جاري'
+                                                                    }
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                
+                                                {/* OCR Data Preview Inline */}
+                                                {(file.aiOcrDataJson || file.aiErrorMessage) && (
+                                                    <div className="bg-slate-50 border-t border-slate-100 p-3 text-xs">
+                                                        {file.aiErrorMessage ? (
+                                                            <div className="text-red-600 flex items-start gap-1.5">
+                                                                <AlertCircle className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+                                                                <span className="font-medium">فشل الـ OCR: {file.aiErrorMessage}</span>
+                                                            </div>
+                                                        ) : file.aiOcrDataJson && (
+                                                            <div className="relative">
+                                                                <div className="flex items-center gap-1.5 text-slate-500 font-bold mb-1.5">
+                                                                    <FileJson2 className="w-3.5 h-3.5" />
+                                                                    <span>البيانات المستخرجة آلياً ({file.aiOcrMethod || 'Gemini Vision'})</span>
+                                                                </div>
+                                                                <pre className="bg-slate-800 text-slate-300 p-2.5 rounded text-[10px] overflow-x-auto whitespace-pre-wrap leading-relaxed shadow-inner font-mono text-left" dir="ltr">
+                                                                    {file.aiOcrDataJson}
+                                                                </pre>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                )}
+                                            </div>
                                         ))}
                                     </div>
                                 </Card>

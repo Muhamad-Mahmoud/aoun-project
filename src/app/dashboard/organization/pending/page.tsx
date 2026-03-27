@@ -57,7 +57,7 @@ export default function OrganizationPendingPage() {
 function RequestCard({ request }: { request: any }) {
     return (
         <Card className="p-5 flex flex-col gap-4 hover:border-primary/50 transition-colors shadow-sm relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-1.5 h-full bg-amber-500" />
+            <div className={`absolute top-0 right-0 w-1.5 h-full ${request.aiNeedLevel === 'High' ? 'bg-red-500' : request.aiNeedLevel === 'Medium' ? 'bg-amber-500' : request.aiNeedLevel === 'Low' ? 'bg-green-500' : 'bg-amber-500'}`} />
             <div className="flex justify-between items-start">
                 <div>
                     <h3 className="font-bold text-lg">{request.familyName || request.familyHeadName}</h3>
@@ -82,6 +82,16 @@ function RequestCard({ request }: { request: any }) {
                 {request.priorityLevel && (
                     <span className="text-xs bg-red-50 px-2 py-1 rounded-md text-red-600 font-medium">
                         عاجل
+                    </span>
+                )}
+                {request.aiNeedLevel && (
+                    <span className={`text-xs px-2 py-1 rounded-md font-medium border flex items-center gap-1 ${
+                        request.aiNeedLevel === 'High' ? 'bg-red-50 text-red-700 border-red-200' :
+                        request.aiNeedLevel === 'Medium' ? 'bg-amber-50 text-amber-700 border-amber-200' :
+                        'bg-green-50 text-green-700 border-green-200'
+                    }`}>
+                        الذكاء الاصطناعي: {request.aiNeedLevel === 'High' ? 'عالي' : request.aiNeedLevel === 'Medium' ? 'متوسط' : 'منخفض'}
+                        {request.aiConfidence && <span className="text-[10px] opacity-70">({Math.round(request.aiConfidence)}%)</span>}
                     </span>
                 )}
                 <Link href={`/dashboard/organization/requests/${request.id}`} className="mr-auto">

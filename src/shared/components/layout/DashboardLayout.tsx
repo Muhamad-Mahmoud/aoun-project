@@ -30,7 +30,7 @@ export function DashboardTopBar({ userType }: { userType: string }) {
   const statusColor = "text-slate-400";
 
   return (
-    <header className="h-24 bg-white/80 backdrop-blur-xl border-b border-slate-100 flex items-center justify-between px-6 lg:px-10 sticky top-0 z-20 pt-4">
+    <header className="h-24 bg-white/80 backdrop-blur-xl border-b border-slate-100 shadow-sm shadow-slate-100/50 flex items-center justify-between px-6 lg:px-10 sticky top-0 z-20 pt-4">
       <div className="flex items-center gap-4 flex-1">
         {/* Mobile Menu Trigger */}
         <Sheet>
@@ -62,23 +62,23 @@ export function DashboardTopBar({ userType }: { userType: string }) {
             aria-label="التنبيهات"
             className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center hover:bg-slate-50 rounded-2xl relative transition-all active:scale-90 group"
           >
-            <Bell className="w-5 h-5 sm:w-6 sm:h-6 text-slate-400 group-hover:text-slate-900 transition-colors" />
+            <Bell className="w-5 h-5 sm:w-6 sm:h-6 text-slate-400 group-hover:text-primary transition-colors group-hover:animate-pulse-slow" />
             <span className="absolute top-2 sm:top-3 end-2 sm:end-3 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-rose-500 rounded-full border-2 border-white ring-4 ring-rose-500/10"></span>
           </button>
         </div>
 
         <div className="w-[1px] h-8 bg-slate-100 hidden xs:block"></div>
 
-        <div className="flex items-center gap-2 sm:gap-4 cursor-pointer group px-1 sm:px-2 py-1.5 rounded-2xl hover:bg-slate-50 transition-all active:scale-95">
+        <div className="flex items-center gap-2 sm:gap-4 cursor-pointer group px-1 sm:px-2 py-1.5 rounded-2xl hover:bg-slate-50 transition-all active:scale-95 border border-transparent hover:border-slate-100">
           <div className="text-end hidden md:block">
             <p className="text-sm font-bold text-slate-900 leading-none mb-1">{userName}</p>
             <p className={`text-[10px] font-bold uppercase tracking-widest ${statusColor}`}>
                 {userStatus}
             </p>
           </div>
-          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-[12px] sm:rounded-[15px] bg-slate-100 flex items-center justify-center border-2 border-white shadow-sm ring-1 ring-slate-100 group-hover:ring-primary/20 transition-all overflow-hidden">
+          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-[12px] sm:rounded-[15px] bg-slate-100 flex items-center justify-center border-2 border-white shadow-sm ring-1 ring-slate-100 group-hover:ring-primary/20 transition-all overflow-hidden scale-100 group-hover:scale-105">
              {user ? (
-                 <div className="w-full h-full bg-warm-green/10 flex items-center justify-center text-warm-green font-bold text-lg">
+                 <div className="w-full h-full bg-primary/10 flex items-center justify-center text-primary font-bold text-lg">
                      {user.name?.[0]}
                  </div>
              ) : (
