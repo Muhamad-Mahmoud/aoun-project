@@ -73,11 +73,16 @@ export default function NewRequestPage() {
             // createRequest handles this conversion internally.
             const response = await createRequest(data as Parameters<typeof createRequest>[0]);
 
-            if (response && response.id) {
-                setRequestId(response.id.toString());
-                setSubmitted(true);
-                toast.success("تم إرسال طلبك بنجاح");
+            // If the API call succeeded without throwing, we consider it a success.
+            // Some backend frameworks might return PascalCase Id or wrap it differently.
+            const newId = response?.id || (response as any)?.Id || (response as any)?.data?.id || (response as any)?.data?.Id;
+            
+            if (newId) {
+                setRequestId(newId.toString());
             }
+            
+            setSubmitted(true);
+            toast.success("تم إرسال طلبك بنجاح");
         } catch (error: unknown) {
             setValidationError(null);
 
