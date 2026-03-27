@@ -12,7 +12,10 @@ export async function middleware(request: NextRequest) {
     // 1. API Proxy Logic (Improved with direct fetch for better external proxying)
     if (pathname.startsWith('/api/proxy')) {
         const targetPath = pathname.replace('/api/proxy', '');
-        const baseUrl = process.env.API_URL || 'http://127.0.0.1:5204';
+        const isAiRoute = targetPath.startsWith('/api/ai');
+        const baseUrl = isAiRoute 
+            ? (process.env.AI_API_URL || 'http://127.0.0.1:8000')
+            : (process.env.API_URL || 'http://127.0.0.1:5204');
         let targetUrl = `${baseUrl}${targetPath}${request.nextUrl.search}`;
         // Fix for Node.js 18+ preferring IPv6 (::1) which breaks local ASP.NET connections
         targetUrl = targetUrl.replace('localhost', '127.0.0.1');

@@ -21,7 +21,7 @@ interface ChatWindowProps {
 }
 
 export function ChatWindow({ className, onClose }: ChatWindowProps) {
-    const apiUrl = `${API_CONFIG.aiBaseURL}${API_ENDPOINTS.ai.chatStream}`;
+    const apiUrl = `${API_CONFIG.baseURL}${API_ENDPOINTS.ai.chatStream}`;
     const { messages, isStreaming, sendMessage, cancelStream, clearChat } =
         useStreamingChat({ apiUrl });
 
