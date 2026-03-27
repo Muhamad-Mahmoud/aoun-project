@@ -46,7 +46,7 @@ export interface HealthDataDto {
 }
 
 export interface LivingConditionDto {
-    housingType: number;
+    housingType: string | number;
     hasCar: boolean;
     rentMonthly?: number;
     monthlyExpenses: number;
@@ -69,7 +69,7 @@ export interface SocialSupportDto {
 // ===== Main Request Detail Response =====
 export interface RequestDetailResponse {
     id: number;
-    requestType: number;
+    requestType: string | number;
     otherRequestType?: string;
     description: string;
     location?: string;
@@ -93,7 +93,7 @@ export interface RequestDetailResponse {
 // ===== List item (for GET /api/Requests) =====
 export interface AidRequest {
     id: number | string;
-    requestType?: number;
+    requestType?: string | number;
     description?: string;
     status: number | string;
     createdAt?: string;
@@ -109,7 +109,7 @@ export interface AidRequest {
 
 // ===== Create Request Payload =====
 export interface CreateAidRequestPayload {
-    requestType: number;
+    requestType: string;
     otherRequestType?: string;
     description: string;
     isWorking: boolean;
@@ -133,7 +133,7 @@ export interface CreateAidRequestPayload {
     hasChronicDisease: boolean;
     chronicDiseaseType?: string;
     medicalCostMonthly?: number;
-    housingType: number;
+    housingType: string;
     hasCar: boolean;
     rentMonthly?: number;
     monthlyExpenses: number;

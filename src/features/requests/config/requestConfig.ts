@@ -62,6 +62,19 @@ export const statusFilters = [
     { value: "CANCELLED",  label: "ملغي" },
 ];
 
+/** Safely resolve a requestType to string for backward compatibility */
+export function resolveCategory(requestType: string | number | undefined | null): string {
+    if (typeof requestType === "string") return requestType;
+    if (typeof requestType === "number") {
+        const legacyMap: Record<number, string> = {
+            0: "Financial", 1: "Medical", 2: "Food", 3: "Housing",
+            4: "Education", 5: "Utilities", 6: "Other"
+        };
+        return legacyMap[requestType] ?? "Other";
+    }
+    return "Other";
+}
+
 // ===== Category =====
 export interface CategoryDisplayConfig {
     label: string;
@@ -70,19 +83,19 @@ export interface CategoryDisplayConfig {
     bg: string;
 }
 
-export const categoryConfig: Record<number, CategoryDisplayConfig> = {
-    0: { label: "مساعدة مالية",   icon: Coins,            color: "text-blue-600",    bg: "bg-blue-50" },
-    1: { label: "رعاية صحية",    icon: Stethoscope,      color: "text-emerald-600", bg: "bg-emerald-50" },
-    2: { label: "دعم غذائي",     icon: UtensilsCrossed,  color: "text-orange-600",  bg: "bg-orange-50" },
-    3: { label: "سكن وإيواء",    icon: Home,             color: "text-sky-600",     bg: "bg-sky-50" },
-    4: { label: "تعليم",          icon: GraduationCap,    color: "text-purple-600",  bg: "bg-purple-50" },
-    5: { label: "فواتير وخدمات",  icon: CreditCard,       color: "text-red-600",     bg: "bg-red-50" },
-    6: { label: "أخرى",          icon: HelpCircle,       color: "text-gray-600",    bg: "bg-gray-50" },
+export const categoryConfig: Record<string, CategoryDisplayConfig> = {
+    "Financial": { label: "مساعدة مالية",   icon: Coins,            color: "text-blue-600",    bg: "bg-blue-50" },
+    "Medical": { label: "رعاية صحية",    icon: Stethoscope,      color: "text-emerald-600", bg: "bg-emerald-50" },
+    "Food": { label: "دعم غذائي",     icon: UtensilsCrossed,  color: "text-orange-600",  bg: "bg-orange-50" },
+    "Housing": { label: "سكن وإيواء",    icon: Home,             color: "text-sky-600",     bg: "bg-sky-50" },
+    "Education": { label: "تعليم",          icon: GraduationCap,    color: "text-purple-600",  bg: "bg-purple-50" },
+    "Utilities": { label: "فواتير وخدمات",  icon: CreditCard,       color: "text-red-600",     bg: "bg-red-50" },
+    "Other": { label: "أخرى",          icon: HelpCircle,       color: "text-gray-600",    bg: "bg-gray-50" },
 };
 
 // ===== Enum label maps =====
-export const housingLabels: Record<number, string> = {
-    0: "ملك", 1: "إيجار", 2: "مستضاف", 3: "إيواء اضطراري", 4: "أخرى",
+export const housingLabels: Record<string, string> = {
+    "Owned": "ملك", "Rented": "إيجار", "Provided": "استضافة/إيواء", "Other": "أخرى",
 };
 
 export const workingTypeLabels: Record<number, string> = {

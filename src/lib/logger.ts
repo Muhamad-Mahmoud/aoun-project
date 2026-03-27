@@ -11,8 +11,8 @@ class Logger {
   private shouldLog(level: LogLevel): boolean {
     if (this.isDevelopment) return true;
     
-    // In production, only log warnings and errors
-    return level === 'warn' || level === 'error';
+    // Completely silence all logs in production environments
+    return false;
   }
 
   debug(message: string, ...args: unknown[]): void {

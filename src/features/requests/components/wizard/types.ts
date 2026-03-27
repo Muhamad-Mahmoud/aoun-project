@@ -4,7 +4,7 @@ import { LucideIcon } from "lucide-react";
  * Category definition for request types
  */
 export interface RequestCategory {
-    value: number;
+    value: string;
     label: string;
     icon: LucideIcon;
     color: string;

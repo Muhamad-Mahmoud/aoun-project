@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 interface Step1BasicInfoProps {
     control: Control<RequestFormData>;
-    selectedRequestType: number;
+    selectedRequestType: string;
     categories: RequestCategory[];
 }
 
@@ -75,9 +75,8 @@ export function Step1BasicInfo({ control, selectedRequestType, categories }: Ste
                 )}
             />
 
-            {/* Other type clarification */}
             <AnimatePresence mode="wait">
-                {selectedRequestType === 6 && (
+                {selectedRequestType === "Other" && (
                     <motion.div
                         key="other"
                         initial={{ opacity: 0, height: 0 }}

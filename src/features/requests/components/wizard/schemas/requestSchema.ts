@@ -1,14 +1,15 @@
 import { z } from "zod";
 
+export const AssistanceTypeEnum = z.enum(["Medical", "Financial", "Utilities", "Housing", "Education", "Food", "Other"]);
+export const HousingTypeEnum = z.enum(["Owned", "Rented", "Provided", "Other"]);
+
 /**
  * Schema aligned with official API documentation
  * Source: POST /api/Requests - CreateAssistanceRequestDto
  */
 export const baseRequestFormSchema = z.object({
     // ===== Core Data =====
-    requestType: z.coerce.number()
-        .min(0, "يرجى اختيار نوع الطلب")
-        .max(6, "نوع طلب غير صحيح"),
+    requestType: AssistanceTypeEnum,
     otherRequestType: z.string().optional(),
     description: z.string().min(20, "الشرح يجب أن يكون 20 حرفاً على الأقل").max(1000, "الشرح يجب ألا يتجاوز 1000 حرف"),
 
@@ -18,9 +19,9 @@ export const baseRequestFormSchema = z.object({
     employmentType: z.coerce.number().optional(),  // 0=Private, 1=Public, 2=NonProfit, 3=SelfEmployed
     jobTitle: z.string().optional(),
     company: z.string().optional(),
-    salaryMonthly: z.coerce.number().optional().nullable(),
-    workDescription: z.string().optional(),
-    unEmploymentReason: z.string().optional(),
+    salaryMonthly: z.coerce.number().min(0).optional().nullable(),
+    workDescription: z.string().max(250, "الوصف يجب ألا يتجاوز 250 حرف").optional(),
+    unEmploymentReason: z.string().max(300, "السبب يجب ألا يتجاوز 300 حرف").optional(),
 
     // Missing fields collected in UI
     yearsAtJob: z.coerce.number().optional().nullable(),
@@ -36,30 +37,28 @@ export const baseRequestFormSchema = z.object({
     disabilityType: z.string().optional(),
     hasChronicDisease: z.boolean(),
     chronicDiseaseType: z.string().optional(),
-    medicalCostMonthly: z.coerce.number().optional().nullable(),
+    medicalCostMonthly: z.coerce.number().min(0).optional().nullable(),
 
     // ===== Living Condition =====
-    housingType: z.coerce.number()
-        .min(0, "يرجى اختيار نوع السكن")
-        .max(4, "نوع سكن غير صحيح"),
-    rentMonthly: z.coerce.number().optional().nullable(),
+    housingType: HousingTypeEnum,
+    rentMonthly: z.coerce.number().min(0).optional().nullable(),
     hasCar: z.boolean(),
-    monthlyExpenses: z.coerce.number().min(0, "المصاريف يجب أن تكون 0 أو أكثر"),
-    utilitiesMonthly: z.coerce.number().min(0, "فواتير الخدمات يجب أن تكون 0 أو أكثر"),
+    monthlyExpenses: z.coerce.number().min(0, "هذا الحقل مطلوب (يمكن إدخال 0)"),
+    utilitiesMonthly: z.coerce.number().min(0, "هذا الحقل مطلوب (يمكن إدخال 0)"),
 
     // Legacy/Commitment fields found in Swagger
     hasOtherCommitments: z.boolean().optional().default(false),
     otherCommitmentsType: z.string().optional(),
-    otherCommitmentsAmount: z.coerce.number().optional().nullable(),
-    householdMonthlySpending: z.coerce.number().min(0, "إجمالي الإنفاق يجب أن يكون 0 أو أكثر"),
-    annualPayment: z.coerce.number().min(0, "الأقساط السنوية يجب أن تكون 0 أو أكثر"),
+    otherCommitmentsAmount: z.coerce.number().min(0).optional().nullable(),
+    householdMonthlySpending: z.coerce.number().min(0, "هذا الحقل مطلوب (يمكن إدخال 0)"),
+    annualPayment: z.coerce.number().min(0, "هذا الحقل مطلوب (يمكن إدخال 0)"),
 
     // ===== Social Support & Other Aid =====
     registeredSocialSupport: z.boolean(),
-    socialSupportAmount: z.coerce.number().optional().nullable(),
+    socialSupportAmount: z.coerce.number().min(0).optional().nullable(),
     otherAidProviders: z.string().optional(),
     otherAidType: z.string().optional(),
-    otherAidAmount: z.coerce.number().optional().nullable(),
+    otherAidAmount: z.coerce.number().min(0).optional().nullable(),
 
     // ===== Additional fields for frontend =====
     location: z.string()
@@ -85,7 +84,7 @@ export const step0Schema = baseRequestFormSchema.pick({
     description: true,
 }).superRefine((data, ctx) => {
     // Only validate Step 0 rules
-    if (data.requestType === 6 && (!data.otherRequestType || data.otherRequestType.trim() === "")) {
+    if (data.requestType === "Other" && (!data.otherRequestType || data.otherRequestType.trim() === "")) {
         ctx.addIssue({
             code: z.ZodIssueCode.custom,
             path: ["otherRequestType"],
@@ -190,11 +189,8 @@ export const step3Schema = baseRequestFormSchema.pick({
     otherAidAmount: true,
 }).superRefine((data, ctx) => {
     // HousingType required
-    if (data.housingType !== undefined && data.housingType !== null) {
-        // Validate based on housing type
-        if (data.housingType === 1 && (data.rentMonthly === undefined || data.rentMonthly === null || data.rentMonthly <= 0)) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["rentMonthly"], message: "الإيجار الشهري مطلوب" });
-        }
+    if (data.housingType === "Rented" && (data.rentMonthly === undefined || data.rentMonthly === null || data.rentMonthly <= 0)) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["rentMonthly"], message: "الإيجار الشهري مطلوب" });
     }
 
     if (data.registeredSocialSupport && (data.socialSupportAmount === undefined || data.socialSupportAmount === null || data.socialSupportAmount <= 0)) {
@@ -233,8 +229,8 @@ export const step3Schema = baseRequestFormSchema.pick({
 
 // Full schema for final submission (validates all steps together)
 export const requestFormSchema = baseRequestFormSchema.superRefine((data, ctx) => {
-    // 1️⃣ RequestType == 6 (Other) -> OtherRequestType required
-    if (data.requestType === 6 && (!data.otherRequestType || data.otherRequestType.trim() === "")) {
+    // 1️⃣ RequestType == Other (Other) -> OtherRequestType required
+    if (data.requestType === "Other" && (!data.otherRequestType || data.otherRequestType.trim() === "")) {
         ctx.addIssue({
             code: z.ZodIssueCode.custom,
             path: ["otherRequestType"],
@@ -290,8 +286,8 @@ export const requestFormSchema = baseRequestFormSchema.superRefine((data, ctx) =
         }
     }
 
-    // 7️⃣ HousingType == 1 (Rented) -> RentMonthly required
-    if (data.housingType === 1 && (data.rentMonthly === undefined || data.rentMonthly === null || data.rentMonthly <= 0)) {
+    // 7️⃣ HousingType == Rented -> RentMonthly required
+    if (data.housingType === "Rented" && (data.rentMonthly === undefined || data.rentMonthly === null || data.rentMonthly <= 0)) {
         ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["rentMonthly"], message: "الإيجار الشهري مطلوب" });
     }
 
@@ -344,7 +340,7 @@ export const stepSchemas: Record<number, z.ZodSchema> = {
  * Aligned with API nullable fields.
  */
 export const defaultFormValues: RequestFormData = {
-    requestType: 0,
+    requestType: "Financial",
     otherRequestType: "",
     description: "",
     isWorking: false,
@@ -362,7 +358,7 @@ export const defaultFormValues: RequestFormData = {
     hasChronicDisease: false,
     chronicDiseaseType: "",
     medicalCostMonthly: 0,
-    housingType: 0,
+    housingType: "Owned",
     rentMonthly: 0,
     hasCar: false,
     monthlyExpenses: 0,

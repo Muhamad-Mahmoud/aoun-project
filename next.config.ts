@@ -44,12 +44,12 @@ const nextConfig: NextConfig = {
               "default-src 'self'",
               "script-src 'self' 'unsafe-inline'",
               "style-src 'self' 'unsafe-inline'",
-              // Images from DiceBear (avatars) only — backend images served via proxy
-              `img-src 'self' data: blob: https://api.dicebear.com ${!isProd ? 'http://localhost:5204 http://127.0.0.1:5204' : ''}`,
+              // Images from DiceBear (avatars) and main API
+              `img-src 'self' data: blob: https://api.dicebear.com http://aounn.runasp.net https://aounn.runasp.net ${!isProd ? 'http://localhost:5204 http://127.0.0.1:5204' : ''}`,
               "font-src 'self' data:",
               "frame-ancestors 'none'",
               // Browser only ever connects to its own origin (Next.js proxy handles the rest)
-              `connect-src 'self' ${devBackends}`,
+              `connect-src 'self' http://aounn.runasp.net https://aounn.runasp.net ${devBackends}`,
             ].join('; ').replace(/\s+/g, ' ').trim(),
           },
         ],
@@ -64,6 +64,14 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "api.dicebear.com", // Avatar service
+      },
+      {
+        protocol: "http",
+        hostname: "aounn.runasp.net",
+      },
+      {
+        protocol: "https",
+        hostname: "aounn.runasp.net",
       },
       // Development-only: local backend direct image access
       ...(!isProd ? [
@@ -110,6 +118,10 @@ const nextConfig: NextConfig = {
       "zod",
       "react-markdown",
     ],
+  },
+  // Remove ALL console logs in production to keep it completely clean
+  compiler: {
+    removeConsole: isProd,
   },
   // Disable dev indicators to prevent overlay injections on mobile
   devIndicators: false,

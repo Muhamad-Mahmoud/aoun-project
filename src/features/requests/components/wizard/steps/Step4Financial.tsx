@@ -10,7 +10,7 @@ import { SectionCard } from "../ui/SectionCard";
 interface Step4FinancialProps {
     control: Control<RequestFormData>;
     registeredSocialSupport: boolean;
-    housingType: number;
+    housingType: string;
     hasOtherCommitments: boolean;
 }
 
@@ -75,11 +75,10 @@ export function Step4Financial({ control, registeredSocialSupport, housingType, 
                             <FormControl>
                                 <div className="flex flex-wrap gap-2">
                                     {[
-                                        { val: 0, label: "ملك" },
-                                        { val: 1, label: "إيجار" },
-                                        { val: 2, label: "استضافة" },
-                                        { val: 3, label: "طوارئ" },
-                                        { val: 4, label: "أخرى" },
+                                        { val: "Owned", label: "ملك" },
+                                        { val: "Rented", label: "إيجار" },
+                                        { val: "Provided", label: "استضافة/إيواء" },
+                                        { val: "Other", label: "أخرى" },
                                     ].map((opt) => {
                                         const isActive = field.value === opt.val;
                                         return (
@@ -104,7 +103,7 @@ export function Step4Financial({ control, registeredSocialSupport, housingType, 
                     )}
                 />
 
-                {housingType === 1 && (
+                {housingType === "Rented" && (
                     <FormField
                         control={control}
                         name="rentMonthly"

@@ -20,7 +20,7 @@ import type { FamilyStatistics } from "@/features/families/types";
 import { toast } from "sonner";
 import { logger } from "@/lib/logger";
 import { Skeleton } from "@/shared/ui/skeleton";
-import { resolveStatus, statusConfig as statusDisplayConfig, categoryConfig } from "@/features/requests/config/requestConfig";
+import { resolveStatus, statusConfig as statusDisplayConfig, categoryConfig, resolveCategory } from "@/features/requests/config/requestConfig";
 
 const CATEGORY_ICONS: Record<string, LucideIcon> = {
     "صحة": Stethoscope,
@@ -86,12 +86,12 @@ export default function FamilyDashboardPage() {
                         // Fetch full details for the active request to get better description/location etc.
                         const fullDetails = await getRequestById(activeReq.id);
                         const statusKey = resolveStatus(fullDetails.status);
-                        const category = categoryConfig[fullDetails.requestType]?.label || "عام";
+                        const category = categoryConfig[resolveCategory(fullDetails.requestType)]?.label || "عام";
 
                         // Map to ActiveRequest format
                         setActiveRequest({
                             id: `REQ-${fullDetails.id}`,
-                            title: categoryConfig[fullDetails.requestType]?.label || "طلب مساعدة",
+                            title: categoryConfig[resolveCategory(fullDetails.requestType)]?.label || "طلب مساعدة",
                             category: category,
                             location: fullDetails.location || "غير محدد",
                             status: statusDisplayConfig[statusKey]?.label || "غير معروف",
@@ -120,9 +120,9 @@ export default function FamilyDashboardPage() {
                         const statusKey = resolveStatus(r.status);
                         return {
                             id: `REQ-${r.id}`,
-                            title: categoryConfig[r.requestType || 0]?.label || "طلب",
+                            title: categoryConfig[resolveCategory(r.requestType)]?.label || "طلب",
                             description: r.description || "",
-                            category: categoryConfig[r.requestType || 0]?.label || "عام",
+                            category: categoryConfig[resolveCategory(r.requestType)]?.label || "عام",
                             status: statusKey, // Pass key for config lookup
                             amount: "-", // Placeholder
                             date: new Date(r.createdAt || "").toLocaleDateString('ar-EG')

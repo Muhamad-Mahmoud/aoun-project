@@ -44,6 +44,7 @@ import {
     statusFilters,
     categoryConfig,
     resolveStatus,
+    resolveCategory,
 } from "@/features/requests/config/requestConfig";
 import type { AidRequest, PagedResponse } from "@/features/requests/types";
 import { toast } from "sonner";
@@ -129,9 +130,9 @@ export default function FamilyRequestsPage() {
         );
     };
 
-    const getCategoryBadge = (requestType?: number) => {
+    const getCategoryBadge = (requestType?: string | number) => {
         if (requestType == null) return null;
-        const cat = categoryConfig[requestType] || categoryConfig[6];
+        const cat = categoryConfig[resolveCategory(requestType)] || categoryConfig["Other"];
         const CatIcon = cat.icon;
         return (
             <div className={cn("flex items-center gap-1.5 px-2.5 py-1 rounded-lg border", cat.bg, "border-transparent")}>

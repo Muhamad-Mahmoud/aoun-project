@@ -2,6 +2,7 @@
 
 import { RequestFormData } from "../schemas/requestSchema";
 import { RequestCategory } from "../types";
+import { housingLabels } from "../../../config/requestConfig";
 import { SectionCard } from "../ui/SectionCard";
 import {
     CheckCircle2,
@@ -38,8 +39,6 @@ export function Step6Review({ formData, categories, uploadedFiles }: Step6Review
         return `${amount.toLocaleString()} ريال`;
     };
 
-    const housingLabels = ["ملك", "إيجار", "استضافة", "سكن طوارئ", "أخرى"];
-
     return (
         <div className="space-y-4">
             {/* Ready banner */}
@@ -66,7 +65,7 @@ export function Step6Review({ formData, categories, uploadedFiles }: Step6Review
                             value={
                                 <span className={`flex items-center gap-2 ${selectedCategory?.color}`}>
                                     {selectedCategory && <selectedCategory.icon className="w-4 h-4" />}
-                                    {formData.requestType === 6 ? formData.otherRequestType : selectedCategory?.label}
+                                    {formData.requestType === "Other" ? formData.otherRequestType : selectedCategory?.label}
                                 </span>
                             }
                         />
@@ -105,7 +104,7 @@ export function Step6Review({ formData, categories, uploadedFiles }: Step6Review
                         ) : (
                             <Field label="سبب عدم العمل" value={formData.unEmploymentReason} />
                         )}
-                        <Field label="نوع السكن" value={housingLabels[formData.housingType] ?? "غير محدد"} />
+                        <Field label="نوع السكن" value={(housingLabels as Record<string, string>)[formData.housingType as string] ?? "غير محدد"} />
                     </div>
                 </SectionCard>
 
@@ -125,7 +124,7 @@ export function Step6Review({ formData, categories, uploadedFiles }: Step6Review
                 <SectionCard title="الوضع المالي" icon={Coins} iconColor="text-amber-500" iconBg="bg-amber-50">
                     <div className="grid grid-cols-2 gap-3">
                         <Field label="إجمالي المصاريف" value={formatCurrency(formData.monthlyExpenses)} />
-                        {formData.housingType === 1 && (
+                        {formData.housingType === "Rented" && (
                             <Field label="الإيجار الشهري" value={formatCurrency(formData.rentMonthly)} />
                         )}
                         <Field label="فواتير الخدمات" value={formatCurrency(formData.utilitiesMonthly)} />

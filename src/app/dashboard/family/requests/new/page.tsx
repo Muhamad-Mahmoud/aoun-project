@@ -101,10 +101,10 @@ export default function NewRequestPage() {
                 setValidationError(message);
                 toast.error("❌ حدث خطأ في بيانات النموذج. تحقق من جميع الحقول المطلوبة");
             }
-            // If it's the common Entity Framework error
+            // If it's the common Entity Framework error but backend added inner exception details
             else if (message.includes("saving the entity changes")) {
-                message = "حدث خطأ أثناء حفظ البيانات. يرجى التحقق من جميع الحقول المطلوبة وإعادة المحاولة.";
-                toast.error(message);
+                setValidationError(message);
+                toast.error("حدث خطأ أثناء الحفظ بقاعدة البيانات، راجع التفاصيل.");
             }
             else {
                 toast.error(message);

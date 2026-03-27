@@ -38,13 +38,13 @@ import { Step6Review } from "./wizard/steps/Step6Review";
 import { RequestCategory, WizardStep } from "./wizard/types";
 
 const categories: RequestCategory[] = [
-    { value: 0, label: "مساعدة مالية", icon: Coins, color: "text-blue-500", bg: "bg-blue-500/10", border: "border-blue-500/30" },
-    { value: 1, label: "رعاية صحية", icon: Stethoscope, color: "text-emerald-500", bg: "bg-emerald-500/10", border: "border-emerald-500/30" },
-    { value: 2, label: "دعم غذائي", icon: UtensilsCrossed, color: "text-orange-500", bg: "bg-orange-500/10", border: "border-orange-500/30" },
-    { value: 3, label: "سكن وإيواء", icon: Home, color: "text-sky-500", bg: "bg-sky-500/10", border: "border-sky-500/30" },
-    { value: 4, label: "تعليم", icon: GraduationCap, color: "text-purple-500", bg: "bg-purple-500/10", border: "border-purple-500/30" },
-    { value: 5, label: "فواتير وخدمات", icon: CreditCard, color: "text-red-500", bg: "bg-red-500/10", border: "border-red-500/30" },
-    { value: 6, label: "أخرى", icon: HelpCircle, color: "text-gray-500", bg: "bg-gray-500/10", border: "border-gray-500/30" },
+    { value: "Financial", label: "مساعدة مالية", icon: Coins, color: "text-blue-500", bg: "bg-blue-500/10", border: "border-blue-500/30" },
+    { value: "Medical", label: "رعاية صحية", icon: Stethoscope, color: "text-emerald-500", bg: "bg-emerald-500/10", border: "border-emerald-500/30" },
+    { value: "Food", label: "دعم غذائي", icon: UtensilsCrossed, color: "text-orange-500", bg: "bg-orange-500/10", border: "border-orange-500/30" },
+    { value: "Housing", label: "سكن وإيواء", icon: Home, color: "text-sky-500", bg: "bg-sky-500/10", border: "border-sky-500/30" },
+    { value: "Education", label: "تعليم", icon: GraduationCap, color: "text-purple-500", bg: "bg-purple-500/10", border: "border-purple-500/30" },
+    { value: "Utilities", label: "فواتير وخدمات", icon: CreditCard, color: "text-red-500", bg: "bg-red-500/10", border: "border-red-500/30" },
+    { value: "Other", label: "أخرى", icon: HelpCircle, color: "text-gray-500", bg: "bg-gray-500/10", border: "border-gray-500/30" },
 ];
 
 const wizardSteps: WizardStep[] = [

@@ -50,6 +50,7 @@ import {
     statusConfig,
     categoryConfig,
     resolveStatus,
+    resolveCategory,
     housingLabels,
     workingTypeLabels,
     employmentTypeLabels,
@@ -273,7 +274,7 @@ export default function RequestDetailsPage() {
     const status = statusConfig[statusKey] || statusConfig.PENDING;
     const StatusIcon = status.icon;
     const canCancel = ["PENDING", "VERIFIED"].includes(statusKey);
-    const cat = categoryConfig[request.requestType] || categoryConfig[6];
+    const cat = categoryConfig[resolveCategory(request.requestType)] || categoryConfig["Other"];
     const CatIcon = cat.icon;
     const isTerminal = ["REJECTED", "CANCELLED"].includes(statusKey);
 
