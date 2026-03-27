@@ -34,7 +34,7 @@ export function Step4Financial({ control, registeredSocialSupport, housingType, 
                                 <FormControl>
                                     <div className="relative">
                                         <Input type="number" placeholder="مثال: 3500" className={inputCls} {...field} value={field.value ?? ""} onChange={e => field.onChange(e.target.valueAsNumber || 0)} />
-                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">ريال</span>
+                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">جنيه</span>
                                     </div>
                                 </FormControl>
                                 <FormMessage className="text-rose-500 text-xs" />
@@ -52,7 +52,7 @@ export function Step4Financial({ control, registeredSocialSupport, housingType, 
                                 <FormControl>
                                     <div className="relative">
                                         <Input type="number" placeholder="مثال: 450" className={inputCls} {...field} value={field.value ?? ""} onChange={e => field.onChange(e.target.valueAsNumber || 0)} />
-                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">ريال</span>
+                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">جنيه</span>
                                     </div>
                                 </FormControl>
                                 <FormMessage className="text-rose-500 text-xs" />
@@ -115,7 +115,7 @@ export function Step4Financial({ control, registeredSocialSupport, housingType, 
                                 <FormControl>
                                     <div className="relative max-w-xs">
                                         <Input type="number" placeholder="أدخل قيمة الإيجار" className={inputCls} {...field} value={field.value ?? ""} onChange={e => field.onChange(e.target.valueAsNumber || 0)} />
-                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">ريال</span>
+                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">جنيه</span>
                                     </div>
                                 </FormControl>
                                 <FormMessage className="text-rose-500 text-xs" />
@@ -154,7 +154,7 @@ export function Step4Financial({ control, registeredSocialSupport, housingType, 
                                     <FormControl>
                                         <div className="relative">
                                             <Input type="number" placeholder="0" className={cn(inputCls, "focus:ring-sky-500/10 focus:border-sky-500/40")} {...field} value={field.value ?? ""} onChange={e => field.onChange(e.target.valueAsNumber || null)} />
-                                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">ريال</span>
+                                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">جنيه</span>
                                         </div>
                                     </FormControl>
                                     <FormMessage className="text-xs text-rose-500" />
@@ -204,7 +204,7 @@ export function Step4Financial({ control, registeredSocialSupport, housingType, 
                                         <FormControl>
                                             <div className="relative">
                                                 <Input type="number" placeholder="0" className={cn(inputCls, "focus:ring-purple-500/10 focus:border-purple-500/40 pl-10")} {...field} value={field.value ?? ""} onChange={e => field.onChange(e.target.valueAsNumber || null)} />
-                                                <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400">ريال</span>
+                                                <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400">جنيه</span>
                                             </div>
                                         </FormControl>
                                         <FormMessage className="text-xs text-rose-500" />

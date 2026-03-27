@@ -36,7 +36,7 @@ export function Step6Review({ formData, categories, uploadedFiles }: Step6Review
 
     const formatCurrency = (amount: number | null | undefined) => {
         if (amount === undefined || amount === null) return "غير محدد";
-        return `${amount.toLocaleString()} ريال`;
+        return `${amount.toLocaleString()} جنيه`;
     };
 
     return (
