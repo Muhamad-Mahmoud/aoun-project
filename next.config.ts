@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
     // CSP connect-src: in production only allow 'self' (all calls go through /api/proxy).
     // In development, allow direct local backend access for easier debugging.
     const devBackends = !isProd
-      ? 'http://localhost:5204 http://127.0.0.1:5204 https://localhost:7189 https://127.0.0.1:7189 http://127.0.0.1:8000 http://localhost:8000'
+      ? 'http://aounn.runasp.net https://aounn.runasp.net'
       : '';
 
     return [
@@ -45,7 +45,7 @@ const nextConfig: NextConfig = {
               "script-src 'self' 'unsafe-inline'",
               "style-src 'self' 'unsafe-inline'",
               // Images from DiceBear (avatars) and main API
-              `img-src 'self' data: blob: https://api.dicebear.com http://aounn.runasp.net https://aounn.runasp.net ${!isProd ? 'http://localhost:5204 http://127.0.0.1:5204' : ''}`,
+              `img-src 'self' data: blob: https://api.dicebear.com http://aounn.runasp.net https://aounn.runasp.net`,
               "font-src 'self' data:",
               "frame-ancestors 'none'",
               // Browser only ever connects to its own origin (Next.js proxy handles the rest)
@@ -75,10 +75,8 @@ const nextConfig: NextConfig = {
       },
       // Development-only: local backend direct image access
       ...(!isProd ? [
-        { protocol: "http" as const, hostname: "localhost", port: "5204" },
-        { protocol: "http" as const, hostname: "127.0.0.1", port: "5204" },
-        { protocol: "https" as const, hostname: "localhost", port: "7189" },
-        { protocol: "https" as const, hostname: "127.0.0.1", port: "7189" },
+        { protocol: "http" as const, hostname: "aounn.runasp.net" },
+        { protocol: "https" as const, hostname: "aounn.runasp.net" },
       ] : []),
     ],
   },
