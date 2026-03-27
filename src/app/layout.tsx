@@ -12,7 +12,7 @@ const font = Cairo({
 
 
 export const metadata: Metadata = {
-    metadataBase: new URL("https://aoun.org"),
+    metadataBase: new URL("http://aounn.runasp.net"),
     title: "عون | مد يد المساعدة للأسر المحتاجة في مصر",
     description: "المنصة الرقمية الأولى في مصر لربط الأسر المحتاجة بالجمعيات الخيرية والمؤسسات المعتمدة بذكاء وأمان وشفافية تامة.",
     keywords: ["عون", "مساعدة", "خير", "جمعيات خيرية", "مصر", "دعم أسر", "تكافل"],
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     openGraph: {
         title: "منصة عون - المساعدة في دقائق",
         description: "نوصل المساعدة إلى كل أسرة بأمان وسرعة. انضم إلينا الآن كمستفيد أو كجمعية شريكة.",
-        url: "https://aoun.org",
+        url: "http://aounn.runasp.net",
         siteName: "عون",
         images: [
             {

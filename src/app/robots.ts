@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
-  const base = "https://aoun.org";
+  const base = "http://aounn.runasp.net";
 
   return {
     rules: {
