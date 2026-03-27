@@ -599,3 +599,64 @@ nextjs-portal,
 body > :first-child {
     pointer-events: auto !important;
 }
+
+@layer components {
+    /* Consistent page section container */
+    .page-section {
+        @apply space-y-6 px-6 lg:px-10 pb-20 pt-6 lg:pt-8 relative z-10;
+    }
+
+    /* Form field group with consistent spacing */
+    .form-field-group {
+        @apply space-y-2;
+    }
+    .form-field-group label {
+        @apply text-sm font-semibold text-slate-700;
+    }
+    .form-field-group .field-error {
+        @apply text-xs font-bold text-destructive mt-1;
+    }
+
+    /* Section header with accent bar */
+    .section-header {
+        @apply flex items-center gap-2 mb-4;
+    }
+    .section-header::before {
+        content: '';
+        @apply w-1.5 h-6 rounded-full bg-primary block;
+    }
+    .section-header h2 {
+        @apply text-xl font-black text-slate-900;
+    }
+
+    /* Focus-visible ring for keyboard navigation */
+    .focus-ring {
+        @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-2;
+    }
+
+    /* Shimmer skeleton animation */
+    .skeleton-shimmer {
+        background: linear-gradient(90deg, 
+            hsl(var(--muted)) 25%, 
+            hsl(var(--muted) / 0.5) 50%, 
+            hsl(var(--muted)) 75%
+        );
+        background-size: 200% 100%;
+        animation: shimmer 1.5s ease-in-out infinite;
+    }
+
+    /* Fade slide up animation for cards */
+    .animate-fade-slide-up {
+        animation: fadeSlideUp 0.4s ease-out both;
+    }
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+@keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+}

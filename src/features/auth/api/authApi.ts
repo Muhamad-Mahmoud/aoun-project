@@ -149,8 +149,11 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
         const authUser: AuthUser = {
             id: userData.id,
             email: userData.email,
-            name: userData.name || userData.firstName || 'مستخدم',
-            role: userData.userType || userData.role || 'Family'
+            name: (userData.firstName && userData.lastName) 
+                ? `${userData.firstName} ${userData.lastName}` 
+                : (userData.name || userData.firstName || 'مستخدم'),
+            role: userData.userType || userData.role || 'Family',
+            isVerified: userData.isVerified || false
         };
 
         return authUser;

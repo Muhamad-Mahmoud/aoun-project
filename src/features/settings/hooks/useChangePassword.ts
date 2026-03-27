@@ -41,6 +41,7 @@ export function useChangePassword() {
         register,
         handleSubmit,
         formState: { errors },
+        watch,
         reset,
     } = useForm<ChangePasswordSchema>({
         resolver: zodResolver(changePasswordSchema),
@@ -65,6 +66,7 @@ export function useChangePassword() {
         register,
         handleSubmit: handleSubmit(onSubmit),
         errors,
+        watch,
         isLoading,
     };
 }

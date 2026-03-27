@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { DashboardLayout } from "@/shared/components/layout/DashboardLayout";
+import { useAuthContext } from "@/shared/providers";
 
 import { FamilySidebar } from "@/shared/components/layout/FamilySidebar";
 import { StatsCard } from "@/features/dashboard/components/StatsCard";
@@ -54,6 +55,7 @@ const getStepsForStatus = (status: string) => {
 };
 
 export default function FamilyDashboardPage() {
+    const { user } = useAuthContext();
     const [stats, setStats] = useState<FamilyStatistics | null>(null);
     const [activeRequest, setActiveRequest] = useState<ActiveRequest | null>(null);
     const [recentRequests, setRecentRequests] = useState<RequestHistoryItem[]>([]);
@@ -151,7 +153,7 @@ export default function FamilyDashboardPage() {
                         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 animate-in fade-in slide-in-from-top-4 duration-700">
                             <div className="space-y-1">
                                 <h1 className="text-3xl font-bold tracking-tight text-slate-900">لوحة التحكم</h1>
-                                <p className="text-base text-slate-500 font-medium mt-2">مرحباً بك، أسرة محمد علي. نتابع طلباتك بكل اهتمام.</p>
+                                <p className="text-base text-slate-500 font-medium mt-2">مرحباً بك، {user?.name || 'أسرة'}. نتابع طلباتك بكل اهتمام.</p>
                             </div>
                             <Button asChild size="lg" className="h-12 px-6 rounded-xl bg-warm-green hover:bg-warm-green/90 shadow-lg shadow-warm-green/10 font-bold text-base transition-all active:scale-95">
                                 <Link href="/dashboard/family/requests/new" className="flex items-center gap-3">
@@ -216,9 +218,8 @@ export default function FamilyDashboardPage() {
                         <div className="grid gap-10 lg:grid-cols-12 items-start">
                             <div className="lg:col-span-8 space-y-10">
                                 <div className="space-y-4">
-                                    <div className="flex items-center gap-2 mb-4">
-                                        <div className="w-1.5 h-6 bg-warm-green rounded-full" />
-                                        <h2 className="text-xl font-bold text-slate-900">الطلب النشط حالياً</h2>
+                                    <div className="section-header">
+                                        <h2>الطلب النشط حالياً</h2>
                                     </div>
                                     
                                     {loadingRequests ? (

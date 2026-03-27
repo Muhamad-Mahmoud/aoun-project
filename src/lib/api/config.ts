@@ -1,13 +1,24 @@
+/**
+ * API Configuration
+ *
+ * SECURITY:
+ *  - The real backend URL (API_URL) is a server-only env variable and is
+ *    NEVER sent to the browser. All browser requests go through the
+ *    Next.js internal proxy at /api/proxy, which forwards them
+ *    server-side and injects the auth token from the HttpOnly cookie.
+ *  - Do NOT add NEXT_PUBLIC_ to API_URL or AI_API_URL.
+ */
+
 export const API_CONFIG = {
-    // Browser requests should go through the Next.js proxy so HttpOnly auth cookies
-    // can be translated into Authorization headers in middleware.
+    /**
+     * Browser clients always talk to the internal Next.js proxy.
+     * Server-side code (middleware, route handlers) reads API_URL from env
+     * and constructs the real target URL itself.
+     */
     baseURL: typeof window === 'undefined'
-        ? (process.env.NEXT_PUBLIC_API_URL || '')
-        : '/api/proxy',
-    // AI / Gemini backend (separate service)
-    aiBaseURL: process.env.NEXT_PUBLIC_AI_API_URL || '',
-    version: 'v1',
-    timeout: 30000,
+        ? (process.env.API_URL || '')          // server: real backend
+        : '/api/proxy',                         // browser: internal proxy only
+    timeout: 30_000,
     withCredentials: false,
 } as const;
 
@@ -17,7 +28,7 @@ export const API_ENDPOINTS = {
         login: '/api/Auth/login',
         registerFamily: '/api/Auth/register/family',
         registerAssociation: '/api/Auth/register/association',
-        logout: '/api/Auth/logout', // Assuming this exists or we keep it for client cleanup
+        logout: '/api/Auth/logout',
         refresh: '/api/Auth/refresh-token',
         resetPassword: '/api/Auth/reset-password',
         forgotPassword: '/api/Auth/forgot-password',
@@ -27,18 +38,9 @@ export const API_ENDPOINTS = {
 
     // User endpoints
     user: {
-        profile: '/api/User/profile', // Placeholder till verified
+        profile: '/api/User/profile',
         updateProfile: '/api/User/profile',
         changePassword: '/api/User/change-password',
-    },
-
-    // Profile endpoints
-    profile: {
-        get: (id: string) => `/api/profile/${id}`,
-        update: '/api/profile',
-        avatar: '/api/profile/avatar',
-        bookings: '/api/profile/bookings',
-        reviews: '/api/profile/reviews',
     },
 
     // Association endpoints
@@ -55,7 +57,7 @@ export const API_ENDPOINTS = {
         association: {
             undertakings: '/api/Dashboard/Association/undertakings',
             analytics: '/api/Dashboard/Association/analytics',
-        }
+        },
     },
 
     // Families endpoints
@@ -71,7 +73,7 @@ export const API_ENDPOINTS = {
         cancel: (id: string | number) => `/api/Requests/${id}/cancel`,
     },
 
-    // AI endpoints
+    // AI endpoints — proxied through Next.js AI route handler
     ai: {
         chatStream: '/api/ai/chat/stream',
     },

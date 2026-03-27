@@ -2,6 +2,7 @@
 
 import { DashboardLayout } from "@/shared/components/layout/DashboardLayout";
 import { OrganizationSidebar } from "@/shared/components/layout/OrganizationSidebar";
+import { DashboardSkeleton } from "@/shared/components/common/DashboardSkeleton";
 import { StatsCard } from "@/features/dashboard/components/StatsCard";
 import { TasksCard, type Task } from "@/features/dashboard/components/TasksCard";
 import { RecentActivityCard } from "@/features/dashboard/components/RecentActivityCard";
@@ -19,15 +20,7 @@ export default function OrganizationDashboardPage() {
 
     if (isLoading) {
         return (
-            <DashboardLayout>
-                <OrganizationSidebar />
-                <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-slate-50">
-                    <DashboardTopBar userType="organization" />
-                    <div className="flex-1 flex items-center justify-center">
-                        <Loader2 className="w-10 h-10 animate-spin text-primary" />
-                    </div>
-                </div>
-            </DashboardLayout>
+            <DashboardSkeleton userType="organization" sidebar={<OrganizationSidebar />} />
         );
     }
 
@@ -35,7 +28,7 @@ export default function OrganizationDashboardPage() {
         return (
             <DashboardLayout>
                 <OrganizationSidebar />
-                <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-slate-50">
+                <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-slate-50" dir="rtl">
                     <DashboardTopBar userType="organization" />
                     <div className="flex-1 flex items-center justify-center text-destructive">
                         <div className="text-center">
@@ -55,7 +48,7 @@ export default function OrganizationDashboardPage() {
     return (
         <DashboardLayout>
             <OrganizationSidebar />
-            <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-slate-50">
+            <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-slate-50" dir="rtl">
                 <DashboardTopBar userType="organization" />
                 <main className="pb-20 pt-6 lg:pt-8 relative z-10">
                     <div className="space-y-6 px-6 lg:px-10">
@@ -100,9 +93,8 @@ export default function OrganizationDashboardPage() {
 
                             {/* Section: Insights AI */}
                             <div className="space-y-4">
-                                <div className="flex items-center gap-2 mb-4 mt-10">
-                                    <div className="w-1.5 h-6 bg-slate-800 rounded-full" />
-                                    <h2 className="text-xl font-black text-slate-900">توزيع الطلبات والمساعدات</h2>
+                                <div className="section-header mt-10">
+                                    <h2>توزيع الطلبات والمساعدات</h2>
                                 </div>
                                 <div className="grid gap-6 md:grid-cols-3">
                                     {/* AI Progress Card 1 */}
@@ -148,17 +140,15 @@ export default function OrganizationDashboardPage() {
 
                             <div className="grid gap-6 lg:grid-cols-12 space-y-0 mt-10">
                                 <div className="lg:col-span-8 space-y-4">
-                                    <div className="flex items-center gap-2 mb-4">
-                                        <div className="w-1.5 h-6 bg-sky-blue rounded-full" />
-                                        <h2 className="text-xl font-black text-slate-900">معدل الطلبات شهرياً</h2>
+                                    <div className="section-header">
+                                        <h2>معدل الطلبات شهرياً</h2>
                                     </div>
                                     <Card className="p-6 border border-slate-200/60 shadow-sm rounded-[24px]">
                                         <MonthlyTrendChart data={analytics?.requestsByMonth || {}} />
                                     </Card>
 
-                                    <div className="flex items-center gap-2 mb-4 mt-10">
-                                        <div className="w-1.5 h-6 bg-primary rounded-full" />
-                                        <h2 className="text-xl font-black text-slate-900">المهام العاجلة</h2>
+                                    <div className="section-header mt-10">
+                                        <h2>المهام العاجلة</h2>
                                     </div>
                                     {tasks.length > 0 ? (
                                         <TasksCard tasks={tasks} />
@@ -169,17 +159,15 @@ export default function OrganizationDashboardPage() {
                                     )}
                                 </div>
                                 <div className="lg:col-span-4 space-y-6">
-                                    <div className="flex items-center gap-2 mb-4">
-                                        <div className="w-1.5 h-6 bg-warm-green rounded-full" />
-                                        <h2 className="text-xl font-black text-slate-900">توزيع الطلبات</h2>
+                                    <div className="section-header">
+                                        <h2>توزيع الطلبات</h2>
                                     </div>
                                     <Card className="p-6 border border-slate-200/60 shadow-sm rounded-[24px]">
                                         <RequestTypeChart data={analytics?.requestsByType || {}} />
                                     </Card>
 
-                                    <div className="flex items-center gap-2 mb-4 mt-10">
-                                        <div className="w-1.5 h-6 bg-royal-purple rounded-full" />
-                                        <h2 className="text-xl font-black text-slate-900">أكثر مجالات الاحتياج (المناطق)</h2>
+                                    <div className="section-header mt-10">
+                                        <h2>أكثر مجالات الاحتياج (المناطق)</h2>
                                     </div>
                                     <Card className="p-6 border border-slate-200/60 shadow-sm rounded-[24px]">
                                         {analytics?.topNeedAreas && analytics.topNeedAreas.length > 0 ? (
@@ -208,9 +196,8 @@ export default function OrganizationDashboardPage() {
                                         )}
                                     </Card>
                                     <div className="space-y-4">
-                                    <div className="flex items-center gap-2 mb-4 mt-10">
-                                        <div className="w-1.5 h-6 bg-golden-orange rounded-full" />
-                                        <h2 className="text-xl font-black text-slate-900">مستويات الاحتياج (الذكاء الاصطناعي)</h2>
+                                    <div className="section-header mt-10">
+                                        <h2>مستويات الاحتياج (الذكاء الاصطناعي)</h2>
                                     </div>
                                     <Card className="p-6 border border-slate-200/60 shadow-sm rounded-[24px]">
                                         {analytics?.needLevelDistribution && Object.keys(analytics.needLevelDistribution).length > 0 ? (
@@ -243,9 +230,8 @@ export default function OrganizationDashboardPage() {
                                     </Card>
                                     </div>
                                     
-                                    <div className="flex items-center gap-2 mb-4 mt-10">
-                                        <div className="w-1.5 h-6 bg-slate-800 rounded-full" />
-                                        <h2 className="text-xl font-black text-slate-900">آخر النشاطات</h2>
+                                    <div className="section-header mt-10">
+                                        <h2>آخر النشاطات</h2>
                                     </div>
                                     {activities.length > 0 ? (
                                         <RecentActivityCard activities={activities} />

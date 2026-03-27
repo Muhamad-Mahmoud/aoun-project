@@ -9,45 +9,48 @@ const nextConfig: NextConfig = {
 
   // Security headers
   async headers() {
+    // CSP connect-src: in production only allow 'self' (all calls go through /api/proxy).
+    // In development, allow direct local backend access for easier debugging.
+    const devBackends = !isProd
+      ? 'http://localhost:5204 http://127.0.0.1:5204 https://localhost:7189 https://127.0.0.1:7189 http://127.0.0.1:8000 http://localhost:8000'
+      : '';
+
     return [
       {
         source: "/:path*",
         headers: [
-          {
-            key: "X-DNS-Prefetch-Control",
-            value: "on",
-          },
+          { key: "X-DNS-Prefetch-Control", value: "on" },
           {
             key: "Strict-Transport-Security",
             value: "max-age=63072000; includeSubDomains; preload",
           },
-          {
-            key: "X-Frame-Options",
-            value: "SAMEORIGIN",
-          },
-          {
-            key: "X-Content-Type-Options",
-            value: "nosniff",
-          },
-          {
-            key: "X-XSS-Protection",
-            value: "1; mode=block",
-          },
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "X-XSS-Protection", value: "1; mode=block" },
           {
             key: "Referrer-Policy",
             value: "strict-origin-when-cross-origin",
           },
           {
+            key: "Permissions-Policy",
+            // Only allow camera/mic if explicitly needed; restrict everything else
+            value: "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
+          },
+          {
             key: "Content-Security-Policy",
-            value: `
-              default-src 'self'; 
-              script-src 'self' 'unsafe-inline'; 
-              style-src 'self' 'unsafe-inline'; 
-              img-src 'self' data: blob: https://api.dicebear.com https://aoun-api.runasp.net ${isProd ? '' : 'http://localhost:5204 http://127.0.0.1:5204 https://localhost:7189 https://127.0.0.1:7189'}; 
-              font-src 'self' data:; 
-              frame-ancestors 'none'; 
-              connect-src 'self' https://aoun-api.runasp.net https://muhammadmahmoud-awn-ai-service.hf.space ${isProd ? '' : 'http://localhost:5204 http://127.0.0.1:5204 https://localhost:7189 https://127.0.0.1:7189 http://127.0.0.1:8000 http://localhost:8000'};
-            `.replace(/\s+/g, " ").trim(),
+            // connect-src: only 'self' in prod — all API calls go through the Next.js proxy,
+            // so the real backend URL is NEVER needed by the browser.
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline'",
+              "style-src 'self' 'unsafe-inline'",
+              // Images from DiceBear (avatars) only — backend images served via proxy
+              `img-src 'self' data: blob: https://api.dicebear.com ${!isProd ? 'http://localhost:5204 http://127.0.0.1:5204' : ''}`,
+              "font-src 'self' data:",
+              "frame-ancestors 'none'",
+              // Browser only ever connects to its own origin (Next.js proxy handles the rest)
+              `connect-src 'self' ${devBackends}`,
+            ].join('; ').replace(/\s+/g, ' ').trim(),
           },
         ],
       },
@@ -57,14 +60,12 @@ const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [
+      // Only external image CDNs allowed — backend images served via /api/proxy
       {
         protocol: "https",
-        hostname: "api.dicebear.com",
+        hostname: "api.dicebear.com", // Avatar service
       },
-      {
-        protocol: "https",
-        hostname: "aoun-api.runasp.net",
-      },
+      // Development-only: local backend direct image access
       ...(!isProd ? [
         { protocol: "http" as const, hostname: "localhost", port: "5204" },
         { protocol: "http" as const, hostname: "127.0.0.1", port: "5204" },

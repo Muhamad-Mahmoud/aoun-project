@@ -23,35 +23,49 @@ import { Button } from "@/shared/ui/button";
 import { useAuthContext } from "@/shared/providers";
 
 const navItems = [
-  { label: "لوحة التحكم", href: "/dashboard/family", icon: LayoutDashboard },
-  { label: "طلباتي", href: "/dashboard/family/requests", icon: FileText },
-  { label: "طلب جديد", href: "/dashboard/family/requests/new", icon: PlusCircle },
-  { label: "المساعد الذكي", href: "/dashboard/family/chat", icon: MessageCircle },
-  { label: "الملف الشخصي", href: "/dashboard/family/profile", icon: User },
-  { label: "الإعدادات", href: "/dashboard/family/settings", icon: Settings },
+  { id: "dashboard", label: "لوحة التحكم", href: "/dashboard/family", icon: LayoutDashboard },
+  { id: "requests", label: "طلباتي", href: "/dashboard/family/requests", icon: FileText },
+  { id: "new-request", label: "طلب جديد", href: "/dashboard/family/requests/new", icon: PlusCircle },
+  { id: "chat", label: "المساعد الذكي", href: "/dashboard/family/chat", icon: MessageCircle },
+  { id: "profile", label: "الملف الشخصي", href: "/dashboard/family/profile", icon: User },
+  { id: "settings", label: "الإعدادات", href: "/dashboard/family/settings", icon: Settings },
 ];
 
 export function FamilySidebarContent({ isCollapsed }: { isCollapsed?: boolean }) {
   const pathname = usePathname();
-  const { logout } = useAuthContext();
+  const { user, updateUser, logout } = useAuthContext();
   const [profile, setProfile] = React.useState<{ firstName?: string; lastName?: string; isVerified?: boolean } | null>(null);
+  const [pendingCount, setPendingCount] = React.useState<number>(0);
 
   React.useEffect(() => {
-    const fetchProfile = async () => {
+    const fetchData = async () => {
       try {
-        const { getFamilyProfile } = await import("@/features/families/api/familiesApi");
-        const data = await getFamilyProfile();
-        setProfile(data);
+        const { getFamilyProfile, getFamilyStatistics } = await import("@/features/families/api/familiesApi");
+        const [profileData, statsData] = await Promise.all([
+          getFamilyProfile().catch(() => null),
+          getFamilyStatistics().catch(() => null)
+        ]);
+        if (profileData) {
+            setProfile(profileData);
+            // Sync Auth context with the latest name from profile API
+            const fullName = `${profileData.firstName} ${profileData.lastName}`;
+            if (user && (user.name !== fullName || user.isVerified !== profileData.isVerified)) {
+                updateUser({ ...user, name: fullName, isVerified: profileData.isVerified });
+            }
+        }
+        if (statsData) setPendingCount(statsData.pendingRequests || 0);
       } catch (error) {
-        logger.warn("Failed to fetch profile for sidebar");
+        logger.warn("Failed to fetch data for sidebar");
       }
     };
-    fetchProfile();
+    fetchData();
   }, []);
 
   const userName = profile ? `${profile.firstName} ${profile.lastName}` : "تحميل...";
   const userStatus = profile?.isVerified ? "حساب مفعل" : "حساب أسرة";
-  const userInitials = profile?.firstName?.[0] || "أ";
+  const userInitials = profile 
+    ? `${profile.firstName?.[0] || ""}${profile.lastName?.[0] || ""}`.toUpperCase() 
+    : (user?.name?.[0] || "أ");
 
   return (
     <div className="flex flex-col h-full bg-white relative z-20 overflow-hidden">
@@ -73,6 +87,7 @@ export function FamilySidebarContent({ isCollapsed }: { isCollapsed?: boolean })
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           const Icon = item.icon;
+          const badge = item.id === "requests" ? pendingCount : 0;
           return (
             <Link
               key={item.href}
@@ -89,7 +104,7 @@ export function FamilySidebarContent({ isCollapsed }: { isCollapsed?: boolean })
               {isActive && (
                 <motion.div 
                   layoutId="active-family-pill"
-                  className="absolute left-0 top-2 bottom-2 w-1 bg-primary rounded-r-full"
+                  className="absolute start-0 top-2 bottom-2 w-1 bg-primary rounded-e-full"
                 />
               )}
               <div className="flex items-center gap-3">
@@ -107,7 +122,19 @@ export function FamilySidebarContent({ isCollapsed }: { isCollapsed?: boolean })
                     )}>{item.label}</span>
                 )}
               </div>
-              {!isCollapsed && isActive && <ChevronLeft className="w-4 h-4 shrink-0" />}
+              
+              {/* Badge & Active Indicator Wrapper */}
+              <div className="flex items-center gap-2">
+                {badge > 0 && (
+                  <span className={cn(
+                    "min-w-[20px] h-5 px-1.5 flex items-center justify-center rounded-full text-[10px] font-black shrink-0 transition-all",
+                    isActive ? "bg-primary text-white" : "bg-destructive text-white group-hover:bg-primary group-hover:text-white"
+                  )}>
+                    {badge}
+                  </span>
+                )}
+                {!isCollapsed && isActive && <ChevronLeft className="w-4 h-4 shrink-0" />}
+              </div>
             </Link>
           );
         })}
@@ -156,7 +183,8 @@ export function FamilySidebar() {
         variant="outline"
         size="icon"
         onClick={() => setIsCollapsed(!isCollapsed)}
-        className="absolute top-10 -left-4 w-8 h-8 rounded-full border border-slate-200 bg-white shadow-sm z-50 hover:bg-slate-50 hover:text-primary transition-transform"
+        aria-label={isCollapsed ? "توسيع القائمة" : "طي القائمة"}
+        className="absolute top-10 -start-4 w-8 h-8 rounded-full border border-slate-200 bg-white shadow-sm z-50 hover:bg-slate-50 hover:text-primary transition-transform"
       >
         {isCollapsed ? <ChevronRight className="w-4 h-4 ml-0.5" /> : <ChevronLeft className="w-4 h-4 mr-0.5" />}
       </Button>

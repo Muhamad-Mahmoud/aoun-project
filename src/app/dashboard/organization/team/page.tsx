@@ -5,12 +5,13 @@ import { OrganizationSidebar } from "@/shared/components/layout/OrganizationSide
 import { DashboardTopBar } from "@/shared/components/layout/DashboardLayout";
 import { Card } from "@/shared/ui/card";
 import { Users } from "lucide-react";
+import { EmptyState } from "@/shared/components/common/EmptyState";
 
 export default function OrganizationTeamPage() {
     return (
         <DashboardLayout>
             <OrganizationSidebar />
-            <div className="flex-1 flex flex-col min-h-screen overflow-y-auto">
+            <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-slate-50" dir="rtl">
                 <DashboardTopBar userType="organization" />
                 <main className="py-8">
                     <div className="space-y-8 px-6 lg:px-10">
@@ -19,10 +20,11 @@ export default function OrganizationTeamPage() {
                             <p className="text-muted-foreground">إدارة أعضاء فريق الجمعية والمتطوعين.</p>
                         </div>
 
-                        <Card className="p-12 text-center">
-                            <Users className="w-12 h-12 text-secondary mx-auto mb-4 opacity-30" />
-                            <p className="text-muted-foreground italic">سيتم عرض قائمة أعضاء الفريق هنا.</p>
-                        </Card>
+                        <EmptyState
+                            icon={Users}
+                            title="سيتم إطلاق ميزة الفريق قريباً"
+                            description="قم بإدارة أعضاء الفريق والمتطوعين وتوزيع المهام والصلاحيات في التحديث القادم."
+                        />
                     </div>
                 </main>
             </div>

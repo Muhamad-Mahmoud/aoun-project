@@ -11,6 +11,8 @@ import { Loader2, AlertCircle, Calendar } from "lucide-react";
 import Link from "next/link";
 import { format } from "date-fns";
 import { ar } from "date-fns/locale";
+import { EmptyState } from "@/shared/components/common/EmptyState";
+import { Inbox } from "lucide-react";
 
 export default function OrganizationPendingPage() {
     const { requests, isLoading, error } = useAssociationRequests({ status: RequestStatus.Pending });
@@ -37,9 +39,11 @@ export default function OrganizationPendingPage() {
                                 <p>{error}</p>
                             </Card>
                         ) : requests.length === 0 ? (
-                            <Card className="p-12 text-center border-dashed">
-                                <p className="text-muted-foreground">لا توجد طلبات قيد المراجعة حالياً.</p>
-                            </Card>
+                            <EmptyState
+                                icon={Inbox}
+                                title="لا توجد طلبات معلقة"
+                                description="لا توجد طلبات قيد المراجعة حالياً. يرجى التحقق من هذه الصفحة لاحقاً للاطلاع على الطلبات الجديدة."
+                            />
                         ) : (
                             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                                 {requests.map((request) => (

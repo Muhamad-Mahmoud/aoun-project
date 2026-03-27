@@ -13,7 +13,26 @@ export function ChangePasswordForm() {
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-    const { register, handleSubmit, errors, isLoading } = useChangePassword();
+    const { register, handleSubmit, errors, watch, isLoading } = useChangePassword();
+
+    const newPasswordValue = watch("newPassword") || "";
+    
+    // Password Strength Calculation
+    const getStrength = (password: string) => {
+        if (!password) return { score: 0, text: "" };
+        let score = 0;
+        if (password.length >= 8) score++;
+        if (/[A-Z]/.test(password)) score++;
+        if (/[a-z]/.test(password)) score++;
+        if (/[0-9]/.test(password)) score++;
+        if (/[^A-Za-z0-9]/.test(password)) score++;
+        
+        if (score <= 2) return { score, text: "ضعيفة", color: "bg-destructive" };
+        if (score <= 4) return { score, text: "متوسطة", color: "bg-warning" };
+        return { score, text: "قوية جداً", color: "bg-success" };
+    };
+    
+    const strength = getStrength(newPasswordValue);
 
     return (
         <Card className="p-8">
@@ -40,18 +59,18 @@ export function ChangePasswordForm() {
                             placeholder="أدخل كلمة المرور الحالية"
                             disabled={isLoading}
                             {...register("currentPassword")}
-                            className={`h-12 pl-12 ${errors.currentPassword ? "border-red-500" : ""}`}
+                            className={`h-12 ps-12 ${errors.currentPassword ? "border-red-500" : ""}`}
                         />
                         <button
                             type="button"
                             onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                            className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                            className="absolute start-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
                         >
                             {showCurrentPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                         </button>
                     </div>
                     {errors.currentPassword && (
-                        <p className="text-sm text-red-600 font-bold">{errors.currentPassword.message}</p>
+                        <p className="text-sm text-destructive font-bold">{errors.currentPassword.message}</p>
                     )}
                 </div>
 
@@ -69,18 +88,35 @@ export function ChangePasswordForm() {
                             placeholder="أدخل كلمة المرور الجديدة"
                             disabled={isLoading}
                             {...register("newPassword")}
-                            className={`h-12 pl-12 ${errors.newPassword ? "border-red-500" : ""}`}
+                            className={`h-12 ps-12 ${errors.newPassword ? "border-red-500" : ""}`}
                         />
                         <button
                             type="button"
                             onClick={() => setShowNewPassword(!showNewPassword)}
-                            className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                            className="absolute start-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
                         >
                             {showNewPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                         </button>
                     </div>
+                    {/* Password Strength Indicator */}
+                    {newPasswordValue && (
+                        <div className="mt-3 space-y-2 animate-in fade-in duration-300">
+                            <div className="flex justify-between items-center text-xs font-bold">
+                                <span className="text-slate-500">قوة كلمة المرور:</span>
+                                <span className={strength.color?.replace('bg-', 'text-')}>{strength.text}</span>
+                            </div>
+                            <div className="flex gap-1 h-1.5 w-full">
+                                {[1, 2, 3, 4, 5].map((level) => (
+                                    <div 
+                                        key={level} 
+                                        className={`flex-1 rounded-full transition-all duration-300 ${level <= strength.score ? strength.color : 'bg-slate-100'}`} 
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    )}
                     {errors.newPassword && (
-                        <p className="text-sm text-red-600 font-bold">{errors.newPassword.message}</p>
+                        <p className="text-sm text-destructive font-bold">{errors.newPassword.message}</p>
                     )}
                 </div>
 
@@ -96,18 +132,18 @@ export function ChangePasswordForm() {
                             placeholder="أعد إدخال كلمة المرور الجديدة"
                             disabled={isLoading}
                             {...register("confirmPassword")}
-                            className={`h-12 pl-12 ${errors.confirmPassword ? "border-red-500" : ""}`}
+                            className={`h-12 ps-12 ${errors.confirmPassword ? "border-red-500" : ""}`}
                         />
                         <button
                             type="button"
                             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                            className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                            className="absolute start-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
                         >
                             {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                         </button>
                     </div>
                     {errors.confirmPassword && (
-                        <p className="text-sm text-red-600 font-bold">{errors.confirmPassword.message}</p>
+                        <p className="text-sm text-destructive font-bold">{errors.confirmPassword.message}</p>
                     )}
                 </div>
 

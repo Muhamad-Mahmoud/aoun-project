@@ -33,8 +33,30 @@ const navItems = [
 
 export function OrganizationSidebarContent({ isCollapsed }: { isCollapsed?: boolean }) {
   const pathname = usePathname();
-  const { logout } = useAuthContext();
+  const { user, updateUser, logout } = useAuthContext();
+  const [profile, setProfile] = React.useState<{ name?: string; isActive?: boolean } | null>(null);
 
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { getAssociationProfile } = await import("@/features/associations/api/associationsApi");
+        const profileData = await getAssociationProfile().catch(() => null);
+        if (profileData) {
+          setProfile(profileData);
+          if (user && user.name !== profileData.name) {
+            updateUser({ ...user, name: profileData.name });
+          }
+        }
+      } catch (error) {
+        // Silently fail or log for debug
+      }
+    };
+    fetchData();
+  }, []);
+
+  const orgName = profile?.name || user?.name || "تحميل...";
+  const orgInitials = orgName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || "ج";
+  
   return (
     <div className="flex flex-col h-full bg-white relative z-20 overflow-hidden">
       {/* Logo area */}
@@ -71,7 +93,7 @@ export function OrganizationSidebarContent({ isCollapsed }: { isCollapsed?: bool
               {isActive && (
                 <motion.div 
                   layoutId="active-org-pill"
-                  className="absolute left-0 top-2 bottom-2 w-1 bg-secondary rounded-r-full"
+                  className="absolute start-0 top-2 bottom-2 w-1 bg-secondary rounded-e-full"
                 />
               )}
               <div className="flex items-center gap-3">
@@ -108,13 +130,13 @@ export function OrganizationSidebarContent({ isCollapsed }: { isCollapsed?: bool
         </Button>
         <div className={cn("mt-4 rounded-xl bg-muted/50 border border-border transition-all duration-300 mx-auto", isCollapsed ? "p-2 w-fit shrink-0" : "p-4")}>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 shrink-0 rounded-full bg-secondary/20 flex items-center justify-center text-secondary font-bold text-sm">
-              جخ
+            <div className="w-10 h-10 shrink-0 rounded-xl bg-secondary/20 flex items-center justify-center text-secondary font-black text-sm">
+              {orgInitials}
             </div>
             {!isCollapsed && (
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-bold text-foreground truncate whitespace-nowrap">جمعية الخير</p>
-                  <p className="text-[10px] text-muted-foreground whitespace-nowrap">جهة معتمدة</p>
+                  <p className="text-xs font-black text-slate-900 truncate whitespace-nowrap">{orgName}</p>
+                  <p className="text-[10px] text-slate-500 font-bold whitespace-nowrap">جهة معتمدة</p>
                 </div>
             )}
           </div>
@@ -136,7 +158,8 @@ export function OrganizationSidebar() {
         variant="outline"
         size="icon"
         onClick={() => setIsCollapsed(!isCollapsed)}
-        className="absolute top-10 -left-4 w-8 h-8 rounded-full border border-slate-200 bg-white shadow-sm z-50 hover:bg-slate-50 hover:text-secondary transition-transform"
+        aria-label={isCollapsed ? "توسيع القائمة" : "طي القائمة"}
+        className="absolute top-10 -start-4 w-8 h-8 rounded-full border border-slate-200 bg-white shadow-sm z-50 hover:bg-slate-50 hover:text-secondary transition-transform"
       >
         {isCollapsed ? <ChevronRight className="w-4 h-4 ml-0.5" /> : <ChevronLeft className="w-4 h-4 mr-0.5" />}
       </Button>

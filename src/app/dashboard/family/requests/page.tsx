@@ -48,16 +48,7 @@ import {
 import type { AidRequest, PagedResponse } from "@/features/requests/types";
 import { toast } from "sonner";
 
-// ===== CSS Keyframes (injected once) =====
-const animationStyles = `
-@keyframes fadeSlideUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.animate-fade-slide-up {
-  animation: fadeSlideUp 0.4s ease-out both;
-}
-`;
+
 
 export default function FamilyRequestsPage() {
     const router = useRouter();
@@ -194,15 +185,12 @@ export default function FamilyRequestsPage() {
 
     return (
         <>
-        {/* Inject animation keyframes */}
-        <style>{animationStyles}</style>
-
         <DashboardLayout>
             <FamilySidebar />
             <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-gradient-to-b from-slate-50 to-white" dir="rtl">
                 <DashboardTopBar userType="family" />
 
-                <main className="p-4 sm:p-8 pb-20 pt-20 lg:pt-28">
+                <main className="p-4 sm:p-8 pb-20 pt-6 lg:pt-8 relative z-10">
                     <div className="mx-auto max-w-5xl space-y-8">
 
                         {/* ===== Header ===== */}

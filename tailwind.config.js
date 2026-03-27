@@ -158,6 +158,13 @@ module.exports = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      boxShadow: {
+        sm: '0 2px 8px -2px rgba(22, 163, 74, 0.05)',
+        md: '0 8px 24px -4px rgba(22, 163, 74, 0.08)',
+        lg: '0 16px 32px -8px rgba(22, 163, 74, 0.12)',
+        card: '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+        'card-hover': '0 12px 28px -4px rgba(0, 0, 0, 0.08)',
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },

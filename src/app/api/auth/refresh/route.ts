@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { API_ENDPOINTS } from '@/lib/api/config';
-import { env } from '@/env';
 import { getAuthCookieOptions } from '@/lib/security/authCookies';
 
 function clearAuthCookies(response: NextResponse) {
@@ -25,7 +24,7 @@ export async function POST() {
             );
         }
 
-        const backendResponse = await fetch(`${env.NEXT_PUBLIC_API_URL}${API_ENDPOINTS.auth.refresh}`, {
+        const backendResponse = await fetch(`${process.env.API_URL}${API_ENDPOINTS.auth.refresh}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

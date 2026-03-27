@@ -94,6 +94,7 @@ export interface AuthUser {
     email: string;
     name: string;
     role: string;
+    isVerified?: boolean;
 }
 
 export interface AuthState {

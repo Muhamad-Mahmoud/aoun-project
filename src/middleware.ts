@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { ROUTES, PUBLIC_ROUTES } from '@/shared/constants/routes';
-import { env } from '@/env';
 
 /**
  * Middleware for route protection and authentication
@@ -13,12 +12,15 @@ export async function middleware(request: NextRequest) {
     // 1. API Proxy Logic (Improved with direct fetch for better external proxying)
     if (pathname.startsWith('/api/proxy')) {
         const targetPath = pathname.replace('/api/proxy', '');
-        const baseUrl = env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:5204';
+        const baseUrl = process.env.API_URL || 'http://127.0.0.1:5204';
         let targetUrl = `${baseUrl}${targetPath}${request.nextUrl.search}`;
         // Fix for Node.js 18+ preferring IPv6 (::1) which breaks local ASP.NET connections
         targetUrl = targetUrl.replace('localhost', '127.0.0.1');
         
-        console.log(`[Proxy Log] ${request.method} ${pathname} -> ${targetUrl}`);
+        // Only log proxy target in development — never leak backend URLs in production
+        if (process.env.NODE_ENV === 'development') {
+            console.log(`[Proxy] ${request.method} ${pathname} -> ${targetUrl}`);
+        }
 
         const requestHeaders = new Headers(request.headers);
         ['host', 'cookie', 'origin', 'referer', 'connection', 'content-length'].forEach((header) => {
