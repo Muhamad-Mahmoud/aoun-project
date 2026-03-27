@@ -152,6 +152,14 @@ export async function createRequest(payload: CreateAidRequestPayload): Promise<A
 
         // If the backend has a specific inner exception message, it will be included in apiError.message
         let errorMessage = apiError.message || 'حدث خطأ أثناء حفظ البيانات.';
+        
+        // ASP.NET Core Validation 400 Bad Request Errors
+        if (apiError.errors && typeof apiError.errors === 'object') {
+            const errorList = Object.values(apiError.errors).flat().join('\n');
+            if (errorList) {
+                errorMessage = `أخطاء التحقق من البيانات:\n${errorList}`;
+            }
+        }
 
         throw new Error(errorMessage);
     }

@@ -3,9 +3,9 @@ import type { NextRequest } from 'next/server';
 import { ROUTES, PUBLIC_ROUTES } from '@/shared/constants/routes';
 
 /**
- * Middleware for route protection and authentication
+ * Proxy for route protection and authentication
  */
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
     const token = request.cookies.get('auth_token');
     const pathname = request.nextUrl.pathname;
 

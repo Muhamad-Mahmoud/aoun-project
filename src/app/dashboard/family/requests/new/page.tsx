@@ -106,7 +106,12 @@ export default function NewRequestPage() {
                 setValidationError(message);
                 toast.error("حدث خطأ أثناء الحفظ بقاعدة البيانات، راجع التفاصيل.");
             }
+            else if (message.includes("أخطاء التحقق من البيانات")) {
+                setValidationError(message);
+                toast.error("هناك بيانات تتعارض مع شروط الحفظ، راجع التفاصيل بالأعلى.");
+            }
             else {
+                setValidationError(message);
                 toast.error(message);
             }
         }
