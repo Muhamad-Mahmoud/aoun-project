@@ -24,7 +24,7 @@ interface ChatWindowProps {
 export function ChatWindow({ className, onClose }: ChatWindowProps) {
     const { user, token } = useAuth();
     const apiUrl = `${API_CONFIG.baseURL}${API_ENDPOINTS.ai.chatStream}`;
-    const voiceUrl = `${API_CONFIG.baseURL}${(API_ENDPOINTS.ai as any).voice || '/api/ai/voice'}`;
+    const voiceUrl = '/api/ai/voice'; // Direct Next.js API route (not proxy — handles FormData properly)
     const { messages, isStreaming, sendMessage, sendVoiceMessage, cancelStream, clearChat } =
         useStreamingChat({ 
             apiUrl, 

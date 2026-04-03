@@ -214,7 +214,15 @@ export function useStreamingChat({
     const sendVoiceMessage = useCallback(
         async (audioBlob: Blob) => {
             if (!voiceUrl || isStreaming) return;
+
+            // Show 🎤 user bubble + empty model bubble (loading dots) immediately
+            setMessages((prev) => [
+                ...prev,
+                { role: "user", content: "🎤 رسالة صوتية" },
+                { role: "model", content: "" },
+            ]);
             setIsStreaming(true);
+            abortRef.current = new AbortController();
 
             try {
                 const formData = new FormData();
@@ -227,25 +235,119 @@ export function useStreamingChat({
                 const response = await fetch(voiceUrl, {
                     method: "POST",
                     body: formData,
+                    signal: abortRef.current.signal,
                 });
 
-                if (!response.ok) throw new Error("Voice API failed");
-                const data = await response.json();
+                if (!response.ok) {
+                    const errText = await response.text();
+                    throw new Error(`Voice API ${response.status}: ${errText}`);
+                }
 
-                setMessages((prev) => [
-                    ...prev,
-                    { role: "user", content: data.transcription || "مقطع صوتي" },
-                    { role: "model", content: data.response || "" }
-                ]);
+                // Read the SSE stream exactly like sendMessage does
+                const reader = response.body!.getReader();
+                const decoder = new TextDecoder("utf-8");
+                let fullText = "";
+                let buffer = "";
+                let transcription = "";
 
-            } catch (error) {
+                const flush = (text: string) => {
+                    if (!text) return;
+                    fullText += text;
+                    setMessages((prev) => {
+                        const updated = [...prev];
+                        updated[updated.length - 1] = {
+                            ...updated[updated.length - 1],
+                            content: fullText,
+                        };
+                        return updated;
+                    });
+                };
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split("\n");
+                    buffer = lines.pop() ?? "";
+
+                    for (const line of lines) {
+                        const raw = line.replace(/\r$/, "");
+
+                        if (raw === "data: [DONE]") break;
+                        if (raw.startsWith("data: [ERROR]")) break;
+                        if (!raw.startsWith("data: ")) continue;
+
+                        const jsonStr = raw.slice(6);
+                        if (!jsonStr) continue;
+
+                        let content: any = null;
+                        let isJson = false;
+                        try {
+                            content = JSON.parse(jsonStr);
+                            isJson = true;
+                        } catch {
+                            content = jsonStr;
+                        }
+
+                        // Handle transcription object from voice stream
+                        if (isJson && content?.type === "transcription") {
+                            transcription = content.text || "";
+                            // Update the user bubble with actual transcription
+                            setMessages((prev) => {
+                                const updated = [...prev];
+                                updated[updated.length - 2] = {
+                                    role: "user",
+                                    content: transcription || "🎤 رسالة صوتية",
+                                };
+                                return updated;
+                            });
+                            continue;
+                        }
+
+                        // Handle confirmation like text stream
+                        if (isJson && content?.type === "confirmation") {
+                            setMessages((prev) => {
+                                const updated = [...prev];
+                                const lastMsg = updated[updated.length - 1];
+                                updated[updated.length - 1] = {
+                                    ...lastMsg,
+                                    confirmation: content.data,
+                                };
+                                return updated;
+                            });
+                            continue;
+                        }
+
+                        // Regular text token
+                        const textStr = isJson && typeof content === "string"
+                            ? content
+                            : (isJson ? JSON.stringify(content) : content);
+
+                        const tokens = textStr.match(/[\s\S]{1,4}/g) || [];
+                        for (const token of tokens) {
+                            if (abortRef.current?.signal.aborted) break;
+                            flush(token);
+                            await new Promise((resolve) => setTimeout(resolve, 15 + Math.random() * 20));
+                        }
+                    }
+                }
+
+            } catch (error: any) {
                 logger.error("Voice sending failed", error);
-                setMessages((prev) => [
-                    ...prev,
-                    { role: "model", content: "عذراً، فشل معالجة الصوت." }
-                ]);
+                if (error.name !== "AbortError") {
+                    setMessages((prev) => {
+                        const updated = [...prev];
+                        updated[updated.length - 1] = {
+                            role: "model",
+                            content: `عذراً، فشل معالجة الصوت. (${error?.message || "خطأ غير معروف"})`,
+                        };
+                        return updated;
+                    });
+                }
             } finally {
                 setIsStreaming(false);
+                abortRef.current = null;
             }
         },
         [voiceUrl, isStreaming, session_id, family_id, access_token]
