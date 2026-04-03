@@ -1,8 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
-import { Bot, User } from "lucide-react";
+import { Bot, User, CheckCircle2, XCircle } from "lucide-react";
 import { cn } from "@/shared/utils";
 import type { ChatMessage } from "@/shared/hooks";
 
@@ -10,12 +10,28 @@ interface ChatBubbleProps {
     message: ChatMessage;
     isLast: boolean;
     isStreaming: boolean;
+    onAction?: (actionText: string) => void;
 }
 
-export const ChatBubble = React.memo(function ChatBubble({ message, isLast, isStreaming }: ChatBubbleProps) {
+export const ChatBubble = React.memo(function ChatBubble({ message, isLast, isStreaming, onAction }: ChatBubbleProps) {
     const isUser = message.role === "user";
     const showCursor = isLast && !isUser && isStreaming;
     const showDots = !isUser && !message.content && isStreaming;
+    
+    // Manage local state to show 'loading' on buttons or disable them after clicking
+    const [actionTaken, setActionTaken] = useState(false);
+
+    const handleConfirm = () => {
+        if (!onAction || actionTaken) return;
+        setActionTaken(true);
+        onAction("نعم، أؤكد التنفيذ");
+    };
+
+    const handleReject = () => {
+        if (!onAction || actionTaken) return;
+        setActionTaken(true);
+        onAction("لا، تراجع");
+    };
 
     /* ─── User message (Anchored to Right in RTL) ─── */
     if (isUser) {
@@ -37,7 +53,6 @@ export const ChatBubble = React.memo(function ChatBubble({ message, isLast, isSt
         <div className="flex justify-end items-end gap-3">
             <div className="max-w-[85%] bg-card border border-border/80 rounded-2xl rounded-tl-sm shadow-md px-6 py-5 hover:shadow-lg transition-all duration-300">
                 {showDots ? (
-
                     /* Loading dots */
                     <div className="flex items-center gap-1.5 py-0.5">
                         <span className="w-2 h-2 rounded-full bg-primary/40 animate-bounce [animation-delay:0ms]" />
@@ -139,6 +154,45 @@ export const ChatBubble = React.memo(function ChatBubble({ message, isLast, isSt
 
                         {showCursor && (
                             <span className="inline-block w-[2px] h-[1em] bg-primary ms-0.5 align-text-bottom animate-pulse" />
+                        )}
+
+                        {/* Additional Tool Confirmation UI */}
+                        {message.confirmation && isLast && !isStreaming && (
+                            <div className="mt-5 pt-4 border-t border-border/50">
+                                <div className="p-4 bg-muted/40 rounded-xl border border-border/50">
+                                    <p className="font-semibold text-sm mb-4 text-foreground/90">
+                                        يطلب منك المساعد اتخاذ قرار بشأن هذا الإجراء.
+                                    </p>
+                                    <div className="flex items-center gap-3">
+                                        <button
+                                            onClick={handleConfirm}
+                                            disabled={actionTaken}
+                                            className={cn(
+                                                "flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-[13px] transition-all",
+                                                actionTaken 
+                                                    ? "bg-primary/50 text-white shadow-none cursor-not-allowed" 
+                                                    : "bg-primary text-white hover:bg-warm-green-dark shadow-md"
+                                            )}
+                                        >
+                                            <CheckCircle2 className="w-4 h-4" />
+                                            نعم، أوافق
+                                        </button>
+                                        <button
+                                            onClick={handleReject}
+                                            disabled={actionTaken}
+                                            className={cn(
+                                                "flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-[13px] transition-all",
+                                                actionTaken 
+                                                    ? "bg-destructive/50 text-white shadow-none cursor-not-allowed" 
+                                                    : "bg-destructive/10 text-destructive hover:bg-destructive hover:text-white"
+                                            )}
+                                        >
+                                            <XCircle className="w-4 h-4" />
+                                            لا، تراجع
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         )}
                     </div>
                 )}

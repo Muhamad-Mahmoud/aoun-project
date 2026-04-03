@@ -34,7 +34,7 @@ const nextConfig: NextConfig = {
           {
             key: "Permissions-Policy",
             // Only allow camera/mic if explicitly needed; restrict everything else
-            value: "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
+            value: "camera=(), microphone=(self), geolocation=(), payment=(), usb=()",
           },
           {
             key: "Content-Security-Policy",

@@ -8,6 +8,7 @@ import { ChatBubble } from "./ChatBubble";
 import { ChatInput } from "./ChatInput";
 import { Bot, MessageSquare, HelpCircle, FileText } from "lucide-react";
 import { cn } from "@/shared/utils";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 
 const SUGGESTIONS = [
     { label: "كيف تعمل منصة عون؟", icon: HelpCircle },
@@ -21,9 +22,17 @@ interface ChatWindowProps {
 }
 
 export function ChatWindow({ className, onClose }: ChatWindowProps) {
+    const { user, token } = useAuth();
     const apiUrl = `${API_CONFIG.baseURL}${API_ENDPOINTS.ai.chatStream}`;
-    const { messages, isStreaming, sendMessage, cancelStream, clearChat } =
-        useStreamingChat({ apiUrl });
+    const voiceUrl = `${API_CONFIG.baseURL}${(API_ENDPOINTS.ai as any).voice || '/api/ai/voice'}`;
+    const { messages, isStreaming, sendMessage, sendVoiceMessage, cancelStream, clearChat } =
+        useStreamingChat({ 
+            apiUrl, 
+            voiceUrl,
+            session_id: user?.id,
+            family_id: user?.id, // assuming family_id maps to user.id for family accounts
+            access_token: token || undefined
+        });
 
     const scrollRef = useRef<HTMLDivElement>(null);
     const hasMessages = messages.length > 0;
@@ -93,6 +102,7 @@ export function ChatWindow({ className, onClose }: ChatWindowProps) {
                                 message={msg}
                                 isLast={i === messages.length - 1}
                                 isStreaming={isStreaming}
+                                onAction={sendMessage}
                             />
                         ))}
                     </div>
@@ -102,6 +112,7 @@ export function ChatWindow({ className, onClose }: ChatWindowProps) {
             {/* Input */}
             <ChatInput
                 onSend={sendMessage}
+                onSendVoice={sendVoiceMessage}
                 onCancel={cancelStream}
                 onClear={clearChat}
                 isStreaming={isStreaming}

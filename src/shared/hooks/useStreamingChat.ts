@@ -6,21 +6,28 @@ import { logger } from "@/lib/logger";
 export interface ChatMessage {
     role: "user" | "model";
     content: string;
+    confirmation?: {
+        confirmation_id: string;
+        tool_name: string;
+        message: string;
+    };
 }
 
 interface UseStreamingChatOptions {
     /** Full SSE endpoint URL */
     apiUrl: string;
-    /** localStorage key for message persistence (default: "chat_messages") */
+    /** Voice API endpoint URL */
+    voiceUrl?: string;
+    /** localStorage key for message persistence */
     storageKey?: string;
+    /** Dynamic connection options */
+    session_id?: string;
+    family_id?: string;
+    access_token?: string;
 }
 
 const STORAGE_KEY = "aoun_chat_messages";
 
-/**
- * Simple Base64 obfuscation to prevent casual plaintext snooping
- * This is NOT encryption — just basic obfuscation for localStorage.
- */
 function encode(data: string): string {
     try { return btoa(unescape(encodeURIComponent(data))); } catch { return data; }
 }
@@ -42,23 +49,20 @@ function loadMessages(key: string): ChatMessage[] {
 function saveMessages(key: string, messages: ChatMessage[]) {
     if (typeof window === "undefined") return;
     try {
-        // Keep only last 50 messages to avoid storage bloat
         const toSave = messages.slice(-50);
         localStorage.setItem(key, encode(JSON.stringify(toSave)));
     } catch {
-        // Storage full or unavailable — fail silently
+        // noop
     }
 }
 
-/**
- * Custom hook for streaming AI chat via Server-Sent Events (SSE).
- * Messages are persisted to localStorage and restored on mount.
- *
- * Backend sends JSON-encoded SSE chunks: data: "text with \\n"
- */
 export function useStreamingChat({
     apiUrl,
+    voiceUrl,
     storageKey = STORAGE_KEY,
+    session_id,
+    family_id,
+    access_token
 }: UseStreamingChatOptions) {
     const [messages, setMessages] = useState<ChatMessage[]>(() =>
         loadMessages(storageKey)
@@ -67,12 +71,10 @@ export function useStreamingChat({
     const abortRef = useRef<AbortController | null>(null);
     const messagesRef = useRef<ChatMessage[]>(messages);
 
-    // Keep ref in sync
     useEffect(() => {
         messagesRef.current = messages;
     }, [messages]);
 
-    // Persist messages to localStorage whenever they change
     useEffect(() => {
         saveMessages(storageKey, messages);
     }, [messages, storageKey]);
@@ -81,15 +83,18 @@ export function useStreamingChat({
         async (userMessage: string) => {
             if (!userMessage.trim() || isStreaming) return;
 
-            // 1. Append user message immediately
             const userMsg: ChatMessage = { role: "user", content: userMessage };
             setMessages((prev) => [...prev, userMsg]);
-
-            // 2. Append empty AI placeholder (filled token-by-token)
             setMessages((prev) => [...prev, { role: "model", content: "" }]);
 
             setIsStreaming(true);
             abortRef.current = new AbortController();
+
+            // Extract just the core fields to prevent schema corruption
+            const history = messagesRef.current.slice(-20).map(m => ({ 
+                role: m.role, 
+                content: m.content 
+            }));
 
             try {
                 const response = await fetch(apiUrl, {
@@ -97,7 +102,11 @@ export function useStreamingChat({
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                         message: userMessage,
-                        history: messagesRef.current.slice(-20),
+                        history: history,
+                        session_id: session_id || "guest-session",
+                        mode: "agent",
+                        family_id: family_id || "",
+                        access_token: access_token || ""
                     }),
                     signal: abortRef.current.signal,
                 });
@@ -106,7 +115,6 @@ export function useStreamingChat({
                     throw new Error(`Server error: ${response.status}`);
                 }
 
-                // 3. Read SSE stream with a line buffer
                 const reader = response.body!.getReader();
                 const decoder = new TextDecoder("utf-8");
                 let fullText = "";
@@ -114,17 +122,14 @@ export function useStreamingChat({
 
                 const flush = (text: string) => {
                     if (!text) return;
-
-                    // Sanitize: filter out suspicious symbols/tokens (e.g. 🖳 or control-like hallucinations)
-                    // This regex removes common problematic non-textual symbols while keeping standard emojis
                     const sanitized = text.replace(/[\u{1F5B3}\u{1F5B4}\u{1F5B5}\u{1F5B6}\u{1F5B7}\u{1F5B8}\u{1F5B9}\u{1F5BA}]/gu, "");
-
                     if (!sanitized) return;
 
                     fullText += sanitized;
                     setMessages((prev) => {
                         const updated = [...prev];
-                        updated[updated.length - 1] = { role: "model", content: fullText };
+                        const lastMsg = updated[updated.length - 1];
+                        updated[updated.length - 1] = { ...lastMsg, content: fullText };
                         return updated;
                     });
                 };
@@ -150,23 +155,35 @@ export function useStreamingChat({
                         const jsonStr = raw.slice(6);
                         if (!jsonStr) continue;
 
-                        let content: string;
+                        let content: any = null;
+                        let isJson = false;
+
                         try {
                             content = JSON.parse(jsonStr);
+                            isJson = true;
                         } catch {
-                            content = jsonStr; // fallback for non-JSON
+                            content = jsonStr;
                         }
 
-                        // تقسيم أي نص كبير (زي الردود المحفوظة في الكاش) لقطع صغيرة من 4 حروف
-                        // عشان نضمن إن التأثير يبان دايماً كلمة بكلمة، حتى لو السيرفر بعت الرد كله في لحظة واحدة
-                        const tokens = content.match(/[\s\S]{1,4}/g) || [];
+                        if (isJson && content && typeof content === 'object' && content.type === 'confirmation') {
+                            setMessages((prev) => {
+                                const updated = [...prev];
+                                const lastMsg = updated[updated.length - 1];
+                                updated[updated.length - 1] = { 
+                                    ...lastMsg, 
+                                    confirmation: content.data 
+                                };
+                                return updated;
+                            });
+                            continue;
+                        }
+
+                        let textStr = isJson && typeof content === 'string' ? content : (isJson ? JSON.stringify(content) : content);
+
+                        const tokens = textStr.match(/[\s\S]{1,4}/g) || [];
                         for (const token of tokens) {
-                            // لو المستخدم داس "إيقاف" نوقف الطباعة فوراً
                             if (abortRef.current?.signal.aborted) break;
-                            
                             flush(token);
-                            
-                            // تأخير من 15 ل 35 ملي ثانية بين كل 4 حروف
                             await new Promise((resolve) => setTimeout(resolve, 15 + Math.random() * 20));
                         }
                     }
@@ -177,7 +194,9 @@ export function useStreamingChat({
                     logger.error("Streaming failed", err);
                     setMessages((prev) => {
                         const updated = [...prev];
+                        const last = updated[updated.length - 1];
                         updated[updated.length - 1] = {
+                            ...last,
                             role: "model",
                             content: "عذراً، حدث خطأ أثناء الاتصال. يرجى المحاولة مرة أخرى.",
                         };
@@ -189,19 +208,58 @@ export function useStreamingChat({
                 abortRef.current = null;
             }
         },
-        [apiUrl, isStreaming],
+        [apiUrl, isStreaming, session_id, family_id, access_token],
     );
 
-    /** Cancel the current streaming response */
+    const sendVoiceMessage = useCallback(
+        async (audioBlob: Blob) => {
+            if (!voiceUrl || isStreaming) return;
+            setIsStreaming(true);
+
+            try {
+                const formData = new FormData();
+                formData.append("file", audioBlob, "audio.webm");
+                if (session_id) formData.append("session_id", session_id);
+                if (family_id) formData.append("family_id", family_id);
+                if (access_token) formData.append("access_token", access_token);
+                formData.append("language", "ar");
+
+                const response = await fetch(voiceUrl, {
+                    method: "POST",
+                    body: formData,
+                });
+
+                if (!response.ok) throw new Error("Voice API failed");
+                const data = await response.json();
+
+                setMessages((prev) => [
+                    ...prev,
+                    { role: "user", content: data.transcription || "مقطع صوتي" },
+                    { role: "model", content: data.response || "" }
+                ]);
+
+            } catch (error) {
+                logger.error("Voice sending failed", error);
+                setMessages((prev) => [
+                    ...prev,
+                    { role: "model", content: "عذراً، فشل معالجة الصوت." }
+                ]);
+            } finally {
+                setIsStreaming(false);
+            }
+        },
+        [voiceUrl, isStreaming, session_id, family_id, access_token]
+    );
+
     const cancelStream = useCallback(() => {
         abortRef.current?.abort();
     }, []);
 
-    /** Clear all messages (also clears localStorage) */
     const clearChat = useCallback(() => {
         setMessages([]);
         try { localStorage.removeItem(storageKey); } catch { /* noop */ }
     }, [storageKey]);
 
-    return { messages, isStreaming, sendMessage, cancelStream, clearChat };
+    return { messages, isStreaming, sendMessage, sendVoiceMessage, cancelStream, clearChat };
 }
+
