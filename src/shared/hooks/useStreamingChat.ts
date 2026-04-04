@@ -97,7 +97,11 @@ export function useStreamingChat({
             try {
                 const response = await fetch(apiUrl, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: {
+                        "Content-Type": "application/json",
+                        // Backend chat endpoint requires an API key header (see product spec)
+                        "X-API-Key": "dev-key",
+                    },
                     body: JSON.stringify({
                         message: userMessage,
                         history: history,
