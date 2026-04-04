@@ -24,11 +24,9 @@ interface ChatWindowProps {
 export function ChatWindow({ className, onClose }: ChatWindowProps) {
     const { user, token } = useAuth();
     const apiUrl = `${API_CONFIG.baseURL}${API_ENDPOINTS.ai.chatStream}`;
-    const voiceUrl = '/api/ai/voice'; // Direct Next.js API route (not proxy — handles FormData properly)
-    const { messages, isStreaming, sendMessage, sendVoiceMessage, cancelStream, clearChat } =
+    const { messages, isStreaming, chatMode, setChatMode, sendMessage, cancelStream, clearChat } =
         useStreamingChat({ 
-            apiUrl, 
-            voiceUrl,
+            apiUrl,
             session_id: user?.id,
             family_id: user?.id, // assuming family_id maps to user.id for family accounts
             access_token: token || undefined
@@ -52,7 +50,13 @@ export function ChatWindow({ className, onClose }: ChatWindowProps) {
     return (
         <div className={cn("flex flex-col h-full bg-background rounded-2xl border border-border/50 shadow-md overflow-hidden", className)}>
             {/* Header */}
-            <ChatHeader onClear={clearChat} hasMessages={hasMessages} onClose={onClose} />
+            <ChatHeader 
+                onClear={clearChat} 
+                hasMessages={hasMessages} 
+                onClose={onClose} 
+                chatMode={chatMode}
+                onModeChange={setChatMode}
+            />
 
             {/* Messages */}
             <div
@@ -112,11 +116,8 @@ export function ChatWindow({ className, onClose }: ChatWindowProps) {
             {/* Input */}
             <ChatInput
                 onSend={sendMessage}
-                onSendVoice={sendVoiceMessage}
                 onCancel={cancelStream}
-                onClear={clearChat}
                 isStreaming={isStreaming}
-                hasMessages={hasMessages}
             />
         </div>
     );
