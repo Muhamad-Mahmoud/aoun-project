@@ -71,9 +71,7 @@ export function AuthProvider({ children, initialIsAuthenticated = false, initial
                 }
             } catch (error) {
                 logger.error('Failed to initialize auth', error);
-                setUser(null);
-                setToken(null);
-                setIsAuthenticated(initialIsAuthenticated);
+                await clearAuthState();
             } finally {
                 setIsLoading(false);
             }
