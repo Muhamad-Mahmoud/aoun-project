@@ -54,8 +54,6 @@ export function ChatWindow({ className, onClose }: ChatWindowProps) {
                 onClear={clearChat} 
                 hasMessages={hasMessages} 
                 onClose={onClose} 
-                chatMode={chatMode}
-                onModeChange={setChatMode}
             />
 
             {/* Messages */}

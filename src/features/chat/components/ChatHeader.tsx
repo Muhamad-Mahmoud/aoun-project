@@ -9,11 +9,9 @@ interface ChatHeaderProps {
     onClear: () => void;
     hasMessages: boolean;
     onClose?: () => void;
-    chatMode: "chat" | "agent";
-    onModeChange: (mode: "chat" | "agent") => void;
 }
 
-export function ChatHeader({ onClear, hasMessages, onClose, chatMode, onModeChange }: ChatHeaderProps) {
+export function ChatHeader({ onClear, hasMessages, onClose }: ChatHeaderProps) {
     return (
         <div className="flex flex-col border-b border-border/50 bg-card/80 backdrop-blur-md sticky top-0 z-10">
             <div className="flex items-center justify-between px-6 py-4">
@@ -65,33 +63,6 @@ export function ChatHeader({ onClear, hasMessages, onClose, chatMode, onModeChan
                 </div>
             </div>
 
-            {/* Bottom bar: Mode Switcher */}
-            <div className="px-6 pb-3 pt-0 flex items-center justify-center">
-                <div className="inline-flex p-1 bg-muted/40 rounded-[14px] border border-border/40 w-full max-w-xs transition-all duration-300">
-                    <button
-                        onClick={() => onModeChange("agent")}
-                        className={cn(
-                            "flex-1 flex items-center justify-center gap-2 px-3 py-1.5 rounded-[10px] text-[11.5px] font-bold transition-all duration-300",
-                            chatMode === "agent" 
-                                ? "bg-background text-primary shadow-sm ring-1 ring-primary/10" 
-                                : "text-muted-foreground/60 hover:text-foreground hover:bg-white/40"
-                        )}
-                    >
-                        المساعد (Agent)
-                    </button>
-                    <button
-                        onClick={() => onModeChange("chat")}
-                        className={cn(
-                            "flex-1 flex items-center justify-center gap-2 px-3 py-1.5 rounded-[10px] text-[11.5px] font-bold transition-all duration-300",
-                            chatMode === "chat" 
-                                ? "bg-background text-primary shadow-sm ring-1 ring-primary/10" 
-                                : "text-muted-foreground/60 hover:text-foreground hover:bg-white/40"
-                        )}
-                    >
-                        شات عادي (Chat)
-                    </button>
-                </div>
-            </div>
         </div>
     );
 }

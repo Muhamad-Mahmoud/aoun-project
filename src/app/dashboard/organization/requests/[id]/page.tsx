@@ -45,7 +45,7 @@ export default function RequestDetailPage() {
         return (
             <DashboardLayout>
                 <OrganizationSidebar />
-                <div className="flex-1 flex flex-col h-screen overflow-y-auto bg-slate-50/50">
+                <div className="flex-1 flex flex-col h-screen overflow-y-auto bg-slate-50">
                     <DashboardTopBar userType="organization" />
                     <div className="flex-1 flex items-center justify-center">
                         <Loader2 className="w-10 h-10 animate-spin text-primary" />
@@ -110,7 +110,7 @@ export default function RequestDetailPage() {
     return (
         <DashboardLayout>
             <OrganizationSidebar />
-            <div className="flex-1 flex flex-col h-screen overflow-y-auto bg-slate-50/50">
+            <div className="flex-1 flex flex-col h-screen overflow-y-auto bg-slate-50">
                 <DashboardTopBar userType="organization" />
                 <main className="py-8 px-4 lg:px-8 max-w-6xl mx-auto w-full">
                     
@@ -118,26 +118,39 @@ export default function RequestDetailPage() {
                     <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
                         <div className="flex items-center gap-4">
                             <Link href="/dashboard/organization/pending">
-                                <Button variant="ghost" size="icon" className="rounded-full bg-white shadow-sm border border-slate-200">
+                                <Button variant="ghost" size="icon" className="rounded-full bg-white shadow-sm border border-slate-200 hover:bg-slate-50">
                                     <ArrowRight className="w-4 h-4" />
                                 </Button>
                             </Link>
                             <div>
-                                <h1 className="text-2xl font-bold">تفاصيل الطلب #{request.id}</h1>
-                                <p className="text-sm text-slate-500 mt-1">
-                                    مقدم منذ: {request.createdAt ? format(new Date(request.createdAt), 'dd MMMM yyyy', { locale: ar }) : ''}
+                                <p className="text-xs font-semibold text-slate-500 mb-1 flex items-center gap-1.5">
+                                    <FileText className="w-3.5 h-3.5" />
+                                    طلب مساعدة
+                                </p>
+                                <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
+                                    تفاصيل الطلب <span className="text-slate-400 font-mono tabular-nums">#{request.id}</span>
+                                </h1>
+                                <p className="text-xs text-slate-500 mt-1">
+                                    {request.createdAt ? format(new Date(request.createdAt), 'dd MMMM yyyy', { locale: ar }) : ''}
                                 </p>
                             </div>
                         </div>
 
-                        <div className={`px-4 py-2 rounded-full text-sm font-bold flex items-center gap-2 ${
-                            request.status === RequestStatus.Approved ? 'bg-green-100 text-green-700' :
-                            request.status === RequestStatus.Rejected ? 'bg-red-100 text-red-700' :
-                            'bg-amber-100 text-amber-700'
+                        <div className={`px-3.5 py-1.5 rounded-full text-sm font-semibold flex items-center gap-2 border ${
+                            request.status === RequestStatus.Approved ? 'bg-green-50 text-green-700 border-green-200' :
+                            request.status === RequestStatus.Rejected ? 'bg-red-50 text-red-700 border-red-200' :
+                            'bg-amber-50 text-amber-700 border-amber-200'
                         }`}>
+                            <span className="relative flex h-2 w-2">
+                                {isPending && <span className="absolute inline-flex h-full w-full rounded-full bg-amber-500 opacity-60 animate-ping" />}
+                                <span className={`relative inline-flex rounded-full h-2 w-2 ${
+                                    request.status === RequestStatus.Approved ? 'bg-green-500' :
+                                    request.status === RequestStatus.Rejected ? 'bg-red-500' : 'bg-amber-500'
+                                }`} />
+                            </span>
                             {request.status === RequestStatus.Approved && <CheckCircle2 className="w-4 h-4" />}
                             {request.status === RequestStatus.Rejected && <XCircle className="w-4 h-4" />}
-                            {request.status === RequestStatus.Approved ? 'تمت الموافقة' : 
+                            {request.status === RequestStatus.Approved ? 'تمت الموافقة' :
                              request.status === RequestStatus.Rejected ? 'مرفوض' : 'قيد المراجعة'}
                         </div>
                     </div>
@@ -149,9 +162,9 @@ export default function RequestDetailPage() {
                             
                             {/* Actions / Forms (Only if pending) */}
                             {isPending && (
-                                <Card className="p-6 border-primary/20 bg-primary/5 shadow-sm">
-                                    <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
-                                        <AlertCircle className="w-5 h-5 text-primary" />
+                                <Card className="p-6 border border-slate-200 shadow-sm">
+                                    <h3 className="font-bold text-base mb-4 flex items-center gap-2 text-slate-900">
+                                        <span className="w-1 h-5 bg-primary rounded-full" />
                                         قرار الجمعية
                                     </h3>
                                     
@@ -269,7 +282,7 @@ export default function RequestDetailPage() {
                                         <InfoItem label="رب الأسرة" value={request.familyInfo.firstName + " " + request.familyInfo.lastName} />
                                         <InfoItem label="الرقم القومي" value={request.familyInfo.headNationalId} />
                                         <InfoItem label="رقم التواصل" value={request.familyInfo.phone} />
-                                        <InfoItem label="عدد الأفراد" value={`${request.familyMemberCount || 0} أفراد`} />
+                                        <InfoItem label="عدد الأفراد" value={`${request.familyInfo?.memberCount || request.familyMemberCount || 0} أفراد`} />
                                         <InfoItem label="العنوان" value={`${request.governorate || '-'} - ${request.city || '-'} - ${request.neighborhood || '-'}`} />
                                     </div>
                                 </Card>
@@ -299,41 +312,44 @@ export default function RequestDetailPage() {
                         <div className="space-y-6">
                             
                             {/* Scoring Info */}
-                            <Card className="p-6 bg-gradient-to-br from-slate-900 to-slate-800 text-white shadow-lg overflow-hidden relative">
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-2xl -mr-10 -mt-10" />
-                                <h3 className="font-bold text-lg mb-6 flex items-center gap-2 text-white/90">
-                                    <AlertCircle className="w-5 h-5 text-amber-400" />
-                                    تقييم النظام الآلي
-                                </h3>
+                            <Card className="p-6 border border-slate-200 shadow-sm relative overflow-hidden">
+                                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-400" />
+                                <div className="flex items-center justify-between mb-5">
+                                    <h3 className="font-bold text-sm flex items-center gap-2 text-slate-900">
+                                        <Bot className="w-4 h-4 text-slate-500" />
+                                        تقييم النظام الآلي
+                                    </h3>
+                                    <span className="text-[10px] font-bold text-amber-700 px-2 py-0.5 rounded-md bg-amber-50 border border-amber-200">AI</span>
+                                </div>
+
                                 <div className="space-y-5">
                                     <div>
-                                        <div className="flex justify-between text-sm mb-2 text-white/80">
-                                            <span>مؤشر الاحتياج</span>
-                                            <span className="font-bold text-white">{request.needScore ?? 'غير متوفر'} / 100</span>
+                                        <div className="flex justify-between items-baseline text-sm mb-2">
+                                            <span className="text-slate-600 text-xs font-semibold">مؤشر الاحتياج</span>
+                                            <span className="font-bold text-slate-900 tabular-nums">
+                                                {request.needScore ?? '—'}<span className="text-slate-400 text-xs font-normal">/100</span>
+                                            </span>
                                         </div>
-                                        <div className="w-full h-2.5 bg-slate-700/50 rounded-full overflow-hidden">
-                                            <div className="h-full bg-gradient-to-l from-red-500 to-amber-500 rounded-full" style={{ width: `${request.needScore || 0}%` }} />
+                                        <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                                            <div className="h-full bg-gradient-to-l from-red-500 via-amber-500 to-emerald-500 rounded-full transition-all" style={{ width: `${request.needScore || 0}%` }} />
                                         </div>
                                     </div>
-                                    
-                                    <div className="pt-4 border-t border-slate-700/50">
-                                        <span className="block text-xs text-white/60 mb-1">النوع المقترح من الذكاء الاصطناعي</span>
-                                        <span className="inline-block px-3 py-1 bg-white/10 border border-white/20 rounded-md text-sm font-medium">
+
+                                    <div className="pt-4 border-t border-slate-100">
+                                        <span className="block text-[11px] text-slate-500 mb-1.5 font-semibold uppercase tracking-wide">النوع المقترح</span>
+                                        <span className="inline-block px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-md text-sm font-semibold text-slate-700">
                                             {request.predictedAssistanceType || request.requestType || 'غير محدد'}
                                         </span>
                                     </div>
-                                    
+
                                     {(request.aiMethod || request.aiErrorMessage) && (
-                                        <div className="pt-4 border-t border-slate-700/50">
-                                            <span className="block text-xs text-white/60 mb-1 flex items-center gap-1">
-                                                <Bot className="w-3 h-3" />
-                                                طريقة التقييم الآلي
+                                        <div className="pt-4 border-t border-slate-100">
+                                            <span className="text-[11px] text-slate-500 mb-1.5 font-semibold uppercase tracking-wide flex items-center gap-1">
+                                                <Bot className="w-3 h-3" /> طريقة التقييم
                                             </span>
-                                            <p className="text-sm font-medium text-white/90">
-                                                {request.aiMethod || 'غير محدد'}
-                                            </p>
+                                            <p className="text-sm text-slate-700">{request.aiMethod || 'غير محدد'}</p>
                                             {request.aiErrorMessage && (
-                                                <div className="mt-2 bg-red-500/10 border border-red-500/20 rounded p-2 text-xs text-red-200">
+                                                <div className="mt-2 bg-red-50 border border-red-200 rounded-md p-2 text-xs text-red-700">
                                                     <span className="font-bold flex items-center gap-1 mb-0.5"><XCircle className="w-3 h-3" /> فشل التقييم:</span>
                                                     {request.aiErrorMessage}
                                                 </div>
@@ -345,9 +361,11 @@ export default function RequestDetailPage() {
 
                             {/* Employment */}
                             {request.employmentData && (
-                                <Card className="p-6 border-t-4 border-t-blue-500">
-                                    <h3 className="font-bold text-base flex items-center gap-2 mb-4">
-                                        <Briefcase className="w-4 h-4 text-secondary" />
+                                <Card className="p-6 border border-slate-200 shadow-sm">
+                                    <h3 className="font-bold text-sm flex items-center gap-2 mb-4 text-slate-900">
+                                        <span className="p-1.5 bg-blue-50 rounded-md">
+                                            <Briefcase className="w-3.5 h-3.5 text-blue-600" />
+                                        </span>
                                         العمل والدخل
                                     </h3>
                                     <div className="space-y-3">
@@ -366,9 +384,11 @@ export default function RequestDetailPage() {
 
                             {/* Health */}
                             {request.healthData && (
-                                <Card className="p-6 border-t-4 border-t-red-500">
-                                    <h3 className="font-bold text-base flex items-center gap-2 mb-4">
-                                        <HeartPulse className="w-4 h-4 text-secondary" />
+                                <Card className="p-6 border border-slate-200 shadow-sm">
+                                    <h3 className="font-bold text-sm flex items-center gap-2 mb-4 text-slate-900">
+                                        <span className="p-1.5 bg-red-50 rounded-md">
+                                            <HeartPulse className="w-3.5 h-3.5 text-red-600" />
+                                        </span>
                                         الصحة والتأمين
                                     </h3>
                                     <div className="space-y-3">
@@ -415,28 +435,6 @@ export default function RequestDetailPage() {
                                                         </div>
                                                     </div>
                                                 </a>
-                                                
-                                                {/* OCR Data Preview Inline */}
-                                                {(file.aiOcrDataJson || file.aiErrorMessage) && (
-                                                    <div className="bg-slate-50 border-t border-slate-100 p-3 text-xs">
-                                                        {file.aiErrorMessage ? (
-                                                            <div className="text-red-600 flex items-start gap-1.5">
-                                                                <AlertCircle className="w-3.5 h-3.5 mt-0.5 shrink-0" />
-                                                                <span className="font-medium">فشل الـ OCR: {file.aiErrorMessage}</span>
-                                                            </div>
-                                                        ) : file.aiOcrDataJson && (
-                                                            <div className="relative">
-                                                                <div className="flex items-center gap-1.5 text-slate-500 font-bold mb-1.5">
-                                                                    <FileJson2 className="w-3.5 h-3.5" />
-                                                                    <span>البيانات المستخرجة آلياً ({file.aiOcrMethod || 'Gemini Vision'})</span>
-                                                                </div>
-                                                                <pre className="bg-slate-800 text-slate-300 p-2.5 rounded text-[10px] overflow-x-auto whitespace-pre-wrap leading-relaxed shadow-inner font-mono text-left" dir="ltr">
-                                                                    {file.aiOcrDataJson}
-                                                                </pre>
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                )}
                                             </div>
                                         ))}
                                     </div>

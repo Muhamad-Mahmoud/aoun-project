@@ -107,41 +107,6 @@ function Section({ icon: Icon, title, iconColor = "text-warm-green", iconBg = "b
     );
 }
 
-// ===== Compact Score Pill =====
-function ScorePill({ value, label, color }: { value: number; label: string; color: "blue" | "amber" }) {
-    const colors = {
-        blue: { bg: "bg-blue-50", border: "border-blue-100", text: "text-blue-600", sub: "text-blue-400", ring: "text-blue-500" },
-        amber: { bg: "bg-amber-50", border: "border-amber-100", text: "text-amber-600", sub: "text-amber-400", ring: "text-amber-500" },
-    };
-    const c = colors[color];
-    const radius = 18;
-    const circumference = 2 * Math.PI * radius;
-    const pct = Math.min(value, 100);
-    const offset = circumference - (pct / 100) * circumference;
-
-    return (
-        <div className={cn("flex items-center gap-3 px-4 py-3 rounded-xl border", c.bg, c.border)}>
-            <div className="relative w-11 h-11 shrink-0">
-                <svg className="w-11 h-11 -rotate-90" viewBox="0 0 44 44">
-                    <circle cx="22" cy="22" r={radius} fill="none" stroke="currentColor" strokeWidth="3" className="text-slate-200/60" />
-                    <circle
-                        cx="22" cy="22" r={radius}
-                        fill="none" strokeWidth="3" strokeLinecap="round"
-                        className={c.ring}
-                        strokeDasharray={circumference}
-                        strokeDashoffset={offset}
-                        style={{ animation: "scoreRingFill 0.8s ease-out forwards" }}
-                    />
-                </svg>
-                <div className="absolute inset-0 flex items-center justify-center">
-                    <span className={cn("text-sm font-black", c.text)}>{value}</span>
-                </div>
-            </div>
-            <span className={cn("text-xs font-bold", c.sub)}>{label}</span>
-        </div>
-    );
-}
-
 // ===== File type icon helper =====
 function getFileIcon(fileType: string) {
     const type = fileType?.toLowerCase() || "";
@@ -464,17 +429,6 @@ export default function RequestDetailsPage() {
                                     </div>
                                 )}
 
-                                {/* Scores — compact pills side by side */}
-                                {(request.needScore != null || request.priorityScore != null) && (
-                                    <div className="flex gap-3 flex-wrap">
-                                        {request.needScore != null && (
-                                            <ScorePill value={request.needScore} label="درجة الاحتياج" color="blue" />
-                                        )}
-                                        {request.priorityScore != null && (
-                                            <ScorePill value={request.priorityScore} label="درجة الأولوية" color="amber" />
-                                        )}
-                                    </div>
-                                )}
 
                                 {/* Handled By */}
                                 {request.handledBy && (

@@ -35,8 +35,7 @@
       "@/lib/*": [
         "./src/lib/*"
       ]
-    },
-    "baseUrl": "."
+    }, "baseUrl": "."
   },
   "include": [
     "next-env.d.ts",
@@ -44,8 +43,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
-  ],
-  "exclude": [
+  ],"exclude": [
     "node_modules"
   ]
 }

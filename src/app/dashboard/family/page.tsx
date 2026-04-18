@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { DashboardLayout } from "@/shared/components/layout/DashboardLayout";
 import { useAuthContext } from "@/shared/providers";
 
@@ -56,11 +57,29 @@ const getStepsForStatus = (status: string) => {
 
 export default function FamilyDashboardPage() {
     const { user } = useAuthContext();
+    const router = useRouter();
     const [stats, setStats] = useState<FamilyStatistics | null>(null);
     const [activeRequest, setActiveRequest] = useState<ActiveRequest | null>(null);
-    const [recentRequests, setRecentRequests] = useState<RequestHistoryItem[]>([]);
     const [loadingStats, setLoadingStats] = useState(true);
     const [loadingRequests, setLoadingRequests] = useState(true);
+
+    // Check user role and redirect if not family
+    useEffect(() => {
+        if (!user) return;
+
+        const role = user.role?.toLowerCase() || "";
+        const isOrganization = role.includes('organization') ||
+            role.includes('association') ||
+            role.includes('charity') ||
+            role.includes('org') ||
+            role.includes('جمعية') ||
+            role.includes('مؤسسة');
+
+        if (isOrganization) {
+            router.replace("/dashboard/organization");
+        }
+    }, [user, router]);
+    const [recentRequests, setRecentRequests] = useState<RequestHistoryItem[]>([]);
 
     useEffect(() => {
         const fetchDashboardData = async () => {
@@ -93,18 +112,20 @@ export default function FamilyDashboardPage() {
                             id: `REQ-${fullDetails.id}`,
                             title: categoryConfig[resolveCategory(fullDetails.requestType)]?.label || "طلب مساعدة",
                             category: category,
-                            location: fullDetails.location || "غير محدد",
+                            location: fullDetails.location || "تم تحديده في الملف الشخصي",
                             status: statusDisplayConfig[statusKey]?.label || "غير معروف",
-                            requestedAmount: "غير محدد", // API doesn't provide this yet
+                            requestedAmount: "قيد المراجعة",
                             attachmentsCount: fullDetails.attachmentCount,
                             priority: fullDetails.priority || "عادية",
                             currentStep: statusKey === "COMPLETED" ? 4 : statusKey === "IN_PROGRESS" ? 3 : statusKey === "VERIFIED" ? 2 : 1,
                             totalSteps: 4,
-                            nextAction: statusKey === "PENDING" ? "انتظار المراجعة" : "متابعة الطلب",
+                            nextAction: statusKey === "PENDING" ? "انتظار المراجعة" : statusKey === "IN_PROGRESS" ? "جاري المعالجة" : "متابعة الطلب",
                             nextActionDescription: statusKey === "PENDING"
-                                ? "طلبك قيد المراجعة من قبل الفريق المختص."
-                                : "يتم الآن العمل على طلبك.",
-                            lastModified: new Date(fullDetails.createdAt).toLocaleDateString('ar-EG'), // Using created for now
+                                ? "طلبك قيد المراجعة من قبل الفريق المختص. سيتم التواصل معك قريباً."
+                                : statusKey === "IN_PROGRESS"
+                                ? "تم قبول طلبك وجاري العمل على معالجته."
+                                : "يمكنك متابعة تفاصيل طلبك من خلال الضغط على الزر أدناه.",
+                            lastModified: new Date(fullDetails.createdAt).toLocaleDateString('ar-EG'),
                             createdDaysAgo: Math.floor((Date.now() - new Date(fullDetails.createdAt).getTime()) / (1000 * 60 * 60 * 24))
                         });
                     } catch (err) {
@@ -112,10 +133,9 @@ export default function FamilyDashboardPage() {
                     }
                 }
 
-                // 4. Map History (Exclude the active one if displayed? Or just show all recent except active?)
-                // Let's show all *other* requests in history
+                // 4. Map History - Show all recent requests including active
                 const historyItems = allRequests
-                    .filter(r => r.id !== activeReq?.id)
+                    .slice(0, 5) // Show only first 5 items
                     .map(r => {
                         const statusKey = resolveStatus(r.status);
                         return {

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Eye, EyeOff, ShieldCheck, CheckSquare, Square } from "lucide-react";
-import { FormField } from "../shared/FormField";
+import { Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { FormData, FormErrors } from "@/features/auth/types/register";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { Label } from "@/shared/ui/label";
+import { Input } from "@/shared/ui/input";
 
 interface SecurityFormProps {
     formData: FormData;
@@ -23,37 +23,64 @@ export const SecurityForm: React.FC<SecurityFormProps> = ({ formData, errors, on
                 <div className="space-y-8 relative z-10">
                     {/* Password Fields */}
                     <div className="space-y-4">
-                        <div className="relative group">
-                            <FormField
-                                id="password"
-                                label="كلمة المرور"
-                                type={showPassword ? "text" : "password"}
-                                placeholder="••••••••"
-                                value={formData.password}
-                                onChange={(val) => onChange("password", val)}
-                                error={errors.password}
-                                dir="ltr"
-                            />
-                            <button
-                                type="button"
-                                onClick={() => setShowPassword(!showPassword)}
-                                className="absolute left-4 top-[42px] text-slate-400 hover:text-emerald-600 transition-all p-2 rounded-lg hover:bg-slate-100"
-                            >
-                                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                            </button>
+                        <div className="space-y-2">
+                            <Label htmlFor="password" className="text-sm font-semibold text-slate-800">
+                                كلمة المرور
+                            </Label>
+                            <div className="relative group">
+                                <Input
+                                    id="password"
+                                    type={showPassword ? "text" : "password"}
+                                    placeholder="••••••••"
+                                    value={formData.password}
+                                    onChange={(e) => onChange("password", e.target.value)}
+                                    className="text-right pr-4 pl-12 h-[52px] text-[15px] rounded-xl border-slate-200 focus-visible:ring-4 focus-visible:ring-emerald-500/20 focus-visible:border-emerald-500 transition-all bg-slate-50 hover:bg-slate-100/50 focus:bg-white"
+                                    dir="ltr"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute left-2.5 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 transition-all z-10"
+                                >
+                                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                    <span className="sr-only">تبديل عرض كلمة المرور</span>
+                                </button>
+                            </div>
+                            {errors.password && (
+                                <p className="text-xs text-destructive font-black mt-1 text-right">
+                                    {errors.password}
+                                </p>
+                            )}
                         </div>
 
-                        <div className="relative group">
-                            <FormField
-                                id="confirmPassword"
-                                label="تأكيد كلمة المرور"
-                                type={showPassword ? "text" : "password"}
-                                placeholder="••••••••"
-                                value={formData.confirmPassword}
-                                onChange={(val) => onChange("confirmPassword", val)}
-                                error={errors.confirmPassword}
-                                dir="ltr"
-                            />
+                        <div className="space-y-2">
+                            <Label htmlFor="confirmPassword" className="text-sm font-semibold text-slate-800">
+                                تأكيد كلمة المرور
+                            </Label>
+                            <div className="relative group">
+                                <Input
+                                    id="confirmPassword"
+                                    type={showPassword ? "text" : "password"}
+                                    placeholder="••••••••"
+                                    value={formData.confirmPassword}
+                                    onChange={(e) => onChange("confirmPassword", e.target.value)}
+                                    className="text-right pr-4 pl-12 h-[52px] text-[15px] rounded-xl border-slate-200 focus-visible:ring-4 focus-visible:ring-emerald-500/20 focus-visible:border-emerald-500 transition-all bg-slate-50 hover:bg-slate-100/50 focus:bg-white"
+                                    dir="ltr"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute left-2.5 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 transition-all z-10"
+                                >
+                                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                    <span className="sr-only">تبديل عرض كلمة المرور</span>
+                                </button>
+                            </div>
+                            {errors.confirmPassword && (
+                                <p className="text-xs text-destructive font-black mt-1 text-right">
+                                    {errors.confirmPassword}
+                                </p>
+                            )}
                         </div>
                     </div>
 
