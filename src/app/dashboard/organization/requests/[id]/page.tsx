@@ -327,11 +327,11 @@ export default function RequestDetailPage() {
                                         <div className="flex justify-between items-baseline text-sm mb-2">
                                             <span className="text-slate-600 text-xs font-semibold">مؤشر الاحتياج</span>
                                             <span className="font-bold text-slate-900 tabular-nums">
-                                                {request.needScore ?? '—'}<span className="text-slate-400 text-xs font-normal">/100</span>
+                                                {request.needScore != null ? (request.needScore <= 1 ? Math.round(request.needScore * 100) : Math.round(request.needScore)) : '—'}<span className="text-slate-400 text-xs font-normal">/100</span>
                                             </span>
                                         </div>
                                         <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-                                            <div className="h-full bg-gradient-to-l from-red-500 via-amber-500 to-emerald-500 rounded-full transition-all" style={{ width: `${request.needScore || 0}%` }} />
+                                            <div className="h-full bg-gradient-to-l from-red-500 via-amber-500 to-emerald-500 rounded-full transition-all" style={{ width: `${request.needScore != null ? (request.needScore <= 1 ? request.needScore * 100 : request.needScore) : 0}%` }} />
                                         </div>
                                     </div>
 

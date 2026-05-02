@@ -398,7 +398,7 @@ export default function RequestDetailsPage() {
                                     )}
                                     {request.predictedAssistanceType && (
                                         <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-purple-50 border border-purple-100 text-xs font-bold text-purple-600">
-                                            نوع المساعدة المقترح: {request.predictedAssistanceType}
+                                            نوع المساعدة المقترح: {categoryConfig[resolveCategory(request.predictedAssistanceType)]?.label || request.predictedAssistanceType}
                                         </div>
                                     )}
                                 </div>

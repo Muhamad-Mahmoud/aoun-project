@@ -635,7 +635,7 @@ function RequestCard({
 								{needConfig.label}
 								{request.aiConfidence != null && (
 									<span className="opacity-60 text-[10px]">
-										({Math.round(request.aiConfidence)}%)
+										({request.aiConfidence <= 1 ? Math.round(request.aiConfidence * 100) : Math.round(request.aiConfidence)}%)
 									</span>
 								)}
 							</span>

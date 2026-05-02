@@ -88,7 +88,7 @@ function ApprovedCard({ request }: { request: any }) {
                         'bg-green-50 text-green-700 border-green-200'
                     }`}>
                         الذكاء الاصطناعي: {request.aiNeedLevel === 'High' ? 'عالي' : request.aiNeedLevel === 'Medium' ? 'متوسط' : 'منخفض'}
-                        {request.aiConfidence && <span className="text-[10px] opacity-70">({Math.round(request.aiConfidence)}%)</span>}
+                        {request.aiConfidence && <span className="text-[10px] opacity-70">({request.aiConfidence <= 1 ? Math.round(request.aiConfidence * 100) : Math.round(request.aiConfidence)}%)</span>}
                     </span>
                 )}
                 <Link href={`/dashboard/organization/requests/${request.id}`} className="mr-auto">
