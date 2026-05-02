@@ -64,7 +64,17 @@ export const statusFilters = [
 
 /** Safely resolve a requestType to string for backward compatibility */
 export function resolveCategory(requestType: string | number | undefined | null): string {
-    if (typeof requestType === "string") return requestType;
+    if (typeof requestType === "string") {
+        const t = requestType.trim().toLowerCase();
+        if (t === "financial" || t === "finance") return "Financial";
+        if (t === "medical" || t === "health" || t === "healthcare") return "Medical";
+        if (t === "food") return "Food";
+        if (t === "housing" || t === "home") return "Housing";
+        if (t === "education") return "Education";
+        if (t === "utilities" || t === "bills") return "Utilities";
+        if (t === "other" || t === "general support") return "Other";
+        return requestType;
+    }
     if (typeof requestType === "number") {
         const legacyMap: Record<number, string> = {
             0: "Financial", 1: "Medical", 2: "Food", 3: "Housing",
@@ -84,12 +94,12 @@ export interface CategoryDisplayConfig {
 }
 
 export const categoryConfig: Record<string, CategoryDisplayConfig> = {
-    "Financial": { label: "مساعدة مالية",   icon: Coins,            color: "text-blue-600",    bg: "bg-blue-50" },
-    "Medical": { label: "رعاية صحية",    icon: Stethoscope,      color: "text-emerald-600", bg: "bg-emerald-50" },
-    "Food": { label: "دعم غذائي",     icon: UtensilsCrossed,  color: "text-orange-600",  bg: "bg-orange-50" },
-    "Housing": { label: "سكن وإيواء",    icon: Home,             color: "text-sky-600",     bg: "bg-sky-50" },
+    "Financial": { label: "مالية",   icon: Coins,            color: "text-blue-600",    bg: "bg-blue-50" },
+    "Medical": { label: "صحية",    icon: Stethoscope,      color: "text-emerald-600", bg: "bg-emerald-50" },
+    "Food": { label: "غذائية",     icon: UtensilsCrossed,  color: "text-orange-600",  bg: "bg-orange-50" },
+    "Housing": { label: "سكن",    icon: Home,             color: "text-sky-600",     bg: "bg-sky-50" },
     "Education": { label: "تعليم",          icon: GraduationCap,    color: "text-purple-600",  bg: "bg-purple-50" },
-    "Utilities": { label: "فواتير وخدمات",  icon: CreditCard,       color: "text-red-600",     bg: "bg-red-50" },
+    "Utilities": { label: "فواتير",  icon: CreditCard,       color: "text-red-600",     bg: "bg-red-50" },
     "Other": { label: "أخرى",          icon: HelpCircle,       color: "text-gray-600",    bg: "bg-gray-50" },
 };
 

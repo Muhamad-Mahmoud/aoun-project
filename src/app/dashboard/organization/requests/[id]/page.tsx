@@ -12,6 +12,7 @@ import { Loader2, AlertCircle, CheckCircle2, XCircle, ArrowRight, Download, File
 import Link from "next/link";
 import { format } from "date-fns";
 import { ar } from "date-fns/locale";
+import { categoryConfig, resolveCategory } from "@/features/requests/config/requestConfig";
 
 export default function RequestDetailPage() {
     const params = useParams();
@@ -338,7 +339,7 @@ export default function RequestDetailPage() {
                                     <div className="pt-4 border-t border-slate-100">
                                         <span className="block text-[11px] text-slate-500 mb-1.5 font-semibold uppercase tracking-wide">النوع المقترح</span>
                                         <span className="inline-block px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-md text-sm font-semibold text-slate-700">
-                                            {request.predictedAssistanceType || request.requestType || 'غير محدد'}
+                                            {categoryConfig[resolveCategory(request.predictedAssistanceType || request.requestType)]?.label || request.predictedAssistanceType || request.requestType || 'غير محدد'}
                                         </span>
                                     </div>
 
