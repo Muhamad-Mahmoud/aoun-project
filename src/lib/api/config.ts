@@ -84,7 +84,7 @@ export const API_ENDPOINTS = {
 
     // AI endpoints — proxied through Next.js AI route handler (Temporarily bypassed)
     ai: {
-        chatStream: 'https://muhammadmahmoud-aoun-ai.hf.space/chat_stream',
+        chatStream: 'https://muhammadmahmoud-aoun-ai.hf.space/api/ai/chat/stream',
         voice: '/api/ai/voice',
     },
 } as const;
