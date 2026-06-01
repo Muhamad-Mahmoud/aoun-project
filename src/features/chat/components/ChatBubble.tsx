@@ -11,26 +11,40 @@ interface ChatBubbleProps {
     isLast: boolean;
     isStreaming: boolean;
     onAction?: (actionText: string) => void;
+    onConfirm?: (confirmationId: string, approved: boolean) => void;
 }
 
-export const ChatBubble = React.memo(function ChatBubble({ message, isLast, isStreaming, onAction }: ChatBubbleProps) {
+export const ChatBubble = React.memo(function ChatBubble({ message, isLast, isStreaming, onAction, onConfirm }: ChatBubbleProps) {
     const isUser = message.role === "user";
     const showCursor = isLast && !isUser && isStreaming;
     const showDots = !isUser && !message.content && isStreaming;
     
     // Manage local state to show 'loading' on buttons or disable them after clicking
     const [actionTaken, setActionTaken] = useState(false);
+    const [actionLoading, setActionLoading] = useState(false);
 
-    const handleConfirm = () => {
-        if (!onAction || actionTaken) return;
+    const handleConfirm = async () => {
+        if (actionTaken || actionLoading) return;
+        const confId = message.confirmation?.confirmation_id;
+        if (!confId) return;
+        setActionLoading(true);
+        if (onConfirm) {
+            await onConfirm(confId, true);
+        }
         setActionTaken(true);
-        onAction("نعم، أؤكد التنفيذ");
+        setActionLoading(false);
     };
 
-    const handleReject = () => {
-        if (!onAction || actionTaken) return;
+    const handleReject = async () => {
+        if (actionTaken || actionLoading) return;
+        const confId = message.confirmation?.confirmation_id;
+        if (!confId) return;
+        setActionLoading(true);
+        if (onConfirm) {
+            await onConfirm(confId, false);
+        }
         setActionTaken(true);
-        onAction("لا، تراجع");
+        setActionLoading(false);
     };
 
     /* ─── User message (Anchored to Right in RTL) ─── */
@@ -62,6 +76,23 @@ export const ChatBubble = React.memo(function ChatBubble({ message, isLast, isSt
                 ) : (
                     /* Markdown content */
                     <div className="text-[13.5px] text-foreground/85 leading-[1.9]">
+                        {message.progress && isStreaming && isLast && (
+                            <div className="flex items-center justify-between mb-4 px-4 py-3 rounded-xl bg-primary/5 border border-primary/10">
+                                <div className="flex items-center gap-3">
+                                    <div className="flex items-center gap-1">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-primary/70 animate-bounce [animation-delay:0ms]" />
+                                        <span className="w-1.5 h-1.5 rounded-full bg-primary/70 animate-bounce [animation-delay:150ms]" />
+                                        <span className="w-1.5 h-1.5 rounded-full bg-primary/70 animate-bounce [animation-delay:300ms]" />
+                                    </div>
+                                    <span className="text-[12.5px] font-bold text-primary/80">
+                                        {message.progress.message}
+                                    </span>
+                                </div>
+                                <span className="text-[11px] font-semibold text-primary/50 bg-primary/5 px-2 py-0.5 rounded-md">
+                                    خطوة {message.progress.step}/{message.progress.total_steps}
+                                </span>
+                            </div>
+                        )}
                         <ReactMarkdown
                             components={{
                                 p: ({ children }) => (
@@ -156,40 +187,71 @@ export const ChatBubble = React.memo(function ChatBubble({ message, isLast, isSt
                             <span className="inline-block w-[2px] h-[1em] bg-primary ms-0.5 align-text-bottom animate-pulse" />
                         )}
 
+                        {/* Tool Usage Badges */}
+                        {message.planning && message.planning.tool_calls && message.planning.tool_calls.length > 0 && (
+                            <div className="mt-4 flex flex-wrap gap-1.5">
+                                {message.planning.tool_calls.map((tool, idx) => (
+                                    <span key={idx} className="inline-flex items-center gap-1 px-2 py-0.5 rounded border border-primary/15 bg-primary/5 text-[10.5px] font-mono text-primary/70">
+                                        <Bot className="w-2.5 h-2.5 opacity-70" />
+                                        {tool}
+                                    </span>
+                                ))}
+                            </div>
+                        )}
+
                         {/* Additional Tool Confirmation UI */}
                         {message.confirmation && isLast && !isStreaming && (
                             <div className="mt-5 pt-4 border-t border-border/50">
-                                <div className="p-4 bg-muted/40 rounded-xl border border-border/50">
-                                    <p className="font-semibold text-sm mb-4 text-foreground/90">
-                                        يطلب منك المساعد اتخاذ قرار بشأن هذا الإجراء.
-                                    </p>
+                                <div className="p-4 bg-amber-50/50 dark:bg-amber-950/20 rounded-xl border border-amber-200/50 dark:border-amber-800/30">
+                                    <div className="flex items-start gap-3 mb-4">
+                                        <span className="text-lg mt-0.5">⚠️</span>
+                                        <div>
+                                            <p className="font-bold text-sm text-foreground/90 mb-1">
+                                                يطلب المساعد تأكيدك قبل تنفيذ هذا الإجراء:
+                                            </p>
+                                            <p className="text-[13px] text-muted-foreground leading-relaxed">
+                                                {message.confirmation.message}
+                                            </p>
+                                        </div>
+                                    </div>
                                     <div className="flex items-center gap-3">
                                         <button
+                                            id={`confirm-approve-${message.confirmation.confirmation_id}`}
                                             onClick={handleConfirm}
-                                            disabled={actionTaken}
+                                            disabled={actionTaken || actionLoading}
                                             className={cn(
                                                 "flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-[13px] transition-all",
-                                                actionTaken 
+                                                actionTaken || actionLoading
                                                     ? "bg-primary/50 text-white shadow-none cursor-not-allowed" 
-                                                    : "bg-primary text-white hover:bg-warm-green-dark shadow-md"
+                                                    : "bg-primary text-white hover:bg-primary/85 shadow-md hover:shadow-primary/20"
                                             )}
                                         >
-                                            <CheckCircle2 className="w-4 h-4" />
+                                            {actionLoading ? (
+                                                <span className="w-3.5 h-3.5 border-2 border-white/50 border-t-white rounded-full animate-spin" />
+                                            ) : (
+                                                <CheckCircle2 className="w-4 h-4" />
+                                            )}
                                             نعم، أوافق
                                         </button>
                                         <button
+                                            id={`confirm-reject-${message.confirmation.confirmation_id}`}
                                             onClick={handleReject}
-                                            disabled={actionTaken}
+                                            disabled={actionTaken || actionLoading}
                                             className={cn(
                                                 "flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-[13px] transition-all",
-                                                actionTaken 
-                                                    ? "bg-destructive/50 text-white shadow-none cursor-not-allowed" 
+                                                actionTaken || actionLoading
+                                                    ? "bg-destructive/30 text-destructive/60 shadow-none cursor-not-allowed" 
                                                     : "bg-destructive/10 text-destructive hover:bg-destructive hover:text-white"
                                             )}
                                         >
                                             <XCircle className="w-4 h-4" />
                                             لا، تراجع
                                         </button>
+                                        {actionTaken && (
+                                            <span className="text-xs text-muted-foreground ms-1">
+                                                ✓ تم اتخاذ القرار
+                                            </span>
+                                        )}
                                     </div>
                                 </div>
                             </div>

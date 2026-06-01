@@ -49,7 +49,7 @@ const nextConfig: NextConfig = {
               "font-src 'self' data:",
               "frame-ancestors 'none'",
               // Browser only ever connects to its own origin (Next.js proxy handles the rest)
-              `connect-src 'self' http://aounn.runasp.net https://aounn.runasp.net ${devBackends}`,
+              `connect-src 'self' http://aounn.runasp.net https://aounn.runasp.net https://muhammadmahmoud-aoun-ai.hf.space ${devBackends}`,
             ].join('; ').replace(/\s+/g, ' ').trim(),
           },
         ],

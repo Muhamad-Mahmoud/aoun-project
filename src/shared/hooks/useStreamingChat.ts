@@ -89,18 +89,20 @@ export function useStreamingChat({
     }, [messages, storageKey]);
 
     const sendMessage = useCallback(
-        async (userMessage: string) => {
+        async (userMessage: string, skipAddingUserMessage = false, customHistory?: {role: string, content: string}[]) => {
             if (!userMessage.trim() || isStreaming) return;
 
-            const userMsg: ChatMessage = { role: "user", content: userMessage };
-            setMessages((prev) => [...prev, userMsg]);
+            if (!skipAddingUserMessage) {
+                const userMsg: ChatMessage = { role: "user", content: userMessage };
+                setMessages((prev) => [...prev, userMsg]);
+            }
             setMessages((prev) => [...prev, { role: "model", content: "" }]);
 
             setIsStreaming(true);
             abortRef.current = new AbortController();
 
             // Extract just the core fields to prevent schema corruption
-            const history = messagesRef.current.slice(-20).map(m => ({ 
+            const history = customHistory || messagesRef.current.slice(-20).map(m => ({ 
                 role: m.role, 
                 content: m.content 
             }));
@@ -265,8 +267,7 @@ export function useStreamingChat({
      */
     const confirmAction = useCallback(
         async (confirmationId: string, approved: boolean) => {
-            const baseUrl = API_CONFIG.baseURL;
-            const endpoint = `${baseUrl}${API_ENDPOINTS.ai.chatConfirm}`;
+            const endpoint = API_ENDPOINTS.ai.chatConfirm;
             const url = `${endpoint}?confirmation_id=${encodeURIComponent(confirmationId)}&approved=${approved}`;
 
             try {
@@ -289,9 +290,15 @@ export function useStreamingChat({
                         .reverse()
                         .find((m) => m.role === "user");
                     if (lastUserMsg?.content) {
+                        // Create a history without the pending confirmation AI message
+                        const newHistory = messagesRef.current
+                            .slice(0, -1) // remove AI message
+                            .slice(-20)
+                            .map(m => ({ role: m.role, content: m.content }));
+                        
                         // Remove the pending AI message with the confirmation UI
                         setMessages((prev) => prev.slice(0, -1));
-                        await sendMessage(lastUserMsg.content);
+                        await sendMessage(lastUserMsg.content, true, newHistory);
                     }
                 } else {
                     // Rejection — just append a system note, do not re-trigger

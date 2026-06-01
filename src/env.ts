@@ -16,7 +16,6 @@ const envSchema = z.object({
     // --- Server-only secrets & URLs ---
     JWT_SECRET: z.string().min(32, 'JWT_SECRET must be at least 32 characters'),
     API_URL: z.string().url('Invalid API_URL'),
-    AI_API_URL: z.string().url('Invalid AI_API_URL').optional(),
 
     // --- Runtime ---
     NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
@@ -25,7 +24,6 @@ const envSchema = z.object({
 const processEnv = {
     JWT_SECRET: process.env.JWT_SECRET,
     API_URL: process.env.API_URL,
-    AI_API_URL: process.env.AI_API_URL,
     NODE_ENV: process.env.NODE_ENV,
 };
 
@@ -50,6 +48,5 @@ export const env = parsed.success
     : {
           JWT_SECRET: process.env.JWT_SECRET ?? '',
           API_URL: process.env.API_URL ?? 'http://127.0.0.1:5204',
-          AI_API_URL: process.env.AI_API_URL ?? 'http://127.0.0.1:8000',
           NODE_ENV: (process.env.NODE_ENV as 'development' | 'test' | 'production') ?? 'development',
       };

@@ -23,10 +23,8 @@ interface ChatWindowProps {
 
 export function ChatWindow({ className, onClose }: ChatWindowProps) {
     const { user, token } = useAuth();
-    const apiUrl = API_ENDPOINTS.ai.chatStream.startsWith('http') 
-        ? API_ENDPOINTS.ai.chatStream 
-        : `${API_CONFIG.baseURL}${API_ENDPOINTS.ai.chatStream}`;
-    const { messages, isStreaming, chatMode, setChatMode, sendMessage, cancelStream, clearChat } =
+    const apiUrl = API_ENDPOINTS.ai.chatStream;
+    const { messages, isStreaming, chatMode, setChatMode, sendMessage, cancelStream, clearChat, confirmAction } =
         useStreamingChat({ 
             apiUrl,
             session_id: user?.id,
@@ -107,6 +105,7 @@ export function ChatWindow({ className, onClose }: ChatWindowProps) {
                                 isLast={i === messages.length - 1}
                                 isStreaming={isStreaming}
                                 onAction={sendMessage}
+                                onConfirm={confirmAction}
                             />
                         ))}
                     </div>
