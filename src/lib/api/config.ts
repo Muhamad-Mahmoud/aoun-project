@@ -82,9 +82,9 @@ export const API_ENDPOINTS = {
         cancel: (id: string | number) => `/api/Requests/${id}/cancel`,
     },
 
-    // AI endpoints — proxied through Next.js AI route handler
+    // AI endpoints — proxied through Next.js AI route handler (Temporarily bypassed)
     ai: {
-        chatStream: '/api/ai/chat/stream',
+        chatStream: 'https://muhammadmahmoud-aoun-ai.hf.space/chat_stream',
         voice: '/api/ai/voice',
     },
 } as const;
