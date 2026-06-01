@@ -2,14 +2,25 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import { logger } from "@/lib/logger";
+import { API_CONFIG, API_ENDPOINTS } from "@/lib/api/config";
 
 export interface ChatMessage {
     role: "user" | "model";
     content: string;
+    progress?: {
+        message: string;
+        step: number;
+        total_steps: number;
+    };
     confirmation?: {
         confirmation_id: string;
         tool_name: string;
         message: string;
+        parameters?: any;
+    };
+    planning?: {
+        message: string;
+        tool_calls: string[];
     };
 }
 
@@ -99,7 +110,6 @@ export function useStreamingChat({
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        // Backend chat endpoint requires an API key header (see product spec)
                         "X-API-Key": "dev-key",
                     },
                     body: JSON.stringify({
@@ -167,17 +177,43 @@ export function useStreamingChat({
                             content = jsonStr;
                         }
 
-                        if (isJson && content && typeof content === 'object' && content.type === 'confirmation') {
-                            setMessages((prev) => {
-                                const updated = [...prev];
-                                const lastMsg = updated[updated.length - 1];
-                                updated[updated.length - 1] = { 
-                                    ...lastMsg, 
-                                    confirmation: content.data 
-                                };
-                                return updated;
-                            });
-                            continue;
+                        if (isJson && content && typeof content === 'object') {
+                            if (content.type === 'agent_planning') {
+                                setMessages((prev) => {
+                                    const updated = [...prev];
+                                    const lastMsg = updated[updated.length - 1];
+                                    updated[updated.length - 1] = { 
+                                        ...lastMsg, 
+                                        planning: content 
+                                    };
+                                    return updated;
+                                });
+                                continue;
+                            }
+                            if (content.type === 'confirmation_request') {
+                                setMessages((prev) => {
+                                    const updated = [...prev];
+                                    const lastMsg = updated[updated.length - 1];
+                                    updated[updated.length - 1] = { 
+                                        ...lastMsg, 
+                                        confirmation: content 
+                                    };
+                                    return updated;
+                                });
+                                continue;
+                            }
+                            if (content.type === 'agent_progress') {
+                                setMessages((prev) => {
+                                    const updated = [...prev];
+                                    const lastMsg = updated[updated.length - 1];
+                                    updated[updated.length - 1] = { 
+                                        ...lastMsg, 
+                                        progress: content 
+                                    };
+                                    return updated;
+                                });
+                                continue;
+                            }
                         }
 
                         let textStr = isJson && typeof content === 'string' ? content : (isJson ? JSON.stringify(content) : content);
@@ -210,7 +246,7 @@ export function useStreamingChat({
                 abortRef.current = null;
             }
         },
-        [apiUrl, isStreaming, session_id, family_id, access_token],
+        [apiUrl, isStreaming, chatMode, session_id, family_id, access_token],
     );
 
     const cancelStream = useCallback(() => {
@@ -222,6 +258,54 @@ export function useStreamingChat({
         try { localStorage.removeItem(storageKey); } catch { /* noop */ }
     }, [storageKey]);
 
-    return { messages, isStreaming, chatMode, setChatMode, sendMessage, cancelStream, clearChat };
-}
+    /**
+     * Calls the real /api/ai/chat/confirm endpoint via the proxy gateway.
+     * After approval, re-sends the last user message so the agent continues
+     * executing the now-approved tool.
+     */
+    const confirmAction = useCallback(
+        async (confirmationId: string, approved: boolean) => {
+            const baseUrl = API_CONFIG.baseURL;
+            const endpoint = `${baseUrl}${API_ENDPOINTS.ai.chatConfirm}`;
+            const url = `${endpoint}?confirmation_id=${encodeURIComponent(confirmationId)}&approved=${approved}`;
 
+            try {
+                const res = await fetch(url, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                });
+
+                if (!res.ok) {
+                    logger.error(`Confirmation API call failed: ${res.status}`);
+                    return;
+                }
+
+                logger.info(`Confirmation ${approved ? "approved" : "rejected"} for ID: ${confirmationId}`);
+
+                if (approved) {
+                    // Re-trigger the last user message so the agent can now
+                    // execute the approved tool and continue the loop.
+                    const lastUserMsg = [...messagesRef.current]
+                        .reverse()
+                        .find((m) => m.role === "user");
+                    if (lastUserMsg?.content) {
+                        // Remove the pending AI message with the confirmation UI
+                        setMessages((prev) => prev.slice(0, -1));
+                        await sendMessage(lastUserMsg.content);
+                    }
+                } else {
+                    // Rejection — just append a system note, do not re-trigger
+                    setMessages((prev) => [
+                        ...prev,
+                        { role: "model", content: "❌ تم رفض العملية. يمكنك طلب شيء آخر أو توضيح ما تريد." },
+                    ]);
+                }
+            } catch (err) {
+                logger.error("confirmAction fetch failed", err as Error);
+            }
+        },
+        [sendMessage]
+    );
+
+    return { messages, isStreaming, chatMode, setChatMode, sendMessage, cancelStream, clearChat, confirmAction };
+}
