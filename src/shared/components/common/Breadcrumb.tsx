@@ -17,6 +17,10 @@ const routeLabels: Record<string, string> = {
     'approved': 'المعتمدة',
     'team': 'فريق العمل',
     'chat': 'المساعد الذكي',
+    'messages': 'الرسائل',
+    'donations': 'التبرعات',
+    'campaigns': 'الحملات',
+    'donor': 'متبرع',
 };
 
 export function Breadcrumb({ className }: { className?: string }) {

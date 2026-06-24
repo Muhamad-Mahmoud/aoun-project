@@ -44,7 +44,7 @@ export function RequestHistoryTable({
     return (
         <Card className="text-start border border-slate-100/80 shadow-sm shadow-slate-200/20 bg-white rounded-[24px] overflow-hidden">
             {/* Header portion */}
-            <div className="border-b border-slate-100/80 px-8 py-6 flex flex-col sm:flex-row sm:items-center justify-between gap-5 bg-slate-50/30">
+            <div className="border-b border-slate-100/80 px-4 sm:px-8 py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/30">
                 <h3 className="font-black text-slate-900 flex items-center gap-3 text-lg">
                     <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
                         <List className="w-4 h-4 text-primary" />
@@ -63,7 +63,7 @@ export function RequestHistoryTable({
             </div>
 
             {/* Grid-based List Header (Desktop Only) */}
-            <div className="hidden sm:grid grid-cols-12 gap-4 px-8 py-4 bg-slate-50/80 border-b border-slate-100 text-[11px] font-black text-slate-500 uppercase tracking-widest">
+            <div className="hidden sm:grid grid-cols-12 gap-4 px-4 sm:px-8 py-4 bg-slate-50/80 border-b border-slate-100 text-[11px] font-black text-slate-500 uppercase tracking-widest">
                 <div className="col-span-5 md:col-span-4">تفاصيل الطلب</div>
                 <div className="col-span-3 md:col-span-4 hidden md:block">الوصف</div>
                 <div className="col-span-4 md:col-span-3">الحالة والمبلغ</div>
@@ -80,7 +80,7 @@ export function RequestHistoryTable({
                             <Link 
                                 href={`/dashboard/family/requests/${req.id.replace('REQ-', '')}`}
                                 key={req.id}
-                                className="grid grid-cols-1 sm:grid-cols-12 gap-4 px-6 sm:px-8 py-5 hover:bg-slate-50/60 transition-colors items-center group even:bg-slate-50/30"
+                                className="grid grid-cols-1 sm:grid-cols-12 gap-4 px-4 sm:px-8 py-5 hover:bg-slate-50/60 transition-colors items-center group even:bg-slate-50/30"
                             >
                                 {/* Column 1: Title & Icon */}
                                 <div className="sm:col-span-5 md:col-span-4 flex items-center gap-4">

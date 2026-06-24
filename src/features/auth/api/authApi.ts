@@ -36,7 +36,20 @@ export async function login(credentials: LoginCredentials): Promise<LoginRespons
         API_ENDPOINTS.auth.login,
         { email, password }
     );
-    return response.data.data;
+    const payload = response.data.data;
+    
+    // Map numeric UserType to role string
+    const userTypeRaw = payload.user.role ?? (payload.user as any).userType ?? 'Family';
+    let resolvedRole = userTypeRaw;
+    const rawVal = userTypeRaw as any;
+    if (rawVal === 0 || rawVal === '0') resolvedRole = 'Admin';
+    else if (rawVal === 1 || rawVal === '1') resolvedRole = 'Family';
+    else if (rawVal === 2 || rawVal === '2') resolvedRole = 'Association';
+    else if (rawVal === 3 || rawVal === '3') resolvedRole = 'Donor';
+    
+    payload.user.role = resolvedRole.toString();
+    
+    return payload;
 }
 
 /**
@@ -56,6 +69,17 @@ export async function registerFamily(data: RegisterFamilyRequest): Promise<Regis
 export async function registerAssociation(data: RegisterAssociationRequest): Promise<RegisterResponse> {
     const response = await apiClient.post<ApiResponse<RegisterResponse>>(
         API_ENDPOINTS.auth.registerAssociation,
+        data
+    );
+    return response.data.data;
+}
+
+/**
+ * Register new Donor
+ */
+export async function registerDonor(data: import('../types').RegisterDonorRequest): Promise<RegisterResponse> {
+    const response = await apiClient.post<ApiResponse<RegisterResponse>>(
+        API_ENDPOINTS.auth.registerDonor,
         data
     );
     return response.data.data;
@@ -146,13 +170,21 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
             return null;
         }
 
+        let resolvedRole = userData.userType ?? userData.role ?? 'Family';
+        
+        // Handle C# Enum serialization where Admin=0, Family=1, Association=2, Donor=3
+        if (resolvedRole === 0 || resolvedRole === '0') resolvedRole = 'Admin';
+        else if (resolvedRole === 1 || resolvedRole === '1') resolvedRole = 'Family';
+        else if (resolvedRole === 2 || resolvedRole === '2') resolvedRole = 'Association';
+        else if (resolvedRole === 3 || resolvedRole === '3') resolvedRole = 'Donor';
+
         const authUser: AuthUser = {
             id: userData.id,
             email: userData.email,
             name: (userData.firstName && userData.lastName) 
                 ? `${userData.firstName} ${userData.lastName}` 
                 : (userData.name || userData.firstName || 'مستخدم'),
-            role: userData.userType || userData.role || 'Family',
+            role: resolvedRole.toString(),
             isVerified: userData.isVerified || false
         };
 
@@ -192,4 +224,3 @@ export async function isAuthenticated(): Promise<boolean> {
         return false;
     }
 }
-

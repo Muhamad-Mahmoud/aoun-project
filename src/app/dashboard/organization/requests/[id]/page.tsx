@@ -8,7 +8,7 @@ import { useAssociationRequestDetail } from "@/features/associations";
 import { RequestStatus } from "@/features/associations/types";
 import { Card } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
-import { Loader2, AlertCircle, CheckCircle2, XCircle, ArrowRight, Download, FileText, User, HeartPulse, Home, Briefcase, Bot, FileJson2 } from "lucide-react";
+import { Loader2, AlertCircle, CheckCircle2, XCircle, ArrowRight, Download, FileText, User, HeartPulse, Home, Briefcase, Bot, FileJson2, HeartHandshake } from "lucide-react";
 import Link from "next/link";
 import { format } from "date-fns";
 import { ar } from "date-fns/locale";
@@ -60,7 +60,7 @@ export default function RequestDetailPage() {
         return (
             <DashboardLayout>
                 <OrganizationSidebar />
-                <div className="flex-1 flex flex-col min-h-screen bg-slate-50/50">
+                <div className="flex-1 flex flex-col h-full bg-slate-50/50">
                     <DashboardTopBar userType="organization" />
                     <div className="flex-1 flex items-center justify-center p-8">
                         <Card className="p-8 text-center text-destructive max-w-md w-full">
@@ -113,23 +113,23 @@ export default function RequestDetailPage() {
             <OrganizationSidebar />
             <div className="flex-1 flex flex-col h-screen overflow-y-auto bg-slate-50">
                 <DashboardTopBar userType="organization" />
-                <main className="py-8 px-4 lg:px-8 max-w-6xl mx-auto w-full">
+                <main className="py-8 lg:pb-8 px-4 lg:px-8 max-w-6xl mx-auto w-full">
                     
                     {/* Header */}
-                    <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
-                        <div className="flex items-center gap-4">
-                            <Link href="/dashboard/organization/pending">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+                        <div className="flex items-start gap-4">
+                            <Link href="/dashboard/organization/pending" className="shrink-0 mt-1 sm:mt-0">
                                 <Button variant="ghost" size="icon" className="rounded-full bg-white shadow-sm border border-slate-200 hover:bg-slate-50">
                                     <ArrowRight className="w-4 h-4" />
                                 </Button>
                             </Link>
-                            <div>
+                            <div className="min-w-0 flex-1">
                                 <p className="text-xs font-semibold text-slate-500 mb-1 flex items-center gap-1.5">
                                     <FileText className="w-3.5 h-3.5" />
                                     طلب مساعدة
                                 </p>
-                                <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
-                                    تفاصيل الطلب <span className="text-slate-400 font-mono tabular-nums">#{request.id}</span>
+                                <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight flex flex-wrap items-center gap-2">
+                                    تفاصيل الطلب <span className="text-slate-400 font-mono text-sm sm:text-base break-all">#{request.id}</span>
                                 </h1>
                                 <p className="text-xs text-slate-500 mt-1">
                                     {request.createdAt ? format(new Date(request.createdAt), 'dd MMMM yyyy', { locale: ar }) : ''}
@@ -137,7 +137,7 @@ export default function RequestDetailPage() {
                             </div>
                         </div>
 
-                        <div className={`px-3.5 py-1.5 rounded-full text-sm font-semibold flex items-center gap-2 border ${
+                        <div className={`shrink-0 px-3.5 py-1.5 rounded-full text-sm font-semibold flex items-center w-fit gap-2 border ${
                             request.status === RequestStatus.Approved ? 'bg-green-50 text-green-700 border-green-200' :
                             request.status === RequestStatus.Rejected ? 'bg-red-50 text-red-700 border-red-200' :
                             'bg-amber-50 text-amber-700 border-amber-200'
@@ -163,14 +163,14 @@ export default function RequestDetailPage() {
                             
                             {/* Actions / Forms (Only if pending) */}
                             {isPending && (
-                                <Card className="p-6 border border-slate-200 shadow-sm">
+                                <Card className="p-4 sm:p-6 border border-slate-200 shadow-sm">
                                     <h3 className="font-bold text-base mb-4 flex items-center gap-2 text-slate-900">
                                         <span className="w-1 h-5 bg-primary rounded-full" />
                                         قرار الجمعية
                                     </h3>
                                     
                                     {!showAcceptForm && !showRejectForm ? (
-                                        <div className="flex gap-4">
+                                        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                                             <Button onClick={() => setShowAcceptForm(true)} className="flex-1 bg-green-600 hover:bg-green-700">
                                                 <CheckCircle2 className="w-4 h-4 ml-2" /> موافقة على الطلب
                                             </Button>
@@ -189,7 +189,7 @@ export default function RequestDetailPage() {
                                                     onChange={(e) => setAcceptanceNotes(e.target.value)}
                                                 />
                                             </div>
-                                            <div className="grid grid-cols-2 gap-4">
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                                 <div>
                                                     <label className="block text-sm font-bold mb-2">المبلغ المعتمد (اختياري)</label>
                                                     <input 
@@ -211,12 +211,12 @@ export default function RequestDetailPage() {
                                                 </div>
                                             </div>
                                             {actionError && <p className="text-red-600 text-sm font-bold">{actionError}</p>}
-                                            <div className="flex gap-2 pt-2">
-                                                <Button onClick={handleAccept} disabled={isActionLoading} className="bg-green-600 hover:bg-green-700">
+                                            <div className="flex flex-col sm:flex-row gap-2 pt-2">
+                                                <Button onClick={handleAccept} disabled={isActionLoading} className="bg-green-600 hover:bg-green-700 flex-1">
                                                     {isActionLoading ? <Loader2 className="w-4 h-4 animate-spin ml-2" /> : <CheckCircle2 className="w-4 h-4 ml-2" />}
                                                     تأكيد الموافقة
                                                 </Button>
-                                                <Button onClick={() => { setShowAcceptForm(false); setActionError(""); }} disabled={isActionLoading} variant="outline">
+                                                <Button onClick={() => { setShowAcceptForm(false); setActionError(""); }} disabled={isActionLoading} variant="outline" className="flex-1">
                                                     إلغاء
                                                 </Button>
                                             </div>
@@ -246,6 +246,19 @@ export default function RequestDetailPage() {
                                     )}
                                 </Card>
                             )}
+
+                            {/* Contact Family Button */}
+                            <Card className="p-6 border border-slate-200 shadow-sm flex items-center justify-between bg-secondary/5">
+                                <div>
+                                    <h3 className="font-bold text-lg text-slate-900">التواصل المباشر</h3>
+                                    <p className="text-sm text-slate-500 mt-1">تواصل مع الأسرة للاستفسار عن تفاصيل إضافية للطلب.</p>
+                                </div>
+                                <Link href={`/dashboard/organization/messages?requestId=${id}`}>
+                                    <Button className="bg-secondary hover:bg-secondary/90">
+                                        تواصل مع الأسرة
+                                    </Button>
+                                </Link>
+                            </Card>
 
                             {/* Decision Info (if already decided) */}
                             {!isPending && request.decisionReason && (
@@ -279,12 +292,13 @@ export default function RequestDetailPage() {
                                         البيانات الأساسية للأسرة
                                     </h3>
                                     <div className="grid sm:grid-cols-2 gap-y-4 gap-x-8">
-                                        <InfoItem label="اسم الأسرة" value={`${request.familyInfo.firstName} ${request.familyInfo.lastName}`} />
-                                        <InfoItem label="رب الأسرة" value={request.familyInfo.firstName + " " + request.familyInfo.lastName} />
+                                        <InfoItem label="اسم الأسرة" value={request.familyInfo.familyName || `${request.familyInfo.firstName} ${request.familyInfo.lastName}`} />
+                                        <InfoItem label="رب الأسرة" value={request.familyInfo.familyHeadName || `${request.familyInfo.firstName} ${request.familyInfo.lastName}`} />
                                         <InfoItem label="الرقم القومي" value={request.familyInfo.headNationalId} />
                                         <InfoItem label="رقم التواصل" value={request.familyInfo.phone} />
-                                        <InfoItem label="عدد الأفراد" value={`${request.familyInfo?.memberCount || request.familyMemberCount || 0} أفراد`} />
-                                        <InfoItem label="العنوان" value={`${request.governorate || '-'} - ${request.city || '-'} - ${request.neighborhood || '-'}`} />
+                                        <InfoItem label="البريد الإلكتروني" value={request.familyInfo.email || 'غير متوفر'} />
+                                        <InfoItem label="عدد الأفراد" value={`${request.familyInfo.memberCount || request.familyMemberCount || 0} أفراد`} />
+                                        <InfoItem label="العنوان" value={`${request.familyInfo.governorate || request.governorate || '-'} - ${request.familyInfo.city || request.city || '-'} - ${request.familyInfo.neighborhood || request.neighborhood || '-'}`} />
                                     </div>
                                 </Card>
                             )}
@@ -297,12 +311,19 @@ export default function RequestDetailPage() {
                                         الحالة المعيشية والسكن
                                     </h3>
                                     <div className="grid sm:grid-cols-2 gap-y-4 gap-x-8">
-                                        <InfoItem label="نوع السكن" value={request.livingCondition.housingType === 0 ? 'إيجار' : request.livingCondition.housingType === 1 ? 'تمليك' : 'أخرى'} />
+                                        <InfoItem label="نوع السكن" value={request.livingCondition.housingType === 'Rented' || request.livingCondition.housingType === 0 ? 'إيجار' : request.livingCondition.housingType === 'Owned' || request.livingCondition.housingType === 1 ? 'تمليك' : request.livingCondition.housingType === 'Free' ? 'استضافة / مجاني' : 'أخرى'} />
                                         {request.livingCondition.rentMonthly ? <InfoItem label="الإيجار الشهري" value={`${request.livingCondition.rentMonthly} ج.م`} /> : null}
                                         <InfoItem label="يمتلك سيارة؟" value={request.livingCondition.hasCar ? 'نعم' : 'لا'} />
-                                        <InfoItem label="المصاريف الشهرية" value={`${request.livingCondition.monthlyExpenses} ج.م`} />
+                                        <InfoItem label="المصاريف الشهرية الأساسية" value={`${request.livingCondition.monthlyExpenses} ج.م`} />
                                         <InfoItem label="فواتير المرافق" value={`${request.livingCondition.utilitiesMonthly} ج.م`} />
-                                        <InfoItem label="إجمالي الإنفاق" value={`${request.livingCondition.householdMonthlySpending || '-'} ج.م`} />
+                                        <InfoItem label="التزامات مالية أخرى" value={request.livingCondition.hasOtherCommitments ? `نعم (${request.livingCondition.otherCommitmentsType || 'غير محدد'})` : 'لا'} />
+                                        {request.livingCondition.hasOtherCommitments && request.livingCondition.otherCommitmentsAmount ? (
+                                            <InfoItem label="مبلغ الالتزامات الأخرى" value={`${request.livingCondition.otherCommitmentsAmount} ج.م`} />
+                                        ) : null}
+                                        {request.livingCondition.annualPayment ? (
+                                            <InfoItem label="مصروفات سنوية" value={`${request.livingCondition.annualPayment} ج.م`} />
+                                        ) : null}
+                                        <InfoItem label="إجمالي الإنفاق الشهري" value={`${request.livingCondition.householdMonthlySpending || '-'} ج.م`} />
                                     </div>
                                 </Card>
                             )}
@@ -336,8 +357,33 @@ export default function RequestDetailPage() {
                                         </div>
                                     </div>
 
-                                    <div className="pt-4 border-t border-slate-100">
-                                        <span className="block text-[11px] text-slate-500 mb-1.5 font-semibold uppercase tracking-wide">النوع المقترح</span>
+                                    {request.aiNeedLevel && (
+                                        <div className="pt-4 border-t border-slate-100 flex justify-between items-center">
+                                            <span className="block text-[11px] text-slate-500 font-semibold uppercase tracking-wide">مستوى الحاجة</span>
+                                            <span className={`inline-block px-2.5 py-1 border rounded-md text-sm font-semibold ${
+                                                request.aiNeedLevel === 'High' ? 'bg-red-50 text-red-700 border-red-200' :
+                                                request.aiNeedLevel === 'Medium' ? 'bg-amber-50 text-amber-700 border-amber-200' :
+                                                'bg-green-50 text-green-700 border-green-200'
+                                            }`}>
+                                                {request.aiNeedLevel === 'High' ? 'عالي' : request.aiNeedLevel === 'Medium' ? 'متوسط' : 'منخفض'}
+                                            </span>
+                                        </div>
+                                    )}
+
+                                    {request.aiConfidence != null && (
+                                        <div className="pt-4 border-t border-slate-100">
+                                            <div className="flex justify-between items-center mb-1">
+                                                <span className="block text-[11px] text-slate-500 font-semibold uppercase tracking-wide">نسبة التأكد (Confidence)</span>
+                                                <span className="inline-block px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-md text-sm font-semibold text-slate-700">
+                                                    {request.aiConfidence <= 1 ? Math.round(request.aiConfidence * 100) : Math.round(request.aiConfidence)}%
+                                                </span>
+                                            </div>
+                                            <p className="text-[10px] text-slate-400 leading-relaxed mt-1">تُعبر عن مدى يقين وتأكد الذكاء الاصطناعي من مستوى الحاجة الذي اختاره بناءً على البيانات.</p>
+                                        </div>
+                                    )}
+
+                                    <div className="pt-4 border-t border-slate-100 flex justify-between items-center">
+                                        <span className="block text-[11px] text-slate-500 font-semibold uppercase tracking-wide">النوع المقترح</span>
                                         <span className="inline-block px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-md text-sm font-semibold text-slate-700">
                                             {categoryConfig[resolveCategory(request.predictedAssistanceType || request.requestType)]?.label || request.predictedAssistanceType || request.requestType || 'غير محدد'}
                                         </span>
@@ -349,10 +395,10 @@ export default function RequestDetailPage() {
                                                 <Bot className="w-3 h-3" /> طريقة التقييم
                                             </span>
                                             <p className="text-sm text-slate-700">{request.aiMethod || 'غير محدد'}</p>
-                                            {request.aiErrorMessage && (
-                                                <div className="mt-2 bg-red-50 border border-red-200 rounded-md p-2 text-xs text-red-700">
-                                                    <span className="font-bold flex items-center gap-1 mb-0.5"><XCircle className="w-3 h-3" /> فشل التقييم:</span>
-                                                    {request.aiErrorMessage}
+                                            {request.aiPredictionStatus === 'Failed' && request.aiErrorMessage && (
+                                                <div className="mt-2 bg-slate-50 border border-slate-200 rounded-md p-2 text-xs text-slate-500">
+                                                    <span className="font-bold flex items-center gap-1 mb-0.5"><XCircle className="w-3 h-3 text-red-500" /> تعذر التقييم الآلي:</span>
+                                                    <span>{request.aiErrorMessage || 'لم يتمكن النظام من الوصول لخدمة الذكاء الاصطناعي. سيقوم الموظف المختص بالتقييم اليدوي.'}</span>
                                                 </div>
                                             )}
                                         </div>
@@ -373,11 +419,20 @@ export default function RequestDetailPage() {
                                         <InfoItem label="حالة العمل" value={request.employmentData.isWorking ? 'يعمل' : 'لا يعمل'} vertical />
                                         {request.employmentData.isWorking ? (
                                             <>
+                                                <InfoItem label="طبيعة العمل" value={request.employmentData.workingType === 'FullTime' ? 'دوام كامل' : request.employmentData.workingType === 'PartTime' ? 'دوام جزئي' : request.employmentData.workingType === 'Freelance' ? 'عمل حر / يومية' : request.employmentData.workingType || 'غير محدد'} vertical />
+                                                <InfoItem label="القطاع" value={request.employmentData.employmentType === 'Private' ? 'قطاع خاص' : request.employmentData.employmentType === 'Public' ? 'قطاع حكومي / عام' : request.employmentData.employmentType || 'غير محدد'} vertical />
                                                 <InfoItem label="جهة العمل" value={request.employmentData.company || 'غير محدد'} vertical />
-                                                <InfoItem label="الراتب الشهري" value={`${request.employmentData.salaryMonthly} ج.م`} vertical />
+                                                <InfoItem label="المسمى الوظيفي" value={request.employmentData.jobTitle || 'غير محدد'} vertical />
+                                                <InfoItem label="الراتب الشهري" value={request.employmentData.salaryMonthly ? `${request.employmentData.salaryMonthly} ج.م` : 'غير محدد'} vertical />
+                                                <InfoItem label="الدخل المقدر" value={request.employmentData.estimatedIncomeMonthly ? `${request.employmentData.estimatedIncomeMonthly} ج.م` : 'غير محدد'} vertical />
+                                                <InfoItem label="سنوات العمل" value={request.employmentData.yearsAtJob ? `${request.employmentData.yearsAtJob} سنوات` : 'غير محدد'} vertical />
                                             </>
                                         ) : (
-                                            <InfoItem label="سبب التعطل" value={request.employmentData.unEmploymentReason || 'غير محدد'} vertical />
+                                            <>
+                                                <InfoItem label="سبب التعطل" value={request.employmentData.unEmploymentReason || 'غير محدد'} vertical />
+                                                <InfoItem label="يبحث عن عمل؟" value={request.employmentData.isLookingForJob ? 'نعم' : 'لا'} vertical />
+                                                <InfoItem label="بحاجة لتدريب؟" value={request.employmentData.needsTraining ? 'نعم' : 'لا'} vertical />
+                                            </>
                                         )}
                                     </div>
                                 </Card>
@@ -393,9 +448,41 @@ export default function RequestDetailPage() {
                                         الصحة والتأمين
                                     </h3>
                                     <div className="space-y-3">
-                                        <InfoItem label="أمراض مزمنة" value={request.healthData.hasChronicDisease ? `نعم (${request.healthData.chronicDiseaseType})` : 'لا'} vertical />
-                                        <InfoItem label="تأمين صحي" value={request.healthData.hasInsurance ? 'نعم' : 'لا'} vertical />
-                                        <InfoItem label="إعاقة" value={request.healthData.hasDisability ? `نعم (${request.healthData.disabilityType})` : 'لا'} vertical />
+                                        <InfoItem label="أمراض مزمنة" value={request.healthData.hasChronicDisease ? `نعم (${request.healthData.chronicDiseaseType || 'غير محدد'})` : 'لا'} vertical />
+                                        <InfoItem label="تأمين صحي" value={request.healthData.hasInsurance ? `نعم (${request.healthData.insuranceType || 'غير محدد'})` : 'لا'} vertical />
+                                        <InfoItem label="إعاقة" value={request.healthData.hasDisability ? `نعم (${request.healthData.disabilityType || 'غير محدد'})` : 'لا'} vertical />
+                                        {request.healthData.medicalCostMonthly ? (
+                                            <InfoItem label="تكاليف العلاج الشهرية" value={`${request.healthData.medicalCostMonthly} ج.م`} vertical />
+                                        ) : null}
+                                    </div>
+                                </Card>
+                            )}
+
+                            {/* Social Support */}
+                            {request.socialSupport && (
+                                <Card className="p-6 border border-slate-200 shadow-sm">
+                                    <h3 className="font-bold text-sm flex items-center gap-2 mb-4 text-slate-900">
+                                        <span className="p-1.5 bg-indigo-50 rounded-md">
+                                            <HeartHandshake className="w-3.5 h-3.5 text-indigo-600" />
+                                        </span>
+                                        الدعم الاجتماعي السابق
+                                    </h3>
+                                    <div className="space-y-3">
+                                        <InfoItem label="مسجل بدعم حكومي؟" value={request.socialSupport.registeredSocialSupport ? 'نعم' : 'لا'} vertical />
+                                        {request.socialSupport.registeredSocialSupport && request.socialSupport.socialSupportAmount ? (
+                                            <InfoItem label="قيمة الدعم الحكومي" value={`${request.socialSupport.socialSupportAmount} ج.م`} vertical />
+                                        ) : null}
+                                        {request.socialSupport.otherAidProviders ? (
+                                            <>
+                                                <InfoItem label="مساعدات من جمعيات أخرى" value={request.socialSupport.otherAidProviders} vertical />
+                                                <InfoItem label="نوع المساعدة" value={request.socialSupport.otherAidType || 'غير محدد'} vertical />
+                                                {request.socialSupport.otherAidAmount ? (
+                                                    <InfoItem label="قيمة المساعدة" value={`${request.socialSupport.otherAidAmount} ج.م`} vertical />
+                                                ) : null}
+                                            </>
+                                        ) : (
+                                            <InfoItem label="مساعدات أخرى" value="لا يوجد" vertical />
+                                        )}
                                     </div>
                                 </Card>
                             )}
@@ -436,6 +523,33 @@ export default function RequestDetailPage() {
                                                         </div>
                                                     </div>
                                                 </a>
+                                                
+                                                {/* OCR Data Display */}
+                                                {(file.aiOcrData || file.aiErrorMessage) && (
+                                                    <div className="bg-slate-50 border-t border-slate-100 p-3 text-sm">
+                                                        <div className="font-semibold text-xs text-slate-500 mb-2 flex items-center gap-1.5">
+                                                            <Bot className="w-3.5 h-3.5" /> استخراج البيانات (OCR)
+                                                        </div>
+                                                        {file.aiErrorMessage && (
+                                                            <div className="text-red-600 bg-red-50 p-2 rounded text-xs mb-2 border border-red-100">
+                                                                <span className="font-bold">خطأ:</span> {file.aiErrorMessage}
+                                                            </div>
+                                                        )}
+                                                        {file.aiOcrData && Object.keys(file.aiOcrData).length > 0 && (
+                                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                                                                {Object.entries(file.aiOcrData).map(([key, val], i) => (
+                                                                    <div key={i} className="flex flex-col bg-white p-2 rounded border border-slate-100">
+                                                                        <span className="text-slate-400 font-medium mb-0.5">{key}</span>
+                                                                        <span className="text-slate-800 font-bold">{String(val)}</span>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        )}
+                                                        {file.aiOcrData && Object.keys(file.aiOcrData).length === 0 && !file.aiErrorMessage && (
+                                                            <span className="text-slate-400 text-xs italic">لم يتم استخراج بيانات واضحة.</span>
+                                                        )}
+                                                    </div>
+                                                )}
                                             </div>
                                         ))}
                                     </div>

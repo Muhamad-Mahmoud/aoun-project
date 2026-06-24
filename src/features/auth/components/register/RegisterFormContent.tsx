@@ -16,6 +16,10 @@ const OrganizationForm = dynamic(() => import("@/features/auth/components/regist
     loading: () => <FormLoadingSkeleton />,
 });
 
+const DonorForm = dynamic(() => import("@/features/auth/components/register/DonorForm").then(mod => ({ default: mod.DonorForm })), {
+    loading: () => <FormLoadingSkeleton />,
+});
+
 const SecurityForm = dynamic(() => import("@/features/auth/components/register/SecurityForm").then(mod => ({ default: mod.SecurityForm })), {
     loading: () => <FormLoadingSkeleton />,
 });
@@ -52,7 +56,7 @@ export function RegisterFormContent() {
 
     const [isPending, startTransition] = useTransition();
 
-    const handleAccountTypeChangeWithTransition = (type: "individual" | "organization") => {
+    const handleAccountTypeChangeWithTransition = (type: Parameters<typeof handleAccountTypeChange>[0]) => {
         startTransition(() => {
             handleAccountTypeChange(type);
         });
@@ -96,10 +100,29 @@ export function RegisterFormContent() {
             );
         }
 
-        // Organization Flow
+        if (formData.accountType === "organization") {
+            if (currentStep === 1) {
+                return (
+                    <OrganizationForm
+                        formData={formData}
+                        errors={errors}
+                        onChange={handleInputChange}
+                    />
+                );
+            }
+            return (
+                <SecurityForm
+                    formData={formData}
+                    errors={errors}
+                    onChange={handleInputChange}
+                />
+            );
+        }
+
+        // Donor Flow
         if (currentStep === 1) {
             return (
-                <OrganizationForm
+                <DonorForm
                     formData={formData}
                     errors={errors}
                     onChange={handleInputChange}

@@ -28,6 +28,7 @@ export const API_ENDPOINTS = {
         login: '/api/Auth/login',
         registerFamily: '/api/Auth/register/family',
         registerAssociation: '/api/Auth/register/association',
+        registerDonor: '/api/Auth/register/donor',
         logout: '/api/Auth/logout',
         refresh: '/api/Auth/refresh-token',
         resetPassword: '/api/Auth/reset-password',
@@ -66,6 +67,7 @@ export const API_ENDPOINTS = {
         association: {
             undertakings: '/api/Dashboard/Association/undertakings',
             analytics: '/api/Dashboard/Association/analytics',
+            impactReport: '/api/Dashboard/Association/impact-report',
         },
     },
 

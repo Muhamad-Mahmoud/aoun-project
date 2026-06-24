@@ -109,6 +109,29 @@ function validateOrganizationStep1(data: FormData): FormErrors {
     return errors;
 }
 
+function validateDonorStep1(data: FormData): FormErrors {
+    const errors: FormErrors = {};
+
+    if (!data.firstName?.trim()) {
+        errors.firstName = ERROR_MESSAGES.NAME_REQUIRED;
+    }
+    if (!data.lastName?.trim()) {
+        errors.lastName = ERROR_MESSAGES.NAME_REQUIRED;
+    }
+    if (!data.phone?.trim()) {
+        errors.phone = ERROR_MESSAGES.PHONE_REQUIRED;
+    } else if (!phoneRegex.test(data.phone)) {
+        errors.phone = ERROR_MESSAGES.PHONE_INVALID;
+    }
+    if (!data.email?.trim()) {
+        errors.email = ERROR_MESSAGES.EMAIL_REQUIRED;
+    } else if (!emailRegex.test(data.email)) {
+        errors.email = ERROR_MESSAGES.EMAIL_INVALID;
+    }
+
+    return errors;
+}
+
 export function validateStep(accountType: AccountType, step: number, data: FormData): FormErrors {
     if (accountType === "individual") {
         switch (step) {
@@ -119,10 +142,19 @@ export function validateStep(accountType: AccountType, step: number, data: FormD
             default:
                 return {};
         }
-    } else {
+    } else if (accountType === "organization") {
         switch (step) {
             case 1:
                 return validateOrganizationStep1(data);
+            case 2:
+                return validateSecurityStep(data);
+            default:
+                return {};
+        }
+    } else {
+        switch (step) {
+            case 1:
+                return validateDonorStep1(data);
             case 2:
                 return validateSecurityStep(data);
             default:

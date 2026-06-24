@@ -61,9 +61,18 @@ export default function DashboardPage() {
             role.includes('جمعية') ||
             role.includes('مؤسسة');
 
+        const isAdmin = role.includes('admin') || role.includes('أدمن');
+        const isDonor = role.includes('donor') || role.includes('فاعل خير') || role.includes('متبرع');
+
         setHasRedirected(true);
 
-        if (isOrganization) {
+        if (isAdmin) {
+            logger.debug('Redirecting to admin dashboard');
+            router.replace("/dashboard/admin");
+        } else if (isDonor) {
+            logger.debug('Redirecting to donor dashboard');
+            router.replace("/dashboard/donor");
+        } else if (isOrganization) {
             logger.debug('Redirecting to organization dashboard');
             router.replace("/dashboard/organization");
         } else {

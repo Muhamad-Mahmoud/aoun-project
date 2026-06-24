@@ -48,8 +48,18 @@ export interface RegisterAssociationRequest {
     coverageNotes: string;
 }
 
+// Donor Registration Payload
+export interface RegisterDonorRequest {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phoneNumber: string;
+    password: string;
+    confirmPassword: string;
+}
+
 // Union type for internal use if needed
-export type RegisterRequest = RegisterFamilyRequest | RegisterAssociationRequest;
+export type RegisterRequest = RegisterFamilyRequest | RegisterAssociationRequest | RegisterDonorRequest;
 
 // Keeping partial RegisterData for legacy/compatibility if needed, or we can deprecate it.
 export interface RegisterData {

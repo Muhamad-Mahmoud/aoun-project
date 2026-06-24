@@ -7,7 +7,12 @@
  */
 
 import { useAuthContext } from '@/shared/providers/AuthProvider';
+import { registerDonor as apiRegisterDonor } from '../api/authApi';
 
 export const useAuth = () => {
-    return useAuthContext();
+    const context = useAuthContext();
+    return {
+        ...context,
+        registerDonor: apiRegisterDonor,
+    };
 };

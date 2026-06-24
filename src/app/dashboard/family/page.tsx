@@ -74,8 +74,15 @@ export default function FamilyDashboardPage() {
             role.includes('org') ||
             role.includes('جمعية') ||
             role.includes('مؤسسة');
+            
+        const isAdmin = role.includes('admin') || role.includes('أدمن');
+        const isDonor = role.includes('donor') || role.includes('فاعل خير') || role.includes('متبرع');
 
-        if (isOrganization) {
+        if (isAdmin) {
+            router.replace("/dashboard/admin");
+        } else if (isDonor) {
+            router.replace("/dashboard/donor");
+        } else if (isOrganization) {
             router.replace("/dashboard/organization");
         }
     }, [user, router]);
@@ -165,10 +172,10 @@ export default function FamilyDashboardPage() {
     return (
         <DashboardLayout>
             <FamilySidebar />
-            <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-slate-50" dir="rtl">
+            <div className="flex-1 flex flex-col h-full overflow-y-auto overflow-x-hidden bg-slate-50" dir="rtl">
                 <DashboardTopBar userType="family" />
-                <main className="pb-20 pt-6 lg:pt-8 relative z-10">
-                    <div className="space-y-6 px-6 lg:px-10">
+                <main className=" pt-6 lg:pt-8 relative z-10 w-full overflow-x-hidden">
+                    <div className="space-y-6 px-4 sm:px-6 lg:px-10 w-full">
                         {/* Welcome Section */}
                         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 animate-in fade-in slide-in-from-top-4 duration-700">
                             <div className="space-y-1">
@@ -183,7 +190,7 @@ export default function FamilyDashboardPage() {
                         </div>
 
                         {/* KPI Grid */}
-                        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                        <div className="grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4">
                             {loadingStats ? (
                                 <>
                                     <Skeleton className="h-32 rounded-2xl" />
@@ -314,5 +321,6 @@ export default function FamilyDashboardPage() {
 </DashboardLayout>
 );
 }
+
 
 

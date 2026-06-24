@@ -9,6 +9,7 @@ import dynamic from "next/dynamic";
 const ChatWidget = dynamic(() => import("@/features/chat/components/ChatWidget").then(mod => mod.ChatWidget), { ssr: false });
 import { APP_EVENTS } from "@/shared/utils/events";
 import { ROUTES } from "@/shared/constants/routes";
+import { ImpersonationBanner } from "@/shared/components/layout/ImpersonationBanner";
 
 export default function LayoutContent({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
@@ -45,6 +46,7 @@ export default function LayoutContent({ children }: { children: React.ReactNode 
 
     return (
         <>
+            <ImpersonationBanner />
             {!hideLayout && <Header />}
             <main className={!hideLayout ? "min-h-screen" : ""}>{children}</main>
             {!hideLayout && <Footer />}

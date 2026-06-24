@@ -62,6 +62,7 @@ export interface AssociationProfileDto {
     createdAt: string;
     capacity: number | null;
     coverageNotes: string | null;
+    paymentInstructions: string | null;
     isActive: boolean;
     services: Service[];
     locations: Location[];
@@ -72,6 +73,7 @@ export interface UpdateAssociationProfileRequest {
     name: string;
     capacity: number | null;
     coverageNotes: string | null;
+    paymentInstructions: string | null;
 }
 
 // Request Data from Family
@@ -131,6 +133,9 @@ export interface RequestDetailDto {
     governorate?: string;
     city?: string;
     neighborhood?: string;
+    aiNeedLevel?: string | null;
+    aiConfidence?: number | null;
+    aiPredictionStatus?: string | null;
     aiMethod?: string | null;
     aiErrorMessage?: string | null;
 }
@@ -191,3 +196,31 @@ export interface AssociationAnalyticsDto {
 }
 
 export interface DashboardStatsDto extends AssociationAnalyticsDto {}
+
+// Impact Report DTOs
+export interface MonthlyImpactDto {
+    month: string;
+    familiesHelped: number;
+}
+
+export interface CommunityStoryDto {
+    familyName: string;
+    assistanceType: string;
+    completedAt: string;
+    impact: string;
+}
+
+export interface GeographicCoverageDto {
+    byGovernorate: Record<string, number>;
+    byCity: Record<string, number>;
+    totalAreasServed: number;
+}
+
+export interface ImpactReportDto {
+    totalFamiliesHelped: number;
+    totalRequestsCompleted: number;
+    impactByType: Record<string, number>;
+    monthlyImpact: MonthlyImpactDto[];
+    communityStories: CommunityStoryDto[];
+    geographicCoverage: GeographicCoverageDto;
+}

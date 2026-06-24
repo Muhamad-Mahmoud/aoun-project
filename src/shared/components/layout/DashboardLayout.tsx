@@ -7,7 +7,10 @@ import { Input } from "@/shared/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/shared/ui/sheet";
 import { FamilySidebar, FamilySidebarContent } from "./FamilySidebar";
 import { OrganizationSidebar, OrganizationSidebarContent } from "./OrganizationSidebar";
+import { DonorSidebar, DonorSidebarContent } from "./DonorSidebar";
 import { Breadcrumb } from "../common/Breadcrumb";
+import { NotificationsPopover } from '@/features/notifications/components/NotificationsPopover';
+import { MobileBottomNav } from "./MobileBottomNav";
 
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -24,7 +27,9 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
 
 // Optional TopBar to be used inside Dashboards
 export function DashboardTopBar({ userType }: { userType: string }) {
-  const SidebarContent = userType === "family" ? FamilySidebarContent : OrganizationSidebarContent;
+  const SidebarContent = userType === "family" ? FamilySidebarContent 
+                       : userType === "donor" ? DonorSidebarContent 
+                       : OrganizationSidebarContent;
 
   // Use auth context user data instead of making a duplicate API call
   // (FamilySidebar already fetches the full profile independently)
@@ -36,30 +41,20 @@ export function DashboardTopBar({ userType }: { userType: string }) {
     if (userType === 'family') {
         return user?.isVerified ? 'حساب موثق' : 'حساب أسرة';
     }
+    if (userType === 'donor') {
+        return 'متبرع';
+    }
     return 'حساب جمعية';
   };
   const userStatus = getStatusLabel();
-  const statusColor = (userType === 'family' && user?.isVerified) ? "text-emerald-500" : "text-slate-400";
+  const statusColor = (userType === 'family' && user?.isVerified) || userType === 'donor' ? "text-emerald-500" : "text-slate-400";
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
 
   return (
     <>
-    <header className="h-24 bg-white/80 backdrop-blur-xl border-b border-slate-100 shadow-sm shadow-slate-100/50 flex items-center justify-between px-6 lg:px-10 sticky top-0 z-20 pt-4">
-      <div className="flex items-center gap-4 flex-1">
-        {/* Mobile Menu Trigger */}
-        <Sheet>
-          <SheetTrigger asChild>
-            <button
-              aria-label="القائمة الجانبية"
-              className="lg:hidden w-12 h-12 flex items-center justify-center bg-slate-50 rounded-2xl text-slate-400 active:scale-90 transition-all border border-slate-100 shadow-sm"
-            >
-              <Menu className="w-6 h-6" />
-            </button>
-          </SheetTrigger>
-          <SheetContent side="right" className="p-0 border-none w-80 shadow-2xl" dir="rtl">
-            <SidebarContent />
-          </SheetContent>
-        </Sheet>
+    <header className="h-24 bg-white/80 backdrop-blur-xl border-b border-slate-100 shadow-sm shadow-slate-100/50 flex items-center justify-between px-4 sm:px-6 lg:px-10 sticky top-0 z-20 pt-4 w-full">
+      <div className="flex items-center gap-2 sm:gap-4 flex-1">
+        {/* Mobile search is now the primary left-aligned action for mobile if we remove the hamburger */}
 
         <button 
           aria-label="بحث"
@@ -80,13 +75,7 @@ export function DashboardTopBar({ userType }: { userType: string }) {
 
       <div className="flex items-center gap-2 sm:gap-6">
         <div className="flex items-center gap-2">
-          <button
-            aria-label="التنبيهات"
-            className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center hover:bg-slate-50 rounded-2xl relative transition-all active:scale-90 group"
-          >
-            <Bell className="w-5 h-5 sm:w-6 sm:h-6 text-slate-400 group-hover:text-primary transition-colors group-hover:animate-pulse-slow" />
-            <span className="absolute top-2 sm:top-3 end-2 sm:end-3 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-rose-500 rounded-full border-2 border-white ring-4 ring-rose-500/10"></span>
-          </button>
+          <NotificationsPopover userType={userType} />
         </div>
 
         <div className="w-[1px] h-8 bg-slate-100 hidden xs:block"></div>
@@ -132,9 +121,12 @@ export function DashboardTopBar({ userType }: { userType: string }) {
     )}
 
     {/* Global Breadcrumb under Header */}
-    <div className="px-6 lg:px-10 pt-4 pb-2">
+    <div className="px-4 sm:px-6 lg:px-10 pt-4 pb-2 w-full">
       <Breadcrumb />
     </div>
+
+    {/* Mobile Bottom Navigation */}
+    <MobileBottomNav userType={userType} />
     </>
   );
 }

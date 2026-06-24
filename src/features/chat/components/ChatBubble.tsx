@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
-import { Bot, User, CheckCircle2, XCircle } from "lucide-react";
+import { Bot, User, CheckCircle2, XCircle, ChevronDown, BrainCircuit } from "lucide-react";
 import { cn } from "@/shared/utils";
 import type { ChatMessage } from "@/shared/hooks";
 
@@ -22,6 +22,9 @@ export const ChatBubble = React.memo(function ChatBubble({ message, isLast, isSt
     // Manage local state to show 'loading' on buttons or disable them after clicking
     const [actionTaken, setActionTaken] = useState(false);
     const [actionLoading, setActionLoading] = useState(false);
+    
+    // State for the "Show more" AI thought process
+    const [isThoughtOpen, setIsThoughtOpen] = useState(false);
 
     const handleConfirm = async () => {
         if (actionTaken || actionLoading) return;
@@ -64,8 +67,11 @@ export const ChatBubble = React.memo(function ChatBubble({ message, isLast, isSt
 
     /* ─── AI message (Anchored to Left in RTL) ─── */
     return (
-        <div className="flex justify-end items-end gap-3">
-            <div className="max-w-[85%] bg-card border border-border/80 rounded-2xl rounded-tl-sm shadow-md px-6 py-5 hover:shadow-lg transition-all duration-300">
+        <div className="flex justify-end items-end gap-3 group/ai">
+            <div className="max-w-[85%] bg-gradient-to-br from-white to-slate-50/90 border border-primary/20 rounded-2xl rounded-tl-sm shadow-[0_4px_20px_rgb(var(--primary)/0.08)] px-6 py-5 hover:shadow-[0_8px_30px_rgb(var(--primary)/0.12)] transition-all duration-500 relative overflow-hidden">
+                {/* Subtle top-light effect */}
+                <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+                
                 {showDots ? (
                     /* Loading dots */
                     <div className="flex items-center gap-1.5 py-0.5">
@@ -76,21 +82,89 @@ export const ChatBubble = React.memo(function ChatBubble({ message, isLast, isSt
                 ) : (
                     /* Markdown content */
                     <div className="text-[13.5px] text-foreground/85 leading-[1.9]">
-                        {message.progress && isStreaming && isLast && (
-                            <div className="flex items-center justify-between mb-4 px-4 py-3 rounded-xl bg-primary/5 border border-primary/10">
+                        {message.progress && (
+                            <div className={cn(
+                                "flex items-center justify-between mb-4 px-4 py-3 rounded-xl border transition-all duration-300",
+                                (isStreaming && isLast) 
+                                    ? "bg-primary/5 border-primary/10" 
+                                    : "bg-emerald-50/50 border-emerald-100"
+                            )}>
                                 <div className="flex items-center gap-3">
-                                    <div className="flex items-center gap-1">
-                                        <span className="w-1.5 h-1.5 rounded-full bg-primary/70 animate-bounce [animation-delay:0ms]" />
-                                        <span className="w-1.5 h-1.5 rounded-full bg-primary/70 animate-bounce [animation-delay:150ms]" />
-                                        <span className="w-1.5 h-1.5 rounded-full bg-primary/70 animate-bounce [animation-delay:300ms]" />
-                                    </div>
-                                    <span className="text-[12.5px] font-bold text-primary/80">
-                                        {message.progress.message}
+                                    {(isStreaming && isLast) ? (
+                                        <div className="flex items-center gap-1">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-primary/70 animate-bounce [animation-delay:0ms]" />
+                                            <span className="w-1.5 h-1.5 rounded-full bg-primary/70 animate-bounce [animation-delay:150ms]" />
+                                            <span className="w-1.5 h-1.5 rounded-full bg-primary/70 animate-bounce [animation-delay:300ms]" />
+                                        </div>
+                                    ) : (
+                                        <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                                    )}
+                                    <span className={cn(
+                                        "text-[12.5px] font-bold",
+                                        (isStreaming && isLast) ? "text-primary/80" : "text-emerald-700"
+                                    )}>
+                                        {(isStreaming && isLast) ? message.progress.message : "تم التنفيذ بنجاح"}
                                     </span>
                                 </div>
-                                <span className="text-[11px] font-semibold text-primary/50 bg-primary/5 px-2 py-0.5 rounded-md">
-                                    خطوة {message.progress.step}/{message.progress.total_steps}
+                                <span className={cn(
+                                    "text-[11px] font-semibold px-2 py-0.5 rounded-md",
+                                    (isStreaming && isLast) 
+                                        ? "text-primary/50 bg-primary/5" 
+                                        : "text-emerald-600 bg-emerald-100/50"
+                                )}>
+                                    {(isStreaming && isLast) 
+                                        ? `خطوة ${message.progress.step}/${message.progress.total_steps}`
+                                        : "مكتمل"
+                                    }
                                 </span>
+                            </div>
+                        )}
+
+                        {/* Collapsible Thought Process (Like an Agent's Thought Block) */}
+                        {message.planning && (
+                            <div className="mb-4 border border-slate-200/60 rounded-xl bg-slate-50/50 overflow-hidden transition-all shadow-sm">
+                                <button 
+                                    onClick={() => setIsThoughtOpen(!isThoughtOpen)}
+                                    className="w-full flex items-center justify-between px-4 py-2.5 bg-white/50 hover:bg-white transition-colors"
+                                    title="عرض طريقة تفكير المساعد الذكي"
+                                >
+                                    <div className="flex items-center gap-2">
+                                        <BrainCircuit className={cn(
+                                            "w-4 h-4 transition-colors", 
+                                            isStreaming ? "text-primary animate-pulse" : "text-emerald-500"
+                                        )} />
+                                        <span className="text-[12.5px] font-bold text-slate-700">
+                                            {isStreaming ? "جاري التحليل والتفكير..." : "تفاصيل العملية وطريقة التفكير"}
+                                        </span>
+                                    </div>
+                                    <ChevronDown className={cn("w-4 h-4 text-slate-400 transition-transform duration-300", isThoughtOpen && "rotate-180")} />
+                                </button>
+                                
+                                {isThoughtOpen && (
+                                    <div className="px-4 py-3 border-t border-slate-100 text-[12.5px] leading-relaxed text-slate-600 font-medium bg-slate-50/80">
+                                        {/* The AI's internal thought text */}
+                                        {message.planning.message && (
+                                            <div className="mb-3 whitespace-pre-wrap opacity-90 border-r-2 border-primary/20 pr-3">
+                                                {message.planning.message}
+                                            </div>
+                                        )}
+
+                                        {/* Tool Usage Badges */}
+                                        {message.planning.tool_calls && message.planning.tool_calls.length > 0 && (
+                                            <div className="flex flex-col gap-1.5 mt-2">
+                                                <span className="text-[11px] font-bold text-slate-400">الأدوات المستخدمة:</span>
+                                                <div className="flex flex-wrap gap-1.5">
+                                                    {message.planning.tool_calls.map((tool, idx) => (
+                                                        <span key={idx} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-slate-200 bg-white text-[10.5px] font-mono text-slate-600 shadow-sm">
+                                                            <Bot className="w-3 h-3 opacity-60 text-primary" />
+                                                            {tool}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
                             </div>
                         )}
                         <ReactMarkdown
@@ -187,18 +261,6 @@ export const ChatBubble = React.memo(function ChatBubble({ message, isLast, isSt
                             <span className="inline-block w-[2px] h-[1em] bg-primary ms-0.5 align-text-bottom animate-pulse" />
                         )}
 
-                        {/* Tool Usage Badges */}
-                        {message.planning && message.planning.tool_calls && message.planning.tool_calls.length > 0 && (
-                            <div className="mt-4 flex flex-wrap gap-1.5">
-                                {message.planning.tool_calls.map((tool, idx) => (
-                                    <span key={idx} className="inline-flex items-center gap-1 px-2 py-0.5 rounded border border-primary/15 bg-primary/5 text-[10.5px] font-mono text-primary/70">
-                                        <Bot className="w-2.5 h-2.5 opacity-70" />
-                                        {tool}
-                                    </span>
-                                ))}
-                            </div>
-                        )}
-
                         {/* Additional Tool Confirmation UI */}
                         {message.confirmation && isLast && !isStreaming && (
                             <div className="mt-5 pt-4 border-t border-border/50">
@@ -261,8 +323,10 @@ export const ChatBubble = React.memo(function ChatBubble({ message, isLast, isSt
             </div>
 
             {/* Avatar on the far Left */}
-            <div className="flex-shrink-0 w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-warm-green-dark flex items-center justify-center shadow-lg shadow-primary/20 mb-0.5 border border-primary/10">
-                <Bot className="w-4.5 h-4.5 text-white" />
+            <div className="flex-shrink-0 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br from-primary via-primary/90 to-emerald-500 flex items-center justify-center shadow-md shadow-primary/20 mb-0.5 border-2 border-white relative">
+                {/* Pulsing ring behind the bot icon */}
+                <div className="absolute inset-0 rounded-full bg-primary animate-ping opacity-20" style={{ animationDuration: '3s' }} />
+                <Bot className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-white z-10" />
             </div>
         </div>
     );

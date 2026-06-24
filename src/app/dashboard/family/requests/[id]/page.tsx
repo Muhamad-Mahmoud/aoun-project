@@ -43,6 +43,10 @@ import {
     TrendingUp,
     Coins,
     Info,
+    Brain,
+    Sparkles,
+    ScanLine,
+    ChevronDown,
 } from "lucide-react";
 import { cn } from "@/shared/utils";
 import { getRequestById, cancelRequest } from "@/features/requests/api/requestsApi";
@@ -58,6 +62,7 @@ import {
 import type { RequestDetailResponse } from "@/features/requests/types";
 import { toast } from "sonner";
 import { logger } from "@/lib/logger";
+import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 
 // ===== CSS Keyframes =====
@@ -187,9 +192,9 @@ export default function RequestDetailsPage() {
         return (
             <DashboardLayout>
                 <FamilySidebar />
-                <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-gradient-to-b from-slate-50 to-white" dir="rtl">
+                <div className="flex-1 flex flex-col h-full overflow-y-auto overflow-x-hidden bg-gradient-to-b from-slate-50 to-white" dir="rtl">
                     <DashboardTopBar userType="family" />
-                    <main className="p-4 sm:p-8 pb-20 pt-20 lg:pt-28">
+                    <main className="p-4 sm:p-8 pt-20 lg:pt-28">
                         <div className="mx-auto max-w-4xl space-y-5">
                             <div className="flex items-center gap-4">
                                 <Skeleton className="w-11 h-11 rounded-xl" />
@@ -215,9 +220,9 @@ export default function RequestDetailsPage() {
         return (
             <DashboardLayout>
                 <FamilySidebar />
-                <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-gradient-to-b from-slate-50 to-white" dir="rtl">
+                <div className="flex-1 flex flex-col h-full overflow-y-auto overflow-x-hidden bg-gradient-to-b from-slate-50 to-white" dir="rtl">
                     <DashboardTopBar userType="family" />
-                    <main className="p-4 sm:p-8 pb-20 pt-20 lg:pt-28">
+                    <main className="p-4 sm:p-8 pt-20 lg:pt-28">
                         <div className="mx-auto max-w-4xl">
                             <div className="p-10 text-center rounded-2xl border border-red-200 bg-red-50">
                                 <AlertCircle className="w-10 h-10 text-red-400 mx-auto mb-3" />
@@ -256,10 +261,10 @@ export default function RequestDetailsPage() {
 
         <DashboardLayout>
             <FamilySidebar />
-            <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-gradient-to-b from-slate-50 to-white print:bg-white" dir="rtl">
+            <div className="flex-1 flex flex-col h-full overflow-y-auto overflow-x-hidden bg-gradient-to-b from-slate-50 to-white print:bg-white" dir="rtl">
                 <DashboardTopBar userType="family" />
 
-                <main className="p-4 sm:p-8 pb-20 pt-20 lg:pt-28 relative z-10">
+                <main className="p-4 sm:p-8 pt-20 lg:pt-28 relative z-10">
                     <div className="mx-auto max-w-4xl space-y-6">
 
                         {/* ===== Compact Header ===== */}
@@ -323,8 +328,8 @@ export default function RequestDetailsPage() {
 
                         {/* ===== Status Timeline ===== */}
                         {!isTerminal && (
-                            <div className="anim-up bg-white rounded-2xl border border-slate-100 p-5 shadow-sm" style={{ animationDelay: "60ms" }}>
-                                <div className="flex items-center justify-between gap-1">
+                            <div className="anim-up bg-white rounded-2xl border border-slate-100 p-5 shadow-sm overflow-x-auto" style={{ animationDelay: "60ms" }}>
+                                <div className="flex items-center justify-between gap-1 min-w-max md:min-w-0">
                                     {lifecycleSteps.map((step, idx) => {
                                         const isActive = step.key === statusKey;
                                         const isDone = idx < currentStepIndex;
@@ -524,26 +529,184 @@ export default function RequestDetailsPage() {
                             )}
                         </div>
 
+                        {/* ===== AI Prediction Results ===== */}
+                        {request.aiPredictionStatus && request.aiPredictionStatus !== 'None' && (
+                            <div className="anim-up bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden" style={{ animationDelay: "140ms" }}>
+                                <div className="h-1 w-full bg-gradient-to-r from-violet-500 via-purple-400 to-violet-500/40" />
+                                <div className="p-5 sm:p-6">
+                                    <div className="flex items-center gap-2.5 mb-4">
+                                        <span className="w-7 h-7 rounded-lg bg-violet-50 flex items-center justify-center shrink-0">
+                                            <Brain className="w-3.5 h-3.5 text-violet-600" />
+                                        </span>
+                                        <h4 className="text-[14px] font-black text-slate-800">نتائج تقييم الذكاء الاصطناعي</h4>
+                                        {/* AI Status Badge */}
+                                        <span className={cn(
+                                            "mr-auto text-[10px] font-bold px-2.5 py-0.5 rounded-full border",
+                                            request.aiPredictionStatus === 'Completed'
+                                                ? "bg-emerald-50 text-emerald-600 border-emerald-100"
+                                                : request.aiPredictionStatus === 'Failed'
+                                                    ? "bg-red-50 text-red-600 border-red-100"
+                                                    : "bg-amber-50 text-amber-600 border-amber-100"
+                                        )}>
+                                            {request.aiPredictionStatus === 'Completed' ? '✓ مكتمل'
+                                                : request.aiPredictionStatus === 'Failed' ? '✗ فشل'
+                                                : request.aiPredictionStatus === 'Processing' ? '⟳ جاري المعالجة'
+                                                : request.aiPredictionStatus === 'Retrying' ? '↺ إعادة المحاولة'
+                                                : request.aiPredictionStatus}
+                                        </span>
+                                    </div>
+
+                                    {request.aiPredictionStatus === 'Completed' && (
+                                        <div className="space-y-4">
+                                            {/* Score Cards Row */}
+                                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                                {/* Need Level */}
+                                                {request.aiNeedLevel && (
+                                                    <div className="bg-violet-50 rounded-xl p-4 flex flex-col items-center gap-1 border border-violet-100">
+                                                        <span className="text-[10px] font-bold text-violet-400 uppercase tracking-wider">مستوى الحاجة</span>
+                                                        <span className="text-[22px] font-black text-violet-700">
+                                                            {request.aiNeedLevel === 'High' ? 'عالي' : request.aiNeedLevel === 'Medium' ? 'متوسط' : request.aiNeedLevel === 'Low' ? 'منخفض' : request.aiNeedLevel}
+                                                        </span>
+                                                        <span className={cn(
+                                                            "w-2.5 h-2.5 rounded-full mt-0.5",
+                                                            request.aiNeedLevel === 'High' ? "bg-red-400" : request.aiNeedLevel === 'Medium' ? "bg-amber-400" : "bg-emerald-400"
+                                                        )} />
+                                                    </div>
+                                                )}
+
+                                                {/* Confidence Score */}
+                                                {request.aiConfidence != null && (
+                                                    <div className="bg-slate-50 rounded-xl p-4 flex flex-col items-center gap-1 border border-slate-100">
+                                                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">نسبة الثقة</span>
+                                                        <div className="relative w-14 h-14">
+                                                            <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
+                                                                <circle cx="50" cy="50" r="40" fill="none" stroke="#e2e8f0" strokeWidth="10" />
+                                                                <circle
+                                                                    cx="50" cy="50" r="40" fill="none"
+                                                                    stroke="#8b5cf6" strokeWidth="10"
+                                                                    strokeLinecap="round"
+                                                                    strokeDasharray={`${(request.aiConfidence * 251.2).toFixed(1)} 251.2`}
+                                                                />
+                                                            </svg>
+                                                            <span className="absolute inset-0 flex items-center justify-center text-[13px] font-black text-slate-700">
+                                                                {Math.round(request.aiConfidence * 100)}%
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                                {/* Method */}
+                                                {request.aiMethod && (
+                                                    <div className="bg-slate-50 rounded-xl p-4 flex flex-col items-center gap-1 border border-slate-100">
+                                                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">نموذج الذكاء</span>
+                                                        <Sparkles className="w-5 h-5 text-slate-400 mt-1" />
+                                                        <span className="text-[11px] font-bold text-slate-600 text-center">{request.aiMethod}</span>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {/* SHAP Explanation */}
+                                            {request.aiExplanation && (
+                                                <div className="space-y-2">
+                                                    {request.aiExplanation.summary && (
+                                                        <p className="text-[12px] text-slate-500 font-medium bg-slate-50 rounded-xl px-4 py-3 border border-slate-100">
+                                                            {request.aiExplanation.summary}
+                                                        </p>
+                                                    )}
+                                                    {request.aiExplanation.topFactors && request.aiExplanation.topFactors.length > 0 && (
+                                                        <div className="space-y-1.5">
+                                                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-1">أهم العوامل المؤثرة</p>
+                                                            {request.aiExplanation.topFactors.slice(0, 4).map((factor, i) => (
+                                                                <div key={i} className="flex items-center gap-2.5 p-2.5 bg-slate-50 rounded-lg border border-slate-100">
+                                                                    <span className={cn(
+                                                                        "w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-black shrink-0",
+                                                                        factor.direction === 'positive' ? "bg-emerald-100 text-emerald-600" : "bg-red-100 text-red-500"
+                                                                    )}>
+                                                                        {factor.direction === 'positive' ? '↑' : '↓'}
+                                                                    </span>
+                                                                    <span className="text-[12px] font-semibold text-slate-700 flex-1">{factor.label || factor.factor}</span>
+                                                                    <span className={cn(
+                                                                        "text-[10px] font-bold px-2 py-0.5 rounded-full",
+                                                                        factor.impact === 'High' ? "bg-red-50 text-red-500" : factor.impact === 'Medium' ? "bg-amber-50 text-amber-500" : "bg-slate-100 text-slate-500"
+                                                                    )}>
+                                                                        {factor.impact === 'High' ? 'تأثير عالي' : factor.impact === 'Medium' ? 'تأثير متوسط' : 'تأثير منخفض'}
+                                                                    </span>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {/* Pending/Processing State */}
+                                    {['Pending', 'Processing', 'Retrying'].includes(request.aiPredictionStatus || '') && (
+                                        <div className="flex items-center gap-3 p-3 bg-amber-50 rounded-xl border border-amber-100">
+                                            <Loader2 className="w-4 h-4 text-amber-500 animate-spin shrink-0" />
+                                            <p className="text-[12px] font-medium text-amber-700">جاري تحليل الطلب بالذكاء الاصطناعي، سيظهر التقييم قريباً...</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
                         {/* ===== Attachments ===== */}
                         {request.attachments && request.attachments.length > 0 && (
                             <Section icon={Paperclip} title={`المستندات المرفقة (${request.attachments.length})`} iconColor="text-warm-green" iconBg="bg-warm-green/10" delay={380}>
-                                <div className="sm:col-span-2 space-y-2">
+                                <div className="sm:col-span-2 space-y-3">
                                     {request.attachments.map((att) => {
                                         const FileIcon = getFileIcon(att.fileType);
+                                        const hasOcrData = att.aiOcrData && Object.keys(att.aiOcrData).length > 0;
                                         return (
-                                            <div key={att.id} className="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-100 group hover:border-slate-200 transition-colors">
-                                                <div className="w-8 h-8 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
-                                                    <FileIcon className="w-3.5 h-3.5 text-warm-green" />
+                                            <div key={att.id} className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+                                                {/* Attachment Header */}
+                                                <div className="flex items-center gap-3 p-3">
+                                                    <div className="w-8 h-8 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
+                                                        <FileIcon className="w-3.5 h-3.5 text-warm-green" />
+                                                    </div>
+                                                    <div className="flex-1 min-w-0">
+                                                        <p className="text-[12px] font-bold text-slate-700 truncate">{att.fileName}</p>
+                                                        <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                                                            <p className="text-[10px] text-slate-400">{att.fileType} • {att.uploadedAt ? new Date(att.uploadedAt).toLocaleDateString('ar-EG') : ""}</p>
+                                                            {/* OCR Status Badge */}
+                                                            {att.aiOcrStatus && att.aiOcrStatus !== 'None' && (
+                                                                <span className={cn(
+                                                                    "text-[9px] font-bold px-2 py-0.5 rounded-full border flex items-center gap-1",
+                                                                    att.aiOcrStatus === 'Completed' ? "bg-emerald-50 text-emerald-600 border-emerald-100"
+                                                                        : att.aiOcrStatus === 'Failed' ? "bg-red-50 text-red-500 border-red-100"
+                                                                        : "bg-amber-50 text-amber-500 border-amber-100"
+                                                                )}>
+                                                                    <ScanLine className="w-2.5 h-2.5" />
+                                                                    OCR {att.aiOcrStatus === 'Completed' ? 'مكتمل' : att.aiOcrStatus === 'Failed' ? 'فشل' : 'جاري'}
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                    {att.filePath && (
+                                                        <a href={att.filePath} target="_blank" rel="noopener noreferrer" className="text-[11px] font-bold text-warm-green hover:underline flex items-center gap-1 shrink-0">
+                                                            <Download className="w-3 h-3" />
+                                                            تحميل
+                                                        </a>
+                                                    )}
                                                 </div>
-                                                <div className="flex-1 min-w-0">
-                                                    <p className="text-[12px] font-bold text-slate-700 truncate">{att.fileName}</p>
-                                                    <p className="text-[10px] text-slate-400">{att.fileType} • {att.uploadedAt ? new Date(att.uploadedAt).toLocaleDateString('ar-EG') : ""}</p>
-                                                </div>
-                                                {att.filePath && (
-                                                    <a href={att.filePath} target="_blank" rel="noopener noreferrer" className="text-[11px] font-bold text-warm-green hover:underline flex items-center gap-1 shrink-0">
-                                                        <Download className="w-3 h-3" />
-                                                        تحميل
-                                                    </a>
+
+                                                {/* OCR Data Table */}
+                                                {hasOcrData && (
+                                                    <div className="border-t border-slate-100 bg-violet-50/40 p-3">
+                                                        <p className="text-[10px] font-bold text-violet-500 uppercase tracking-wider mb-2 flex items-center gap-1">
+                                                            <Brain className="w-3 h-3" />
+                                                            بيانات مستخرجة بالذكاء الاصطناعي ({att.aiOcrMethod || 'OCR'})
+                                                        </p>
+                                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                                                            {Object.entries(att.aiOcrData!).map(([key, val]) => (
+                                                                <div key={key} className="flex flex-col gap-0.5 bg-white rounded-lg px-2.5 py-1.5 border border-violet-100">
+                                                                    <span className="text-[9px] font-bold text-violet-400 uppercase tracking-wider">{key.replace(/_/g, ' ')}</span>
+                                                                    <span className="text-[11px] font-semibold text-slate-700">{String(val) || '—'}</span>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </div>
                                                 )}
                                             </div>
                                         );
@@ -551,6 +714,21 @@ export default function RequestDetailsPage() {
                                 </div>
                             </Section>
                         )}
+
+                        {/* ===== Chat Area ===== */}
+                        <div className="anim-up mt-6" style={{ animationDelay: "450ms" }}>
+                            <div className="bg-white rounded-2xl border border-slate-100 p-5 shadow-sm flex items-center justify-between">
+                                <div>
+                                    <h3 className="font-bold text-lg text-slate-900">التواصل المباشر مع الجمعية</h3>
+                                    <p className="text-sm text-slate-500 mt-1">تواصل مع موظفي الجمعية لمتابعة طلبك أو الاستفسار.</p>
+                                </div>
+                                <Link href={`/dashboard/family/messages?requestId=${id}`}>
+                                    <Button className="bg-warm-green hover:bg-warm-green/90 rounded-xl px-6">
+                                        فتح المحادثة
+                                    </Button>
+                                </Link>
+                            </div>
+                        </div>
                     </div>
                 </main>
             </div>

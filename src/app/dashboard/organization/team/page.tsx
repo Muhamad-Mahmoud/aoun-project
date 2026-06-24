@@ -11,7 +11,7 @@ export default function OrganizationTeamPage() {
     return (
         <DashboardLayout>
             <OrganizationSidebar />
-            <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-slate-50" dir="rtl">
+            <div className="flex-1 flex flex-col h-full overflow-y-auto bg-slate-50" dir="rtl">
                 <DashboardTopBar userType="organization" />
                 <main className="py-8">
                     <div className="space-y-8 px-6 lg:px-10">
@@ -31,3 +31,4 @@ export default function OrganizationTeamPage() {
         </DashboardLayout>
     );
 }
+

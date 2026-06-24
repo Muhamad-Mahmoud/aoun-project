@@ -1,3 +1,17 @@
+// ===== AI Types =====
+export interface AiFactorImpact {
+    factor: string;
+    label: string;
+    impact: string;
+    direction: string;
+    value: number;
+}
+
+export interface AiPredictionExplanation {
+    summary: string;
+    topFactors: AiFactorImpact[];
+}
+
 // ===== Attachment DTO =====
 export interface RequestAttachmentDto {
     id: number;
@@ -7,7 +21,9 @@ export interface RequestAttachmentDto {
     uploadedAt: string;
     aiOcrStatus?: string;
     aiOcrMethod?: string;
-    aiOcrDataJson?: string;
+    aiOcrProvider?: string;
+    /** Structured OCR data from FastAPI — object, not raw JSON string */
+    aiOcrData?: Record<string, unknown>;
     aiErrorMessage?: string;
 }
 
@@ -88,6 +104,12 @@ export interface RequestDetailResponse {
     healthData?: HealthDataDto | null;
     livingCondition?: LivingConditionDto | null;
     socialSupport?: SocialSupportDto | null;
+    // AI Prediction fields
+    aiNeedLevel?: string | null;
+    aiConfidence?: number | null;
+    aiMethod?: string | null;
+    aiPredictionStatus?: string | null;
+    aiExplanation?: AiPredictionExplanation | null;
 }
 
 // ===== List item (for GET /api/Requests) =====

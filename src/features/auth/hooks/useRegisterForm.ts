@@ -8,8 +8,8 @@
 import { useState, useCallback, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { logger } from "@/lib/logger";
-import { registerFamily, registerAssociation, login } from "../api/authApi";
-import type { RegisterFamilyRequest, RegisterAssociationRequest, LoginCredentials } from "../types";
+import { registerFamily, registerAssociation, login, registerDonor } from "../api/authApi";
+import type { RegisterFamilyRequest, RegisterAssociationRequest, RegisterDonorRequest, LoginCredentials } from "../types";
 import type { ApiError } from "@/lib/api/types";
 import { useAuthContext } from "@/shared/providers";
 import { ROUTES } from "@/shared/constants/routes";
@@ -36,7 +36,7 @@ export const useRegisterForm = () => {
         if (!searchParams) return;
 
         const type = searchParams.get('type');
-        if (type === 'organization' || type === 'individual') {
+        if (type === 'organization' || type === 'individual' || type === 'donor') {
             setFormData(prev => ({ ...prev, accountType: type as AccountType }));
         }
     }, [searchParams]);
@@ -148,7 +148,7 @@ export const useRegisterForm = () => {
                 };
                 logger.debug("Sending Individual registration");
                 response = await registerFamily(familyData);
-            } else {
+            } else if (formData.accountType === 'organization') {
                 const associationData: RegisterAssociationRequest = {
                     name: formData.name, // Association Name
                     email,
@@ -163,6 +163,17 @@ export const useRegisterForm = () => {
                 };
                 logger.debug("Sending Association registration");
                 response = await registerAssociation(associationData);
+            } else {
+                const donorData: RegisterDonorRequest = {
+                    firstName: formData.firstName,
+                    lastName: formData.lastName,
+                    email,
+                    phoneNumber: phone,
+                    password,
+                    confirmPassword
+                };
+                logger.debug("Sending Donor registration");
+                response = await registerDonor(donorData);
             }
 
             logger.info("Registration successful", { userId: response?.userId });

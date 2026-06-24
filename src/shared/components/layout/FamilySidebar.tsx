@@ -14,6 +14,7 @@ import {
   LogOut,
   ChevronLeft,
   MessageCircle,
+  MessageSquare,
   ChevronRight
 } from "lucide-react";
 import { motion } from "framer-motion";
@@ -27,6 +28,7 @@ const navItems = [
   { id: "requests", label: "طلباتي", href: "/dashboard/family/requests", icon: FileText },
   { id: "new-request", label: "طلب جديد", href: "/dashboard/family/requests/new", icon: PlusCircle },
   { id: "chat", label: "المساعد الذكي", href: "/dashboard/family/chat", icon: MessageCircle },
+  { id: "messages", label: "الرسائل المباشرة", href: "/dashboard/family/messages", icon: MessageSquare },
   { id: "profile", label: "الملف الشخصي", href: "/dashboard/family/profile", icon: User },
   { id: "settings", label: "الإعدادات", href: "/dashboard/family/settings", icon: Settings },
 ];
@@ -190,5 +192,107 @@ export function FamilySidebar() {
       </Button>
       <FamilySidebarContent isCollapsed={isCollapsed} />
     </aside>
+  );
+}
+
+export function FamilyBottomSheetMenu() {
+  const pathname = usePathname();
+  const { user, logout } = useAuthContext();
+  const [profile, setProfile] = React.useState<{ firstName?: string; lastName?: string; isVerified?: boolean } | null>(null);
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { getFamilyProfile } = await import("@/features/families/api/familiesApi");
+        const profileData = await getFamilyProfile().catch(() => null);
+        if (profileData) {
+          setProfile(profileData);
+        }
+      } catch (error) {
+      }
+    };
+    fetchData();
+  }, []);
+
+  const userName = profile ? `${profile.firstName} ${profile.lastName}` : (user?.name || "تحميل...");
+  const userStatus = profile?.isVerified ? "حساب مفعل" : "حساب أسرة";
+  const userInitials = profile 
+    ? `${profile.firstName?.[0] || ""}${profile.lastName?.[0] || ""}`.toUpperCase() 
+    : (user?.name?.[0] || "أ");
+
+  const sheetItems = [
+    { label: "الرسائل المباشرة", href: "/dashboard/family/messages", icon: MessageSquare, color: "text-blue-600", bg: "bg-blue-50" },
+    { label: "الملف الشخصي", href: "/dashboard/family/profile", icon: User, color: "text-indigo-600", bg: "bg-indigo-50" },
+    { label: "الإعدادات", href: "/dashboard/family/settings", icon: Settings, color: "text-slate-600", bg: "bg-slate-100" },
+  ];
+
+  return (
+    <div className="flex flex-col bg-white pb-8 pt-3 rounded-t-[32px] relative overflow-hidden">
+      {/* Top Drag Handle */}
+      <div className="w-12 h-1.5 bg-slate-200/80 rounded-full mx-auto mb-6" />
+      
+      {/* Decorative Background */}
+      <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-slate-50 to-white -z-10" />
+
+      {/* Profile Header (Centered) */}
+      <div className="px-6 mb-8 flex flex-col items-center text-center">
+        <div className="w-20 h-20 rounded-3xl bg-gradient-to-tr from-primary/20 to-blue-500/20 flex items-center justify-center border-4 border-white shadow-xl shadow-primary/5 mb-4 relative">
+          <span className="text-3xl font-black text-slate-800">{userInitials}</span>
+          <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-sm">
+            <div className={cn("w-4 h-4 rounded-full animate-pulse", profile?.isVerified ? "bg-emerald-500" : "bg-amber-500")} />
+          </div>
+        </div>
+        <h2 className="text-xl font-black text-slate-900 mb-2">{userName}</h2>
+        <span className={cn(
+          "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border shadow-sm",
+          profile?.isVerified ? "bg-emerald-50 text-emerald-600 border-emerald-100" : "bg-amber-50 text-amber-600 border-amber-100"
+        )}>
+          {profile?.isVerified && <User className="w-3.5 h-3.5" />}
+          {userStatus}
+        </span>
+      </div>
+
+      {/* Menu Links (iOS Settings Style) */}
+      <div className="px-4">
+        <div className="bg-slate-50/50 rounded-[24px] border border-slate-100/60 p-2 space-y-1 shadow-sm">
+          {sheetItems.map((item) => {
+            const isActive = pathname === item.href;
+            const Icon = item.icon;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "flex items-center gap-4 p-3 rounded-2xl transition-all duration-300",
+                  isActive ? "bg-white shadow-sm ring-1 ring-slate-100" : "hover:bg-white/60 active:bg-slate-100"
+                )}
+              >
+                <div className={cn(
+                  "w-10 h-10 rounded-[14px] flex items-center justify-center shadow-sm",
+                  item.bg, item.color
+                )}>
+                  <Icon className="w-5 h-5" />
+                </div>
+                <span className="font-bold flex-1 text-slate-700 text-[15px]">{item.label}</span>
+                <ChevronLeft className="w-5 h-5 text-slate-300" />
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* Logout Action */}
+        <div className="mt-4 bg-red-50/30 rounded-[24px] border border-red-100/50 p-2 shadow-sm">
+          <button
+            onClick={() => logout()}
+            className="w-full flex items-center gap-4 p-3 rounded-2xl hover:bg-red-50 active:bg-red-100 transition-all group"
+          >
+            <div className="w-10 h-10 rounded-[14px] bg-red-100 text-red-600 flex items-center justify-center shadow-sm group-active:scale-95 transition-transform">
+              <LogOut className="w-5 h-5" />
+            </div>
+            <span className="font-black flex-1 text-start text-red-600 text-[15px]">تسجيل الخروج</span>
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }

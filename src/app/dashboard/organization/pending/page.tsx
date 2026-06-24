@@ -50,6 +50,7 @@ interface AssociationRequest {
 	requestType?: string;
 	aiNeedLevel?: NeedLevel;
 	aiConfidence?: number | null;
+	needScore?: number | null;
 	priorityLevel?: string | number | boolean | null;
 }
 
@@ -188,11 +189,11 @@ export default function OrganizationPendingPage() {
 		<DashboardLayout>
 			<OrganizationSidebar />
 			<div
-				className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-gradient-to-b from-slate-50 to-white"
+				className="flex-1 flex flex-col h-full overflow-y-auto bg-gradient-to-b from-slate-50 to-white"
 				dir="rtl"
 			>
 				<DashboardTopBar userType="organization" />
-				<main className="py-6 sm:py-8 pb-20">
+				<main className="py-6 sm:py-8">
 					<div className="space-y-6 sm:space-y-8 px-4 sm:px-6 lg:px-10 max-w-7xl mx-auto">
 						{/* ===== Header ===== */}
 						<div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
@@ -633,9 +634,9 @@ function RequestCard({
 							>
 								<Brain className="w-3 h-3" />
 								{needConfig.label}
-								{request.aiConfidence != null && (
+								{request.needScore != null && (
 									<span className="opacity-60 text-[10px]">
-										({request.aiConfidence <= 1 ? Math.round(request.aiConfidence * 100) : Math.round(request.aiConfidence)}%)
+										({request.needScore <= 1 ? Math.round(request.needScore * 100) : Math.round(request.needScore)}%)
 									</span>
 								)}
 							</span>

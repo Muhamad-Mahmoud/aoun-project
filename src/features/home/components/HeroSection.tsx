@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/shared/ui/button";
-import { ArrowLeft, Users, Building2, MapPin, ShieldCheck, Award, Clock, CheckCircle, BrainCircuit } from "lucide-react";
+import { ArrowLeft, Users, Building2, MapPin, ShieldCheck, Award, Clock, CheckCircle, BrainCircuit, Heart } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { colors } from "@/shared/constants";
@@ -47,22 +47,22 @@ export function HeroSection() {
 
             {/* CTA Buttons - Enhanced Size & Design */}
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center justify-center lg:justify-start opacity-0 animate-fade-in-up delay-300 relative z-[100]">
-              {/* Primary CTA - Larger & More Prominent */}
-              <Link href="/register" className="w-full sm:w-auto">
+              
+              {/* Primary CTA - Donate */}
+              <Link href="/explore" className="w-full sm:w-auto">
                 <Button className="w-full sm:w-auto h-14 lg:h-16 text-base lg:text-[17px] font-semibold px-8 rounded-xl gap-3 text-white bg-gradient-to-l from-warm-green via-warm-green/90 to-sky-blue hover:from-warm-green-dark hover:via-warm-green hover:to-sky-blue-dark shadow-[0_8px_20px_hsla(var(--warm-green)/0.3)] hover:shadow-[0_8px_30px_hsla(var(--warm-green)/0.5)] transition-[background,box-shadow,transform] duration-300 hover:scale-[1.02] hover:-translate-y-1">
-                  اطلب مساعدة الآن
-                  <ArrowLeft className="w-5 h-5" />
+                  تبرع وادعم الآن
+                  <Heart className="w-5 h-5" />
                 </Button>
               </Link>
 
-              {/* Secondary CTA - Enhanced Design */}
-              <Link href="/register?type=organization" className="w-full sm:w-auto">
+              {/* Secondary CTA - Request Help */}
+              <Link href="/register" className="w-full sm:w-auto">
                 <Button
                   variant="outline"
-                  className="w-full sm:w-auto h-14 text-base lg:text-[17px] font-semibold px-7 rounded-xl border-2 border-warm-green/40 hover:border-warm-green hover:bg-warm-green hover:text-white text-warm-green transition-[background-color,border-color,color,transform] duration-300 hover:scale-[1.02] gap-2.5"
+                  className="w-full sm:w-auto h-14 lg:h-16 text-base lg:text-[17px] font-semibold px-7 rounded-xl border-2 border-warm-green/40 hover:border-warm-green hover:bg-warm-green hover:text-white text-warm-green transition-[background-color,border-color,color,transform] duration-300 hover:scale-[1.02] gap-2.5"
                 >
-                  <Building2 className="w-5 h-5" />
-                  انضم كجمعية
+                  اطلب مساعدة
                 </Button>
               </Link>
             </div>

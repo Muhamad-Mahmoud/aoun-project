@@ -111,24 +111,14 @@ export function ActiveRequestCard({ request, primaryAction }: ActiveRequestCardP
                         </div>
 
                         {/* Action Button */}
-                        <div className="flex gap-2 sm:flex-col w-full sm:w-auto">
+                        <div className="flex w-full sm:w-auto mt-4 sm:mt-0">
                             <Button
                                 asChild
-                                className="flex-1 sm:flex-none h-10 px-4 rounded-lg bg-warm-green hover:bg-warm-green/90 text-white font-bold text-sm transition-all active:scale-95 whitespace-nowrap"
+                                className="w-full sm:w-auto h-10 px-4 rounded-lg bg-warm-green hover:bg-warm-green/90 text-white font-bold text-sm transition-all active:scale-95"
                             >
                                 <Link href={primaryAction.href}>
-                                    <primaryAction.icon className="w-4 h-4 ml-1" />
+                                    <primaryAction.icon className="w-4 h-4 ml-2" />
                                     {primaryAction.label}
-                                </Link>
-                            </Button>
-                            <Button
-                                asChild
-                                variant="outline"
-                                className="flex-1 sm:flex-none h-10 px-4 rounded-lg border-slate-200 font-bold text-sm hover:bg-slate-50 transition-all active:scale-95 whitespace-nowrap"
-                            >
-                                <Link href={`/dashboard/family/requests/${request.id.replace('REQ-', '')}`}>
-                                    <FileText className="w-4 h-4 ml-1" />
-                                    التفاصيل
                                 </Link>
                             </Button>
                         </div>

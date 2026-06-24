@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
         
         const headers: Record<string, string> = {
             "Content-Type": "application/json",
-            "X-API-Key": "dev-key", // The current API Key expected by Aoun-Ai
+            "X-API-Key": "dev-awn-ai-service-key-2026", // The current API Key expected by Aoun-Ai
         };
 
         // Attach JWT Token if available to allow identity propagation to backend tools

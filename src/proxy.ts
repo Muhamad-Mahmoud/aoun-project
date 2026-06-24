@@ -40,10 +40,11 @@ export async function proxy(request: NextRequest) {
             };
 
             if (!['GET', 'HEAD'].includes(request.method)) {
-                // For POST/PUT requests, we need to pass the body
-                fetchOptions.body = request.body;
-                // @ts-ignore
-                fetchOptions.duplex = 'half';
+                // Read body as ArrayBuffer to prevent empty POST requests (like SignalR negotiate) from hanging
+                const bodyBuffer = await request.arrayBuffer();
+                if (bodyBuffer.byteLength > 0) {
+                    fetchOptions.body = bodyBuffer;
+                }
             }
 
             const response = await fetch(targetUrl, fetchOptions);

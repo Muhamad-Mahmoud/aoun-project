@@ -45,7 +45,7 @@ export default function FamilyProfilePage() {
         return (
             <DashboardLayout>
                 <FamilySidebar />
-                <div className="flex-1 flex flex-col min-h-screen bg-[#f8fafc]" dir="rtl">
+                <div className="flex-1 flex flex-col h-full bg-[#f8fafc]" dir="rtl">
                     <DashboardTopBar userType="family" />
                     <main className="p-8 pt-24 lg:pt-32">
                         <div className="mx-auto max-w-3xl space-y-8">
@@ -62,7 +62,7 @@ export default function FamilyProfilePage() {
         return (
             <DashboardLayout>
                 <FamilySidebar />
-                <div className="flex-1 flex flex-col min-h-screen bg-[#f8fafc]" dir="rtl">
+                <div className="flex-1 flex flex-col h-full bg-[#f8fafc]" dir="rtl">
                     <DashboardTopBar userType="family" />
                     <main className="flex-1 flex items-center justify-center p-8">
                         <div className="text-center space-y-4">
@@ -78,7 +78,7 @@ export default function FamilyProfilePage() {
     return (
         <DashboardLayout>
             <FamilySidebar />
-            <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-[#f8fafc]" dir="rtl">
+            <div className="flex-1 flex flex-col h-full overflow-y-auto bg-[#f8fafc]" dir="rtl">
                 <DashboardTopBar userType="family" />
                 <main className="p-6 lg:p-10 pt-24 lg:pt-32">
                     <div className="mx-auto max-w-3xl space-y-8">
@@ -207,5 +207,6 @@ function ProfileItem({ icon: Icon, label, value }: { icon: React.ComponentType<{
         </div>
     );
 }
+
 
 

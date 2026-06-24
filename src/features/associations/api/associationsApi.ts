@@ -138,3 +138,15 @@ export async function getAssociationAnalytics(): Promise<any> {
         throw err;
     }
 }
+
+export async function getAssociationImpactReport(): Promise<any> {
+    try {
+        const response = await apiClient.get<any>(
+            API_ENDPOINTS.dashboard.association.impactReport
+        );
+        return response.data.value || response.data.data || response.data;
+    } catch (err: any) {
+        console.error('[API] ImpactReport error:', err.response?.data || err.message);
+        throw err;
+    }
+}

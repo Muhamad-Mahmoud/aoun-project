@@ -112,7 +112,7 @@ export function useStreamingChat({
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "X-API-Key": "dev-key",
+                        "X-API-Key": "dev-awn-ai-service-key-2026",
                     },
                     body: JSON.stringify({
                         message: userMessage,

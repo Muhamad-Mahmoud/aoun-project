@@ -2,7 +2,7 @@
  * Register Form Types
  */
 
-export type AccountType = "individual" | "organization";
+export type AccountType = "individual" | "organization" | "donor";
 
 export interface FormData {
     // Common

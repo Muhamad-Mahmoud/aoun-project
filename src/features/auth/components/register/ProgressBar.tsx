@@ -1,16 +1,19 @@
 import React from "react";
 import { Check } from "lucide-react";
 import { cn } from "@/shared/utils";
+import { AccountType } from "@/features/auth/types/register";
 
 interface ProgressBarProps {
     currentStep: number;
     totalSteps: number;
-    accountType: "individual" | "organization";
+    accountType: AccountType;
 }
 
-const getStepLabel = (stepNumber: number, accountType: "individual" | "organization") => {
+const getStepLabel = (stepNumber: number, accountType: AccountType) => {
     if (accountType === "individual") {
         return stepNumber === 1 ? "البيانات الأساسية" : "تأمين الحساب";
+    } else if (accountType === "donor") {
+        return stepNumber === 1 ? "بيانات المتبرع" : "تأمين الحساب";
     }
     // Organization has same structure as individual: Data + Security
     return stepNumber === 1 ? "بيانات الجمعية" : "تأمين الحساب";

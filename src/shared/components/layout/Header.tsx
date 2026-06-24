@@ -29,6 +29,7 @@ type NavItem = { label: string; href: string; sectionId?: string };
 
 const NAV_ITEMS: NavItem[] = [
 	{ label: "الرئيسية", href: "/", sectionId: "hero" },
+	{ label: "حملات التبرع", href: "/explore" },
 	{ label: "لماذا عون؟", href: "/#why-aoun", sectionId: "why-aoun" },
 	{ label: "رحلة المساعدة", href: "/#journey", sectionId: "journey" },
 	{ label: "الأسئلة الشائعة", href: "/#faq", sectionId: "faq" },
@@ -160,8 +161,15 @@ export function Header() {
 	/* ---------- Helpers ---------- */
 	const isActive = useCallback(
 		(item: NavItem) => {
-			if (pathname !== "/") return false;
-			return activeSection === (item.sectionId ?? "");
+			if (pathname === "/") {
+				return activeSection === (item.sectionId ?? "");
+			}
+			
+			if (item.href !== "/" && !item.href.startsWith("/#")) {
+				return pathname.startsWith(item.href);
+			}
+
+			return false;
 		},
 		[pathname, activeSection],
 	);
@@ -196,7 +204,13 @@ export function Header() {
 		if (!user) return "/";
 		const role = user.role?.toLowerCase() ?? "";
 		const isOrg = ORG_ROLE_KEYWORDS.some((k) => role.includes(k));
-		return isOrg ? "/dashboard/organization" : "/dashboard/family";
+		const isAdmin = role.includes('admin') || role.includes('أدمن');
+		const isDonor = role.includes('donor') || role.includes('فاعل خير') || role.includes('متبرع');
+
+		if (isAdmin) return "/dashboard/admin";
+		if (isDonor) return "/dashboard/donor";
+		if (isOrg) return "/dashboard/organization";
+		return "/dashboard/family";
 	}, [user]);
 
 	const initials = useMemo(() => {

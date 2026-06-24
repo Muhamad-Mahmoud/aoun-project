@@ -9,9 +9,22 @@ interface Step5AttachmentsProps {
     uploadedFiles: File[];
     onFileUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onRemoveFile: (index: number) => void;
+    selectedRequestType?: string;
 }
 
-export function Step5Attachments({ uploadedFiles, onFileUpload, onRemoveFile }: Step5AttachmentsProps) {
+export function Step5Attachments({ uploadedFiles, onFileUpload, onRemoveFile, selectedRequestType }: Step5AttachmentsProps) {
+    const getHintMessage = () => {
+        switch (selectedRequestType) {
+            case "Financial": return "يرجى إرفاق: مفردات مرتب، إثبات دخل، أو مستندات الديون المحلولة.";
+            case "Medical": return "يرجى إرفاق: روشتة طبية، تقرير طبي معتمد، أو فواتير علاج.";
+            case "Food": return "يرجى إرفاق: إثبات الحالة الاجتماعية أو أي وثيقة داعمة للاحتياج.";
+            case "Housing": return "يرجى إرفاق: عقد إيجار موثق، أو إيصالات مرافق (كهرباء/مياه) حديثة.";
+            case "Education": return "يرجى إرفاق: شهادة قيد من المدرسة/الجامعة وإيصال بمصروفات دراسية متأخرة.";
+            case "Utilities": return "يرجى إرفاق: فواتير متأخرة أو إخطارات قطع خدمة.";
+            default: return "أرفق صور واضحة للمستندات الداعمة لتسريع عملية دراسة حالتك.";
+        }
+    };
+
     return (
         <div className="space-y-5">
             {/* Header */}
@@ -20,8 +33,8 @@ export function Step5Attachments({ uploadedFiles, onFileUpload, onRemoveFile }: 
                     <span className="w-1 h-5 bg-warm-green rounded-full" />
                     المستندات المطلوبة
                 </h3>
-                <p className="text-slate-500 text-sm pr-3">
-                    أرفق صور واضحة للمستندات الداعمة لتسريع المراجعة.
+                <p className="text-slate-500 text-sm pr-3 font-semibold">
+                    {getHintMessage()}
                 </p>
             </div>
 

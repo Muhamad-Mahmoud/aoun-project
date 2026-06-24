@@ -203,11 +203,11 @@ export default function FamilyRequestsPage() {
 			<DashboardLayout>
 				<FamilySidebar />
 				<div
-					className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-gradient-to-b from-slate-50 to-white"
+					className="flex-1 flex flex-col h-full overflow-y-auto bg-gradient-to-b from-slate-50 to-white"
 					dir="rtl"
 				>
 					<DashboardTopBar userType="family" />
-					<main className="p-4 sm:p-6 lg:p-8 pb-20 relative z-10">
+					<main className="p-4 sm:p-6 lg:p-8 relative z-10">
 						<div className="mx-auto max-w-5xl space-y-6 sm:space-y-8">
 							{/* ===== Header ===== */}
 							<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">

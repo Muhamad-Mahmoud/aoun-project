@@ -262,6 +262,7 @@ export function RequestWizard({ onSubmit }: { onSubmit: (data: any) => void }) {
                                             uploadedFiles={uploadedFiles}
                                             onFileUpload={handleFileUpload}
                                             onRemoveFile={handleRemoveFile}
+                                            selectedRequestType={selectedRequestType}
                                         />
                                     )}
                                     {currentStep === 5 && (

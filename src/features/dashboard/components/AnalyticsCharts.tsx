@@ -35,6 +35,11 @@ const TRANSLATION_MAP: Record<string, string> = {
     Other: "أخرى",
 };
 
+function formatMonth(monthNum: string) {
+    const months = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
+    return months[parseInt(monthNum, 10) - 1] || monthNum;
+}
+
 export function MonthlyTrendChart({ data }: MonthlyTrendChartProps) {
     const entries = useMemo(() => {
         if (!data || Object.keys(data).length === 0) return [];
@@ -86,6 +91,7 @@ export function MonthlyTrendChart({ data }: MonthlyTrendChartProps) {
                     {entries.map(([monthStr, value], idx) => {
                         const [, month] = monthStr.split("-");
                         const heightPercentage = Math.max((value / topValue) * 100, 4);
+                        const monthName = formatMonth(month);
 
                         return (
                             <div key={monthStr} className="flex flex-col items-center justify-end h-full w-12 sm:w-16 group relative">
@@ -100,7 +106,7 @@ export function MonthlyTrendChart({ data }: MonthlyTrendChartProps) {
                                         <span className="font-black">{value}</span> طلبات
                                     </div>
                                 </motion.div>
-                                <span className="text-[11px] text-slate-400 font-bold absolute -bottom-6">{month}</span>
+                                <span className="text-[11px] text-slate-400 font-bold absolute -bottom-6">{monthName}</span>
                             </div>
                         );
                     })}

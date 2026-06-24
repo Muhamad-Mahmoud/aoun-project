@@ -18,7 +18,7 @@ export default function OrganizationApprovedPage() {
     return (
         <DashboardLayout>
             <OrganizationSidebar />
-            <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-slate-50/50">
+            <div className="flex-1 flex flex-col h-full overflow-y-auto bg-slate-50/50">
                 <DashboardTopBar userType="organization" />
                 <main className="py-8">
                     <div className="space-y-8 px-6 lg:px-10">
@@ -88,7 +88,7 @@ function ApprovedCard({ request }: { request: any }) {
                         'bg-green-50 text-green-700 border-green-200'
                     }`}>
                         الذكاء الاصطناعي: {request.aiNeedLevel === 'High' ? 'عالي' : request.aiNeedLevel === 'Medium' ? 'متوسط' : 'منخفض'}
-                        {request.aiConfidence && <span className="text-[10px] opacity-70">({request.aiConfidence <= 1 ? Math.round(request.aiConfidence * 100) : Math.round(request.aiConfidence)}%)</span>}
+                        {request.needScore != null && <span className="text-[10px] opacity-70">({request.needScore <= 1 ? Math.round(request.needScore * 100) : Math.round(request.needScore)}%)</span>}
                     </span>
                 )}
                 <Link href={`/dashboard/organization/requests/${request.id}`} className="mr-auto">
@@ -100,3 +100,4 @@ function ApprovedCard({ request }: { request: any }) {
         </Card>
     );
 }
+

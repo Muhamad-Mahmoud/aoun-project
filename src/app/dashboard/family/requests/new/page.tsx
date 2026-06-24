@@ -125,13 +125,13 @@ export default function NewRequestPage() {
     return (
         <DashboardLayout>
             <FamilySidebar />
-            <div className="flex-1 flex flex-col min-h-screen overflow-y-auto bg-[#f8fafc] relative">
+            <div className="flex-1 flex flex-col h-full overflow-y-auto bg-[#f8fafc] relative">
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] -z-0 pointer-events-none" />
                 <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-warm-green/5 rounded-full blur-[100px] -z-0 pointer-events-none" />
 
                 <DashboardTopBar userType="family" />
 
-                <main className="p-4 sm:px-10 pb-20 pt-20 lg:pt-28 relative z-10">
+                <main className="p-4 sm:px-10 pt-20 lg:pt-28 relative z-10">
                     <div className="mx-auto max-w-4xl">
                         {!submitted ? (
                             <div className="space-y-5">
@@ -195,3 +195,4 @@ export default function NewRequestPage() {
         </DashboardLayout>
     );
 }
+
