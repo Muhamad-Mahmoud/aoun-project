@@ -12,7 +12,7 @@ import { Loader2, AlertCircle, CheckCircle2, XCircle, ArrowRight, Download, File
 import Link from "next/link";
 import { format } from "date-fns";
 import { ar } from "date-fns/locale";
-import { categoryConfig, resolveCategory } from "@/features/requests/config/requestConfig";
+import { categoryConfig, resolveCategory, workingTypeLabels, employmentTypeLabels } from "@/features/requests/config/requestConfig";
 
 export default function RequestDetailPage() {
     const params = useParams();
@@ -419,8 +419,8 @@ export default function RequestDetailPage() {
                                         <InfoItem label="حالة العمل" value={request.employmentData.isWorking ? 'يعمل' : 'لا يعمل'} vertical />
                                         {request.employmentData.isWorking ? (
                                             <>
-                                                <InfoItem label="طبيعة العمل" value={request.employmentData.workingType === 'FullTime' ? 'دوام كامل' : request.employmentData.workingType === 'PartTime' ? 'دوام جزئي' : request.employmentData.workingType === 'Freelance' ? 'عمل حر / يومية' : request.employmentData.workingType || 'غير محدد'} vertical />
-                                                <InfoItem label="القطاع" value={request.employmentData.employmentType === 'Private' ? 'قطاع خاص' : request.employmentData.employmentType === 'Public' ? 'قطاع حكومي / عام' : request.employmentData.employmentType || 'غير محدد'} vertical />
+                                                <InfoItem label="طبيعة العمل" value={request.employmentData.workingType != null ? workingTypeLabels[request.employmentData.workingType as number] || 'غير محدد' : 'غير محدد'} vertical />
+                                                <InfoItem label="القطاع" value={request.employmentData.employmentType != null ? employmentTypeLabels[request.employmentData.employmentType as number] || 'غير محدد' : 'غير محدد'} vertical />
                                                 <InfoItem label="جهة العمل" value={request.employmentData.company || 'غير محدد'} vertical />
                                                 <InfoItem label="المسمى الوظيفي" value={request.employmentData.jobTitle || 'غير محدد'} vertical />
                                                 <InfoItem label="الراتب الشهري" value={request.employmentData.salaryMonthly ? `${request.employmentData.salaryMonthly} ج.م` : 'غير محدد'} vertical />
