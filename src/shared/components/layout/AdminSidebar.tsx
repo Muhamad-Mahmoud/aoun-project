@@ -9,13 +9,13 @@ export function AdminSidebarContent() {
 
     const navigation = [
         { name: 'نظرة عامة', href: '/dashboard/admin', icon: Activity },
-        { name: 'المستخدمين', href: '/dashboard/admin/users', icon: Users },
-        { name: 'الجمعيات', href: '/dashboard/admin/associations', icon: Building },
         { name: 'جميع الطلبات', href: '/dashboard/admin/requests', icon: FileText },
+        { name: 'الجمعيات', href: '/dashboard/admin/associations', icon: Building },
+        { name: 'المستخدمين', href: '/dashboard/admin/users', icon: Users },
     ];
 
     return (
-        <div className="flex flex-col h-full bg-slate-950 text-slate-300 w-full" dir="rtl">
+        <div className="flex flex-col h-full bg-slate-950 text-muted-foreground w-full" dir="rtl">
             <div className="p-6">
                 <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
@@ -41,7 +41,7 @@ export function AdminSidebarContent() {
                         >
                             <item.icon className={cn(
                                 "w-5 h-5 transition-transform duration-200",
-                                isActive ? "text-primary scale-110" : "text-slate-500 group-hover:text-slate-300"
+                                isActive ? "text-primary scale-110" : "text-muted-foreground group-hover:text-muted-foreground"
                             )} />
                             <span>{item.name}</span>
                             {isActive && (
@@ -60,7 +60,7 @@ export function AdminSidebarContent() {
                         </div>
                         <div>
                             <p className="text-sm font-bold text-white">مدير النظام</p>
-                            <p className="text-xs text-slate-500">admin@aoun.com</p>
+                            <p className="text-xs text-muted-foreground">admin@aoun.com</p>
                         </div>
                     </div>
                     <Link href="/auth/login" className="w-full flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors text-sm font-bold">

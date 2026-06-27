@@ -63,7 +63,7 @@ export const AuthWrapper: React.FC<AuthWrapperProps> = ({
                                 {footerLinkText && footerLinkHref && (
                                     <Link
                                         href={footerLinkHref}
-                                        className="text-emerald-600 hover:text-emerald-700 font-extrabold text-sm hover:underline underline-offset-4 transition-all"
+                                        className="text-primary hover:text-emerald-700 font-extrabold text-sm hover:underline underline-offset-4 transition-all"
                                     >
                                         {footerLinkText}
                                     </Link>
@@ -81,7 +81,7 @@ export const AuthWrapper: React.FC<AuthWrapperProps> = ({
 
                 {/* Glows */}
                 <div className="absolute top-0 left-0 w-96 h-96 bg-primary/10 rounded-full blur-[100px] -ml-48 -mt-48" />
-                <div className="absolute bottom-0 right-0 w-96 h-96 bg-emerald-500/5 rounded-full blur-[100px] -mr-48 -mb-48" />
+                <div className="absolute bottom-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-[100px] -mr-48 -mb-48" />
 
                 <div className="relative z-10 w-full text-center px-16 space-y-12">
                     {/* Logo Panel */}
@@ -100,14 +100,14 @@ export const AuthWrapper: React.FC<AuthWrapperProps> = ({
 
                     {/* Text Content */}
                     <div className="text-center mt-12 mb-16 relative z-10 px-8">
-                        <div className="inline-flex items-center justify-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold mb-6">
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        <div className="inline-flex items-center justify-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold mb-6">
+                            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
                             منصة إنسانية ذكية
                         </div>
                         <h2 className="text-[42px] font-extrabold tracking-tight text-white mb-6">
-                            معاً نصنع <span className="text-emerald-500">الأمل</span>
+                            معاً نصنع <span className="text-primary">الأمل</span>
                             <br />
-                            ونبني <span className="text-emerald-600">المستقبل.</span>
+                            ونبني <span className="text-primary">المستقبل.</span>
                         </h2>
                         <p className="text-[16px] leading-loose text-slate-300 max-w-md mx-auto">
                             انضم إلى آلاف المتطوعين والجمعيات الخيرية في مصر.

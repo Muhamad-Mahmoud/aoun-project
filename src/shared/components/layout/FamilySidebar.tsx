@@ -27,8 +27,8 @@ const navItems = [
   { id: "dashboard", label: "لوحة التحكم", href: "/dashboard/family", icon: LayoutDashboard },
   { id: "requests", label: "طلباتي", href: "/dashboard/family/requests", icon: FileText },
   { id: "new-request", label: "طلب جديد", href: "/dashboard/family/requests/new", icon: PlusCircle },
-  { id: "chat", label: "المساعد الذكي", href: "/dashboard/family/chat", icon: MessageCircle },
   { id: "messages", label: "الرسائل المباشرة", href: "/dashboard/family/messages", icon: MessageSquare },
+  { id: "chat", label: "المساعد الذكي", href: "/dashboard/family/chat", icon: MessageCircle },
   { id: "profile", label: "الملف الشخصي", href: "/dashboard/family/profile", icon: User },
   { id: "settings", label: "الإعدادات", href: "/dashboard/family/settings", icon: Settings },
 ];
@@ -70,7 +70,7 @@ export function FamilySidebarContent({ isCollapsed }: { isCollapsed?: boolean })
     : (user?.name?.[0] || "أ");
 
   return (
-    <div className="flex flex-col h-full bg-white relative z-20 overflow-hidden">
+    <div className="flex flex-col h-full bg-card dark:bg-background relative z-20 overflow-hidden">
       {/* Logo area */}
       <div className={cn("py-8 border-b border-border/50 flex items-center transition-all duration-300", isCollapsed ? "px-0 justify-center h-[96px]" : "px-8 h-[96px]")}>
         <Link href="/" className="flex items-center justify-center">
@@ -79,7 +79,7 @@ export function FamilySidebarContent({ isCollapsed }: { isCollapsed?: boolean })
                  <span className="text-primary font-black text-xl">ع</span>
              </div>
           ) : (
-             <Image src="/logo.png" alt="عون" width={96} height={48} className="h-12 w-auto shrink-0" />
+             <Image src="/logo.png" alt="عون" width={96} height={48} className="h-12 w-auto shrink-0 dark:invert-[.8]" />
           )}
         </Link>
       </div>
@@ -96,27 +96,15 @@ export function FamilySidebarContent({ isCollapsed }: { isCollapsed?: boolean })
               href={item.href}
               title={isCollapsed ? item.label : undefined}
               className={cn(
-                "flex items-center justify-between p-3 rounded-xl transition-all duration-300 group relative",
+                "flex items-center justify-between px-4 py-3.5 rounded-2xl transition-all duration-300 group relative hover:-translate-x-1 border border-transparent",
                 isActive
-                  ? "bg-primary/10 text-primary"
-                  : "text-muted-foreground hover:bg-slate-50 hover:text-foreground",
-                isCollapsed && "justify-center"
+                  ? "bg-primary text-primary-foreground shadow-md shadow-primary/20 hover:border-primary/50"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground hover:border-border",
+                isCollapsed && "justify-center px-0"
               )}
             >
-              {isActive && (
-                <motion.div 
-                  layoutId="active-family-pill"
-                  className="absolute start-0 top-2 bottom-2 w-1 bg-primary rounded-e-full"
-                />
-              )}
               <div className="flex items-center gap-3">
-                <div className={cn(
-                  "p-2 rounded-lg transition-all duration-300 shrink-0",
-                  isActive ? "bg-primary text-white shadow-md scale-110" : "bg-slate-50 group-hover:bg-primary/10 group-hover:text-primary",
-                  isCollapsed && "mx-auto"
-                )}>
-                  <Icon className="w-5 h-5 shrink-0" />
-                </div>
+                <Icon className={cn("w-5 h-5 shrink-0 transition-transform", isActive && "scale-110", isCollapsed && "mx-auto")} />
                 {!isCollapsed && (
                     <span className={cn(
                       "text-sm transition-all duration-300 whitespace-nowrap",
@@ -129,13 +117,13 @@ export function FamilySidebarContent({ isCollapsed }: { isCollapsed?: boolean })
               <div className="flex items-center gap-2">
                 {badge > 0 && (
                   <span className={cn(
-                    "min-w-[20px] h-5 px-1.5 flex items-center justify-center rounded-full text-[10px] font-black shrink-0 transition-all",
-                    isActive ? "bg-primary text-white" : "bg-destructive text-white group-hover:bg-primary group-hover:text-white"
+                    "min-w-[20px] h-5 px-1.5 flex items-center justify-center rounded-full text-[10px] font-black shrink-0 transition-all shadow-sm",
+                    isActive ? "bg-white text-primary" : "bg-destructive text-white group-hover:bg-primary group-hover:text-white"
                   )}>
                     {badge}
                   </span>
                 )}
-                {!isCollapsed && isActive && <ChevronLeft className="w-4 h-4 shrink-0" />}
+                {!isCollapsed && isActive && <ChevronLeft className="w-4 h-4 shrink-0 opacity-50" />}
               </div>
             </Link>
           );
@@ -161,7 +149,7 @@ export function FamilySidebarContent({ isCollapsed }: { isCollapsed?: boolean })
             {!isCollapsed && (
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-bold text-foreground truncate whitespace-nowrap">{userName}</p>
-                  <p className={`text-[10px] font-medium uppercase tracking-wider whitespace-nowrap ${profile?.isVerified ? "text-emerald-600" : "text-slate-400"}`}>
+                  <p className={`text-[10px] font-medium uppercase tracking-wider whitespace-nowrap ${profile?.isVerified ? "text-primary" : "text-muted-foreground"}`}>
                     {userStatus}
                   </p>
                 </div>
@@ -178,7 +166,7 @@ export function FamilySidebar() {
 
   return (
     <aside className={cn(
-        "bg-white border-e border-slate-100 hidden lg:flex flex-col sticky top-0 h-screen transition-all duration-300 z-30 shrink-0 relative", 
+        "bg-card dark:bg-background border-e border-border hidden lg:flex flex-col sticky top-0 h-screen transition-all duration-300 z-30 shrink-0 relative", 
         isCollapsed ? "w-[100px]" : "w-80"
     )}>
       <Button 
@@ -186,7 +174,7 @@ export function FamilySidebar() {
         size="icon"
         onClick={() => setIsCollapsed(!isCollapsed)}
         aria-label={isCollapsed ? "توسيع القائمة" : "طي القائمة"}
-        className="absolute top-10 -start-4 w-8 h-8 rounded-full border border-slate-200 bg-white shadow-sm z-50 hover:bg-slate-50 hover:text-primary transition-transform"
+        className="absolute top-10 -start-4 w-8 h-8 rounded-full border border-border bg-card shadow-sm z-50 hover:bg-muted hover:text-primary transition-transform"
       >
         {isCollapsed ? <ChevronRight className="w-4 h-4 ml-0.5" /> : <ChevronLeft className="w-4 h-4 mr-0.5" />}
       </Button>
@@ -221,8 +209,8 @@ export function FamilyBottomSheetMenu() {
     : (user?.name?.[0] || "أ");
 
   const sheetItems = [
-    { label: "الرسائل المباشرة", href: "/dashboard/family/messages", icon: MessageSquare, color: "text-blue-600", bg: "bg-blue-50" },
-    { label: "الملف الشخصي", href: "/dashboard/family/profile", icon: User, color: "text-indigo-600", bg: "bg-indigo-50" },
+    { label: "الرسائل المباشرة", href: "/dashboard/family/messages", icon: MessageSquare, color: "text-primary", bg: "bg-blue-50" },
+    { label: "الملف الشخصي", href: "/dashboard/family/profile", icon: User, color: "text-primary", bg: "bg-emerald-50" },
     { label: "الإعدادات", href: "/dashboard/family/settings", icon: Settings, color: "text-slate-600", bg: "bg-slate-100" },
   ];
 
@@ -239,13 +227,13 @@ export function FamilyBottomSheetMenu() {
         <div className="w-20 h-20 rounded-3xl bg-gradient-to-tr from-primary/20 to-blue-500/20 flex items-center justify-center border-4 border-white shadow-xl shadow-primary/5 mb-4 relative">
           <span className="text-3xl font-black text-slate-800">{userInitials}</span>
           <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-sm">
-            <div className={cn("w-4 h-4 rounded-full animate-pulse", profile?.isVerified ? "bg-emerald-500" : "bg-amber-500")} />
+            <div className={cn("w-4 h-4 rounded-full animate-pulse", profile?.isVerified ? "bg-primary" : "bg-primary/100")} />
           </div>
         </div>
         <h2 className="text-xl font-black text-slate-900 mb-2">{userName}</h2>
         <span className={cn(
           "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border shadow-sm",
-          profile?.isVerified ? "bg-emerald-50 text-emerald-600 border-emerald-100" : "bg-amber-50 text-amber-600 border-amber-100"
+          profile?.isVerified ? "bg-primary/10 text-primary border-emerald-100" : "bg-primary/10 text-amber-600 border-primary/20"
         )}>
           {profile?.isVerified && <User className="w-3.5 h-3.5" />}
           {userStatus}

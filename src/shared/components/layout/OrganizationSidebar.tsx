@@ -26,12 +26,12 @@ import { useAuthContext } from "@/shared/providers";
 
 const navItems = [
   { label: "لوحة التحكم", href: "/dashboard/organization", icon: LayoutDashboard },
-  { label: "المساعد الذكي", href: "/dashboard/organization/chat", icon: MessageCircle },
+  { label: "طلبات تحتاج مراجعة", href: "/dashboard/organization/pending", icon: Inbox },
   { label: "إدارة الحملات", href: "/dashboard/organization/campaigns", icon: Search },
   { label: "التبرعات الواردة", href: "/dashboard/organization/donations", icon: HeartHandshake },
   { label: "التواصل المباشر", href: "/dashboard/organization/messages", icon: MessageSquare },
-  { label: "طلبات تحتاج مراجعة", href: "/dashboard/organization/pending", icon: Inbox },
   { label: "الحالات المعتمدة", href: "/dashboard/organization/approved", icon: CheckCircle2 },
+  { label: "المساعد الذكي", href: "/dashboard/organization/chat", icon: MessageCircle },
   { label: "ملف الجمعية", href: "/dashboard/organization/profile", icon: Building2 },
   { label: "الإعدادات", href: "/dashboard/organization/settings", icon: Settings },
 ];
@@ -63,16 +63,16 @@ export function OrganizationSidebarContent({ isCollapsed }: { isCollapsed?: bool
   const orgInitials = orgName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || "ج";
   
   return (
-    <div className="flex flex-col h-full bg-white relative z-20 overflow-hidden">
+    <div className="flex flex-col h-full bg-card dark:bg-background relative z-20 overflow-hidden">
       {/* Logo area */}
       <div className={cn("py-8 border-b border-border/50 flex items-center transition-all duration-300", isCollapsed ? "px-0 justify-center h-[96px]" : "px-8 h-[96px]")}>
         <Link href="/" className="flex items-center justify-center">
           {isCollapsed ? (
-             <div className="w-10 h-10 bg-secondary/10 rounded-xl flex items-center justify-center overflow-hidden shrink-0">
-                 <span className="text-secondary font-black text-xl">ع</span>
+             <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center overflow-hidden shrink-0">
+                 <span className="text-primary font-black text-xl">ع</span>
              </div>
           ) : (
-             <Image src="/logo.png" alt="عون" width={96} height={48} className="h-12 w-auto shrink-0" />
+             <Image src="/logo.png" alt="عون" width={96} height={48} className="h-12 w-auto shrink-0 dark:invert-[.8]" />
           )}
         </Link>
       </div>
@@ -88,35 +88,21 @@ export function OrganizationSidebarContent({ isCollapsed }: { isCollapsed?: bool
               href={item.href}
               title={isCollapsed ? item.label : undefined}
               className={cn(
-                "flex items-center justify-between p-3 rounded-xl transition-all duration-300 group relative",
+                "flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all duration-300 group relative hover:-translate-x-1 border border-transparent",
                 isActive
-                  ? "bg-secondary/10 text-secondary"
-                  : "text-muted-foreground hover:bg-slate-50 hover:text-foreground",
-                isCollapsed && "justify-center"
+                  ? "bg-primary text-primary-foreground shadow-md shadow-primary/20 hover:border-primary/50"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground hover:border-border",
+                isCollapsed && "justify-center px-0"
               )}
             >
-              {isActive && (
-                <motion.div 
-                  layoutId="active-org-pill"
-                  className="absolute start-0 top-2 bottom-2 w-1 bg-secondary rounded-e-full"
-                />
+              <Icon className={cn("w-5 h-5 shrink-0 transition-transform", isActive && "scale-110", isCollapsed && "mx-auto")} />
+              {!isCollapsed && (
+                  <span className={cn(
+                    "text-sm transition-all duration-300 whitespace-nowrap",
+                    isActive ? "font-black" : "font-bold"
+                  )}>{item.label}</span>
               )}
-              <div className="flex items-center gap-3">
-                <div className={cn(
-                  "p-2 rounded-lg transition-all duration-300 shrink-0",
-                  isActive ? "bg-secondary text-white shadow-md scale-110" : "bg-slate-50 group-hover:bg-secondary/10 group-hover:text-secondary",
-                  isCollapsed && "mx-auto"
-                )}>
-                  <Icon className="w-5 h-5 shrink-0" />
-                </div>
-                {!isCollapsed && (
-                    <span className={cn(
-                      "text-sm transition-all duration-300 whitespace-nowrap",
-                      isActive ? "font-black" : "font-bold"
-                    )}>{item.label}</span>
-                )}
-              </div>
-              {!isCollapsed && isActive && <ChevronLeft className="w-4 h-4 shrink-0" />}
+              {!isCollapsed && isActive && <ChevronLeft className="absolute left-4 w-4 h-4 opacity-50" />}
             </Link>
           );
         })}
@@ -135,13 +121,13 @@ export function OrganizationSidebarContent({ isCollapsed }: { isCollapsed?: bool
         </Button>
         <div className={cn("mt-4 rounded-xl bg-muted/50 border border-border transition-all duration-300 mx-auto", isCollapsed ? "p-2 w-fit shrink-0" : "p-4")}>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 shrink-0 rounded-xl bg-secondary/20 flex items-center justify-center text-secondary font-black text-sm">
+            <div className="w-10 h-10 shrink-0 rounded-xl bg-primary/20 flex items-center justify-center text-primary font-black text-sm">
               {orgInitials}
             </div>
             {!isCollapsed && (
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-black text-slate-900 truncate whitespace-nowrap">{orgName}</p>
-                  <p className="text-[10px] text-slate-500 font-bold whitespace-nowrap">جهة معتمدة</p>
+                  <p className="text-xs font-black text-foreground truncate whitespace-nowrap">{orgName}</p>
+                  <p className="text-[10px] text-muted-foreground font-bold whitespace-nowrap">جهة معتمدة</p>
                 </div>
             )}
           </div>
@@ -156,7 +142,7 @@ export function OrganizationSidebar() {
 
   return (
     <aside className={cn(
-        "bg-white border-e border-slate-100 hidden lg:flex flex-col sticky top-0 h-screen transition-all duration-300 z-30 shrink-0 relative", 
+        "bg-card dark:bg-background border-e border-border hidden lg:flex flex-col sticky top-0 h-screen transition-all duration-300 z-30 shrink-0 relative", 
         isCollapsed ? "w-[100px]" : "w-80"
     )}>
       <Button 
@@ -164,7 +150,7 @@ export function OrganizationSidebar() {
         size="icon"
         onClick={() => setIsCollapsed(!isCollapsed)}
         aria-label={isCollapsed ? "توسيع القائمة" : "طي القائمة"}
-        className="absolute top-10 -start-4 w-8 h-8 rounded-full border border-slate-200 bg-white shadow-sm z-50 hover:bg-slate-50 hover:text-secondary transition-transform"
+        className="absolute top-10 -start-4 w-8 h-8 rounded-full border border-border bg-card shadow-sm z-50 hover:bg-muted hover:text-primary transition-transform"
       >
         {isCollapsed ? <ChevronRight className="w-4 h-4 ml-0.5" /> : <ChevronLeft className="w-4 h-4 mr-0.5" />}
       </Button>
@@ -196,9 +182,9 @@ export function OrganizationBottomSheetMenu() {
   const orgInitials = orgName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || "ج";
 
   const sheetItems = [
-    { label: "إدارة الحملات", href: "/dashboard/organization/campaigns", icon: Search, color: "text-blue-600", bg: "bg-blue-50" },
-    { label: "الحالات المعتمدة", href: "/dashboard/organization/approved", icon: CheckCircle2, color: "text-emerald-600", bg: "bg-emerald-50" },
-    { label: "ملف الجمعية", href: "/dashboard/organization/profile", icon: Building2, color: "text-indigo-600", bg: "bg-indigo-50" },
+    { label: "المساعد الذكي", href: "/dashboard/organization/chat", icon: MessageCircle, color: "text-primary", bg: "bg-blue-50" },
+    { label: "الحالات المعتمدة", href: "/dashboard/organization/approved", icon: CheckCircle2, color: "text-primary", bg: "bg-emerald-50" },
+    { label: "ملف الجمعية", href: "/dashboard/organization/profile", icon: Building2, color: "text-primary", bg: "bg-emerald-50" },
     { label: "الإعدادات", href: "/dashboard/organization/settings", icon: Settings, color: "text-slate-600", bg: "bg-slate-100" },
   ];
 
@@ -212,14 +198,14 @@ export function OrganizationBottomSheetMenu() {
 
       {/* Profile Header (Centered) */}
       <div className="px-6 mb-8 flex flex-col items-center text-center">
-        <div className="w-20 h-20 rounded-3xl bg-gradient-to-tr from-primary/20 to-secondary/20 flex items-center justify-center border-4 border-white shadow-xl shadow-primary/5 mb-4 relative">
+        <div className="w-20 h-20 rounded-3xl bg-gradient-to-tr from-primary/20 to-primary/20 flex items-center justify-center border-4 border-white shadow-xl shadow-primary/5 mb-4 relative">
           <span className="text-3xl font-black text-slate-800">{orgInitials}</span>
           <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-sm">
-            <div className="w-4 h-4 bg-emerald-500 rounded-full animate-pulse" />
+            <div className="w-4 h-4 bg-primary rounded-full animate-pulse" />
           </div>
         </div>
         <h2 className="text-xl font-black text-slate-900 mb-2">{orgName}</h2>
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full text-xs font-bold border border-emerald-100 shadow-sm">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-bold border border-emerald-100 shadow-sm">
           <CheckCircle2 className="w-3.5 h-3.5" />
           جهة معتمدة
         </span>

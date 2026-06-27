@@ -83,7 +83,7 @@ export function useFamilyDashboard() {
             trend: "up",
             icon: FileText,
             iconBg: "bg-blue-100",
-            iconColor: "text-blue-600",
+            iconColor: "text-primary",
         },
         {
             label: "طلبات مكتملة",
@@ -91,7 +91,7 @@ export function useFamilyDashboard() {
             change: "67%",
             trend: "neutral",
             icon: CheckCircle2,
-            iconBg: "bg-green-100",
+            iconBg: "bg-primary/10",
             iconColor: "text-green-600",
         },
         {
@@ -109,8 +109,8 @@ export function useFamilyDashboard() {
             change: "ساعة",
             trend: "down",
             icon: Clock,
-            iconBg: "bg-purple-100",
-            iconColor: "text-purple-600",
+            iconBg: "bg-amber-100",
+            iconColor: "text-amber-600",
         },
     ];
 
@@ -189,10 +189,10 @@ export function useFamilyDashboard() {
 
     // Status Config
     const statusConfig: Record<string, StatusConfig> = {
-        completed: { label: "مكتمل", color: "text-green-700 bg-green-50 border-green-200" },
+        completed: { label: "مكتمل", color: "text-primary bg-primary/5 border-green-200" },
         rejected: { label: "مرفوض", color: "text-red-700 bg-red-50 border-red-200" },
-        pending: { label: "قيد المراجعة", color: "text-amber-700 bg-amber-50 border-amber-200" },
-        in_progress: { label: "قيد التنفيذ", color: "text-blue-700 bg-blue-50 border-blue-200" },
+        pending: { label: "قيد المراجعة", color: "text-primary bg-primary/10 border-amber-200" },
+        in_progress: { label: "قيد التنفيذ", color: "text-blue-700 bg-primary/10 border-primary/30" },
     };
 
     // Tasks

@@ -27,13 +27,13 @@ export function YesNoToggle({
                 className={cn(
                     "relative flex items-center gap-2.5 px-4 py-3 rounded-xl border-2 font-bold text-[14px] transition-all duration-200 select-none focus:outline-none",
                     value === true
-                        ? "border-emerald-500 bg-emerald-50 text-emerald-700 shadow-sm"
-                        : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50"
+                        ? "border-emerald-500 bg-primary/10 text-emerald-700 shadow-sm"
+                        : "border-border bg-card text-muted-foreground hover:border-slate-300 hover:bg-muted"
                 )}
             >
                 <span className={cn(
                     "w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-all",
-                    value === true ? "bg-emerald-500 text-white" : "bg-slate-100 text-slate-400"
+                    value === true ? "bg-primary text-white" : "bg-muted/50 text-muted-foreground"
                 )}>
                     <Check className="w-3.5 h-3.5" strokeWidth={3} />
                 </span>
@@ -48,12 +48,12 @@ export function YesNoToggle({
                     "relative flex items-center gap-2.5 px-4 py-3 rounded-xl border-2 font-bold text-[14px] transition-all duration-200 select-none focus:outline-none",
                     value === false
                         ? "border-rose-400 bg-rose-50 text-rose-700 shadow-sm"
-                        : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50"
+                        : "border-border bg-card text-muted-foreground hover:border-slate-300 hover:bg-muted"
                 )}
             >
                 <span className={cn(
                     "w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-all",
-                    value === false ? "bg-rose-400 text-white" : "bg-slate-100 text-slate-400"
+                    value === false ? "bg-rose-400 text-white" : "bg-muted/50 text-muted-foreground"
                 )}>
                     <X className="w-3.5 h-3.5" strokeWidth={3} />
                 </span>

@@ -64,7 +64,7 @@ export function ChatWindow({ className, onClose }: ChatWindowProps) {
     }, [messages, showScrollFAB]);
 
     return (
-        <div className={cn("flex flex-col h-full bg-slate-50 relative rounded-2xl border border-slate-200 shadow-lg overflow-hidden", className)}>
+        <div className={cn("flex flex-col h-full bg-muted relative rounded-2xl border border-border shadow-lg overflow-hidden", className)}>
             {/* Subtle AI background watermark / glow */}
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent pointer-events-none" />
 
@@ -85,17 +85,17 @@ export function ChatWindow({ className, onClose }: ChatWindowProps) {
                     /* Empty state */
                     <div className="flex flex-col items-center justify-center h-full text-center px-4 gap-8 relative z-10">
                         {/* Glowing Icon */}
-                        <div className="relative w-24 h-24 rounded-[32px] bg-gradient-to-br from-primary via-primary/90 to-emerald-500 flex items-center justify-center shadow-[0_0_40px_rgb(var(--primary)/0.2)] border-2 border-white/40 group">
+                        <div className="relative w-24 h-24 rounded-[32px] bg-gradient-to-br from-primary via-primary/90 to-emerald-500 flex items-center justify-center shadow-[0_0_40px_rgb(var(--primary)/0.2)] border-2 border-border/40 group">
                             <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full" />
-                            <div className="absolute inset-0 rounded-[32px] bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-500" />
+                            <div className="absolute inset-0 rounded-[32px] bg-card opacity-0 group-hover:opacity-10 transition-opacity duration-500" />
                             <Bot className="w-12 h-12 text-white drop-shadow-lg relative z-10 animate-bounce" style={{ animationDuration: '3s' }} />
                         </div>
 
                         <div>
-                            <h3 className="text-2xl font-black text-slate-900 mb-2">
+                            <h3 className="text-2xl font-black text-foreground mb-2">
                                 أهلاً، كيف يمكنني مساعدتك؟
                             </h3>
-                            <p className="text-[15px] font-medium text-slate-500 max-w-sm leading-relaxed">
+                            <p className="text-[15px] font-medium text-muted-foreground max-w-sm leading-relaxed">
                                 المساعد الذكي (Aoun AI) جاهز للإجابة على استفساراتك حول المنصة وتقديم الدعم الفوري
                             </p>
                         </div>
@@ -145,7 +145,7 @@ export function ChatWindow({ className, onClose }: ChatWindowProps) {
                     >
                         <button 
                             onClick={scrollToBottom}
-                            className="w-12 h-12 rounded-full bg-white/90 backdrop-blur-md text-slate-600 shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-slate-100 flex items-center justify-center hover:bg-slate-50 hover:text-primary transition-all active:scale-95 group"
+                            className="w-12 h-12 rounded-full bg-card/90 backdrop-blur-md text-muted-foreground shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-border flex items-center justify-center hover:bg-muted hover:text-primary transition-all active:scale-95 group"
                             aria-label="النزول لأسفل"
                         >
                             <ChevronDown className="w-6 h-6 group-hover:translate-y-0.5 transition-transform" />

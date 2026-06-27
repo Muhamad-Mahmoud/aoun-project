@@ -23,7 +23,7 @@ export const AccountTypeSelector: React.FC<AccountTypeSelectorProps> = ({ accoun
             >
                 {accountType === "individual" && (
                     <div className="absolute top-4 right-4 animate-scale-in">
-                        <div className="bg-emerald-500 rounded-full p-0.5">
+                        <div className="bg-primary rounded-full p-0.5">
                             <Check className="w-4 h-4 text-white" />
                         </div>
                     </div>
@@ -31,7 +31,7 @@ export const AccountTypeSelector: React.FC<AccountTypeSelectorProps> = ({ accoun
 
                 <div className={cn(
                     "w-12 h-12 rounded-full flex items-center justify-center transition-colors duration-300 mb-1",
-                    accountType === "individual" ? "bg-emerald-100 text-emerald-600" : "bg-emerald-50 text-emerald-600 group-hover/card:bg-emerald-100"
+                    accountType === "individual" ? "bg-emerald-100 text-primary" : "bg-primary/10 text-primary group-hover/card:bg-emerald-100"
                 )}>
                     <User className="w-5 h-5" />
                 </div>
@@ -61,7 +61,7 @@ export const AccountTypeSelector: React.FC<AccountTypeSelectorProps> = ({ accoun
             >
                 {accountType === "organization" && (
                     <div className="absolute top-4 right-4 animate-scale-in">
-                        <div className="bg-emerald-500 rounded-full p-0.5">
+                        <div className="bg-primary rounded-full p-0.5">
                             <Check className="w-4 h-4 text-white" />
                         </div>
                     </div>
@@ -69,7 +69,7 @@ export const AccountTypeSelector: React.FC<AccountTypeSelectorProps> = ({ accoun
 
                 <div className={cn(
                     "w-12 h-12 rounded-full flex items-center justify-center transition-colors duration-300 mb-1",
-                    accountType === "organization" ? "bg-amber-100 text-amber-600" : "bg-amber-50 text-amber-600 group-hover/card:bg-amber-100"
+                    accountType === "organization" ? "bg-amber-100 text-amber-600" : "bg-primary/10 text-amber-600 group-hover/card:bg-amber-100"
                 )}>
                     <Building2 className="w-5 h-5" />
                 </div>
@@ -99,7 +99,7 @@ export const AccountTypeSelector: React.FC<AccountTypeSelectorProps> = ({ accoun
             >
                 {accountType === "donor" && (
                     <div className="absolute top-4 right-4 animate-scale-in">
-                        <div className="bg-emerald-500 rounded-full p-0.5">
+                        <div className="bg-primary rounded-full p-0.5">
                             <Check className="w-4 h-4 text-white" />
                         </div>
                     </div>
@@ -107,7 +107,7 @@ export const AccountTypeSelector: React.FC<AccountTypeSelectorProps> = ({ accoun
 
                 <div className={cn(
                     "w-12 h-12 rounded-full flex items-center justify-center transition-colors duration-300 mb-1",
-                    accountType === "donor" ? "bg-indigo-100 text-indigo-600" : "bg-indigo-50 text-indigo-600 group-hover/card:bg-indigo-100"
+                    accountType === "donor" ? "bg-emerald-100 text-primary" : "bg-primary/10 text-primary group-hover/card:bg-emerald-100"
                 )}>
                     <User className="w-5 h-5" />
                 </div>
@@ -115,7 +115,7 @@ export const AccountTypeSelector: React.FC<AccountTypeSelectorProps> = ({ accoun
                 <div className="text-center space-y-0.5">
                     <h3 className={cn(
                         "text-[15px] font-bold transition-colors",
-                        accountType === "donor" ? "text-indigo-900" : "text-slate-800"
+                        accountType === "donor" ? "text-emerald-900" : "text-slate-800"
                     )}>
                         فاعل خير
                     </h3>

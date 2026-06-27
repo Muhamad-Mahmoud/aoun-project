@@ -12,16 +12,16 @@ export const colors = {
         hoverLightGradient: "group-hover:from-warm-green/20 group-hover:to-warm-green/10",
     },
     // Secondary - Trust & Social
-    skyBlue: {
-        base: "sky-blue",
-        text: "text-sky-blue",
-        textDark: "text-sky-blue-dark",
-        bg: "bg-sky-blue",
-        border: "border-sky-blue",
-        borderLight: "border-sky-blue/20",
-        gradient: "from-sky-blue to-sky-blue-light",
-        lightGradient: "from-sky-blue/10 to-sky-blue/5",
-        hoverLightGradient: "group-hover:from-sky-blue/20 group-hover:to-sky-blue/10",
+    tealBlue: {
+        base: "teal-blue",
+        text: "text-teal-blue",
+        textDark: "text-teal-blue-dark",
+        bg: "bg-teal-blue",
+        border: "border-teal-blue",
+        borderLight: "border-teal-blue/20",
+        gradient: "from-teal-blue to-teal-blue-light",
+        lightGradient: "from-teal-blue/10 to-teal-blue/5",
+        hoverLightGradient: "group-hover:from-teal-blue/20 group-hover:to-teal-blue/10",
     },
     // Action - Food & Hunger
     goldenOrange: {
@@ -48,16 +48,16 @@ export const colors = {
         hoverLightGradient: "group-hover:from-pharaoh-gold/20 group-hover:to-pharaoh-gold/10",
     },
     // Auxiliary
-    purple: {
-        base: "royal-purple",
-        text: "text-royal-purple",
-        textDark: "text-royal-purple",
-        bg: "bg-royal-purple",
-        border: "border-royal-purple",
-        borderLight: "border-royal-purple/20",
-        gradient: "from-royal-purple to-royal-purple-light",
-        lightGradient: "from-royal-purple/10 to-royal-purple/5",
-        hoverLightGradient: "group-hover:from-royal-purple/20 group-hover:to-royal-purple/10",
+    amber: {
+        base: "royal-amber",
+        text: "text-royal-amber",
+        textDark: "text-royal-amber",
+        bg: "bg-royal-amber",
+        border: "border-royal-amber",
+        borderLight: "border-royal-amber/20",
+        gradient: "from-royal-amber to-royal-amber-light",
+        lightGradient: "from-royal-amber/10 to-royal-amber/5",
+        hoverLightGradient: "group-hover:from-royal-amber/20 group-hover:to-royal-amber/10",
     },
     cyan: {
         base: "vibrant-cyan",
@@ -87,12 +87,12 @@ export const partnerTypeColors: Record<string, typeof colors.warmGreen> = {
     "عامة": colors.warmGreen,
     "صحية": colors.emerald,
     "غذائية": colors.goldenOrange,
-    "اجتماعية": colors.skyBlue,
-    "تنموية": colors.purple,
+    "اجتماعية": colors.tealBlue,
+    "تنموية": colors.amber,
 };
 
 export const storyCategoryColors: Record<string, typeof colors.warmGreen> = {
     "رعاية صحية": colors.warmGreen,
-    "دعم تعليمي": colors.purple,
+    "دعم تعليمي": colors.amber,
     "دعم غذائي": colors.goldenOrange,
 };

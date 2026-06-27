@@ -28,7 +28,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ currentStep, totalStep
 
                 {/* Active Progress Line */}
                 <div
-                    className="absolute top-[20px] right-0 h-[3px] bg-gradient-to-l from-primary to-sky-blue -z-10 rounded-full transition-all duration-500 ease-out"
+                    className="absolute top-[20px] right-0 h-[3px] bg-gradient-to-l from-primary to-teal-blue -z-10 rounded-full transition-all duration-500 ease-out"
                     style={{
                         width: `${((currentStep - 1) / (totalSteps - 1)) * 100}%`
                     }}

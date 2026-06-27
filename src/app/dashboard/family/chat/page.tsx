@@ -19,7 +19,7 @@ export default function ChatPage() {
             <FamilySidebar />
             
             {/* Mobile: 100% Full Screen Immersive Chat (No Scroll) */}
-            <div className="lg:hidden fixed inset-0 z-[100] bg-white flex flex-col overflow-hidden" dir="rtl">
+            <div className="lg:hidden fixed inset-0 z-[100] bg-card flex flex-col overflow-hidden" dir="rtl">
                 <ChatWindow 
                     className="w-full h-full rounded-none border-none shadow-none" 
                     onClose={() => router.push('/dashboard/family')}
@@ -27,10 +27,10 @@ export default function ChatPage() {
             </div>
 
             {/* Desktop: Standard Layout */}
-            <div className="hidden lg:flex flex-1 flex-col min-h-0 overflow-hidden bg-slate-50" dir="rtl">
+            <div className="hidden lg:flex flex-1 flex-col min-h-0 overflow-hidden bg-muted" dir="rtl">
                 <DashboardTopBar userType="family" />
                 <div className="flex-1 p-6 min-h-0 overflow-hidden flex flex-col">
-                    <ChatWindow className="w-full h-full rounded-2xl border border-slate-200 shadow-lg" />
+                    <ChatWindow className="w-full h-full rounded-2xl border border-border shadow-lg" />
                 </div>
             </div>
         </DashboardLayout>

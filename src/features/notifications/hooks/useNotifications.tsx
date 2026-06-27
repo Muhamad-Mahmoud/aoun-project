@@ -1,8 +1,26 @@
-import { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { HubConnectionBuilder, LogLevel, HubConnection } from "@microsoft/signalr";
 import { getMyNotifications, getUnreadCount, markAsRead, markAllAsRead } from "../api/notificationsApi";
 import { NotificationDto } from "../types";
+import { toast } from "sonner";
+import { BellRing, MessageSquare, CheckCircle2 } from "lucide-react";
+
+function playNotificationSound(isMessage: boolean) {
+    try {
+        if (typeof window === 'undefined') return;
+        
+        // We use actual high-quality, calm audio files for a premium feel
+        const soundFile = isMessage ? '/sounds/message.wav' : '/sounds/notification.wav';
+        const audio = new window.Audio(soundFile);
+        
+        // Play the sound gently
+        audio.volume = 0.6;
+        audio.play().catch(e => console.warn("Audio play prevented by browser:", e));
+    } catch (e) {
+        console.warn("Could not play sound", e);
+    }
+}
 
 export function useNotifications(userType: string) {
     const router = useRouter();
@@ -11,6 +29,12 @@ export function useNotifications(userType: string) {
     const [isOpen, setIsOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [connection, setConnection] = useState<HubConnection | null>(null);
+
+    useEffect(() => {
+        if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'default') {
+            Notification.requestPermission().catch(() => {});
+        }
+    }, []);
 
     const fetchUnreadCount = useCallback(async () => {
         try {
@@ -33,7 +57,6 @@ export function useNotifications(userType: string) {
         }
     }, []);
 
-    // Initial load and SignalR connection
     useEffect(() => {
         fetchUnreadCount();
         
@@ -60,6 +83,39 @@ export function useNotifications(userType: string) {
                 newConnection.on("ReceiveNotification", (notification: NotificationDto) => {
                     setNotifications(prev => [notification, ...prev]);
                     setUnreadCount(prev => prev + 1);
+                    
+                    const isMessage = (notification.title + " " + notification.body).toLowerCase().includes("رسالة") || (notification.title + " " + notification.body).toLowerCase().includes("رد");
+                    
+                    // Guaranteed real WAV sound (calm and premium)
+                    playNotificationSound(isMessage);
+                    
+                    toast(notification.title, {
+                        description: notification.body,
+                        position: "bottom-left",
+                        duration: 5000,
+                        icon: (
+                            <div className="w-9 h-9 rounded-xl bg-teal-50 flex items-center justify-center shrink-0 border border-teal-100 shadow-sm ml-3">
+                                {isMessage ? (
+                                    <MessageSquare className="w-4 h-4 text-teal-600" />
+                                ) : (
+                                    <BellRing className="w-4 h-4 text-teal-600" />
+                                )}
+                            </div>
+                        ),
+                    });
+
+                    if (typeof document !== 'undefined' && document.hidden && 'Notification' in window && Notification.permission === 'granted') {
+                        new Notification(notification.title, { body: notification.body, icon: '/favicon.ico' });
+                    }
+                    
+                    // Dispatch a global event so active chat windows can refresh immediately
+                    if (isMessage && notification.relatedRequestId) {
+                        if (typeof window !== 'undefined') {
+                            window.dispatchEvent(new CustomEvent('chatMessageReceived', { 
+                                detail: { requestId: notification.relatedRequestId } 
+                            }));
+                        }
+                    }
                 });
 
                 await newConnection.start();

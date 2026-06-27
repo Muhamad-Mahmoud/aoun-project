@@ -28,9 +28,9 @@ export function HeroSection() {
           {/* Content Column - 60% */}
           <div className="text-right space-y-6 lg:space-y-8 order-2 lg:order-1">
             {/* AI Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-sky-blue/10 border border-sky-blue/20 text-sky-blue-dark text-sm font-bold transition-all duration-700 hover:scale-105 cursor-default opacity-0 animate-fade-in-up">
-              <BrainCircuit className="w-4 h-4 text-sky-blue" />
-              <span className="bg-gradient-to-r from-sky-blue-dark to-sky-blue bg-clip-text text-transparent">مدعومة بالذكاء الاصطناعي</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-blue/10 border border-teal-blue/20 text-teal-blue-dark text-sm font-bold transition-all duration-700 hover:scale-105 cursor-default opacity-0 animate-fade-in-up">
+              <BrainCircuit className="w-4 h-4 text-teal-blue" />
+              <span className="bg-gradient-to-r from-teal-blue-dark to-teal-blue bg-clip-text text-transparent">مدعومة بالذكاء الاصطناعي</span>
             </div>
 
             {/* Main Headline - Enhanced Size & Typography */}
@@ -50,7 +50,7 @@ export function HeroSection() {
               
               {/* Primary CTA - Donate */}
               <Link href="/explore" className="w-full sm:w-auto">
-                <Button className="w-full sm:w-auto h-14 lg:h-16 text-base lg:text-[17px] font-semibold px-8 rounded-xl gap-3 text-white bg-gradient-to-l from-warm-green via-warm-green/90 to-sky-blue hover:from-warm-green-dark hover:via-warm-green hover:to-sky-blue-dark shadow-[0_8px_20px_hsla(var(--warm-green)/0.3)] hover:shadow-[0_8px_30px_hsla(var(--warm-green)/0.5)] transition-[background,box-shadow,transform] duration-300 hover:scale-[1.02] hover:-translate-y-1">
+                <Button className="w-full sm:w-auto h-14 lg:h-16 text-base lg:text-[17px] font-semibold px-8 rounded-xl gap-3 text-white bg-gradient-to-l from-warm-green via-warm-green/90 to-teal-blue hover:from-warm-green-dark hover:via-warm-green hover:to-teal-blue-dark shadow-[0_8px_20px_hsla(var(--warm-green)/0.3)] hover:shadow-[0_8px_30px_hsla(var(--warm-green)/0.5)] transition-[background,box-shadow,transform] duration-300 hover:scale-[1.02] hover:-translate-y-1">
                   تبرع وادعم الآن
                   <Heart className="w-5 h-5" />
                 </Button>
@@ -82,7 +82,7 @@ export function HeroSection() {
               </div>
 
               {/* Response Time - Enhanced */}
-              <div className={`group flex items-center gap-2 bg-white/80 backdrop-blur-sm border ${colors.skyBlue.borderLight} px-4 py-2.5 lg:px-5 lg:py-3 rounded-xl text-[13px] lg:text-[14px] font-medium ${colors.skyBlue.textDark} shadow-sm hover:-translate-y-0.5 transition-transform duration-250`}>
+              <div className={`group flex items-center gap-2 bg-white/80 backdrop-blur-sm border ${colors.tealBlue.borderLight} px-4 py-2.5 lg:px-5 lg:py-3 rounded-xl text-[13px] lg:text-[14px] font-medium ${colors.tealBlue.textDark} shadow-sm hover:-translate-y-0.5 transition-transform duration-250`}>
                 <Clock className="w-4 h-4 lg:w-5 lg:h-5" />
                 <span>استجابة خلال 24 ساعة</span>
               </div>
@@ -113,9 +113,9 @@ export function HeroSection() {
                   </div>
 
                   {/* Floating Stats - Enhanced */}
-                  <div className="absolute -top-4 -right-4 lg:-top-6 lg:-right-6 bg-white border-2 border-sky-blue/20 rounded-xl px-3 py-2 lg:px-4 lg:py-2.5 shadow-lg scale-90 lg:scale-100">
+                  <div className="absolute -top-4 -right-4 lg:-top-6 lg:-right-6 bg-white border-2 border-teal-blue/20 rounded-xl px-3 py-2 lg:px-4 lg:py-2.5 shadow-lg scale-90 lg:scale-100">
                     <div className="flex items-center gap-2">
-                      <MapPin className="w-4 h-4 lg:w-5 lg:h-5 text-sky-blue" />
+                      <MapPin className="w-4 h-4 lg:w-5 lg:h-5 text-teal-blue" />
                       <span className="text-xs lg:text-sm font-semibold text-foreground">27 محافظة</span>
                     </div>
                   </div>
@@ -154,15 +154,15 @@ export function HeroSection() {
             icon={Building2}
             number="٨٥+"
             label="جهة شريكة"
-            colorClass="text-sky-blue"
-            bgClass="bg-sky-blue/10"
+            colorClass="text-teal-blue"
+            bgClass="bg-teal-blue/10"
           />
           <AnimatedStatCard
             icon={MapPin}
             number="٢٧"
             label="محافظة مصرية"
-            colorClass="text-sky-blue"
-            bgClass="bg-sky-blue/10"
+            colorClass="text-teal-blue"
+            bgClass="bg-teal-blue/10"
           />
           <AnimatedStatCard
             icon={CheckCircle}

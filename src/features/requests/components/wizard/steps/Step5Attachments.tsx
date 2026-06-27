@@ -29,17 +29,17 @@ export function Step5Attachments({ uploadedFiles, onFileUpload, onRemoveFile, se
         <div className="space-y-5">
             {/* Header */}
             <div>
-                <h3 className="text-[15px] font-black text-slate-800 flex items-center gap-2 mb-1">
+                <h3 className="text-[15px] font-black text-foreground flex items-center gap-2 mb-1">
                     <span className="w-1 h-5 bg-warm-green rounded-full" />
                     المستندات المطلوبة
                 </h3>
-                <p className="text-slate-500 text-sm pr-3 font-semibold">
+                <p className="text-muted-foreground text-sm pr-3 font-semibold">
                     {getHintMessage()}
                 </p>
             </div>
 
             {/* Upload Area */}
-            <div className="relative border-2 border-dashed border-slate-200 bg-slate-50/50 rounded-2xl p-8 text-center hover:border-warm-green/50 hover:bg-warm-green/5 transition-all duration-300 group overflow-hidden cursor-pointer">
+            <div className="relative border-2 border-dashed border-border bg-muted/50 rounded-2xl p-8 text-center hover:border-warm-green/50 hover:bg-warm-green/5 transition-all duration-300 group overflow-hidden cursor-pointer">
                 <Input
                     type="file"
                     multiple
@@ -48,12 +48,12 @@ export function Step5Attachments({ uploadedFiles, onFileUpload, onRemoveFile, se
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                 />
                 <div className="flex flex-col items-center gap-3 relative z-0">
-                    <div className="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center group-hover:scale-110 group-hover:shadow-md transition-all duration-300">
+                    <div className="w-14 h-14 rounded-2xl bg-card shadow-sm flex items-center justify-center group-hover:scale-110 group-hover:shadow-md transition-all duration-300">
                         <UploadCloud className="w-7 h-7 text-warm-green" />
                     </div>
                     <div>
-                        <p className="text-[15px] font-bold text-slate-800 mb-0.5">اضغط هنا أو اسحب الملفات</p>
-                        <p className="text-sm text-slate-400">صور وـPDF · حد أقصى 5 MB للملف</p>
+                        <p className="text-[15px] font-bold text-foreground mb-0.5">اضغط هنا أو اسحب الملفات</p>
+                        <p className="text-sm text-muted-foreground">صور وـPDF · حد أقصى 5 MB للملف</p>
                     </div>
                 </div>
             </div>
@@ -61,7 +61,7 @@ export function Step5Attachments({ uploadedFiles, onFileUpload, onRemoveFile, se
             {/* Uploaded Files */}
             {uploadedFiles.length > 0 && (
                 <div className="space-y-3">
-                    <p className="text-sm font-bold text-slate-700">
+                    <p className="text-sm font-bold text-foreground">
                         الملفات المرفقة
                         <span className="mr-2 bg-warm-green/10 text-warm-green px-2 py-0.5 rounded-full text-xs font-bold">{uploadedFiles.length}</span>
                     </p>
@@ -69,9 +69,9 @@ export function Step5Attachments({ uploadedFiles, onFileUpload, onRemoveFile, se
                         {uploadedFiles.map((file, idx) => (
                             <div
                                 key={idx}
-                                className="flex items-center gap-3 p-3 bg-white rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition-all group"
+                                className="flex items-center gap-3 p-3 bg-card rounded-xl border border-border shadow-sm hover:shadow-md transition-all group"
                             >
-                                <div className="w-9 h-9 rounded-lg bg-slate-50 flex items-center justify-center shrink-0">
+                                <div className="w-9 h-9 rounded-lg bg-muted flex items-center justify-center shrink-0">
                                     {file.type.startsWith("image/") ? (
                                         <ImageIcon className="w-4 h-4 text-warm-green" />
                                     ) : (
@@ -79,8 +79,8 @@ export function Step5Attachments({ uploadedFiles, onFileUpload, onRemoveFile, se
                                     )}
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-bold text-slate-700 truncate">{file.name}</p>
-                                    <p className="text-xs text-slate-400">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                                    <p className="text-sm font-bold text-foreground truncate">{file.name}</p>
+                                    <p className="text-xs text-muted-foreground">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
                                 </div>
                                 <Button
                                     type="button"
@@ -98,13 +98,13 @@ export function Step5Attachments({ uploadedFiles, onFileUpload, onRemoveFile, se
             )}
 
             {/* Disclaimer */}
-            <div className="flex gap-3 p-4 bg-amber-50 rounded-xl border border-amber-100">
+            <div className="flex gap-3 p-4 bg-primary/10 rounded-xl border border-primary/20">
                 <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center shrink-0 mt-0.5">
                     <AlertCircle className="w-4 h-4 text-amber-600" />
                 </div>
                 <div className="text-sm text-amber-800">
                     <p className="font-bold mb-0.5">إقرار بصحة البيانات</p>
-                    <p className="leading-relaxed text-amber-700">
+                    <p className="leading-relaxed text-primary">
                         بإرسالك لهذا الطلب، أنت تقر بصحة جميع البيانات والمستندات. سنتصل بك قريباً.
                     </p>
                 </div>

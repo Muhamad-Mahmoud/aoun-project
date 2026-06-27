@@ -84,7 +84,7 @@ export function DonationModal({ campaign, children }: DonationModalProps) {
                     </div>
                 )}
 
-                <div className="bg-emerald-50 border border-emerald-200 p-4 rounded-xl mb-6">
+                <div className="bg-primary/10 border border-emerald-200 p-4 rounded-xl mb-6">
                     <h4 className="text-sm font-bold text-emerald-800 mb-2">وسائل وطرق الدفع للجمعية</h4>
                     <p className="text-sm font-medium text-amber-900 whitespace-pre-wrap leading-relaxed">
                         {campaign.paymentInstructions || "لم تقم الجمعية بتحديد وسائل دفع إلكترونية حتى الآن. سيتم التواصل معك لتنسيق عملية التبرع واستلام المبلغ."}

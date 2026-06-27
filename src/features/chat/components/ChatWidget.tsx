@@ -75,7 +75,7 @@ export function ChatWidget() {
                     role="dialog"
                     aria-modal="true"
                     aria-label="نافذة المحادثة"
-                    className="fixed bottom-[88px] sm:bottom-[104px] left-6 w-[92vw] sm:w-[420px] h-[min(600px,80vh)] max-h-[80vh] bg-background/95 backdrop-blur-xl rounded-[24px] sm:rounded-[32px] shadow-[0_25px_60px_rgba(0,0,0,0.2)] border border-white/20 overflow-hidden flex flex-col pointer-events-auto"
+                    className="fixed bottom-[88px] sm:bottom-[104px] left-6 w-[92vw] sm:w-[420px] h-[min(600px,80vh)] max-h-[80vh] bg-background/95 backdrop-blur-xl rounded-[24px] sm:rounded-[32px] shadow-[0_25px_60px_rgba(0,0,0,0.2)] border border-border/20 overflow-hidden flex flex-col pointer-events-auto"
                     style={{ zIndex: 9999 }}
                     dir="rtl"
                     data-widget="global-chat-window"

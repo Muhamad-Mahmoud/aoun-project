@@ -14,7 +14,7 @@ interface Step4FinancialProps {
     hasOtherCommitments: boolean;
 }
 
-const inputCls = "h-11 rounded-xl border border-slate-200 bg-white hover:border-slate-300 focus:ring-2 focus:ring-warm-green/15 focus:border-warm-green/50 shadow-sm transition-all px-4 text-[14px] font-medium placeholder:text-slate-400";
+const inputCls = "h-11 rounded-xl border border-border bg-card hover:border-slate-300 focus:ring-2 focus:ring-warm-green/15 focus:border-warm-green/50 shadow-sm transition-all px-4 text-[14px] font-medium placeholder:text-muted-foreground";
 
 export function Step4Financial({ control, registeredSocialSupport, housingType, hasOtherCommitments }: Step4FinancialProps) {
     return (
@@ -28,13 +28,13 @@ export function Step4Financial({ control, registeredSocialSupport, housingType, 
                         name="monthlyExpenses"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel className="text-[13px] font-bold text-slate-700">
+                                <FormLabel className="text-[13px] font-bold text-foreground">
                                     إجمالي المصاريف الشهرية <span className="text-rose-500">*</span>
                                 </FormLabel>
                                 <FormControl>
                                     <div className="relative">
                                         <Input type="number" placeholder="مثال: 3500" className={inputCls} {...field} value={field.value ?? ""} onChange={e => field.onChange(e.target.valueAsNumber || 0)} />
-                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">جنيه</span>
+                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-muted-foreground bg-muted/50 px-1.5 py-0.5 rounded">جنيه</span>
                                     </div>
                                 </FormControl>
                                 <FormMessage className="text-rose-500 text-xs" />
@@ -46,13 +46,13 @@ export function Step4Financial({ control, registeredSocialSupport, housingType, 
                         name="utilitiesMonthly"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel className="text-[13px] font-bold text-slate-700">
+                                <FormLabel className="text-[13px] font-bold text-foreground">
                                     فواتير الخدمات الشهرية <span className="text-rose-500">*</span>
                                 </FormLabel>
                                 <FormControl>
                                     <div className="relative">
                                         <Input type="number" placeholder="مثال: 450" className={inputCls} {...field} value={field.value ?? ""} onChange={e => field.onChange(e.target.valueAsNumber || 0)} />
-                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">جنيه</span>
+                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-muted-foreground bg-muted/50 px-1.5 py-0.5 rounded">جنيه</span>
                                     </div>
                                 </FormControl>
                                 <FormMessage className="text-rose-500 text-xs" />
@@ -69,7 +69,7 @@ export function Step4Financial({ control, registeredSocialSupport, housingType, 
                     name="housingType"
                     render={({ field }) => (
                         <FormItem className="mb-4">
-                            <FormLabel className="text-[13px] font-bold text-slate-700 mb-2 block">
+                            <FormLabel className="text-[13px] font-bold text-foreground mb-2 block">
                                 نوع السكن <span className="text-rose-500">*</span>
                             </FormLabel>
                             <FormControl>
@@ -89,7 +89,7 @@ export function Step4Financial({ control, registeredSocialSupport, housingType, 
                                                     "cursor-pointer py-2 px-4 rounded-lg border-2 font-bold text-[13px] transition-all duration-200 select-none",
                                                     isActive
                                                         ? "bg-warm-green/10 border-warm-green text-warm-green"
-                                                        : "bg-white border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50"
+                                                        : "bg-card border-border text-muted-foreground hover:border-slate-300 hover:bg-muted"
                                                 )}
                                             >
                                                 {opt.label}
@@ -109,13 +109,13 @@ export function Step4Financial({ control, registeredSocialSupport, housingType, 
                         name="rentMonthly"
                         render={({ field }) => (
                             <FormItem className="animate-in fade-in slide-in-from-top-2 duration-300">
-                                <FormLabel className="text-[13px] font-bold text-slate-700">
+                                <FormLabel className="text-[13px] font-bold text-foreground">
                                     قيمة الإيجار الشهري <span className="text-rose-500">*</span>
                                 </FormLabel>
                                 <FormControl>
                                     <div className="relative max-w-xs">
                                         <Input type="number" placeholder="أدخل قيمة الإيجار" className={inputCls} {...field} value={field.value ?? ""} onChange={e => field.onChange(e.target.valueAsNumber || 0)} />
-                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">جنيه</span>
+                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-muted-foreground bg-muted/50 px-1.5 py-0.5 rounded">جنيه</span>
                                     </div>
                                 </FormControl>
                                 <FormMessage className="text-rose-500 text-xs" />
@@ -129,16 +129,16 @@ export function Step4Financial({ control, registeredSocialSupport, housingType, 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
 
                 {/* Social Support Block */}
-                <SectionCard icon={Building2} iconColor="text-sky-500" iconBg="bg-sky-500/10">
+                <SectionCard icon={Building2} iconColor="text-teal-500" iconBg="bg-teal-500/10">
                     <div className="flex items-center justify-between mb-4">
-                        <span className="text-[14px] font-black text-slate-800">الضمان الاجتماعي</span>
+                        <span className="text-[14px] font-black text-foreground">الضمان الاجتماعي</span>
                         <FormField
                             control={control}
                             name="registeredSocialSupport"
                             render={({ field }) => (
                                 <FormItem className="flex items-center m-0 space-y-0">
                                     <FormControl>
-                                        <Switch checked={field.value} onCheckedChange={field.onChange} className="data-[state=checked]:bg-sky-500" />
+                                        <Switch checked={field.value} onCheckedChange={field.onChange} className="data-[state=checked]:bg-teal-500" />
                                     </FormControl>
                                 </FormItem>
                             )}
@@ -150,11 +150,11 @@ export function Step4Financial({ control, registeredSocialSupport, housingType, 
                             name="socialSupportAmount"
                             render={({ field }) => (
                                 <FormItem className="animate-in fade-in zoom-in-95">
-                                    <FormLabel className="text-[12px] font-bold text-slate-600">القيمة الشهرية للدعم</FormLabel>
+                                    <FormLabel className="text-[12px] font-bold text-muted-foreground">القيمة الشهرية للدعم</FormLabel>
                                     <FormControl>
                                         <div className="relative">
-                                            <Input type="number" placeholder="0" className={cn(inputCls, "focus:ring-sky-500/10 focus:border-sky-500/40")} {...field} value={field.value ?? ""} onChange={e => field.onChange(e.target.valueAsNumber || null)} />
-                                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">جنيه</span>
+                                            <Input type="number" placeholder="0" className={cn(inputCls, "focus:ring-teal-500/10 focus:border-teal-500/40")} {...field} value={field.value ?? ""} onChange={e => field.onChange(e.target.valueAsNumber || null)} />
+                                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-muted-foreground bg-muted/50 px-1.5 py-0.5 rounded">جنيه</span>
                                         </div>
                                     </FormControl>
                                     <FormMessage className="text-xs text-rose-500" />
@@ -165,16 +165,16 @@ export function Step4Financial({ control, registeredSocialSupport, housingType, 
                 </SectionCard>
 
                 {/* Commitments Block */}
-                <SectionCard icon={Receipt} iconColor="text-purple-500" iconBg="bg-purple-500/10">
+                <SectionCard icon={Receipt} iconColor="text-primary" iconBg="bg-primary/100/10">
                     <div className="flex items-center justify-between mb-4">
-                        <span className="text-[14px] font-black text-slate-800">التزامات وقروض</span>
+                        <span className="text-[14px] font-black text-foreground">التزامات وقروض</span>
                         <FormField
                             control={control}
                             name="hasOtherCommitments"
                             render={({ field }) => (
                                 <FormItem className="flex items-center m-0 space-y-0">
                                     <FormControl>
-                                        <Switch checked={field.value} onCheckedChange={field.onChange} className="data-[state=checked]:bg-purple-500" />
+                                        <Switch checked={field.value} onCheckedChange={field.onChange} className="data-[state=checked]:bg-primary/100" />
                                     </FormControl>
                                 </FormItem>
                             )}
@@ -187,9 +187,9 @@ export function Step4Financial({ control, registeredSocialSupport, housingType, 
                                 name="otherCommitmentsType"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel className="text-[12px] font-bold text-slate-600">نوع الالتزام</FormLabel>
+                                        <FormLabel className="text-[12px] font-bold text-muted-foreground">نوع الالتزام</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="قرض، أقساط..." className={cn(inputCls, "focus:ring-purple-500/10 focus:border-purple-500/40")} {...field} value={field.value ?? ""} />
+                                            <Input placeholder="قرض، أقساط..." className={cn(inputCls, "focus:ring-amber-500/10 focus:border-amber-500/40")} {...field} value={field.value ?? ""} />
                                         </FormControl>
                                         <FormMessage className="text-xs text-rose-500" />
                                     </FormItem>
@@ -200,11 +200,11 @@ export function Step4Financial({ control, registeredSocialSupport, housingType, 
                                 name="otherCommitmentsAmount"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel className="text-[12px] font-bold text-slate-600">القيمة الشهرية</FormLabel>
+                                        <FormLabel className="text-[12px] font-bold text-muted-foreground">القيمة الشهرية</FormLabel>
                                         <FormControl>
                                             <div className="relative">
-                                                <Input type="number" placeholder="0" className={cn(inputCls, "focus:ring-purple-500/10 focus:border-purple-500/40 pl-10")} {...field} value={field.value ?? ""} onChange={e => field.onChange(e.target.valueAsNumber || null)} />
-                                                <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400">جنيه</span>
+                                                <Input type="number" placeholder="0" className={cn(inputCls, "focus:ring-amber-500/10 focus:border-amber-500/40 pl-10")} {...field} value={field.value ?? ""} onChange={e => field.onChange(e.target.valueAsNumber || null)} />
+                                                <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[11px] font-bold text-muted-foreground">جنيه</span>
                                             </div>
                                         </FormControl>
                                         <FormMessage className="text-xs text-rose-500" />

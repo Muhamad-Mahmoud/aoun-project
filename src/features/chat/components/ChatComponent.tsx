@@ -108,31 +108,31 @@ export function ChatComponent({ assistanceRequestId, isStandalone = false, other
     }, [messages]);
 
     return (
-        <div className={`flex flex-col bg-slate-50/50 ${isStandalone ? 'h-full rounded-none border-none' : 'h-[600px] rounded-2xl border border-slate-200 shadow-sm'} overflow-hidden relative`}>
+        <div className={`flex flex-col bg-muted/50 ${isStandalone ? 'h-full rounded-none border-none' : 'h-[600px] rounded-2xl border border-border shadow-sm'} overflow-hidden relative`}>
             {/* Header */}
             {(!isStandalone || otherPartyName || onBack) && (
-                <div className={`shrink-0 px-5 py-4 bg-white/95 backdrop-blur-md flex items-center justify-between border-b border-slate-100 z-10 ${isStandalone ? 'rounded-t-none' : 'rounded-t-2xl'}`}>
+                <div className={`shrink-0 px-5 py-4 bg-card/95 backdrop-blur-md flex items-center justify-between border-b border-border z-10 ${isStandalone ? 'rounded-t-none' : 'rounded-t-2xl'}`}>
                     <div className="flex items-center gap-3">
                         {onBack && (
                             <button 
                                 onClick={onBack} 
                                 title="العودة للقائمة"
-                                className="lg:hidden w-10 h-10 -mr-2 rounded-full flex items-center justify-center text-slate-600 hover:text-primary hover:bg-slate-100 transition-colors"
+                                className="lg:hidden w-10 h-10 -mr-2 rounded-full flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-muted/50 transition-colors"
                             >
                                 <ArrowRight className="w-6 h-6" />
                             </button>
                         )}
-                        <div className="w-11 h-11 bg-slate-100 border border-slate-200 rounded-full flex items-center justify-center shrink-0 overflow-hidden shadow-sm">
-                            <UserIcon className="w-6 h-6 text-slate-400" />
+                        <div className="w-11 h-11 bg-muted/50 border border-border rounded-full flex items-center justify-center shrink-0 overflow-hidden shadow-sm">
+                            <UserIcon className="w-6 h-6 text-muted-foreground" />
                         </div>
                         <div>
-                            <h3 className="font-bold text-slate-800 text-sm md:text-base">
+                            <h3 className="font-bold text-foreground text-sm md:text-base">
                                 {otherPartyName || "التواصل المباشر"}
                             </h3>
                             {otherPartyName && (
                                 <div className="flex items-center gap-1.5 mt-0.5">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                                    <p className="text-xs font-medium text-slate-500">متصل الآن</p>
+                                    <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                                    <p className="text-xs font-medium text-muted-foreground">متصل الآن</p>
                                 </div>
                             )}
                         </div>
@@ -147,16 +147,16 @@ export function ChatComponent({ assistanceRequestId, isStandalone = false, other
             >
                 {isLoading ? (
                     <div className="flex items-center justify-center h-full">
-                        <Loader2 className="w-8 h-8 animate-spin text-secondary opacity-80" />
+                        <Loader2 className="w-8 h-8 animate-spin text-primary opacity-80" />
                     </div>
                 ) : messages.length === 0 ? (
                     <div className="flex flex-col items-center justify-center h-full text-center space-y-4">
-                        <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-sm border border-slate-100 mb-2">
+                        <div className="w-20 h-20 bg-card rounded-full flex items-center justify-center shadow-sm border border-border mb-2">
                             <UserIcon className="w-10 h-10 text-slate-300" />
                         </div>
-                        <div className="bg-white px-6 py-4 rounded-2xl border border-slate-100 shadow-sm max-w-sm">
-                            <p className="text-slate-800 font-bold mb-1">لا توجد رسائل حتى الآن</p>
-                            <p className="text-sm text-slate-500 leading-relaxed">
+                        <div className="bg-card px-6 py-4 rounded-2xl border border-border shadow-sm max-w-sm">
+                            <p className="text-foreground font-bold mb-1">لا توجد رسائل حتى الآن</p>
+                            <p className="text-sm text-muted-foreground leading-relaxed">
                                 {user?.role === "Association" 
                                     ? "ابدأ المحادثة مع الأسرة للحصول على تفاصيل إضافية عن الطلب."
                                     : "سيقوم ممثل الجمعية بالتواصل معك قريباً."}
@@ -170,7 +170,7 @@ export function ChatComponent({ assistanceRequestId, isStandalone = false, other
                             <div key={groupIdx} className="space-y-3">
                                 {/* Date Separator */}
                                 <div className="flex justify-center my-6">
-                                    <div className="bg-white/80 backdrop-blur-md text-slate-500 font-medium text-xs px-4 py-1.5 rounded-full shadow-sm border border-slate-100/60">
+                                    <div className="bg-card/80 backdrop-blur-md text-muted-foreground font-medium text-xs px-4 py-1.5 rounded-full shadow-sm border border-border/60">
                                         {group.date}
                                     </div>
                                 </div>
@@ -189,14 +189,14 @@ export function ChatComponent({ assistanceRequestId, isStandalone = false, other
                                             className={`flex flex-col ${isMe ? 'items-start' : 'items-end'} ${isFirstInBlock ? 'mt-3' : 'mt-1'}`}
                                         >
                                             {!isMe && isFirstInBlock && (
-                                                <span className="text-[11px] font-bold text-slate-500 mb-1 px-1">
+                                                <span className="text-[11px] font-bold text-muted-foreground mb-1 px-1">
                                                     {msg.senderName}
                                                 </span>
                                             )}
                                             <div className={`relative px-4 pt-2.5 pb-2 max-w-[85%] md:max-w-[70%] text-[14.5px] leading-relaxed shadow-sm transition-all ${
                                                 isMe 
-                                                    ? 'bg-secondary text-white' 
-                                                    : 'bg-white text-slate-800 border border-slate-100'
+                                                    ? 'bg-primary text-white' 
+                                                    : 'bg-card text-foreground border border-border'
                                             } ${
                                                 isMe
                                                     ? isFirstInBlock ? 'rounded-2xl rounded-tr-sm' : 'rounded-2xl'
@@ -207,7 +207,7 @@ export function ChatComponent({ assistanceRequestId, isStandalone = false, other
                                                         {msg.message}
                                                     </span>
                                                     <div className={`flex items-center gap-1 shrink-0 ${isMe ? '-mr-1' : ''} translate-y-[2px]`}>
-                                                        <span className={`text-[10px] leading-none ${isMe ? 'text-white/80' : 'text-slate-400'}`}>
+                                                        <span className={`text-[10px] leading-none ${isMe ? 'text-white/80' : 'text-muted-foreground'}`}>
                                                             {formatTime(msg.createdAt)}
                                                         </span>
                                                         {isMe && (
@@ -236,12 +236,12 @@ export function ChatComponent({ assistanceRequestId, isStandalone = false, other
                                     exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.1 } }}
                                     className="flex flex-col items-start mt-2"
                                 >
-                                    <div className="bg-white text-slate-800 border border-slate-100 rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm flex items-center gap-1.5 h-10">
+                                    <div className="bg-card text-foreground border border-border rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm flex items-center gap-1.5 h-10">
                                         <span className="w-1.5 h-1.5 rounded-full bg-slate-400 animate-bounce" style={{ animationDelay: '0ms' }}></span>
                                         <span className="w-1.5 h-1.5 rounded-full bg-slate-400 animate-bounce" style={{ animationDelay: '150ms' }}></span>
                                         <span className="w-1.5 h-1.5 rounded-full bg-slate-400 animate-bounce" style={{ animationDelay: '300ms' }}></span>
                                     </div>
-                                    <span className="text-[10px] text-slate-400 mt-1 mr-1">
+                                    <span className="text-[10px] text-muted-foreground mt-1 mr-1">
                                         {otherPartyName ? `${otherPartyName} يكتب...` : 'يكتب الآن...'}
                                     </span>
                                 </motion.div>
@@ -265,11 +265,11 @@ export function ChatComponent({ assistanceRequestId, isStandalone = false, other
                         <Button 
                             onClick={scrollToBottom}
                             size="icon"
-                            className="w-10 h-10 rounded-full bg-white text-slate-600 shadow-[0_4px_16px_rgb(0,0,0,0.12)] border border-slate-100 hover:bg-slate-50 relative group transition-transform hover:-translate-y-0.5"
+                            className="w-10 h-10 rounded-full bg-card text-muted-foreground shadow-[0_4px_16px_rgb(0,0,0,0.12)] border border-border hover:bg-muted relative group transition-transform hover:-translate-y-0.5"
                         >
-                            <ChevronDown className="w-5 h-5 text-slate-500 group-hover:text-slate-800 transition-colors" />
+                            <ChevronDown className="w-5 h-5 text-muted-foreground group-hover:text-foreground transition-colors" />
                             {unreadScrollCount > 0 && (
-                                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-secondary text-[10px] font-bold text-white shadow-sm ring-2 ring-white">
+                                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white shadow-sm ring-2 ring-white">
                                     {unreadScrollCount > 99 ? '99+' : unreadScrollCount}
                                 </span>
                             )}
@@ -279,12 +279,12 @@ export function ChatComponent({ assistanceRequestId, isStandalone = false, other
             </AnimatePresence>
 
             {/* Input Area */}
-            <div className="shrink-0 p-4 bg-white border-t border-slate-100/80 flex items-center gap-3 z-10 shadow-[0_-4px_20px_rgb(0,0,0,0.02)]">
+            <div className="shrink-0 p-4 bg-card border-t border-border/80 flex items-center gap-3 z-10 shadow-[0_-4px_20px_rgb(0,0,0,0.02)]">
                 <Button 
                     type="button" 
                     variant="ghost" 
                     size="icon" 
-                    className="text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-xl shrink-0 w-11 h-11"
+                    className="text-muted-foreground hover:text-muted-foreground hover:bg-muted rounded-xl shrink-0 w-11 h-11"
                     disabled={isSending || isLoading || (messages.length === 0 && user?.role === "Family")}
                 >
                     <Paperclip className="w-5 h-5" />
@@ -300,13 +300,13 @@ export function ChatComponent({ assistanceRequestId, isStandalone = false, other
                                 ? "في انتظار رسالة من الجمعية لفتح المحادثة..."
                                 : "اكتب رسالتك هنا..."
                         }
-                        className="flex-1 h-11 px-4 text-[14.5px] bg-slate-50/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary focus:bg-white text-slate-800 disabled:opacity-50 disabled:bg-slate-100 transition-all placeholder:text-slate-400"
+                        className="flex-1 h-11 px-4 text-[14.5px] bg-muted/50 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary focus:bg-card text-foreground disabled:opacity-50 disabled:bg-muted/50 transition-all placeholder:text-muted-foreground"
                         disabled={isSending || isLoading || (messages.length === 0 && user?.role === "Family")}
                     />
                     <Button 
                         type="submit" 
                         disabled={!newMessage.trim() || isSending || isLoading || (messages.length === 0 && user?.role === "Family")}
-                        className="w-11 h-11 p-0 rounded-xl bg-secondary hover:bg-secondary/90 shrink-0 text-white shadow-md shadow-secondary/20 transition-transform active:scale-95 disabled:shadow-none"
+                        className="w-11 h-11 p-0 rounded-xl bg-primary hover:bg-primary/90 shrink-0 text-white shadow-md shadow-secondary/20 transition-transform active:scale-95 disabled:shadow-none"
                     >
                         {isSending ? (
                             <Loader2 className="w-5 h-5 animate-spin" />

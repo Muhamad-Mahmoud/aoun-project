@@ -164,31 +164,31 @@
         --popover: var(--warm-white);
         --popover-foreground: var(--text-primary);
 
-        /* Primary = Warm Green (Brand Primary) */
-        --primary: var(--warm-green);
+        /* Primary = Aoun Brand Teal (Trust, Charity) */
+        --primary: 160 84% 39%;
         --primary-foreground: 0 0% 100%;
 
-        /* Secondary = Golden Orange (Brand Secondary) */
-        --secondary: var(--golden-orange);
+        /* Secondary = Warm Amber (Growth, Action) */
+        --secondary: 38 92% 50%;
         --secondary-foreground: 0 0% 100%;
 
-        /* Muted = Warm Beige (Subtle Backgrounds) */
-        --muted: var(--warm-beige);
-        --muted-foreground: var(--text-secondary);
+        /* Muted = Slate 50 (Subtle Backgrounds) */
+        --muted: 210 40% 96.1%;
+        --muted-foreground: 215.4 16.3% 46.9%;
 
-        /* Accent = Golden Orange (Call-to-Action) */
-        --accent: var(--golden-orange);
-        --accent-foreground: var(--text-primary);
+        /* Accent = Amber-500 (Warmth / Call-to-Action) */
+        --accent: 38 92% 50%;
+        --accent-foreground: 0 0% 100%;
 
         /* Destructive = Error Red */
         --destructive: var(--error);
         --destructive-foreground: var(--error-foreground);
 
         /* UI Elements */
-        --border: var(--border-light);
-        --input: var(--border-light);
-        --ring: var(--warm-green);
-        --radius: 0.5rem;
+        --border: 214.3 31.8% 91.4%;
+        --input: 214.3 31.8% 91.4%;
+        --ring: 160 84% 39%;
+        --radius: 0.75rem;
 
         /* --- CHART COLORS (Data Visualization) --- */
         --chart-1: 160 84% 39%;

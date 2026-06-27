@@ -39,12 +39,12 @@ import { RequestCategory, WizardStep } from "./wizard/types";
 
 const categories: RequestCategory[] = [
     { value: "Financial", label: "مساعدة مالية", icon: Coins, color: "text-blue-500", bg: "bg-blue-500/10", border: "border-blue-500/30" },
-    { value: "Medical", label: "رعاية صحية", icon: Stethoscope, color: "text-emerald-500", bg: "bg-emerald-500/10", border: "border-emerald-500/30" },
+    { value: "Medical", label: "رعاية صحية", icon: Stethoscope, color: "text-primary", bg: "bg-primary/10", border: "border-emerald-500/30" },
     { value: "Food", label: "دعم غذائي", icon: UtensilsCrossed, color: "text-orange-500", bg: "bg-orange-500/10", border: "border-orange-500/30" },
-    { value: "Housing", label: "سكن وإيواء", icon: Home, color: "text-sky-500", bg: "bg-sky-500/10", border: "border-sky-500/30" },
-    { value: "Education", label: "تعليم", icon: GraduationCap, color: "text-purple-500", bg: "bg-purple-500/10", border: "border-purple-500/30" },
+    { value: "Housing", label: "سكن وإيواء", icon: Home, color: "text-teal-500", bg: "bg-teal-500/10", border: "border-teal-500/30" },
+    { value: "Education", label: "تعليم", icon: GraduationCap, color: "text-primary", bg: "bg-primary/100/10", border: "border-amber-500/30" },
     { value: "Utilities", label: "فواتير وخدمات", icon: CreditCard, color: "text-red-500", bg: "bg-red-500/10", border: "border-red-500/30" },
-    { value: "Other", label: "أخرى", icon: HelpCircle, color: "text-gray-500", bg: "bg-gray-500/10", border: "border-gray-500/30" },
+    { value: "Other", label: "أخرى", icon: HelpCircle, color: "text-muted-foreground", bg: "bg-muted", border: "border-border" },
 ];
 
 const wizardSteps: WizardStep[] = [
@@ -158,16 +158,16 @@ export function RequestWizard({ onSubmit }: { onSubmit: (data: any) => void }) {
     const progressPercentage = ((currentStep + 1) / TOTAL_STEPS) * 100;
 
     return (
-        <Card className="w-full max-w-4xl mx-auto shadow-[0_8px_40px_rgba(0,0,0,0.07)] border border-slate-100 rounded-2xl overflow-hidden mb-10 bg-white" dir="rtl">
+        <Card className="w-full max-w-4xl mx-auto shadow-[0_8px_40px_rgba(0,0,0,0.07)] border border-border rounded-2xl overflow-hidden mb-10 bg-card" dir="rtl">
 
             {/* ── Header ── */}
-            <CardHeader className="bg-white border-b border-slate-100 px-5 sm:px-7 pt-5 pb-4 gap-0">
+            <CardHeader className="bg-card border-b border-border px-5 sm:px-7 pt-5 pb-4 gap-0">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     {/* Left: step name + breadcrumbs */}
                     <div>
                         <div className="flex items-baseline gap-2 mb-1.5">
-                            <span className="text-[15px] font-black text-slate-900">{wizardSteps[currentStep].label}</span>
-                            <span className="text-xs font-bold text-slate-400">الخطوة {currentStep + 1} / {TOTAL_STEPS}</span>
+                            <span className="text-[15px] font-black text-foreground">{wizardSteps[currentStep].label}</span>
+                            <span className="text-xs font-bold text-muted-foreground">الخطوة {currentStep + 1} / {TOTAL_STEPS}</span>
                         </div>
 
                         {/* Breadcrumb dots */}
@@ -180,16 +180,16 @@ export function RequestWizard({ onSubmit }: { onSubmit: (data: any) => void }) {
                                         <span className={cn(
                                             "inline-flex items-center justify-center rounded-full transition-all duration-300",
                                             isActive
-                                                ? "w-5 h-5 bg-warm-green text-white"
+                                                ? "w-5 h-5 bg-primary text-primary-foreground"
                                                 : isPast
-                                                    ? "w-4 h-4 bg-slate-200 text-slate-500"
-                                                    : "w-3 h-3 bg-slate-100"
+                                                    ? "w-4 h-4 bg-muted text-muted-foreground"
+                                                    : "w-3 h-3 bg-muted/50"
                                         )}>
                                             {isActive && <span className="text-[9px] font-black">{step.num}</span>}
                                             {isPast && <Check className="w-2.5 h-2.5" strokeWidth={3} />}
                                         </span>
                                         {idx < TOTAL_STEPS - 1 && (
-                                            <span className={cn("w-4 h-px transition-colors", isPast ? "bg-slate-300" : "bg-slate-100")} />
+                                            <span className={cn("w-4 h-px transition-colors", isPast ? "bg-muted-foreground/30" : "bg-muted")} />
                                         )}
                                     </div>
                                 );
@@ -200,12 +200,12 @@ export function RequestWizard({ onSubmit }: { onSubmit: (data: any) => void }) {
                     {/* Right: progress bar */}
                     <div className="w-full sm:w-40">
                         <div className="flex justify-between items-center mb-1">
-                            <span className="text-[10px] font-bold text-slate-400">الإنجاز</span>
-                            <span className="text-[10px] font-bold text-warm-green">{Math.round(progressPercentage)}%</span>
+                            <span className="text-[10px] font-bold text-muted-foreground">الإنجاز</span>
+                            <span className="text-[10px] font-bold text-primary">{Math.round(progressPercentage)}%</span>
                         </div>
-                        <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                        <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
                             <motion.div
-                                className="h-full bg-warm-green rounded-full"
+                                className="h-full bg-primary rounded-full"
                                 animate={{ width: `${progressPercentage}%` }}
                                 transition={{ duration: 0.4, ease: "easeOut" }}
                             />
@@ -215,7 +215,7 @@ export function RequestWizard({ onSubmit }: { onSubmit: (data: any) => void }) {
             </CardHeader>
 
             {/* ── Content ── */}
-            <CardContent className="p-5 sm:p-7 bg-white min-h-[340px] relative overflow-hidden">
+            <CardContent className="p-5 sm:p-7 bg-card min-h-[340px] relative overflow-hidden">
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(handleSubmit)}>
                         <div className="relative">
@@ -280,7 +280,7 @@ export function RequestWizard({ onSubmit }: { onSubmit: (data: any) => void }) {
             </CardContent>
 
             {/* ── Footer ── */}
-            <CardFooter className="flex items-center justify-between px-5 sm:px-7 py-4 bg-slate-50/80 border-t border-slate-100 gap-3">
+            <CardFooter className="flex items-center justify-between px-5 sm:px-7 py-4 bg-muted/20 border-t border-border gap-3">
                 {/* Back */}
                 <Button
                     type="button"
@@ -291,7 +291,7 @@ export function RequestWizard({ onSubmit }: { onSubmit: (data: any) => void }) {
                         "rounded-xl px-5 h-10 font-bold text-sm transition-all duration-200",
                         isFirstStep
                             ? "opacity-0 pointer-events-none"
-                            : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300 shadow-sm"
+                            : "bg-card border border-border text-foreground hover:bg-muted hover:border-muted-foreground/30 shadow-sm"
                     )}
                 >
                     <ChevronRight className="w-4 h-4 ml-1" />
@@ -304,7 +304,7 @@ export function RequestWizard({ onSubmit }: { onSubmit: (data: any) => void }) {
                         type="button"
                         onClick={form.handleSubmit(handleSubmit)}
                         disabled={isSubmitting}
-                        className="bg-slate-900 hover:bg-slate-800 text-white rounded-xl px-8 h-11 text-sm font-bold shadow-sm min-w-[180px] transition-all duration-200"
+                        className="bg-foreground hover:bg-foreground/90 text-background rounded-xl px-8 h-11 text-sm font-bold shadow-sm min-w-[180px] transition-all duration-200"
                     >
                         {isSubmitting ? (
                             <>
@@ -322,7 +322,7 @@ export function RequestWizard({ onSubmit }: { onSubmit: (data: any) => void }) {
                     <Button
                         type="button"
                         onClick={goToNextStep}
-                        className="bg-warm-green hover:bg-[#86b541] text-white rounded-xl px-8 h-10 text-sm font-bold shadow-sm min-w-[130px] transition-all duration-200"
+                        className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl px-8 h-10 text-sm font-bold shadow-sm min-w-[130px] transition-all duration-200"
                     >
                         التالي
                         <ChevronLeft className="w-4 h-4 mr-1.5" />

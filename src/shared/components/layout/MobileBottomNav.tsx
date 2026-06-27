@@ -46,7 +46,7 @@ export function MobileBottomNav({ userType }: { userType: string }) {
     navItems = [
       { id: "home", label: "الرئيسية", href: "/dashboard/organization", icon: LayoutDashboard },
       { id: "pending", label: "الطلبات", href: "/dashboard/organization/pending", icon: Inbox },
-      { id: "chat", label: "المساعد", href: "/dashboard/organization/chat", icon: MessageCircle },
+      { id: "campaigns", label: "الحملات", href: "/dashboard/organization/campaigns", icon: Search },
       { id: "messages", label: "الرسائل", href: "/dashboard/organization/messages", icon: MessageSquare },
       { id: "menu", label: "المزيد", icon: Menu, isMenu: true },
     ];

@@ -110,8 +110,8 @@ function SecuritySettings() {
             <Card className="p-5 sm:p-6 md:p-8 border border-slate-100 shadow-sm rounded-3xl bg-white overflow-hidden relative">
                 <div className="flex items-start justify-between gap-4 relative z-10">
                     <div className="flex gap-3 sm:gap-4">
-                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-indigo-50 flex items-center justify-center shrink-0">
-                            <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-indigo-500" />
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0">
+                            <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
                         </div>
                         <div>
                             <h3 className="text-base sm:text-lg font-black text-slate-900 mb-1">التحقق بخطوتين (2FA)</h3>
@@ -123,11 +123,11 @@ function SecuritySettings() {
                     <Switch 
                         checked={twoFactorEnabled} 
                         onCheckedChange={setTwoFactorEnabled} 
-                        className="data-[state=checked]:bg-indigo-500 shrink-0 mt-1"
+                        className="data-[state=checked]:bg-primary shrink-0 mt-1"
                     />
                 </div>
                 {twoFactorEnabled && (
-                    <div className="mt-6 pt-5 border-t border-slate-100 flex items-center gap-2 text-sm font-bold text-indigo-600 bg-indigo-50/50 p-4 rounded-xl animate-in fade-in">
+                    <div className="mt-6 pt-5 border-t border-slate-100 flex items-center gap-2 text-sm font-bold text-primary bg-emerald-50/50 p-4 rounded-xl animate-in fade-in">
                         <CheckCircle2 className="w-5 h-5 shrink-0" />
                         تم تفعيل التحقق بخطوتين بنجاح. سيتم إرسال رمز التحقق لبريدك الإلكتروني عند الدخول القادم.
                     </div>
@@ -148,7 +148,7 @@ function SecuritySettings() {
                             <div>
                                 <p className="font-bold text-slate-900 text-sm">Windows • Chrome</p>
                                 <div className="flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs font-medium text-slate-500 mt-1">
-                                    <span className="text-emerald-500 font-bold">نشط الآن</span>
+                                    <span className="text-primary font-bold">نشط الآن</span>
                                     <span>•</span>
                                     <span>القاهرة، مصر</span>
                                 </div>

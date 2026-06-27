@@ -242,7 +242,7 @@ export function AttachmentItem({ file }: { file: any }) {
 			: ocrStatus === "Failed"
 				? { bg: "bg-red-100", text: "text-red-700", label: "فشل" }
 				: ocrStatus
-					? { bg: "bg-amber-100", text: "text-amber-700", label: "جاري" }
+					? { bg: "bg-primary/15", text: "text-primary", label: "جاري" }
 					: null;
 
 	return (

@@ -22,10 +22,10 @@ interface TasksCardProps {
 
 export function TasksCard({ tasks, title = "إجراءات مطلوبة" }: TasksCardProps) {
     return (
-        <Card className="text-start rounded-2xl border-slate-100 shadow-sm bg-white overflow-hidden">
-            <div className="border-b border-slate-100 px-6 py-4 flex items-center gap-2 bg-slate-50/50">
+        <Card className="text-start rounded-2xl border-border shadow-sm bg-card overflow-hidden">
+            <div className="border-b border-border px-6 py-4 flex items-center gap-2 bg-muted/50">
                 <div className="w-2 h-2 rounded-full bg-golden-orange" />
-                <h3 className="font-bold text-slate-800 text-sm">{title}</h3>
+                <h3 className="font-bold text-foreground text-sm">{title}</h3>
             </div>
             <div className="p-4">
                 {tasks.length === 0 ? (
@@ -33,7 +33,7 @@ export function TasksCard({ tasks, title = "إجراءات مطلوبة" }: Task
                         icon={ClipboardList}
                         title="لا توجد مهام حالياً"
                         description="لقد أنجزت كل المهام المطلوبة منك. عمل رائع!"
-                        className="min-h-[200px] border-none bg-slate-50/50"
+                        className="min-h-[200px] border-none bg-muted/50"
                     />
                 ) : (
                     <div className="space-y-2">
@@ -45,7 +45,7 @@ export function TasksCard({ tasks, title = "إجراءات مطلوبة" }: Task
                                 "flex items-start gap-3 p-3 rounded-xl transition-all",
                                 task.done
                                     ? "bg-muted/30 opacity-70 cursor-default"
-                                    : "hover:bg-muted cursor-pointer border border-transparent hover:border-primary/20 bg-white shadow-sm",
+                                    : "hover:bg-muted cursor-pointer border border-transparent hover:border-primary/20 bg-card shadow-sm",
                                 task.urgent && !task.done && "border-error-light bg-error-light/50 hover:bg-error-light"
                             )}
                         >
@@ -61,7 +61,7 @@ export function TasksCard({ tasks, title = "إجراءات مطلوبة" }: Task
                                 <span
                                     className={cn(
                                         "text-sm font-semibold block truncate",
-                                        task.done ? "line-through text-muted-foreground" : "text-slate-900"
+                                        task.done ? "line-through text-muted-foreground" : "text-foreground"
                                     )}
                                 >
                                     {task.text}

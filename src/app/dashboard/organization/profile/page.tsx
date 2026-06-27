@@ -16,7 +16,7 @@ export default function OrganizationProfilePage() {
             <DashboardLayout>
                 <OrganizationSidebar />
                 <div className="flex-1 flex items-center justify-center">
-                    <Loader2 className="w-10 h-10 animate-spin text-secondary" />
+                    <Loader2 className="w-10 h-10 animate-spin text-primary" />
                 </div>
             </DashboardLayout>
         );
@@ -44,11 +44,11 @@ export default function OrganizationProfilePage() {
                         
                         {/* Header Profile Card */}
                         <Card className="p-6 md:p-8 border-none shadow-sm rounded-2xl bg-white relative overflow-hidden">
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-50 rounded-bl-full -z-0"></div>
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-bl-full -z-0"></div>
                             
                             <div className="relative z-10 flex flex-col md:flex-row items-center md:items-start justify-between gap-6">
                                 <div className="flex flex-col md:flex-row items-center md:items-center gap-6">
-                                    <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-emerald-100 to-teal-100 flex items-center justify-center text-emerald-600 text-3xl font-black shadow-inner flex-shrink-0">
+                                    <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-blue-100 to-sky-100 flex items-center justify-center text-primary text-3xl font-black shadow-inner flex-shrink-0">
                                         {profile.name?.substring(0, 2) || "جم"}
                                     </div>
                                     <div className="text-center md:text-right">
@@ -102,7 +102,7 @@ export default function OrganizationProfilePage() {
                                 <Card className="p-6 md:p-8 border-none shadow-sm rounded-2xl bg-white">
                                     <div className="flex items-center justify-between mb-6">
                                         <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+                                            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                                                 <CreditCard className="w-5 h-5" />
                                             </div>
                                             <h3 className="text-lg font-bold text-slate-900">وسائل وطرق الدفع</h3>
@@ -132,7 +132,7 @@ export default function OrganizationProfilePage() {
                             <div className="space-y-6">
                                 <Card className="p-6 md:p-8 border-none shadow-sm rounded-2xl bg-white">
                                     <div className="flex items-center gap-3 mb-6">
-                                        <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600">
+                                        <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                                             <FileText className="w-5 h-5" />
                                         </div>
                                         <h3 className="text-lg font-bold text-slate-900">معلومات إضافية</h3>

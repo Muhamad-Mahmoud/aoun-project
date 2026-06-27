@@ -73,7 +73,7 @@ function SheetContent({
       >
         {children}
         <SheetPrimitive.Close className={cn(
-          "ring-offset-background focus:ring-ring data-[state=open]:bg-secondary absolute top-4 z-50 rounded-full p-2.5 opacity-70 transition-all hover:opacity-100 hover:bg-slate-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none text-slate-500",
+          "ring-offset-background focus:ring-ring data-[state=open]:bg-primary absolute top-4 z-50 rounded-full p-2.5 opacity-70 transition-all hover:opacity-100 hover:bg-slate-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none text-slate-500",
           side === "right" ? "left-4" : "right-4"
         )}>
           <XIcon className="size-5" />

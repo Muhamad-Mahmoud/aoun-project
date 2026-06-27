@@ -22,8 +22,8 @@ const Toaster = ({ ...props }: ToasterProps) => {
       position="top-center"
       dir="rtl"
       icons={{
-        success: <CircleCheckIcon className="size-5 text-emerald-600" />,
-        info: <InfoIcon className="size-5 text-sky-600" />,
+        success: <CircleCheckIcon className="size-5 text-primary" />,
+        info: <InfoIcon className="size-5 text-teal-600" />,
         warning: <TriangleAlertIcon className="size-5 text-amber-600" />,
         error: <OctagonXIcon className="size-5 text-red-600" />,
         loading: <Loader2Icon className="size-5 animate-spin text-primary" />,
@@ -37,8 +37,8 @@ const Toaster = ({ ...props }: ToasterProps) => {
 
           error: "group-[.toast]:border-r-4 group-[.toast]:border-r-red-500 group-[.toast]:bg-red-50/10",
           success: "group-[.toast]:border-r-4 group-[.toast]:border-r-emerald-500 group-[.toast]:bg-emerald-50/10",
-          warning: "group-[.toast]:border-r-4 group-[.toast]:border-r-amber-500 group-[.toast]:bg-amber-50/10",
-          info: "group-[.toast]:border-r-4 group-[.toast]:border-r-sky-500 group-[.toast]:bg-sky-50/10",
+          warning: "group-[.toast]:border-r-4 group-[.toast]:border-r-amber-500 group-[.toast]:bg-primary/10/10",
+          info: "group-[.toast]:border-r-4 group-[.toast]:border-r-teal-500 group-[.toast]:bg-teal-50/10",
         },
         style: {
           fontFamily: 'var(--font-cairo)',

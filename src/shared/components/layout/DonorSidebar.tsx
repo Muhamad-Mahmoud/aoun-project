@@ -36,7 +36,7 @@ export function DonorSidebarContent({ isCollapsed }: { isCollapsed?: boolean }) 
   const userInitials = user?.name?.[0] || "م";
 
   return (
-    <div className="flex flex-col h-full bg-white relative z-20 overflow-hidden">
+    <div className="flex flex-col h-full bg-card relative z-20 overflow-hidden">
       {/* Logo area */}
       <div className={cn("py-8 border-b border-border/50 flex items-center transition-all duration-300", isCollapsed ? "px-0 justify-center h-[96px]" : "px-8 h-[96px]")}>
         <Link href="/" className="flex items-center justify-center">
@@ -64,7 +64,7 @@ export function DonorSidebarContent({ isCollapsed }: { isCollapsed?: boolean }) 
                 "flex items-center justify-between p-3 rounded-xl transition-all duration-300 group relative",
                 isActive
                   ? "bg-primary/10 text-primary"
-                  : "text-muted-foreground hover:bg-slate-50 hover:text-foreground",
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
                 isCollapsed && "justify-center"
               )}
             >
@@ -77,7 +77,7 @@ export function DonorSidebarContent({ isCollapsed }: { isCollapsed?: boolean }) 
               <div className="flex items-center gap-3">
                 <div className={cn(
                   "p-2 rounded-lg transition-all duration-300 shrink-0",
-                  isActive ? "bg-primary text-white shadow-md scale-110" : "bg-slate-50 group-hover:bg-primary/10 group-hover:text-primary",
+                  isActive ? "bg-primary text-white shadow-md scale-110" : "bg-muted group-hover:bg-primary/10 group-hover:text-primary",
                   isCollapsed && "mx-auto"
                 )}>
                   <Icon className="w-5 h-5 shrink-0" />
@@ -117,7 +117,7 @@ export function DonorSidebarContent({ isCollapsed }: { isCollapsed?: boolean }) 
             {!isCollapsed && (
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-bold text-foreground truncate whitespace-nowrap">{userName}</p>
-                  <p className="text-[10px] font-medium uppercase tracking-wider whitespace-nowrap text-emerald-600">
+                  <p className="text-[10px] font-medium uppercase tracking-wider whitespace-nowrap text-primary">
                     {userStatus}
                   </p>
                 </div>
@@ -134,7 +134,7 @@ export function DonorSidebar() {
 
   return (
     <aside className={cn(
-        "bg-white border-e border-slate-100 hidden lg:flex flex-col sticky top-0 h-screen transition-all duration-300 z-30 shrink-0 relative", 
+        "bg-card border-e border-border hidden lg:flex flex-col sticky top-0 h-screen transition-all duration-300 z-30 shrink-0 relative", 
         isCollapsed ? "w-[100px]" : "w-80"
     )}>
       <Button 
@@ -142,7 +142,7 @@ export function DonorSidebar() {
         size="icon"
         onClick={() => setIsCollapsed(!isCollapsed)}
         aria-label={isCollapsed ? "توسيع القائمة" : "طي القائمة"}
-        className="absolute top-10 -start-4 w-8 h-8 rounded-full border border-slate-200 bg-white shadow-sm z-50 hover:bg-slate-50 hover:text-primary transition-transform"
+        className="absolute top-10 -start-4 w-8 h-8 rounded-full border border-border bg-card shadow-sm z-50 hover:bg-muted hover:text-primary transition-transform"
       >
         {isCollapsed ? <ChevronRight className="w-4 h-4 ml-0.5" /> : <ChevronLeft className="w-4 h-4 mr-0.5" />}
       </Button>

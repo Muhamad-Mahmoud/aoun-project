@@ -14,10 +14,10 @@ interface RecentActivityCardProps {
 
 export function RecentActivityCard({ activities, badgeText = "اليوم" }: RecentActivityCardProps) {
     return (
-        <Card className="rounded-[24px] border border-slate-100 shadow-sm bg-white overflow-hidden hover:shadow-md transition-shadow duration-300 flex flex-col h-full">
-            <div className="border-b border-slate-100/80 px-7 py-5 flex justify-between items-center bg-slate-50/30">
-                <h3 className="text-base font-black text-slate-900">آخر النشاطات</h3>
-                <Badge variant="secondary" className="text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-500 hover:bg-slate-200">{badgeText}</Badge>
+        <Card className="rounded-[24px] border border-border shadow-sm bg-card overflow-hidden hover:shadow-md transition-shadow duration-300 flex flex-col h-full">
+            <div className="border-b border-border/80 px-7 py-5 flex justify-between items-center bg-muted/30">
+                <h3 className="text-base font-black text-foreground">آخر النشاطات</h3>
+                <Badge variant="secondary" className="text-[10px] font-bold uppercase tracking-wider bg-muted/50 text-muted-foreground hover:bg-slate-200">{badgeText}</Badge>
             </div>
             <div className="p-7 flex-1">
                 {activities.length === 0 ? (

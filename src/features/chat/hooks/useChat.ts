@@ -26,6 +26,39 @@ export function useChat(assistanceRequestId: number) {
             .finally(() => setIsLoading(false));
     }, [assistanceRequestId, user]);
 
+    // Listen for global notification events to instantly refetch chat (workaround for ChatHub issues)
+    useEffect(() => {
+        const handleNewMessageNotification = (e: any) => {
+            if (e.detail?.requestId == assistanceRequestId || e.detail?.requestId === String(assistanceRequestId)) {
+                chatApi.getMessages(assistanceRequestId).then(data => {
+                    setMessages(data);
+                    const hasUnread = data.some(m => !m.isRead && m.senderId !== user?.id);
+                    if (hasUnread) chatApi.markAsRead(assistanceRequestId).catch(console.error);
+                }).catch(console.error);
+            }
+        };
+        window.addEventListener("chatMessageReceived", handleNewMessageNotification);
+        return () => window.removeEventListener("chatMessageReceived", handleNewMessageNotification);
+    }, [assistanceRequestId, user]);
+
+    // Failsafe polling every 5 seconds to ensure absolute reliability
+    useEffect(() => {
+        if (!user) return;
+        const interval = setInterval(() => {
+            chatApi.getMessages(assistanceRequestId).then(data => {
+                setMessages(prev => {
+                    if (data.length !== prev.length) {
+                        const hasUnread = data.some(m => !m.isRead && m.senderId !== user.id);
+                        if (hasUnread) chatApi.markAsRead(assistanceRequestId).catch(console.error);
+                        return data;
+                    }
+                    return prev;
+                });
+            }).catch(() => {});
+        }, 5000);
+        return () => clearInterval(interval);
+    }, [assistanceRequestId, user]);
+
     // Setup SignalR connection - using ref to survive StrictMode double-invoke
     useEffect(() => {
         if (!user) return;

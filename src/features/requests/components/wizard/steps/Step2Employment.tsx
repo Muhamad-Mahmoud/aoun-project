@@ -15,8 +15,8 @@ interface Step2EmploymentProps {
     isWorking: boolean;
 }
 
-const inputCls = "h-11 rounded-xl border border-slate-200 bg-white hover:border-slate-300 focus:bg-white focus:ring-2 focus:ring-warm-green/15 focus:border-warm-green/50 shadow-sm px-4 font-medium transition-all placeholder:text-slate-400";
-const selectTriggerCls = "h-11 rounded-xl border border-slate-200 bg-white hover:border-slate-300 focus:ring-2 focus:ring-warm-green/15 focus:border-warm-green/50 shadow-sm px-4 font-medium transition-all";
+const inputCls = "h-11 rounded-xl border border-border bg-card hover:border-slate-300 focus:bg-card focus:ring-2 focus:ring-warm-green/15 focus:border-warm-green/50 shadow-sm px-4 font-medium transition-all placeholder:text-muted-foreground";
+const selectTriggerCls = "h-11 rounded-xl border border-border bg-card hover:border-slate-300 focus:ring-2 focus:ring-warm-green/15 focus:border-warm-green/50 shadow-sm px-4 font-medium transition-all";
 
 export function Step2Employment({ control, isWorking }: Step2EmploymentProps) {
     return (
@@ -27,7 +27,7 @@ export function Step2Employment({ control, isWorking }: Step2EmploymentProps) {
                 name="location"
                 render={({ field }) => (
                     <FormItem className="text-start">
-                        <FormLabel className="text-[13px] font-bold text-slate-700">
+                        <FormLabel className="text-[13px] font-bold text-foreground">
                             المدينة أو الحي السكني <span className="text-rose-500 mr-1">*</span>
                         </FormLabel>
                         <FormControl>
@@ -38,7 +38,7 @@ export function Step2Employment({ control, isWorking }: Step2EmploymentProps) {
                                 value={field.value ?? ""}
                             />
                         </FormControl>
-                        <FormDescription className="text-xs text-slate-400 mt-1.5">
+                        <FormDescription className="text-xs text-muted-foreground mt-1.5">
                             نحتاج لمعرفة منطقة سكنك لتوجيه الطلب لأقرب فرع.
                         </FormDescription>
                         <FormMessage />
@@ -46,7 +46,7 @@ export function Step2Employment({ control, isWorking }: Step2EmploymentProps) {
                 )}
             />
 
-            <div className="w-full h-px bg-slate-100" />
+            <div className="w-full h-px bg-muted/50" />
 
             {/* Employment Status */}
             <FormField
@@ -54,7 +54,7 @@ export function Step2Employment({ control, isWorking }: Step2EmploymentProps) {
                 name="isWorking"
                 render={({ field }) => (
                     <FormItem>
-                        <FormLabel className="text-[13px] font-bold text-slate-700 mb-2.5 inline-block">
+                        <FormLabel className="text-[13px] font-bold text-foreground mb-2.5 inline-block">
                             ما هي حالتك المهنية الحالية؟ <span className="text-rose-500 mr-1">*</span>
                         </FormLabel>
                         <YesNoToggle
@@ -77,7 +77,7 @@ export function Step2Employment({ control, isWorking }: Step2EmploymentProps) {
                             name="workingType"
                             render={({ field }) => (
                                 <FormItem className="text-start">
-                                    <FormLabel className="text-[13px] font-bold text-slate-700">
+                                    <FormLabel className="text-[13px] font-bold text-foreground">
                                         نمط العمل <span className="text-rose-500 mr-1">*</span>
                                     </FormLabel>
                                     <Select onValueChange={(v) => field.onChange(Number(v))} value={field.value?.toString() ?? ""}>
@@ -86,7 +86,7 @@ export function Step2Employment({ control, isWorking }: Step2EmploymentProps) {
                                                 <SelectValue placeholder="اختر..." />
                                             </SelectTrigger>
                                         </FormControl>
-                                        <SelectContent className="rounded-xl border-slate-100 shadow-xl">
+                                        <SelectContent className="rounded-xl border-border shadow-xl">
                                             <SelectItem value="0" className="rounded-lg py-2.5 cursor-pointer">دوام كامل</SelectItem>
                                             <SelectItem value="1" className="rounded-lg py-2.5 cursor-pointer">دوام جزئي</SelectItem>
                                             <SelectItem value="2" className="rounded-lg py-2.5 cursor-pointer">عقد مؤقت</SelectItem>
@@ -103,7 +103,7 @@ export function Step2Employment({ control, isWorking }: Step2EmploymentProps) {
                             name="employmentType"
                             render={({ field }) => (
                                 <FormItem className="text-start">
-                                    <FormLabel className="text-[13px] font-bold text-slate-700">
+                                    <FormLabel className="text-[13px] font-bold text-foreground">
                                         القطاع <span className="text-rose-500 mr-1">*</span>
                                     </FormLabel>
                                     <Select onValueChange={(v) => field.onChange(Number(v))} value={field.value?.toString() ?? ""}>
@@ -112,7 +112,7 @@ export function Step2Employment({ control, isWorking }: Step2EmploymentProps) {
                                                 <SelectValue placeholder="اختر..." />
                                             </SelectTrigger>
                                         </FormControl>
-                                        <SelectContent className="rounded-xl border-slate-100 shadow-xl">
+                                        <SelectContent className="rounded-xl border-border shadow-xl">
                                             <SelectItem value="0" className="rounded-lg py-2.5 cursor-pointer">قطاع خاص</SelectItem>
                                             <SelectItem value="1" className="rounded-lg py-2.5 cursor-pointer">قطاع حكومي</SelectItem>
                                             <SelectItem value="2" className="rounded-lg py-2.5 cursor-pointer">منظمة غير ربحية</SelectItem>
@@ -131,7 +131,7 @@ export function Step2Employment({ control, isWorking }: Step2EmploymentProps) {
                             name="jobTitle"
                             render={({ field }) => (
                                 <FormItem className="text-start">
-                                    <FormLabel className="text-[13px] font-bold text-slate-700">
+                                    <FormLabel className="text-[13px] font-bold text-foreground">
                                         المسمى الوظيفي <span className="text-rose-500 mr-1">*</span>
                                     </FormLabel>
                                     <FormControl>
@@ -146,7 +146,7 @@ export function Step2Employment({ control, isWorking }: Step2EmploymentProps) {
                             name="company"
                             render={({ field }) => (
                                 <FormItem className="text-start">
-                                    <FormLabel className="text-[13px] font-bold text-slate-700">
+                                    <FormLabel className="text-[13px] font-bold text-foreground">
                                         جهة العمل <span className="text-rose-500 mr-1">*</span>
                                     </FormLabel>
                                     <FormControl>
@@ -161,13 +161,13 @@ export function Step2Employment({ control, isWorking }: Step2EmploymentProps) {
                             name="salaryMonthly"
                             render={({ field }) => (
                                 <FormItem className="text-start">
-                                    <FormLabel className="text-[13px] font-bold text-slate-700">
+                                    <FormLabel className="text-[13px] font-bold text-foreground">
                                         الراتب الشهري <span className="text-rose-500 mr-1">*</span>
                                     </FormLabel>
                                     <FormControl>
                                         <div className="relative">
                                             <Input type="number" className={cn(inputCls, "pl-14")} {...field} value={field.value ?? ""} />
-                                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">ج.م</span>
+                                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-muted-foreground bg-muted/50 px-1.5 py-0.5 rounded">ج.م</span>
                                         </div>
                                     </FormControl>
                                     <FormMessage />
@@ -179,13 +179,13 @@ export function Step2Employment({ control, isWorking }: Step2EmploymentProps) {
                             name="yearsAtJob"
                             render={({ field }) => (
                                 <FormItem className="text-start">
-                                    <FormLabel className="text-[13px] font-bold text-slate-700">
+                                    <FormLabel className="text-[13px] font-bold text-foreground">
                                         سنوات الخدمة <span className="text-rose-500 mr-1">*</span>
                                     </FormLabel>
                                     <FormControl>
                                         <div className="relative">
                                             <Input type="number" className={cn(inputCls, "pl-16")} {...field} value={field.value ?? ""} />
-                                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">سنة</span>
+                                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-muted-foreground bg-muted/50 px-1.5 py-0.5 rounded">سنة</span>
                                         </div>
                                     </FormControl>
                                     <FormMessage />
@@ -199,13 +199,13 @@ export function Step2Employment({ control, isWorking }: Step2EmploymentProps) {
                         name="workDescription"
                         render={({ field }) => (
                             <FormItem className="text-start">
-                                <FormLabel className="text-[13px] font-bold text-slate-700">
+                                <FormLabel className="text-[13px] font-bold text-foreground">
                                     وصف طبيعة العمل <span className="text-rose-500 mr-1">*</span>
                                 </FormLabel>
                                 <FormControl>
                                     <Textarea
                                         placeholder="اشرح ماذا تفعل في عملك بشكل مبسط..."
-                                        className="min-h-[100px] rounded-xl p-4 border border-slate-200 focus:ring-2 focus:ring-warm-green/15 focus:border-warm-green/50 transition-all resize-none placeholder:text-slate-400"
+                                        className="min-h-[100px] rounded-xl p-4 border border-border focus:ring-2 focus:ring-warm-green/15 focus:border-warm-green/50 transition-all resize-none placeholder:text-muted-foreground"
                                         {...field}
                                         value={field.value ?? ""}
                                     />
@@ -220,7 +220,7 @@ export function Step2Employment({ control, isWorking }: Step2EmploymentProps) {
                         name="workLocation"
                         render={({ field }) => (
                             <FormItem className="text-start">
-                                <FormLabel className="text-[13px] font-bold text-slate-700">
+                                <FormLabel className="text-[13px] font-bold text-foreground">
                                     مكان العمل
                                 </FormLabel>
                                 <FormControl>
@@ -238,12 +238,12 @@ export function Step2Employment({ control, isWorking }: Step2EmploymentProps) {
                         name="unEmploymentReason"
                         render={({ field }) => (
                             <FormItem className="text-start">
-                                <FormLabel className="text-[13px] font-bold text-slate-700">
+                                <FormLabel className="text-[13px] font-bold text-foreground">
                                     سبب عدم العمل <span className="text-rose-500 mr-1">*</span>
                                 </FormLabel>
                                 <FormControl>
                                     <Textarea
-                                        className="min-h-[100px] rounded-xl p-4 border border-slate-200 focus:ring-2 focus:ring-rose-500/10 focus:border-rose-300 transition-all resize-none placeholder:text-slate-400"
+                                        className="min-h-[100px] rounded-xl p-4 border border-border focus:ring-2 focus:ring-rose-500/10 focus:border-rose-300 transition-all resize-none placeholder:text-muted-foreground"
                                         placeholder="اذكر سبب عدم توافر عمل حالياً..."
                                         {...field}
                                         value={field.value ?? ""}
@@ -259,13 +259,13 @@ export function Step2Employment({ control, isWorking }: Step2EmploymentProps) {
                         name="estimatedIncomeMonthly"
                         render={({ field }) => (
                             <FormItem className="text-start">
-                                <FormLabel className="text-[13px] font-bold text-slate-700">
+                                <FormLabel className="text-[13px] font-bold text-foreground">
                                     الدخل الشهري المتوقع <span className="text-rose-500 mr-1">*</span>
                                 </FormLabel>
                                 <FormControl>
                                     <div className="relative max-w-xs">
                                         <Input type="number" className={cn(inputCls, "pl-14")} {...field} value={field.value ?? ""} />
-                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">ج.م</span>
+                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-muted-foreground bg-muted/50 px-1.5 py-0.5 rounded">ج.م</span>
                                     </div>
                                 </FormControl>
                                 <FormMessage />
@@ -285,11 +285,11 @@ export function Step2Employment({ control, isWorking }: Step2EmploymentProps) {
                                         className={cn(
                                             "cursor-pointer flex items-center gap-3 p-3.5 rounded-xl border-2 transition-all duration-200 select-none",
                                             field.value
-                                                ? "border-sky-500 bg-sky-50 text-sky-700 shadow-sm"
-                                                : "border-slate-100 bg-white hover:border-slate-200"
+                                                ? "border-teal-500 bg-teal-50 text-teal-700 shadow-sm"
+                                                : "border-border bg-card hover:border-border"
                                         )}
                                     >
-                                        <div className={cn("w-5 h-5 rounded-md flex items-center justify-center border-2 transition-all shrink-0", field.value ? "bg-sky-500 border-sky-500 text-white" : "border-slate-300 bg-white")}>
+                                        <div className={cn("w-5 h-5 rounded-md flex items-center justify-center border-2 transition-all shrink-0", field.value ? "bg-teal-500 border-teal-500 text-white" : "border-slate-300 bg-card")}>
                                             {field.value && <Check className="w-3 h-3" />}
                                         </div>
                                         <FormLabel className="text-sm font-bold cursor-pointer m-0">أرغب في البحث عن وظيفة</FormLabel>
@@ -307,11 +307,11 @@ export function Step2Employment({ control, isWorking }: Step2EmploymentProps) {
                                         className={cn(
                                             "cursor-pointer flex items-center gap-3 p-3.5 rounded-xl border-2 transition-all duration-200 select-none",
                                             field.value
-                                                ? "border-purple-500 bg-purple-50 text-purple-700 shadow-sm"
-                                                : "border-slate-100 bg-white hover:border-slate-200"
+                                                ? "border-amber-500 bg-primary/10 text-primary shadow-sm"
+                                                : "border-border bg-card hover:border-border"
                                         )}
                                     >
-                                        <div className={cn("w-5 h-5 rounded-md flex items-center justify-center border-2 transition-all shrink-0", field.value ? "bg-purple-500 border-purple-500 text-white" : "border-slate-300 bg-white")}>
+                                        <div className={cn("w-5 h-5 rounded-md flex items-center justify-center border-2 transition-all shrink-0", field.value ? "bg-primary/100 border-amber-500 text-white" : "border-slate-300 bg-card")}>
                                             {field.value && <Check className="w-3 h-3" />}
                                         </div>
                                         <FormLabel className="text-sm font-bold cursor-pointer m-0">أحتاج لتدريب مهني</FormLabel>

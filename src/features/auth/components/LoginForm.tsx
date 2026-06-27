@@ -61,7 +61,7 @@ export function LoginForm() {
                             البريد الإلكتروني
                         </Label>
                         <div className="relative group">
-                            <Mail strokeWidth={1.5} className="absolute right-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-emerald-500 transition-colors z-10" />
+                            <Mail strokeWidth={1.5} className="absolute right-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-primary transition-colors z-10" />
                             <Input
                                 id="email"
                                 type="email"
@@ -82,7 +82,7 @@ export function LoginForm() {
                             </Label>
                             <Link
                                 href="/forgot-password"
-                                className="text-sm text-emerald-600 hover:text-emerald-700 underline underline-offset-4 decoration-emerald-600/30 hover:decoration-emerald-600 font-bold transition-all"
+                                className="text-sm text-primary hover:text-emerald-700 underline underline-offset-4 decoration-emerald-600/30 hover:decoration-emerald-600 font-bold transition-all"
                             >
                                 نسيت كلمة المرور؟
                             </Link>
@@ -101,7 +101,7 @@ export function LoginForm() {
                             <button
                                 type="button"
                                 onClick={togglePassword}
-                                className="absolute left-2.5 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 transition-all z-10"
+                                className="absolute left-2.5 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-primary hover:bg-primary/10 transition-all z-10"
                             >
                                 {showPassword ? (
                                     <EyeOff strokeWidth={1.5} className="h-4 w-4" />

@@ -125,9 +125,9 @@ export default function NewRequestPage() {
     return (
         <DashboardLayout>
             <FamilySidebar />
-            <div className="flex-1 flex flex-col h-full overflow-y-auto bg-[#f8fafc] relative">
+            <div className="flex-1 flex flex-col h-full overflow-y-auto bg-background relative">
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] -z-0 pointer-events-none" />
-                <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-warm-green/5 rounded-full blur-[100px] -z-0 pointer-events-none" />
+                <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-primary/5 rounded-full blur-[100px] -z-0 pointer-events-none" />
 
                 <DashboardTopBar userType="family" />
 
@@ -142,22 +142,22 @@ export default function NewRequestPage() {
                                             <Sparkles className="w-5 h-5" />
                                         </div>
                                         <div>
-                                            <h1 className="text-[22px] font-black text-slate-900 tracking-tight leading-tight">طلب مساعدة جديد</h1>
-                                            <p className="text-[13px] text-slate-500 font-medium mt-0.5">أدخل بياناتك بدقة لدراسة حالتك وتحديد نوع الدعم المناسب</p>
+                                            <h1 className="text-[22px] font-black text-foreground tracking-tight leading-tight">طلب مساعدة جديد</h1>
+                                            <p className="text-[13px] text-muted-foreground font-medium mt-0.5">أدخل بياناتك بدقة لدراسة حالتك وتحديد نوع الدعم المناسب</p>
                                         </div>
                                     </div>
                                     
-                                    <Link href="/dashboard/family/requests" className="hidden sm:flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-slate-600 transition-colors">
+                                    <Link href="/dashboard/family/requests" className="hidden sm:flex items-center gap-2 text-xs font-bold text-muted-foreground hover:text-foreground transition-colors">
                                         <ChevronRight className="w-4 h-4" />
                                         طلباتي 
                                     </Link>
                                 </div>
 
                                 {validationError && (
-                                    <Alert variant="destructive" className="border-red-200 bg-red-50 rounded-2xl">
+                                    <Alert variant="destructive" className="border-destructive/20 bg-destructive/10 rounded-2xl">
                                         <AlertTriangle className="h-4 w-4" />
                                         <AlertTitle>خطأ في البيانات المدخلة</AlertTitle>
-                                        <AlertDescription className="mt-2 text-right whitespace-pre-wrap font-medium text-red-700">
+                                        <AlertDescription className="mt-2 text-right whitespace-pre-wrap font-medium text-destructive">
                                             {validationError}
                                         </AlertDescription>
                                     </Alert>
@@ -166,22 +166,22 @@ export default function NewRequestPage() {
                                 <RequestWizard onSubmit={handleSubmit} />
                             </div>
                         ) : (
-                            <Card className="max-w-xl mx-auto p-12 text-center border-none shadow-2xl rounded-[3rem] animate-in zoom-in duration-500 bg-white">
-                                <div className="w-24 h-24 bg-warm-green/10 rounded-full flex items-center justify-center mx-auto mb-8 shadow-inner">
-                                    <CheckCircle2 className="w-12 h-12 text-warm-green" />
+                            <Card className="max-w-xl mx-auto p-12 text-center border-border shadow-2xl rounded-[3rem] animate-in zoom-in duration-500 bg-card">
+                                <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-8 shadow-inner">
+                                    <CheckCircle2 className="w-12 h-12 text-primary" />
                                 </div>
-                                <h1 className="text-2xl font-bold mb-3 text-slate-900">تم استلام طلبك بنجاح!</h1>
-                                <p className="text-slate-500 font-medium mb-10 text-base leading-relaxed">
-                                    لقد سجلنا طلبك برقم <span className="text-slate-900 font-bold border-b-2 border-warm-green/30">#REQ-{requestId || "2024-001"}</span>.
+                                <h1 className="text-2xl font-bold mb-3 text-foreground">تم استلام طلبك بنجاح!</h1>
+                                <p className="text-muted-foreground font-medium mb-10 text-base leading-relaxed">
+                                    لقد سجلنا طلبك برقم <span className="text-foreground font-bold border-b-2 border-primary/30">#REQ-{requestId || "2024-001"}</span>.
                                     جاري الآن تحويله للفريق المختص للمراجعة.
                                 </p>
                                 <div className="flex flex-col gap-3">
-                                    <Button asChild className="h-14 rounded-2xl bg-warm-green hover:bg-emerald-600 text-white font-bold text-base shadow-lg shadow-warm-green/20">
+                                    <Button asChild className="h-14 rounded-2xl bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-base shadow-lg shadow-primary/20">
                                         <Link href="/dashboard/family/requests">
                                             متابعة طلباتي
                                         </Link>
                                     </Button>
-                                    <Button asChild variant="ghost" className="h-12 rounded-2xl font-semibold text-slate-400">
+                                    <Button asChild variant="ghost" className="h-12 rounded-2xl font-semibold text-muted-foreground hover:text-foreground hover:bg-muted">
                                         <Link href="/dashboard/family" className="flex items-center gap-2">
                                             العودة للرئيسية <ChevronRight className="w-4 h-4" />
                                         </Link>
@@ -195,4 +195,3 @@ export default function NewRequestPage() {
         </DashboardLayout>
     );
 }
-

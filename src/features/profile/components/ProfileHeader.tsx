@@ -40,7 +40,7 @@ export function ProfileHeader({
     const initials = name.split(' ').slice(0, 2).map(n => n[0]).join('');
 
     return (
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between p-6 sm:p-8 bg-white rounded-3xl border border-slate-100 shadow-sm gap-6 relative overflow-hidden">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between p-6 sm:p-8 bg-card rounded-3xl border border-border shadow-sm gap-6 relative overflow-hidden">
             {/* Background Accent */}
             <div className="absolute top-0 end-0 w-64 h-64 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/4 blur-3xl pointer-events-none" />
             
@@ -70,15 +70,15 @@ export function ProfileHeader({
                 </div>
 
                 <div className="mt-2 sm:mt-4">
-                    <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">{name}</h1>
-                    {subtitle && <p className="text-slate-500 font-medium mt-1">{subtitle}</p>}
+                    <h1 className="text-2xl sm:text-3xl font-black text-foreground tracking-tight">{name}</h1>
+                    {subtitle && <p className="text-muted-foreground font-medium mt-1">{subtitle}</p>}
                 </div>
             </div>
 
             <Button
                 variant={isEditing ? "outline" : "default"}
                 onClick={onEditClick}
-                className="w-full sm:w-auto rounded-xl h-12 px-6 font-bold shadow-sm relative z-10 shrink-0 border-slate-200"
+                className="w-full sm:w-auto rounded-xl h-12 px-6 font-bold shadow-sm relative z-10 shrink-0 border-border"
             >
                 <Edit2 className="h-4 w-4 ml-2" />
                 {isEditing ? 'إلغاء التعديل' : 'تعديل الملف'}

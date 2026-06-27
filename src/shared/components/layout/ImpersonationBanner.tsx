@@ -40,7 +40,7 @@ export function ImpersonationBanner() {
     if (!isImpersonating) return null;
 
     return (
-        <div className="bg-amber-500 text-white px-4 py-2 flex items-center justify-center gap-4 text-sm font-bold shadow-md z-[100] relative" dir="rtl">
+        <div className="bg-primary/100 text-white px-4 py-2 flex items-center justify-center gap-4 text-sm font-bold shadow-md z-[100] relative" dir="rtl">
             <div className="flex items-center gap-2">
                 <ShieldAlert className="w-5 h-5" />
                 <span>أنت الآن تتصفح النظام بصلاحيات حساب آخر (وضع الإنابة)</span>

@@ -39,23 +39,23 @@ interface ActiveRequestCardProps {
 
 export function ActiveRequestCard({ request, primaryAction }: ActiveRequestCardProps) {
     const getStatusAccent = (status: string) => {
-        if (status.includes("مكتمل") || status === "COMPLETED") return "bg-emerald-500";
-        if (status.includes("جاري") || status === "IN_PROGRESS") return "bg-blue-500";
+        if (status.includes("مكتمل") || status === "COMPLETED") return "bg-primary";
+        if (status.includes("جاري") || status === "IN_PROGRESS") return "bg-primary";
         if (status.includes("مرفوض") || status === "REJECTED") return "bg-red-500";
         if (status.includes("قيد") || status === "PENDING") return "bg-amber-400";
         return "bg-gray-400";
     };
 
     const getStatusBadgeStyle = (status: string) => {
-        if (status.includes("مكتمل") || status === "COMPLETED") return "bg-emerald-50 text-emerald-700 border-emerald-200";
-        if (status.includes("جاري") || status === "IN_PROGRESS") return "bg-blue-50 text-blue-700 border-blue-200";
+        if (status.includes("مكتمل") || status === "COMPLETED") return "bg-primary/10 text-emerald-700 border-emerald-200";
+        if (status.includes("جاري") || status === "IN_PROGRESS") return "bg-primary/10 text-blue-700 border-primary/30";
         if (status.includes("مرفوض") || status === "REJECTED") return "bg-red-50 text-red-700 border-red-200";
-        if (status.includes("قيد") || status === "PENDING") return "bg-amber-50 text-amber-700 border-amber-200";
-        return "bg-slate-50 text-slate-700 border-slate-200";
+        if (status.includes("قيد") || status === "PENDING") return "bg-primary/10 text-primary border-amber-200";
+        return "bg-muted text-foreground border-border";
     };
 
     return (
-        <Card className="animate-fade-slide-up rounded-2xl border-slate-100 bg-white hover:shadow-lg hover:border-slate-200 transition-shadow duration-300 group overflow-hidden">
+        <Card className="animate-fade-slide-up rounded-2xl border-border bg-card hover:shadow-lg hover:border-border transition-shadow duration-300 group overflow-hidden">
             <div className="flex">
                 {/* Status Accent Strip */}
                 <div
@@ -69,7 +69,7 @@ export function ActiveRequestCard({ request, primaryAction }: ActiveRequestCardP
                             <div className="flex items-center gap-2 flex-wrap">
                                 <Badge
                                     variant="outline"
-                                    className="text-[10px] font-black text-slate-400 border-slate-200 px-2 py-0.5 rounded-md"
+                                    className="text-[10px] font-black text-muted-foreground border-border px-2 py-0.5 rounded-md"
                                 >
                                     #{request.id}
                                 </Badge>
@@ -83,18 +83,18 @@ export function ActiveRequestCard({ request, primaryAction }: ActiveRequestCardP
                                     {request.status}
                                 </Badge>
                                 {request.attachmentsCount > 0 && (
-                                    <div className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-50 border border-slate-100">
-                                        <Paperclip className="w-3 h-3 text-slate-400" />
-                                        <span className="text-[10px] font-bold text-slate-400">
+                                    <div className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-muted border border-border">
+                                        <Paperclip className="w-3 h-3 text-muted-foreground" />
+                                        <span className="text-[10px] font-bold text-muted-foreground">
                                             {request.attachmentsCount}
                                         </span>
                                     </div>
                                 )}
                             </div>
-                            <p className="text-sm font-bold text-slate-800 leading-relaxed line-clamp-2">
+                            <p className="text-sm font-bold text-foreground leading-relaxed line-clamp-2">
                                 {request.title}
                             </p>
-                            <div className="flex items-center gap-3 sm:gap-4 text-[11px] text-slate-400 font-medium flex-wrap">
+                            <div className="flex items-center gap-3 sm:gap-4 text-[11px] text-muted-foreground font-medium flex-wrap">
                                 {request.location && (
                                     <span className="flex items-center gap-1 min-w-0">
                                         <MapPin className="w-3 h-3 shrink-0" />

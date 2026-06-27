@@ -18,9 +18,9 @@ export function Timeline({ items, className }: TimelineProps) {
     const getTypeStyles = (type: TimelineItem["type"]) => {
         switch (type) {
             case "success":
-                return "bg-green-500 ring-4 ring-green-100";
+                return "bg-primary/50 ring-4 ring-green-100";
             case "info":
-                return "bg-blue-500 ring-4 ring-blue-100";
+                return "bg-primary ring-4 ring-blue-100";
             default:
                 return "bg-gray-400 ring-4 ring-gray-100";
         }

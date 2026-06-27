@@ -153,7 +153,7 @@ export default function AssociationCampaignsPage() {
                         return (
                             <div key={campaign.id} className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col hover:border-primary/30 transition-colors">
                                 <div className="flex items-start justify-between mb-4">
-                                    <div className={`px-3 py-1 text-xs font-bold rounded-full ${campaign.isActive ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-slate-100 text-slate-500 border border-slate-200'}`}>
+                                    <div className={`px-3 py-1 text-xs font-bold rounded-full ${campaign.isActive ? 'bg-primary/10 text-primary border border-emerald-100' : 'bg-slate-100 text-slate-500 border border-slate-200'}`}>
                                         {campaign.isActive ? 'نشطة' : 'متوقفة'}
                                     </div>
                                     <div className="flex items-center gap-3">
@@ -201,7 +201,7 @@ export default function AssociationCampaignsPage() {
                                             </div>
                                         </div>
                                     ) : (
-                                        <div className="text-sm font-bold text-amber-600 bg-amber-50 px-3 py-2 rounded-xl">
+                                        <div className="text-sm font-bold text-primary bg-primary/10 px-3 py-2 rounded-xl">
                                             مطلوب: {campaign.requiredItems}
                                         </div>
                                     )}
@@ -237,7 +237,7 @@ export default function AssociationCampaignsPage() {
                                     <div key={d.id} className="p-4 rounded-2xl border border-slate-100 bg-slate-50 flex items-center justify-between gap-4">
                                         <div className="flex items-center gap-4">
                                             <div className="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400">
-                                                {d.amount ? <Heart className="w-4 h-4 text-primary" /> : <PackageOpen className="w-4 h-4 text-amber-500" />}
+                                                {d.amount ? <Heart className="w-4 h-4 text-primary" /> : <PackageOpen className="w-4 h-4 text-primary" />}
                                             </div>
                                             <div>
                                                 <p className="font-bold text-slate-900">{d.donorName}</p>
@@ -248,7 +248,7 @@ export default function AssociationCampaignsPage() {
                                         </div>
                                         <div>
                                             {d.status === 'Confirmed' ? (
-                                                <span className="text-emerald-500 text-xs font-bold flex items-center gap-1"><CheckCircle2 className="w-4 h-4" /> تم التأكيد</span>
+                                                <span className="text-primary text-xs font-bold flex items-center gap-1"><CheckCircle2 className="w-4 h-4" /> تم التأكيد</span>
                                             ) : (
                                                 <button 
                                                     onClick={async () => {

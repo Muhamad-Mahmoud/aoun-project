@@ -84,8 +84,8 @@ export default function FamilyProfilePage() {
                     <div className="mx-auto max-w-3xl space-y-8">
                         <div className="flex items-center justify-between">
                             <div>
-                                <h1 className="text-3xl font-bold tracking-tight text-slate-900">الملف الشخصي</h1>
-                                <p className="text-slate-500 mt-2 font-medium">بيانات الأسرة ومعلومات التواصل.</p>
+                                <h1 className="text-3xl font-bold tracking-tight text-foreground">الملف الشخصي</h1>
+                                <p className="text-muted-foreground mt-2 font-medium">بيانات الأسرة ومعلومات التواصل.</p>
                             </div>
                             {!isEditing && (
                                 <Button onClick={() => setIsEditing(true)} className="gap-2 bg-warm-green hover:bg-warm-green/90 text-white rounded-xl shadow-lg shadow-warm-green/20 transition-all active:scale-95">
@@ -95,7 +95,7 @@ export default function FamilyProfilePage() {
                             )}
                         </div>
 
-                        <Card className="p-8 border-none shadow-xl shadow-slate-200/50 rounded-3xl bg-white relative overflow-hidden">
+                        <Card className="p-8 border-none shadow-xl shadow-slate-200/50 rounded-3xl bg-card relative overflow-hidden">
                             {isEditing ? (
                                 <FamilyProfileForm
                                     initialData={profile}
@@ -105,11 +105,11 @@ export default function FamilyProfilePage() {
                             ) : (
                                 <div className="animate-in fade-in duration-500">
                                     <div className="flex flex-col items-center mb-10">
-                                        <div className="w-28 h-28 rounded-full bg-gradient-to-br from-warm-green/10 to-warm-green/20 flex items-center justify-center text-warm-green text-3xl font-black mb-4 border-4 border-white shadow-lg">
+                                        <div className="w-28 h-28 rounded-full bg-gradient-to-br from-warm-green/10 to-warm-green/20 flex items-center justify-center text-warm-green text-3xl font-black mb-4 border-4 border-border shadow-lg">
                                             {profile.firstName?.[0] || ""}{profile.lastName?.[0] || ""}
                                         </div>
-                                        <h2 className="text-2xl font-bold text-slate-900">{profile.firstName} {profile.lastName}</h2>
-                                        <div className="flex items-center gap-2 text-emerald-700 bg-emerald-50 border border-emerald-100 px-4 py-1.5 rounded-full text-xs font-bold mt-3 shadow-sm">
+                                        <h2 className="text-2xl font-bold text-foreground">{profile.firstName} {profile.lastName}</h2>
+                                        <div className="flex items-center gap-2 text-emerald-700 bg-primary/10 border border-emerald-100 px-4 py-1.5 rounded-full text-xs font-bold mt-3 shadow-sm">
                                             <ShieldCheck className="w-3.5 h-3.5" />
                                             حساب موثق
                                         </div>
@@ -134,9 +134,9 @@ export default function FamilyProfilePage() {
                                             </h3>
                                             <div className="grid gap-4 md:grid-cols-2">
                                                 {profile.familyMembers.map((member) => (
-                                                    <div key={member.id} className="p-4 rounded-xl bg-slate-50 border border-slate-100">
+                                                    <div key={member.id} className="p-4 rounded-xl bg-muted border border-border">
                                                         <div className="font-bold">{member.firstName} {member.lastName}</div>
-                                                        <div className="text-sm text-slate-500 mt-1">
+                                                        <div className="text-sm text-muted-foreground mt-1">
                                                             {member.relation} • {member.age} سنة
                                                         </div>
                                                     </div>
@@ -196,12 +196,12 @@ export default function FamilyProfilePage() {
 
 function ProfileItem({ icon: Icon, label, value }: { icon: React.ComponentType<{ className?: string }>, label: string, value?: string }) {
     return (
-        <div className="flex items-center justify-between p-5 rounded-2xl bg-slate-50 border border-slate-100 hover:border-warm-green/30 hover:bg-white hover:shadow-md transition-all duration-300 group">
-            <span className="font-bold text-slate-900">{value || "غير متوفر"}</span>
+        <div className="flex items-center justify-between p-5 rounded-2xl bg-muted border border-border hover:border-warm-green/30 hover:bg-card hover:shadow-md transition-all duration-300 group">
+            <span className="font-bold text-foreground">{value || "غير متوفر"}</span>
             <div className="flex items-center gap-3">
-                <span className="text-xs font-semibold text-slate-400 group-hover:text-warm-green transition-colors">{label}</span>
-                <div className="p-2.5 rounded-xl bg-white border border-slate-100 group-hover:bg-warm-green/10 group-hover:border-warm-green/20 transition-all shadow-sm">
-                    <Icon className="w-4 h-4 text-slate-400 group-hover:text-warm-green transition-colors" />
+                <span className="text-xs font-semibold text-muted-foreground group-hover:text-warm-green transition-colors">{label}</span>
+                <div className="p-2.5 rounded-xl bg-card border border-border group-hover:bg-warm-green/10 group-hover:border-warm-green/20 transition-all shadow-sm">
+                    <Icon className="w-4 h-4 text-muted-foreground group-hover:text-warm-green transition-colors" />
                 </div>
             </div>
         </div>

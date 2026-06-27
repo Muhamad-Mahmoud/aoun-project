@@ -28,10 +28,10 @@ export interface StatusDisplayConfig {
 }
 
 export const statusConfig: Record<string, StatusDisplayConfig> = {
-    PENDING:      { label: "قيد المراجعة", icon: Clock,        color: "text-amber-600",  bg: "bg-amber-50 border-amber-200" },
-    VERIFIED:     { label: "تم التحقق",   icon: CheckCircle2,  color: "text-blue-600",   bg: "bg-blue-50 border-blue-200" },
-    IN_PROGRESS:  { label: "جاري التنفيذ", icon: Loader2,      color: "text-sky-600",    bg: "bg-sky-50 border-sky-200" },
-    COMPLETED:    { label: "مكتمل",       icon: CheckCircle2,  color: "text-emerald-600", bg: "bg-emerald-50 border-emerald-200" },
+    PENDING:      { label: "قيد المراجعة", icon: Clock,        color: "text-amber-600",  bg: "bg-primary/10 border-amber-200" },
+    VERIFIED:     { label: "تم التحقق",   icon: CheckCircle2,  color: "text-primary",   bg: "bg-primary/10 border-primary/30" },
+    IN_PROGRESS:  { label: "جاري التنفيذ", icon: Loader2,      color: "text-teal-600",    bg: "bg-teal-50 border-teal-200" },
+    COMPLETED:    { label: "مكتمل",       icon: CheckCircle2,  color: "text-primary", bg: "bg-primary/10 border-emerald-200" },
     REJECTED:     { label: "مرفوض",       icon: XCircle,       color: "text-red-600",    bg: "bg-red-50 border-red-200" },
     CANCELLED:    { label: "ملغي",        icon: Ban,           color: "text-gray-500",   bg: "bg-gray-50 border-gray-200" },
 };
@@ -94,11 +94,11 @@ export interface CategoryDisplayConfig {
 }
 
 export const categoryConfig: Record<string, CategoryDisplayConfig> = {
-    "Financial": { label: "مالية",   icon: Coins,            color: "text-blue-600",    bg: "bg-blue-50" },
-    "Medical": { label: "صحية",    icon: Stethoscope,      color: "text-emerald-600", bg: "bg-emerald-50" },
+    "Financial": { label: "مالية",   icon: Coins,            color: "text-primary",    bg: "bg-blue-50" },
+    "Medical": { label: "صحية",    icon: Stethoscope,      color: "text-primary", bg: "bg-emerald-50" },
     "Food": { label: "غذائية",     icon: UtensilsCrossed,  color: "text-orange-600",  bg: "bg-orange-50" },
-    "Housing": { label: "سكن",    icon: Home,             color: "text-sky-600",     bg: "bg-sky-50" },
-    "Education": { label: "تعليم",          icon: GraduationCap,    color: "text-purple-600",  bg: "bg-purple-50" },
+    "Housing": { label: "سكن",    icon: Home,             color: "text-teal-600",     bg: "bg-teal-50" },
+    "Education": { label: "تعليم",          icon: GraduationCap,    color: "text-amber-600",  bg: "bg-primary/10" },
     "Utilities": { label: "فواتير",  icon: CreditCard,       color: "text-red-600",     bg: "bg-red-50" },
     "Other": { label: "أخرى",          icon: HelpCircle,       color: "text-gray-600",    bg: "bg-gray-50" },
 };

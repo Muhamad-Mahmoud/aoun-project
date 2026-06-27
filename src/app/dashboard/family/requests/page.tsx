@@ -127,6 +127,7 @@ export default function FamilyRequestsPage() {
 					"text-[11px] font-bold border px-3 py-1 rounded-full gap-1.5",
 					config.bg,
 					config.color,
+					"dark:bg-opacity-10"
 				)}
 			>
 				<Icon className="w-3 h-3" />
@@ -145,6 +146,7 @@ export default function FamilyRequestsPage() {
 				className={cn(
 					"flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-transparent",
 					cat.bg,
+					"dark:bg-opacity-10"
 				)}
 			>
 				<CatIcon className={cn("w-3 h-3", cat.color)} />
@@ -164,13 +166,13 @@ export default function FamilyRequestsPage() {
 		const key = resolveStatus(status);
 		const accents: Record<string, string> = {
 			PENDING: "bg-amber-400",
-			VERIFIED: "bg-blue-500",
-			IN_PROGRESS: "bg-sky-500",
-			COMPLETED: "bg-emerald-500",
+			VERIFIED: "bg-primary",
+			IN_PROGRESS: "bg-teal-500",
+			COMPLETED: "bg-primary",
 			REJECTED: "bg-red-500",
-			CANCELLED: "bg-gray-400",
+			CANCELLED: "bg-muted-foreground",
 		};
-		return accents[key] || "bg-gray-400";
+		return accents[key] || "bg-muted-foreground";
 	};
 
 	/* ---------- Counts (current page only, with hint) ---------- */
@@ -203,7 +205,7 @@ export default function FamilyRequestsPage() {
 			<DashboardLayout>
 				<FamilySidebar />
 				<div
-					className="flex-1 flex flex-col h-full overflow-y-auto bg-gradient-to-b from-slate-50 to-white"
+					className="flex-1 flex flex-col h-full overflow-y-auto bg-background"
 					dir="rtl"
 				>
 					<DashboardTopBar userType="family" />
@@ -212,16 +214,16 @@ export default function FamilyRequestsPage() {
 							{/* ===== Header ===== */}
 							<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
 								<div>
-									<h1 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-900">
+									<h1 className="text-2xl sm:text-3xl font-black tracking-tight text-foreground">
 										طلباتي
 									</h1>
-									<p className="text-slate-500 font-medium mt-1 text-sm sm:text-base">
+									<p className="text-muted-foreground font-medium mt-1 text-sm sm:text-base">
 										تابع حالة طلباتك الحالية والسابقة
 									</p>
 								</div>
 								<Button
 									asChild
-									className="bg-warm-green hover:bg-warm-green/90 rounded-xl h-12 px-6 font-bold shadow-lg shadow-warm-green/20 transition-all hover:shadow-xl hover:shadow-warm-green/30 sm:hover:scale-[1.02] active:scale-[0.98] w-full sm:w-auto"
+									className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl h-12 px-6 font-bold shadow-lg shadow-primary/20 transition-all hover:shadow-xl hover:shadow-primary/30 sm:hover:scale-[1.02] active:scale-[0.98] w-full sm:w-auto"
 								>
 									<Link
 										href="/dashboard/family/requests/new"
@@ -236,12 +238,12 @@ export default function FamilyRequestsPage() {
 							{/* ===== Stats Bar + Search ===== */}
 							<div className="flex flex-col sm:flex-row sm:items-center gap-3">
 								<div className="flex items-center gap-2">
-									<div className="flex items-center gap-2 px-4 py-2.5 bg-white rounded-xl border border-slate-100 shadow-sm">
-										<FileText className="w-4 h-4 text-warm-green" />
-										<span className="font-black text-slate-700">
+									<div className="flex items-center gap-2 px-4 py-2.5 bg-card rounded-xl border border-border shadow-sm">
+										<FileText className="w-4 h-4 text-primary" />
+										<span className="font-black text-foreground">
 											{totalCount}
 										</span>
-										<span className="text-slate-400 font-medium text-sm">
+										<span className="text-muted-foreground font-medium text-sm">
 											طلب
 										</span>
 									</div>
@@ -251,7 +253,7 @@ export default function FamilyRequestsPage() {
 										onClick={fetchRequests}
 										disabled={loading}
 										aria-label="تحديث الطلبات"
-										className="rounded-xl hover:bg-white h-10 w-10 p-0 shrink-0"
+										className="rounded-xl hover:bg-muted text-foreground h-10 w-10 p-0 shrink-0"
 									>
 										<RefreshCw
 											className={cn("w-4 h-4", loading && "animate-spin")}
@@ -261,21 +263,21 @@ export default function FamilyRequestsPage() {
 
 								{/* Search Input */}
 								<div className="relative flex-1 sm:max-w-sm sm:mr-auto">
-									<Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+									<Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
 									<input
 										type="text"
 										placeholder="ابحث بالوصف أو الرقم..."
 										value={searchQuery}
 										onChange={(e) => setSearchQuery(e.target.value)}
 										aria-label="بحث في الطلبات"
-										className="w-full h-10 pr-10 pl-9 text-sm font-medium rounded-xl border border-slate-100 bg-white placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-warm-green/20 focus:border-warm-green/40 transition-all"
+										className="w-full h-10 pr-10 pl-9 text-sm font-medium rounded-xl border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 transition-all"
 									/>
 									{searchQuery && (
 										<button
 											type="button"
 											onClick={() => setSearchQuery("")}
 											aria-label="مسح البحث"
-											className="absolute left-2 top-1/2 -translate-y-1/2 p-1 rounded-md text-slate-400 hover:text-slate-600 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-warm-green/40 transition-colors"
+											className="absolute left-2 top-1/2 -translate-y-1/2 p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 transition-colors"
 										>
 											<X className="w-4 h-4" />
 										</button>
@@ -307,10 +309,10 @@ export default function FamilyRequestsPage() {
 												}}
 												className={cn(
 													"px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 border whitespace-nowrap flex items-center gap-2",
-													"focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-warm-green/40",
+													"focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40",
 													isActive
-														? "bg-warm-green text-white border-warm-green shadow-md shadow-warm-green/20"
-														: "bg-white text-slate-500 border-slate-100 hover:border-slate-200 hover:bg-slate-50",
+														? "bg-primary text-primary-foreground border-primary shadow-md shadow-primary/20"
+														: "bg-card text-muted-foreground border-border hover:border-muted-foreground/30 hover:bg-muted",
 												)}
 											>
 												{filter.label}
@@ -319,8 +321,8 @@ export default function FamilyRequestsPage() {
 														className={cn(
 															"text-[10px] font-black px-1.5 py-0.5 rounded-full min-w-[20px] text-center",
 															isActive
-																? "bg-white/20 text-white"
-																: "bg-slate-100 text-slate-400",
+																? "bg-background/20 text-primary-foreground"
+																: "bg-muted text-muted-foreground",
 														)}
 													>
 														{count}
@@ -334,8 +336,8 @@ export default function FamilyRequestsPage() {
 
 							{/* ===== Error State ===== */}
 							{error && (
-								<Card className="p-4 sm:p-6 border-red-200 bg-red-50 rounded-2xl">
-									<div className="flex flex-col sm:flex-row sm:items-center gap-3 text-red-600">
+								<Card className="p-4 sm:p-6 border-destructive/20 bg-destructive/10 rounded-2xl">
+									<div className="flex flex-col sm:flex-row sm:items-center gap-3 text-destructive">
 										<div className="flex items-center gap-3 flex-1">
 											<AlertCircle className="w-5 h-5 shrink-0" />
 											<p className="text-sm font-bold flex-1">{error}</p>
@@ -344,7 +346,7 @@ export default function FamilyRequestsPage() {
 											size="sm"
 											variant="outline"
 											onClick={fetchRequests}
-											className="rounded-xl border-red-200 text-red-600 hover:bg-red-100 w-full sm:w-auto"
+											className="rounded-xl border-destructive/20 text-destructive hover:bg-destructive/10 w-full sm:w-auto"
 										>
 											إعادة المحاولة
 										</Button>
@@ -358,19 +360,19 @@ export default function FamilyRequestsPage() {
 									{[1, 2, 3].map((i) => (
 										<Card
 											key={i}
-											className="p-5 rounded-2xl border-slate-100 overflow-hidden"
+											className="p-5 rounded-2xl border-border bg-card overflow-hidden"
 										>
 											<div className="flex items-start gap-4">
-												<Skeleton className="w-1 h-16 rounded-full shrink-0" />
+												<Skeleton className="w-1 h-16 rounded-full shrink-0 bg-muted" />
 												<div className="flex-1 space-y-3">
 													<div className="flex items-center gap-2">
-														<Skeleton className="h-5 w-16 rounded-full" />
-														<Skeleton className="h-5 w-20 rounded-full" />
+														<Skeleton className="h-5 w-16 rounded-full bg-muted" />
+														<Skeleton className="h-5 w-20 rounded-full bg-muted" />
 													</div>
-													<Skeleton className="h-4 w-2/3" />
-													<Skeleton className="h-3 w-1/3" />
+													<Skeleton className="h-4 w-2/3 bg-muted" />
+													<Skeleton className="h-3 w-1/3 bg-muted" />
 												</div>
-												<Skeleton className="hidden sm:block w-20 h-8 rounded-xl" />
+												<Skeleton className="hidden sm:block w-20 h-8 rounded-xl bg-muted" />
 											</div>
 										</Card>
 									))}
@@ -381,24 +383,24 @@ export default function FamilyRequestsPage() {
 							{!loading && !error && (
 								<>
 									{filteredRequests.length === 0 ? (
-										<Card className="p-8 sm:p-12 text-center border-dashed border-2 border-slate-200 rounded-2xl bg-white">
+										<Card className="p-8 sm:p-12 text-center border-dashed border-2 border-border rounded-2xl bg-card">
 											<div className="flex flex-col items-center gap-4">
-												<div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-slate-100 to-slate-50 flex items-center justify-center">
+												<div className="w-20 h-20 rounded-3xl bg-muted flex items-center justify-center">
 													{searchQuery ? (
-														<Search className="w-10 h-10 text-slate-300" />
+														<Search className="w-10 h-10 text-muted-foreground" />
 													) : (
-														<Inbox className="w-10 h-10 text-slate-300" />
+														<Inbox className="w-10 h-10 text-muted-foreground" />
 													)}
 												</div>
 												<div>
-													<p className="text-lg font-bold text-slate-700">
+													<p className="text-lg font-bold text-foreground">
 														{searchQuery
 															? "لا توجد نتائج"
 															: statusFilter
 																? "لا توجد طلبات بهذه الحالة"
 																: "لا توجد طلبات بعد"}
 													</p>
-													<p className="text-sm text-slate-400 mt-1">
+													<p className="text-sm text-muted-foreground mt-1">
 														{searchQuery
 															? `لا توجد طلبات تطابق "${searchQuery}"`
 															: statusFilter
@@ -409,7 +411,7 @@ export default function FamilyRequestsPage() {
 												{!searchQuery && !statusFilter && (
 													<Button
 														asChild
-														className="bg-warm-green hover:bg-warm-green/90 rounded-xl h-11 px-6 font-bold mt-2 shadow-lg shadow-warm-green/20"
+														className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl h-11 px-6 font-bold mt-2 shadow-lg shadow-primary/20"
 													>
 														<Link href="/dashboard/family/requests/new">
 															<Plus className="w-4 h-4 ml-2" />
@@ -421,7 +423,7 @@ export default function FamilyRequestsPage() {
 													<Button
 														variant="outline"
 														onClick={() => setSearchQuery("")}
-														className="rounded-xl h-10 px-5 font-bold text-sm"
+														className="rounded-xl h-10 px-5 font-bold text-sm bg-transparent border-border text-foreground hover:bg-muted"
 													>
 														<X className="w-4 h-4 ml-2" />
 														مسح البحث
@@ -434,7 +436,7 @@ export default function FamilyRequestsPage() {
 															setStatusFilter("");
 															setPageNumber(1);
 														}}
-														className="rounded-xl h-10 px-5 font-bold text-sm"
+														className="rounded-xl h-10 px-5 font-bold text-sm bg-transparent border-border text-foreground hover:bg-muted"
 													>
 														عرض كل الطلبات
 													</Button>
@@ -446,105 +448,86 @@ export default function FamilyRequestsPage() {
 											{filteredRequests.map((req, index) => (
 												<Card
 													key={req.id}
-													className="animate-fade-slide-up rounded-2xl border-slate-100 bg-white hover:shadow-lg hover:border-slate-200 transition-shadow duration-300 group overflow-hidden"
+													className="animate-fade-slide-up rounded-2xl border-border bg-card hover:shadow-xl hover:shadow-black/5 hover:-translate-y-1 transition-all duration-300 group overflow-hidden relative"
 													style={{ animationDelay: `${index * 60}ms` }}
 												>
-													<div className="flex">
-														{/* Status Accent Strip */}
-														<div
-															className={cn(
-																"w-1 shrink-0 rounded-r-full",
-																getStatusAccent(req.status),
-															)}
-															aria-hidden
-														/>
-														<div className="flex-1 p-4 sm:p-5">
-															<div className="flex flex-col sm:flex-row sm:items-center gap-4">
-																{/* Info */}
-																<div className="flex-1 min-w-0 space-y-2.5">
-																	<div className="flex items-center gap-2 flex-wrap">
-																		<Badge
-																			variant="outline"
-																			className="text-[10px] font-black text-slate-400 border-slate-200 px-2 py-0.5 rounded-md"
-																		>
-																			#{req.id}
-																		</Badge>
-																		{getStatusDisplay(req.status)}
-																		{getCategoryBadge(req.requestType)}
-																		{req.attachments &&
-																			req.attachments.length > 0 && (
-																				<div className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-50 border border-slate-100">
-																					<Paperclip className="w-3 h-3 text-slate-400" />
-																					<span className="text-[10px] font-bold text-slate-400">
-																						{req.attachments.length}
-																					</span>
-																				</div>
-																			)}
-																	</div>
-																	<p className="text-sm font-bold text-slate-800 leading-relaxed line-clamp-2">
-																		{req.description ||
-																			req.title ||
-																			"طلب مساعدة"}
+													{/* Top Gradient Status Indicator */}
+													<div className={cn("absolute top-0 right-0 left-0 h-1", getStatusAccent(req.status))} />
+													
+													<div className="p-5 sm:p-6 flex flex-col gap-5">
+														{/* Header: Title + ID/Date */}
+														<div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+															<div className="space-y-2 flex-1">
+																<div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
+																	<span className="font-black text-foreground">#{req.id}</span>
+																	<span className="text-muted-foreground/50">•</span>
+																	<span className="flex items-center gap-1.5 font-medium">
+																		<Clock className="w-3.5 h-3.5" />
+																		{req.createdAt ? new Date(req.createdAt).toLocaleDateString("ar-EG", { year: "numeric", month: "long", day: "numeric" }) : "—"}
+																	</span>
+																</div>
+																<h3 className="text-lg font-black text-foreground group-hover:text-primary transition-colors line-clamp-1">
+																	{req.title || "طلب مساعدة"}
+																</h3>
+																{req.description && (
+																	<p className="text-sm font-medium text-muted-foreground line-clamp-2 leading-relaxed max-w-2xl">
+																		{req.description}
 																	</p>
-																	<div className="flex items-center gap-3 sm:gap-4 text-[11px] text-slate-400 font-medium flex-wrap">
-																		{req.location && (
-																			<span className="flex items-center gap-1 min-w-0">
-																				<MapPin className="w-3 h-3 shrink-0" />
-																				<span className="truncate max-w-[160px]">
-																					{req.location}
-																				</span>
-																			</span>
-																		)}
-																		<span className="flex items-center gap-1">
-																			<Clock className="w-3 h-3" />
-																			{req.createdAt
-																				? new Date(
-																						req.createdAt,
-																					).toLocaleDateString("ar-EG", {
-																						year: "numeric",
-																						month: "short",
-																						day: "numeric",
-																					})
-																				: "—"}
-																		</span>
-																	</div>
-																</div>
+																)}
+															</div>
+															
+															{/* Status & Category Badges */}
+															<div className="flex flex-wrap items-center gap-2 sm:justify-end shrink-0 pt-1">
+																{getStatusDisplay(req.status)}
+																{getCategoryBadge(req.requestType)}
+															</div>
+														</div>
 
-																{/* Actions */}
-																<div className="flex items-stretch gap-2 shrink-0 w-full sm:w-auto">
-																	{canCancel(req.status) && (
-																		<Button
-																			variant="outline"
-																			size="sm"
-																			onClick={() =>
-																				setCancelDialogId(req.id)
-																			}
-																			disabled={cancellingId === req.id}
-																			className="rounded-xl text-red-500 border-red-200 hover:bg-red-50 hover:text-red-600 h-10 sm:h-9 px-4 text-xs font-bold flex-1 sm:flex-none"
-																		>
-																			{cancellingId === req.id ? (
-																				<Loader2 className="w-3 h-3 animate-spin ml-1" />
-																			) : (
-																				<Ban className="w-3 h-3 ml-1" />
-																			)}
-																			إلغاء
-																		</Button>
-																	)}
+														{/* Footer: Meta info & Actions */}
+														<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 mt-auto border-t border-border">
+															<div className="flex items-center gap-5 text-sm font-bold text-muted-foreground">
+																{req.location && (
+																	<span className="flex items-center gap-1.5">
+																		<MapPin className="w-4 h-4 text-muted-foreground/70" />
+																		<span className="truncate max-w-[200px]">{req.location}</span>
+																	</span>
+																)}
+																{req.attachments && req.attachments.length > 0 && (
+																	<span className="flex items-center gap-1.5">
+																		<Paperclip className="w-4 h-4 text-muted-foreground/70" />
+																		<span>{req.attachments.length} مرفقات</span>
+																	</span>
+																)}
+															</div>
+															
+															{/* Actions */}
+															<div className="flex items-center gap-3 w-full sm:w-auto">
+																{canCancel(req.status) && (
 																	<Button
-																		variant="ghost"
+																		variant="outline"
 																		size="sm"
-																		asChild
-																		className="rounded-xl bg-slate-50 sm:bg-transparent hover:bg-warm-green/10 hover:text-warm-green h-10 sm:h-9 px-4 text-xs font-bold text-slate-600 flex-1 sm:flex-none"
+																		onClick={() => setCancelDialogId(req.id)}
+																		disabled={cancellingId === req.id}
+																		className="rounded-xl text-destructive border-destructive/20 hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30 h-11 px-5 text-sm font-bold transition-colors flex-1 sm:flex-none"
 																	>
-																		<Link
-																			href={`/dashboard/family/requests/${req.id}`}
-																			className="flex items-center justify-center"
-																		>
-																			التفاصيل
-																			<ChevronLeft className="w-3 h-3 mr-1" />
-																		</Link>
+																		{cancellingId === req.id ? (
+																			<Loader2 className="w-4 h-4 animate-spin ml-2" />
+																		) : (
+																			<Ban className="w-4 h-4 ml-2" />
+																		)}
+																		إلغاء
 																	</Button>
-																</div>
+																)}
+																<Button
+																	size="sm"
+																	asChild
+																	className="rounded-xl bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground h-11 px-6 text-sm font-bold transition-all flex-1 sm:flex-none"
+																>
+																	<Link href={`/dashboard/family/requests/${req.id}`} className="flex items-center justify-center">
+																		التفاصيل
+																		<ChevronLeft className="w-4 h-4 mr-2" />
+																	</Link>
+																</Button>
 															</div>
 														</div>
 													</div>
@@ -564,7 +547,7 @@ export default function FamilyRequestsPage() {
 												}
 												disabled={pageNumber <= 1}
 												aria-label="الصفحة السابقة"
-												className="rounded-xl h-9 w-9 p-0 font-bold text-xs"
+												className="rounded-xl h-9 w-9 p-0 font-bold text-xs border-border bg-card text-foreground hover:bg-muted"
 											>
 												<ChevronRight className="w-4 h-4" />
 											</Button>
@@ -575,12 +558,12 @@ export default function FamilyRequestsPage() {
 														variant="outline"
 														size="sm"
 														onClick={() => setPageNumber(1)}
-														className="rounded-xl h-9 w-9 p-0 font-bold text-xs"
+														className="rounded-xl h-9 w-9 p-0 font-bold text-xs border-border bg-card text-foreground hover:bg-muted"
 													>
 														1
 													</Button>
 													{pageNumbers[0] > 2 && (
-														<span className="text-slate-300 text-xs px-1">
+														<span className="text-muted-foreground text-xs px-1">
 															…
 														</span>
 													)}
@@ -595,9 +578,10 @@ export default function FamilyRequestsPage() {
 													onClick={() => setPageNumber(p)}
 													aria-current={p === pageNumber ? "page" : undefined}
 													className={cn(
-														"rounded-xl h-9 w-9 p-0 font-bold text-xs transition-all",
-														p === pageNumber &&
-															"bg-warm-green hover:bg-warm-green/90 text-white shadow-md shadow-warm-green/20",
+														"rounded-xl h-9 w-9 p-0 font-bold text-xs transition-all border-border",
+														p === pageNumber
+															? "bg-primary hover:bg-primary/90 text-primary-foreground shadow-md shadow-primary/20"
+															: "bg-card text-foreground hover:bg-muted",
 													)}
 												>
 													{p}
@@ -608,7 +592,7 @@ export default function FamilyRequestsPage() {
 												<>
 													{pageNumbers[pageNumbers.length - 1] <
 														totalPages - 1 && (
-														<span className="text-slate-300 text-xs px-1">
+														<span className="text-muted-foreground text-xs px-1">
 															…
 														</span>
 													)}
@@ -616,7 +600,7 @@ export default function FamilyRequestsPage() {
 														variant="outline"
 														size="sm"
 														onClick={() => setPageNumber(totalPages)}
-														className="rounded-xl h-9 w-9 p-0 font-bold text-xs"
+														className="rounded-xl h-9 w-9 p-0 font-bold text-xs border-border bg-card text-foreground hover:bg-muted"
 													>
 														{totalPages}
 													</Button>
@@ -633,7 +617,7 @@ export default function FamilyRequestsPage() {
 												}
 												disabled={pageNumber >= totalPages}
 												aria-label="الصفحة التالية"
-												className="rounded-xl h-9 w-9 p-0 font-bold text-xs"
+												className="rounded-xl h-9 w-9 p-0 font-bold text-xs border-border bg-card text-foreground hover:bg-muted"
 											>
 												<ChevronLeft className="w-4 h-4" />
 											</Button>
@@ -652,19 +636,19 @@ export default function FamilyRequestsPage() {
 				onOpenChange={(open) => !open && setCancelDialogId(null)}
 			>
 				<AlertDialogContent
-					className="rounded-2xl border-0 shadow-2xl sm:max-w-md"
+					className="rounded-2xl border-border bg-card shadow-2xl sm:max-w-md"
 					dir="rtl"
 				>
 					<AlertDialogHeader className="items-center text-center gap-4">
-						<div className="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center mx-auto">
-							<AlertCircle className="w-8 h-8 text-red-500" />
+						<div className="w-16 h-16 rounded-full bg-destructive/10 flex items-center justify-center mx-auto">
+							<AlertCircle className="w-8 h-8 text-destructive" />
 						</div>
-						<AlertDialogTitle className="text-xl font-black text-slate-900">
+						<AlertDialogTitle className="text-xl font-black text-foreground">
 							تأكيد إلغاء الطلب
 						</AlertDialogTitle>
-						<AlertDialogDescription className="text-sm text-slate-500 font-medium leading-relaxed">
+						<AlertDialogDescription className="text-sm text-muted-foreground font-medium leading-relaxed">
 							هل أنت متأكد من إلغاء هذا الطلب؟{" "}
-							<span className="text-red-400 font-bold block mt-1">
+							<span className="text-destructive font-bold block mt-1">
 								لا يمكن التراجع عن هذا الإجراء بعد التأكيد.
 							</span>
 						</AlertDialogDescription>
@@ -674,12 +658,12 @@ export default function FamilyRequestsPage() {
 							onClick={() =>
 								cancelDialogId !== null && handleCancel(cancelDialogId)
 							}
-							className="bg-red-500 hover:bg-red-600 text-white rounded-xl h-11 px-6 font-bold text-sm flex-1"
+							className="bg-destructive hover:bg-destructive/90 text-destructive-foreground rounded-xl h-11 px-6 font-bold text-sm flex-1"
 						>
 							<Ban className="w-4 h-4 ml-2" />
 							نعم، إلغاء الطلب
 						</AlertDialogAction>
-						<AlertDialogCancel className="rounded-xl h-11 px-6 font-bold text-sm flex-1 border-slate-200 mt-0">
+						<AlertDialogCancel className="rounded-xl h-11 px-6 font-bold text-sm flex-1 border-border bg-transparent text-foreground hover:bg-muted mt-0">
 							تراجع
 						</AlertDialogCancel>
 					</AlertDialogFooter>

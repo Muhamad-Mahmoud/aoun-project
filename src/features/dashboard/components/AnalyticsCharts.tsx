@@ -1,10 +1,13 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { motion } from "framer-motion";
 import { cn } from "@/shared/utils";
 import { EmptyState } from "@/shared/components/common/EmptyState";
-import { BarChart3, PieChart } from "lucide-react";
+import { BarChart3, PieChart as PieChartIcon } from "lucide-react";
+import { 
+    AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+    PieChart, Pie, Cell, Legend
+} from "recharts";
 
 // --- Types ---
 interface MonthlyTrendChartProps {
@@ -15,14 +18,13 @@ interface RequestTypeChartProps {
     data: Record<string, number>;
 }
 
-// Ensure proper spacing and colors
 const COLORS = [
-    "bg-sky-blue",
-    "bg-golden-orange",
-    "bg-warm-green",
-    "bg-royal-purple",
-    "bg-slate-700",
-    "bg-primary"
+    "#10b981", // emerald-500
+    "#3b82f6", // blue-500
+    "#f59e0b", // amber-500
+    "#8b5cf6", // violet-500
+    "#ec4899", // pink-500
+    "#0f172a"  // slate-900
 ];
 
 const TRANSLATION_MAP: Record<string, string> = {
@@ -41,19 +43,45 @@ function formatMonth(monthNum: string) {
 }
 
 export function MonthlyTrendChart({ data }: MonthlyTrendChartProps) {
-    const entries = useMemo(() => {
+    const chartData = useMemo(() => {
         if (!data || Object.keys(data).length === 0) return [];
-        return Object.entries(data).sort((a, b) => a[0].localeCompare(b[0]));
+        
+        const rawEntries = Object.entries(data).sort((a, b) => a[0].localeCompare(b[0]));
+        if (rawEntries.length === 0) return [];
+
+        // Fill missing months with 0
+        const filledData: { name: string, value: number }[] = [];
+        
+        let currentDate = new Date(rawEntries[0][0] + "-01");
+        const endDate = new Date(rawEntries[rawEntries.length - 1][0] + "-01");
+        
+        // Add 2 padding months before to make the chart look like a curve if it's too short
+        if (rawEntries.length < 4) {
+             currentDate.setMonth(currentDate.getMonth() - 2);
+        }
+
+        while (currentDate <= endDate) {
+            const yearStr = currentDate.getFullYear();
+            const monthStr = String(currentDate.getMonth() + 1).padStart(2, '0');
+            const key = yearStr + "-" + monthStr;
+            
+            filledData.push({
+                name: formatMonth(monthStr),
+                value: data[key] || 0
+            });
+            
+            currentDate.setMonth(currentDate.getMonth() + 1);
+        }
+
+        return filledData;
     }, [data]);
 
-    const topValue = useMemo(() => {
-        if (entries.length === 0) return 4;
-        const max = Math.max(...entries.map(([, val]) => val));
-        const tickStep = Math.ceil(max / 3) || 1;
-        return tickStep * 3;
-    }, [entries]);
+    const maxValue = useMemo(() => {
+        if (chartData.length === 0) return 10;
+        return Math.max(...chartData.map(d => d.value));
+    }, [chartData]);
 
-    if (entries.length === 0) {
+    if (chartData.length === 0) {
         return (
             <EmptyState
                 icon={BarChart3}
@@ -64,72 +92,75 @@ export function MonthlyTrendChart({ data }: MonthlyTrendChartProps) {
         );
     }
 
-    const yAxisTicks = [topValue, topValue * 0.66, topValue * 0.33, 0];
+    const CustomTooltip = ({ active, payload, label }: any) => {
+        if (active && payload && payload.length) {
+            return (
+                <div className="bg-card border border-border p-3 rounded-xl shadow-xl flex flex-col gap-1">
+                    <span className="text-muted-foreground text-xs font-bold">{label}</span>
+                    <span className="text-foreground font-black text-lg">{payload[0].value} <span className="text-xs font-bold text-muted-foreground">طلبات</span></span>
+                </div>
+            );
+        }
+        return null;
+    };
 
     return (
-        <div className="w-full h-[280px] flex pt-4 pb-2 font-sans" dir="ltr">
-            {/* Y-Axis */}
-            <div className="w-8 shrink-0 flex flex-col justify-between items-end pb-8 pr-3">
-                {yAxisTicks.map((tick, i) => (
-                    <span key={i} className="text-[10px] text-slate-400 font-bold leading-[0] h-0 flex items-center">
-                        {Math.round(tick)}
-                    </span>
-                ))}
-            </div>
-            
-            {/* Chart Area */}
-            <div className="flex-1 relative ml-1">
-                {/* Minimal Gridlines */}
-                <div className="absolute inset-0 flex flex-col justify-between pointer-events-none pb-8">
-                    {yAxisTicks.map((_, i) => (
-                        <div key={i} className="w-full border-t border-slate-100/50" />
-                    ))}
-                </div>
-
-                {/* Bars */}
-                <div className="absolute inset-0 flex items-end justify-around pb-8 z-10 px-2 lg:px-6">
-                    {entries.map(([monthStr, value], idx) => {
-                        const [, month] = monthStr.split("-");
-                        const heightPercentage = Math.max((value / topValue) * 100, 4);
-                        const monthName = formatMonth(month);
-
-                        return (
-                            <div key={monthStr} className="flex flex-col items-center justify-end h-full w-12 sm:w-16 group relative">
-                                <motion.div
-                                    initial={{ height: 0 }}
-                                    animate={{ height: `${heightPercentage}%` }}
-                                    transition={{ duration: 0.8, delay: idx * 0.1, ease: "circOut" }}
-                                    className="w-full bg-primary/80 hover:bg-primary rounded-t-lg transition-colors duration-300 relative flex justify-center cursor-default sm:cursor-pointer"
-                                >
-                                    {/* Tooltip */}
-                                    <div className="absolute -top-10 text-[11px] font-bold text-white bg-slate-900 rounded-lg py-1.5 px-3 shadow-xl opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 whitespace-nowrap z-20 pointer-events-none tracking-wide">
-                                        <span className="font-black">{value}</span> طلبات
-                                    </div>
-                                </motion.div>
-                                <span className="text-[11px] text-slate-400 font-bold absolute -bottom-6">{monthName}</span>
-                            </div>
-                        );
-                    })}
-                </div>
-            </div>
+        <div className="w-full h-full min-h-[280px]" dir="ltr">
+            <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                    <defs>
+                        <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
+                            <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                        </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                    <XAxis 
+                        dataKey="name" 
+                        axisLine={false} 
+                        tickLine={false} 
+                        tick={{ fontSize: 12, fill: '#64748b', fontWeight: 'bold' }} 
+                        dy={10}
+                    />
+                    <YAxis 
+                        axisLine={false} 
+                        tickLine={false} 
+                        tick={{ fontSize: 12, fill: '#64748b', fontWeight: 'bold' }}
+                        domain={[0, Math.max(10, maxValue + (maxValue * 0.2))]}
+                    />
+                    <Tooltip content={<CustomTooltip />} />
+                    <Area 
+                        type="monotone" 
+                        dataKey="value" 
+                        stroke="#10b981" 
+                        strokeWidth={3}
+                        fillOpacity={1} 
+                        fill="url(#colorValue)" 
+                        activeDot={{ r: 6, fill: "#10b981", stroke: "#fff", strokeWidth: 3 }}
+                    />
+                </AreaChart>
+            </ResponsiveContainer>
         </div>
     );
 }
 
 export function RequestTypeChart({ data }: RequestTypeChartProps) {
-    const entries = useMemo(() => {
+    const chartData = useMemo(() => {
         if (!data || Object.keys(data).length === 0) return [];
-        return Object.entries(data).sort((a, b) => b[1] - a[1]);
+        const total = Object.values(data).reduce((acc, val) => acc + val, 0);
+        return Object.entries(data)
+            .sort((a, b) => b[1] - a[1])
+            .map(([type, value]) => ({
+                name: TRANSLATION_MAP[type] || type,
+                value: value,
+                percentage: total > 0 ? Math.round((value / total) * 100) : 0
+            }));
     }, [data]);
 
-    const total = useMemo(() => {
-        return entries.reduce((acc, [, val]) => acc + val, 0);
-    }, [entries]);
-
-    if (entries.length === 0) {
+    if (chartData.length === 0) {
         return (
             <EmptyState
-                icon={PieChart}
+                icon={PieChartIcon}
                 title="البيانات غير متوفرة"
                 description="توزيع مجالات الاحتياج غير متاح حالياً."
                 className="bg-transparent border-dashed min-h-[200px]"
@@ -137,36 +168,51 @@ export function RequestTypeChart({ data }: RequestTypeChartProps) {
         );
     }
 
-    return (
-        <div className="space-y-7 pt-4">
-            {entries.map(([type, value], idx) => {
-                const percentage = total === 0 ? 0 : (value / total) * 100;
-                const colorClass = COLORS[idx % COLORS.length];
-                const displayType = TRANSLATION_MAP[type] || type;
+    const CustomTooltip = ({ active, payload }: any) => {
+        if (active && payload && payload.length) {
+            return (
+                <div className="bg-card border border-border p-2 rounded-xl shadow-lg flex items-center gap-3">
+                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: payload[0].payload.fill }} />
+                    <span className="text-foreground font-bold text-sm">{payload[0].name}</span>
+                    <span className="text-foreground font-black">{payload[0].value}</span>
+                </div>
+            );
+        }
+        return null;
+    };
 
-                return (
-                    <div key={type} className="space-y-3 group cursor-default">
-                        <div className="flex justify-between items-end">
-                            <div className="flex items-center gap-2.5">
-                                <div className={cn("w-3 h-3 rounded-md shadow-sm transition-transform group-hover:scale-110", colorClass)} />
-                                <span className="text-sm font-bold text-slate-700">{displayType}</span>
-                            </div>
-                            <div className="text-xs font-black text-slate-900 tabular-nums tracking-tight" dir="ltr">
-                                {Math.round(percentage)}% <span className="text-slate-400 font-bold ml-1 text-[11px]">({value})</span>
-                            </div>
-                        </div>
-                        <div className="h-2.5 w-full bg-slate-100 rounded-full overflow-hidden flex justify-end shadow-inner">
-                            <motion.div
-                                initial={{ width: 0 }}
-                                animate={{ width: `${percentage}%` }}
-                                transition={{ duration: 1.2, delay: idx * 0.1, ease: "circOut" }}
-                                className={cn("h-full rounded-full", colorClass)}
-                            />
-                        </div>
+    return (
+        <div className="w-full h-full min-h-[250px] relative flex flex-col" dir="ltr">
+            <div className="flex-1 min-h-[200px]">
+                <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                        <Pie
+                            data={chartData}
+                            cx="50%"
+                            cy="50%"
+                            innerRadius={60}
+                            outerRadius={80}
+                            paddingAngle={5}
+                            dataKey="value"
+                            stroke="none"
+                        >
+                            {chartData.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                            ))}
+                        </Pie>
+                        <Tooltip content={<CustomTooltip />} />
+                    </PieChart>
+                </ResponsiveContainer>
+            </div>
+            {/* Custom Legend */}
+            <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 mt-4" dir="rtl">
+                {chartData.map((entry, idx) => (
+                    <div key={idx} className="flex items-center gap-1.5">
+                        <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: COLORS[idx % COLORS.length] }} />
+                        <span className="text-xs font-bold text-muted-foreground">{entry.name} <span className="text-muted-foreground">({entry.percentage}%)</span></span>
                     </div>
-                );
-            })}
+                ))}
+            </div>
         </div>
     );
 }
-

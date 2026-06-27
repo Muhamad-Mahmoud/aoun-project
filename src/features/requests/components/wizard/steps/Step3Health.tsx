@@ -13,7 +13,7 @@ interface Step3HealthProps {
     hasChronicDisease: boolean;
 }
 
-const inputCls = "h-11 rounded-xl border border-slate-200 bg-white hover:border-slate-300 focus:ring-2 focus:ring-warm-green/15 focus:border-warm-green/50 shadow-sm px-4 font-medium transition-all placeholder:text-slate-400";
+const inputCls = "h-11 rounded-xl border border-border bg-card hover:border-slate-300 focus:ring-2 focus:ring-warm-green/15 focus:border-warm-green/50 shadow-sm px-4 font-medium transition-all placeholder:text-muted-foreground";
 
 export function Step3Health({ control, hasInsurance, hasDisability, hasChronicDisease }: Step3HealthProps) {
     return (
@@ -25,7 +25,7 @@ export function Step3Health({ control, hasInsurance, hasDisability, hasChronicDi
                 name="hasInsurance"
                 render={({ field }) => (
                     <FormItem>
-                        <FormLabel className="text-[13px] font-bold text-slate-700 mb-2.5 inline-block">
+                        <FormLabel className="text-[13px] font-bold text-foreground mb-2.5 inline-block">
                             هل يوجد تأمين طبي؟ <span className="text-rose-500 mr-1">*</span>
                         </FormLabel>
                         <YesNoToggle value={field.value} onChange={field.onChange} />
@@ -41,7 +41,7 @@ export function Step3Health({ control, hasInsurance, hasDisability, hasChronicDi
                         name="insuranceType"
                         render={({ field }) => (
                             <FormItem className="text-start">
-                                <FormLabel className="text-[13px] font-bold text-slate-700 mb-1.5 inline-block">
+                                <FormLabel className="text-[13px] font-bold text-foreground mb-1.5 inline-block">
                                     نوع التأمين الطبي <span className="text-rose-500 mr-1">*</span>
                                 </FormLabel>
                                 <FormControl>
@@ -59,7 +59,7 @@ export function Step3Health({ control, hasInsurance, hasDisability, hasChronicDi
                 </div>
             )}
 
-            <div className="w-full h-px bg-slate-100" />
+            <div className="w-full h-px bg-muted/50" />
 
             {/* Disability */}
             <FormField
@@ -67,7 +67,7 @@ export function Step3Health({ control, hasInsurance, hasDisability, hasChronicDi
                 name="hasDisability"
                 render={({ field }) => (
                     <FormItem>
-                        <FormLabel className="text-[13px] font-bold text-slate-700 mb-2.5 inline-block">
+                        <FormLabel className="text-[13px] font-bold text-foreground mb-2.5 inline-block">
                             هل يوجد أي إعاقة؟ <span className="text-rose-500 mr-1">*</span>
                         </FormLabel>
                         <YesNoToggle value={field.value} onChange={field.onChange} />
@@ -83,7 +83,7 @@ export function Step3Health({ control, hasInsurance, hasDisability, hasChronicDi
                         name="disabilityType"
                         render={({ field }) => (
                             <FormItem className="text-start">
-                                <FormLabel className="text-[13px] font-bold text-slate-700 mb-1.5 inline-block">
+                                <FormLabel className="text-[13px] font-bold text-foreground mb-1.5 inline-block">
                                     نوع الإعاقة <span className="text-rose-500 mr-1">*</span>
                                 </FormLabel>
                                 <FormControl>
@@ -101,7 +101,7 @@ export function Step3Health({ control, hasInsurance, hasDisability, hasChronicDi
                 </div>
             )}
 
-            <div className="w-full h-px bg-slate-100" />
+            <div className="w-full h-px bg-muted/50" />
 
             {/* Chronic Disease */}
             <FormField
@@ -109,7 +109,7 @@ export function Step3Health({ control, hasInsurance, hasDisability, hasChronicDi
                 name="hasChronicDisease"
                 render={({ field }) => (
                     <FormItem>
-                        <FormLabel className="text-[13px] font-bold text-slate-700 mb-2.5 inline-block">
+                        <FormLabel className="text-[13px] font-bold text-foreground mb-2.5 inline-block">
                             هل يوجد أمراض مزمنة؟ <span className="text-rose-500 mr-1">*</span>
                         </FormLabel>
                         <YesNoToggle value={field.value} onChange={field.onChange} />
@@ -125,7 +125,7 @@ export function Step3Health({ control, hasInsurance, hasDisability, hasChronicDi
                         name="chronicDiseaseType"
                         render={({ field }) => (
                             <FormItem className="text-start">
-                                <FormLabel className="text-[13px] font-bold text-slate-700 mb-1.5 inline-block">
+                                <FormLabel className="text-[13px] font-bold text-foreground mb-1.5 inline-block">
                                     نوع المرض المزمن <span className="text-rose-500 mr-1">*</span>
                                 </FormLabel>
                                 <FormControl>
@@ -143,7 +143,7 @@ export function Step3Health({ control, hasInsurance, hasDisability, hasChronicDi
                 </div>
             )}
 
-            <div className="w-full h-px bg-slate-100" />
+            <div className="w-full h-px bg-muted/50" />
 
             {/* Medical Cost */}
             <FormField
@@ -151,13 +151,13 @@ export function Step3Health({ control, hasInsurance, hasDisability, hasChronicDi
                 name="medicalCostMonthly"
                 render={({ field }) => (
                     <FormItem className="text-start">
-                        <FormLabel className="text-[13px] font-bold text-slate-700 mb-1.5 inline-block">
+                        <FormLabel className="text-[13px] font-bold text-foreground mb-1.5 inline-block">
                             متوسط التكلفة الشهرية للعلاج {hasChronicDisease && <span className="text-rose-500 mr-1">*</span>}
                         </FormLabel>
                         <FormControl>
                             <div className="relative max-w-xs">
                                 <Input type="number" className={`${inputCls} pl-14`} {...field} value={field.value ?? ""} />
-                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">ج.م</span>
+                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-muted-foreground bg-muted/50 px-1.5 py-0.5 rounded">ج.م</span>
                             </div>
                         </FormControl>
                         <FormMessage />

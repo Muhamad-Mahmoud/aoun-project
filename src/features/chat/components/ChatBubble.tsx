@@ -97,7 +97,7 @@ export const ChatBubble = React.memo(function ChatBubble({ message, isLast, isSt
                                             <span className="w-1.5 h-1.5 rounded-full bg-primary/70 animate-bounce [animation-delay:300ms]" />
                                         </div>
                                     ) : (
-                                        <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                                        <CheckCircle2 className="w-4 h-4 text-primary" />
                                     )}
                                     <span className={cn(
                                         "text-[12.5px] font-bold",
@@ -110,7 +110,7 @@ export const ChatBubble = React.memo(function ChatBubble({ message, isLast, isSt
                                     "text-[11px] font-semibold px-2 py-0.5 rounded-md",
                                     (isStreaming && isLast) 
                                         ? "text-primary/50 bg-primary/5" 
-                                        : "text-emerald-600 bg-emerald-100/50"
+                                        : "text-primary bg-emerald-100/50"
                                 )}>
                                     {(isStreaming && isLast) 
                                         ? `خطوة ${message.progress.step}/${message.progress.total_steps}`
@@ -122,26 +122,26 @@ export const ChatBubble = React.memo(function ChatBubble({ message, isLast, isSt
 
                         {/* Collapsible Thought Process (Like an Agent's Thought Block) */}
                         {message.planning && (
-                            <div className="mb-4 border border-slate-200/60 rounded-xl bg-slate-50/50 overflow-hidden transition-all shadow-sm">
+                            <div className="mb-4 border border-border/60 rounded-xl bg-muted/50 overflow-hidden transition-all shadow-sm">
                                 <button 
                                     onClick={() => setIsThoughtOpen(!isThoughtOpen)}
-                                    className="w-full flex items-center justify-between px-4 py-2.5 bg-white/50 hover:bg-white transition-colors"
+                                    className="w-full flex items-center justify-between px-4 py-2.5 bg-card/50 hover:bg-card transition-colors"
                                     title="عرض طريقة تفكير المساعد الذكي"
                                 >
                                     <div className="flex items-center gap-2">
                                         <BrainCircuit className={cn(
                                             "w-4 h-4 transition-colors", 
-                                            isStreaming ? "text-primary animate-pulse" : "text-emerald-500"
+                                            isStreaming ? "text-primary animate-pulse" : "text-primary"
                                         )} />
-                                        <span className="text-[12.5px] font-bold text-slate-700">
+                                        <span className="text-[12.5px] font-bold text-foreground">
                                             {isStreaming ? "جاري التحليل والتفكير..." : "تفاصيل العملية وطريقة التفكير"}
                                         </span>
                                     </div>
-                                    <ChevronDown className={cn("w-4 h-4 text-slate-400 transition-transform duration-300", isThoughtOpen && "rotate-180")} />
+                                    <ChevronDown className={cn("w-4 h-4 text-muted-foreground transition-transform duration-300", isThoughtOpen && "rotate-180")} />
                                 </button>
                                 
                                 {isThoughtOpen && (
-                                    <div className="px-4 py-3 border-t border-slate-100 text-[12.5px] leading-relaxed text-slate-600 font-medium bg-slate-50/80">
+                                    <div className="px-4 py-3 border-t border-border text-[12.5px] leading-relaxed text-muted-foreground font-medium bg-muted/80">
                                         {/* The AI's internal thought text */}
                                         {message.planning.message && (
                                             <div className="mb-3 whitespace-pre-wrap opacity-90 border-r-2 border-primary/20 pr-3">
@@ -152,10 +152,10 @@ export const ChatBubble = React.memo(function ChatBubble({ message, isLast, isSt
                                         {/* Tool Usage Badges */}
                                         {message.planning.tool_calls && message.planning.tool_calls.length > 0 && (
                                             <div className="flex flex-col gap-1.5 mt-2">
-                                                <span className="text-[11px] font-bold text-slate-400">الأدوات المستخدمة:</span>
+                                                <span className="text-[11px] font-bold text-muted-foreground">الأدوات المستخدمة:</span>
                                                 <div className="flex flex-wrap gap-1.5">
                                                     {message.planning.tool_calls.map((tool, idx) => (
-                                                        <span key={idx} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-slate-200 bg-white text-[10.5px] font-mono text-slate-600 shadow-sm">
+                                                        <span key={idx} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-border bg-card text-[10.5px] font-mono text-muted-foreground shadow-sm">
                                                             <Bot className="w-3 h-3 opacity-60 text-primary" />
                                                             {tool}
                                                         </span>
@@ -264,7 +264,7 @@ export const ChatBubble = React.memo(function ChatBubble({ message, isLast, isSt
                         {/* Additional Tool Confirmation UI */}
                         {message.confirmation && isLast && !isStreaming && (
                             <div className="mt-5 pt-4 border-t border-border/50">
-                                <div className="p-4 bg-amber-50/50 dark:bg-amber-950/20 rounded-xl border border-amber-200/50 dark:border-amber-800/30">
+                                <div className="p-4 bg-primary/10/50 dark:bg-amber-950/20 rounded-xl border border-amber-200/50 dark:border-amber-800/30">
                                     <div className="flex items-start gap-3 mb-4">
                                         <span className="text-lg mt-0.5">⚠️</span>
                                         <div>
@@ -289,7 +289,7 @@ export const ChatBubble = React.memo(function ChatBubble({ message, isLast, isSt
                                             )}
                                         >
                                             {actionLoading ? (
-                                                <span className="w-3.5 h-3.5 border-2 border-white/50 border-t-white rounded-full animate-spin" />
+                                                <span className="w-3.5 h-3.5 border-2 border-border/50 border-t-white rounded-full animate-spin" />
                                             ) : (
                                                 <CheckCircle2 className="w-4 h-4" />
                                             )}
@@ -323,7 +323,7 @@ export const ChatBubble = React.memo(function ChatBubble({ message, isLast, isSt
             </div>
 
             {/* Avatar on the far Left */}
-            <div className="flex-shrink-0 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br from-primary via-primary/90 to-emerald-500 flex items-center justify-center shadow-md shadow-primary/20 mb-0.5 border-2 border-white relative">
+            <div className="flex-shrink-0 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br from-primary via-primary/90 to-emerald-500 flex items-center justify-center shadow-md shadow-primary/20 mb-0.5 border-2 border-border relative">
                 {/* Pulsing ring behind the bot icon */}
                 <div className="absolute inset-0 rounded-full bg-primary animate-ping opacity-20" style={{ animationDuration: '3s' }} />
                 <Bot className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-white z-10" />

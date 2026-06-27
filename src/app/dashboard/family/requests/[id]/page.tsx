@@ -85,8 +85,8 @@ function Field({ label, value, colSpan = 1 }: { label: string; value: React.Reac
     const display = typeof value === "boolean" ? (value ? "نعم" : "لا") : value;
     return (
         <div className={cn("flex flex-col gap-1", colSpan === 2 && "sm:col-span-2")}>
-            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{label}</span>
-            <span className="text-[13px] font-semibold text-slate-800 bg-white rounded-lg px-3 py-2 flex items-center border border-slate-100 min-h-[34px]">
+            <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">{label}</span>
+            <span className="text-[13px] font-semibold text-foreground bg-card rounded-lg px-3 py-2 flex items-center border border-border min-h-[34px]">
                 {display}
             </span>
         </div>
@@ -98,12 +98,12 @@ function Section({ icon: Icon, title, iconColor = "text-warm-green", iconBg = "b
     icon: LucideIcon; title: string; iconColor?: string; iconBg?: string; children: React.ReactNode; delay?: number;
 }) {
     return (
-        <div className="anim-up bg-slate-50/60 rounded-2xl border border-slate-100 p-4 sm:p-5" style={{ animationDelay: `${delay}ms` }}>
-            <div className="flex items-center gap-2.5 mb-4 pb-3 border-b border-slate-100">
+        <div className="anim-up bg-muted/60 rounded-2xl border border-border p-4 sm:p-5" style={{ animationDelay: `${delay}ms` }}>
+            <div className="flex items-center gap-2.5 mb-4 pb-3 border-b border-border">
                 <span className={cn("w-7 h-7 rounded-lg flex items-center justify-center shrink-0", iconBg, iconColor)}>
                     <Icon className="w-3.5 h-3.5" />
                 </span>
-                <h4 className="text-[14px] font-black text-slate-800 leading-none">{title}</h4>
+                <h4 className="text-[14px] font-black text-foreground leading-none">{title}</h4>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {children}
@@ -192,7 +192,7 @@ export default function RequestDetailsPage() {
         return (
             <DashboardLayout>
                 <FamilySidebar />
-                <div className="flex-1 flex flex-col h-full overflow-y-auto overflow-x-hidden bg-gradient-to-b from-slate-50 to-white" dir="rtl">
+                <div className="flex-1 flex flex-col h-full overflow-y-auto overflow-x-hidden bg-background" dir="rtl">
                     <DashboardTopBar userType="family" />
                     <main className="p-4 sm:p-8 pt-20 lg:pt-28">
                         <div className="mx-auto max-w-4xl space-y-5">
@@ -220,13 +220,13 @@ export default function RequestDetailsPage() {
         return (
             <DashboardLayout>
                 <FamilySidebar />
-                <div className="flex-1 flex flex-col h-full overflow-y-auto overflow-x-hidden bg-gradient-to-b from-slate-50 to-white" dir="rtl">
+                <div className="flex-1 flex flex-col h-full overflow-y-auto overflow-x-hidden bg-background" dir="rtl">
                     <DashboardTopBar userType="family" />
                     <main className="p-4 sm:p-8 pt-20 lg:pt-28">
                         <div className="mx-auto max-w-4xl">
-                            <div className="p-10 text-center rounded-2xl border border-red-200 bg-red-50">
-                                <AlertCircle className="w-10 h-10 text-red-400 mx-auto mb-3" />
-                                <p className="text-base font-bold text-red-600 mb-4">{error || "الطلب غير موجود"}</p>
+                            <div className="p-10 text-center rounded-2xl border border-destructive/20 bg-destructive/10">
+                                <AlertCircle className="w-10 h-10 text-destructive mx-auto mb-3" />
+                                <p className="text-base font-bold text-destructive mb-4">{error || "الطلب غير موجود"}</p>
                                 <div className="flex gap-3 justify-center">
                                     <Button variant="outline" onClick={() => router.back()} className="rounded-xl"><ArrowRight className="w-4 h-4 ml-2" />العودة</Button>
                                     <Button onClick={fetchRequest} className="rounded-xl bg-warm-green hover:bg-warm-green/90">إعادة المحاولة</Button>
@@ -261,7 +261,7 @@ export default function RequestDetailsPage() {
 
         <DashboardLayout>
             <FamilySidebar />
-            <div className="flex-1 flex flex-col h-full overflow-y-auto overflow-x-hidden bg-gradient-to-b from-slate-50 to-white print:bg-white" dir="rtl">
+            <div className="flex-1 flex flex-col h-full overflow-y-auto overflow-x-hidden bg-background print:bg-card" dir="rtl">
                 <DashboardTopBar userType="family" />
 
                 <main className="p-4 sm:p-8 pt-20 lg:pt-28 relative z-10">
@@ -270,15 +270,15 @@ export default function RequestDetailsPage() {
                         {/* ===== Compact Header ===== */}
                         <div className="anim-up flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                             <div className="flex items-center gap-3">
-                                <Button variant="ghost" onClick={() => router.back()} className="w-10 h-10 rounded-xl bg-white shadow-sm border border-slate-100 hover:bg-slate-50 shrink-0 print:hidden p-0">
+                                <Button variant="ghost" onClick={() => router.back()} className="w-10 h-10 rounded-xl bg-card shadow-sm border border-border hover:bg-muted shrink-0 print:hidden p-0">
                                     <ArrowRight className="w-4 h-4" />
                                 </Button>
                                 <div className="space-y-1.5">
                                     <div className="flex items-center gap-2 flex-wrap">
-                                        <h1 className="text-xl sm:text-2xl font-black text-slate-900">تفاصيل الطلب</h1>
+                                        <h1 className="text-xl sm:text-2xl font-black text-foreground">تفاصيل الطلب</h1>
                                         <button
                                             onClick={copyRequestId}
-                                            className="group flex items-center gap-1 bg-slate-100 hover:bg-slate-200 text-slate-500 border-none font-black text-[10px] px-2.5 py-1 rounded-md transition-colors cursor-pointer"
+                                            className="group flex items-center gap-1 bg-slate-100 hover:bg-slate-200 text-muted-foreground border-none font-black text-[10px] px-2.5 py-1 rounded-md transition-colors cursor-pointer"
                                             title="انسخ رقم الطلب"
                                         >
                                             #{request.id}
@@ -289,20 +289,20 @@ export default function RequestDetailsPage() {
                                             {status.label}
                                         </Badge>
                                         {request.priority && (
-                                            <Badge variant="outline" className="text-[10px] font-bold border-amber-200 bg-amber-50 text-amber-600 px-2 py-0.5 rounded-full gap-1">
+                                            <Badge variant="outline" className="text-[10px] font-bold border-amber-200 bg-primary/10 text-amber-600 px-2 py-0.5 rounded-full gap-1">
                                                 <Star className="w-2.5 h-2.5" />
                                                 {request.priority}
                                             </Badge>
                                         )}
                                     </div>
-                                    <div className="flex items-center gap-2.5 text-[11px] text-slate-400 font-medium flex-wrap">
+                                    <div className="flex items-center gap-2.5 text-[11px] text-muted-foreground font-medium flex-wrap">
                                         <span className="flex items-center gap-1">
                                             <Clock className="w-3 h-3" />
                                             {request.createdAt ? new Date(request.createdAt).toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' }) : "—"}
                                         </span>
                                         {request.location && (
                                             <>
-                                                <span className="text-slate-200">•</span>
+                                                <span className="text-muted-foreground/30">•</span>
                                                 <span className="flex items-center gap-1">
                                                     <MapPin className="w-3 h-3" />
                                                     {request.location}
@@ -313,12 +313,12 @@ export default function RequestDetailsPage() {
                                 </div>
                             </div>
                             <div className="flex items-center gap-2 shrink-0 print:hidden">
-                                <Button variant="outline" size="sm" onClick={handlePrint} className="rounded-xl h-9 px-3 font-bold text-[11px] text-slate-500 border-slate-200 hover:bg-slate-50">
+                                <Button variant="outline" size="sm" onClick={handlePrint} className="rounded-xl h-9 px-3 font-bold text-[11px] text-muted-foreground border-border hover:bg-muted">
                                     <Printer className="w-3.5 h-3.5 ml-1.5" />
                                     طباعة
                                 </Button>
                                 {canCancel && (
-                                    <Button variant="outline" onClick={() => setShowCancelDialog(true)} disabled={cancelling} className="rounded-xl border-red-200 text-red-500 hover:bg-red-50 hover:text-red-600 h-9 px-4 font-bold text-[11px]">
+                                    <Button variant="outline" onClick={() => setShowCancelDialog(true)} disabled={cancelling} className="rounded-xl border-destructive/20 text-destructive hover:bg-destructive/10 hover:text-destructive h-9 px-4 font-bold text-[11px]">
                                         {cancelling ? <Loader2 className="w-3.5 h-3.5 animate-spin ml-1.5" /> : <Ban className="w-3.5 h-3.5 ml-1.5" />}
                                         إلغاء الطلب
                                     </Button>
@@ -328,7 +328,7 @@ export default function RequestDetailsPage() {
 
                         {/* ===== Status Timeline ===== */}
                         {!isTerminal && (
-                            <div className="anim-up bg-white rounded-2xl border border-slate-100 p-5 shadow-sm overflow-x-auto" style={{ animationDelay: "60ms" }}>
+                            <div className="anim-up bg-card rounded-2xl border border-border p-5 shadow-sm overflow-x-auto" style={{ animationDelay: "60ms" }}>
                                 <div className="flex items-center justify-between gap-1 min-w-max md:min-w-0">
                                     {lifecycleSteps.map((step, idx) => {
                                         const isActive = step.key === statusKey;
@@ -339,16 +339,16 @@ export default function RequestDetailsPage() {
                                                     <div className={cn(
                                                         "w-7 h-7 rounded-full flex items-center justify-center transition-all duration-500 text-[10px] font-black",
                                                         isDone
-                                                            ? "bg-emerald-500 text-white"
+                                                            ? "bg-primary text-white"
                                                             : isActive
                                                                 ? "bg-warm-green text-white shadow-md shadow-warm-green/25 scale-110"
-                                                                : "bg-slate-100 text-slate-400"
+                                                                : "bg-slate-100 text-muted-foreground"
                                                     )}>
                                                         {isDone ? <CheckCircle2 className="w-3.5 h-3.5" /> : idx + 1}
                                                     </div>
                                                     <span className={cn(
                                                         "text-[10px] font-bold text-center whitespace-nowrap",
-                                                        isActive ? "text-warm-green" : isDone ? "text-emerald-600" : "text-slate-400"
+                                                        isActive ? "text-warm-green" : isDone ? "text-primary" : "text-muted-foreground"
                                                     )}>
                                                         {step.label}
                                                     </span>
@@ -374,20 +374,20 @@ export default function RequestDetailsPage() {
                         {isTerminal && (
                             <div className={cn(
                                 "anim-up rounded-2xl p-4 flex items-center gap-3",
-                                statusKey === "REJECTED" ? "bg-red-50 border border-red-200" : "bg-gray-50 border border-gray-200"
+                                statusKey === "REJECTED" ? "bg-destructive/10 border border-destructive/20" : "bg-gray-50 border border-gray-200"
                             )} style={{ animationDelay: "60ms" }}>
                                 <StatusIcon className={cn("w-5 h-5", status.color)} />
                                 <div>
                                     <p className={cn("text-sm font-black", status.color)}>{status.label}</p>
                                     {request.decisionReason && (
-                                        <p className="text-xs text-slate-500 mt-0.5">{request.decisionReason}</p>
+                                        <p className="text-xs text-muted-foreground mt-0.5">{request.decisionReason}</p>
                                     )}
                                 </div>
                             </div>
                         )}
 
                         {/* ===== Request Overview Card ===== */}
-                        <div className="anim-up bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden" style={{ animationDelay: "120ms" }}>
+                        <div className="anim-up bg-card rounded-2xl border border-border shadow-sm overflow-hidden" style={{ animationDelay: "120ms" }}>
                             <div className="h-1 w-full bg-gradient-to-r from-warm-green via-emerald-400 to-warm-green/40" />
                             <div className="p-5 sm:p-6 space-y-5">
                                 {/* Tags row */}
@@ -397,12 +397,12 @@ export default function RequestDetailsPage() {
                                         {cat.label}
                                     </div>
                                     {request.otherRequestType && (
-                                        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-100 text-xs font-bold text-slate-600">
+                                        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-muted border border-border text-xs font-bold text-muted-foreground">
                                             {request.otherRequestType}
                                         </div>
                                     )}
                                     {request.predictedAssistanceType && (
-                                        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-purple-50 border border-purple-100 text-xs font-bold text-purple-600">
+                                        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-primary/10 border border-primary/20 text-xs font-bold text-amber-600">
                                             نوع المساعدة المقترح: {categoryConfig[resolveCategory(request.predictedAssistanceType)]?.label || request.predictedAssistanceType}
                                         </div>
                                     )}
@@ -410,12 +410,12 @@ export default function RequestDetailsPage() {
 
                                 {/* Description */}
                                 <div className="space-y-2">
-                                    <h3 className="text-[13px] font-black text-slate-800 flex items-center gap-2">
+                                    <h3 className="text-[13px] font-black text-foreground flex items-center gap-2">
                                         <div className="w-1 h-3.5 bg-warm-green rounded-full" />
                                         وصف الحالة
                                     </h3>
-                                    <div className="p-4 rounded-xl bg-slate-50/70 border border-slate-100">
-                                        <p className="text-[13px] font-medium text-slate-600 leading-relaxed whitespace-pre-wrap">
+                                    <div className="p-4 rounded-xl bg-muted/70 border border-border">
+                                        <p className="text-[13px] font-medium text-muted-foreground leading-relaxed whitespace-pre-wrap">
                                             {request.description || "لا يوجد وصف"}
                                         </p>
                                     </div>
@@ -424,12 +424,12 @@ export default function RequestDetailsPage() {
                                 {/* Decision Reason (non-terminal) */}
                                 {!isTerminal && request.decisionReason && (
                                     <div className="space-y-2">
-                                        <h3 className="text-[13px] font-black text-slate-800 flex items-center gap-2">
+                                        <h3 className="text-[13px] font-black text-foreground flex items-center gap-2">
                                             <div className="w-1 h-3.5 bg-amber-400 rounded-full" />
                                             سبب القرار
                                         </h3>
-                                        <div className="p-4 rounded-xl bg-amber-50/60 border border-amber-100">
-                                            <p className="text-[13px] font-medium text-amber-700 leading-relaxed">{request.decisionReason}</p>
+                                        <div className="p-4 rounded-xl bg-primary/10/60 border border-primary/20">
+                                            <p className="text-[13px] font-medium text-primary leading-relaxed">{request.decisionReason}</p>
                                         </div>
                                     </div>
                                 )}
@@ -437,12 +437,12 @@ export default function RequestDetailsPage() {
 
                                 {/* Handled By */}
                                 {request.handledBy && (
-                                    <div className="flex items-center gap-3 p-3.5 rounded-xl bg-emerald-50 border border-emerald-100">
-                                        <Shield className="w-4 h-4 text-emerald-600 shrink-0" />
+                                    <div className="flex items-center gap-3 p-3.5 rounded-xl bg-primary/10 border border-primary/20">
+                                        <Shield className="w-4 h-4 text-primary shrink-0" />
                                         <div>
-                                            <p className="text-[10px] font-bold text-emerald-500">تمت المعالجة بواسطة</p>
-                                            <p className="text-[13px] font-black text-emerald-700">{request.handledBy.name}</p>
-                                            <p className="text-[10px] text-emerald-500">{request.handledBy.email}</p>
+                                            <p className="text-[10px] font-bold text-primary">تمت المعالجة بواسطة</p>
+                                            <p className="text-[13px] font-black text-primary">{request.handledBy.name}</p>
+                                            <p className="text-[10px] text-primary">{request.handledBy.email}</p>
                                         </div>
                                     </div>
                                 )}
@@ -456,7 +456,7 @@ export default function RequestDetailsPage() {
                             {emp && (
                                 <Section icon={Briefcase} title="الحالة المهنية" iconColor="text-blue-500" iconBg="bg-blue-50" delay={180}>
                                     <Field label="حالة التوظيف" value={
-                                        <span className={cn("px-2 py-0.5 rounded-full text-[11px] font-bold inline-flex items-center", emp.isWorking ? "bg-emerald-100 text-emerald-700" : "bg-rose-100 text-rose-700")}>
+                                        <span className={cn("px-2 py-0.5 rounded-full text-[11px] font-bold inline-flex items-center", emp.isWorking ? "bg-emerald-100 text-primary" : "bg-rose-100 text-rose-700")}>
                                             {emp.isWorking ? "يعمل" : "لا يعمل"}
                                         </span>
                                     } />
@@ -486,8 +486,8 @@ export default function RequestDetailsPage() {
                             {/* Health */}
                             {health && (
                                 <Section icon={Heart} title="الحالة الصحية" iconColor="text-rose-500" iconBg="bg-rose-50" delay={230}>
-                                    <Field label="تأمين طبي" value={health.hasInsurance ? <span className="text-emerald-600">نعم{health.insuranceType ? ` (${health.insuranceType})` : ''}</span> : "لا يوجد"} />
-                                    <Field label="إعاقة" value={health.hasDisability ? <span className="text-purple-600">نعم{health.disabilityType ? ` (${health.disabilityType})` : ''}</span> : "لا يوجد"} />
+                                    <Field label="تأمين طبي" value={health.hasInsurance ? <span className="text-primary">نعم{health.insuranceType ? ` (${health.insuranceType})` : ''}</span> : "لا يوجد"} />
+                                    <Field label="إعاقة" value={health.hasDisability ? <span className="text-amber-600">نعم{health.disabilityType ? ` (${health.disabilityType})` : ''}</span> : "لا يوجد"} />
                                     <Field label="مرض مزمن" value={health.hasChronicDisease ? <span className="text-rose-600">نعم{health.chronicDiseaseType ? ` (${health.chronicDiseaseType})` : ''}</span> : "لا يوجد"} />
                                     {health.hasChronicDisease && (
                                         <Field label="التكلفة الطبية الشهرية" value={formatCurrency(health.medicalCostMonthly)} />
@@ -497,7 +497,7 @@ export default function RequestDetailsPage() {
 
                             {/* Living Conditions */}
                             {living && (
-                                <Section icon={Home} title="السكن والمعيشة" iconColor="text-sky-500" iconBg="bg-sky-50" delay={280}>
+                                <Section icon={Home} title="السكن والمعيشة" iconColor="text-teal-500" iconBg="bg-teal-50" delay={280}>
                                     <Field label="نوع السكن" value={living.housingType != null ? housingLabels[living.housingType] || String(living.housingType) : undefined} />
                                     <Field label="يمتلك سيارة" value={living.hasCar} />
                                     <Field label="الإيجار الشهري" value={formatCurrency(living.rentMonthly)} />
@@ -517,7 +517,7 @@ export default function RequestDetailsPage() {
 
                             {/* Social Support */}
                             {social && (
-                                <Section icon={Users} title="الدعم الاجتماعي" iconColor="text-violet-500" iconBg="bg-violet-50" delay={330}>
+                                <Section icon={Users} title="الدعم الاجتماعي" iconColor="text-primary" iconBg="bg-primary/10" delay={330}>
                                     <Field label="مسجل بالدعم" value={social.registeredSocialSupport} />
                                     {social.registeredSocialSupport && (
                                         <Field label="مبلغ الدعم" value={formatCurrency(social.socialSupportAmount)} />
@@ -531,22 +531,22 @@ export default function RequestDetailsPage() {
 
                         {/* ===== AI Prediction Results ===== */}
                         {request.aiPredictionStatus && request.aiPredictionStatus !== 'None' && (
-                            <div className="anim-up bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden" style={{ animationDelay: "140ms" }}>
-                                <div className="h-1 w-full bg-gradient-to-r from-violet-500 via-purple-400 to-violet-500/40" />
+                            <div className="anim-up bg-card rounded-2xl border border-border shadow-sm overflow-hidden" style={{ animationDelay: "140ms" }}>
+                                <div className="h-1 w-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500/40" />
                                 <div className="p-5 sm:p-6">
                                     <div className="flex items-center gap-2.5 mb-4">
-                                        <span className="w-7 h-7 rounded-lg bg-violet-50 flex items-center justify-center shrink-0">
-                                            <Brain className="w-3.5 h-3.5 text-violet-600" />
+                                        <span className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                                            <Brain className="w-3.5 h-3.5 text-amber-600" />
                                         </span>
-                                        <h4 className="text-[14px] font-black text-slate-800">نتائج تقييم الذكاء الاصطناعي</h4>
+                                        <h4 className="text-[14px] font-black text-foreground">نتائج تقييم الذكاء الاصطناعي</h4>
                                         {/* AI Status Badge */}
                                         <span className={cn(
                                             "mr-auto text-[10px] font-bold px-2.5 py-0.5 rounded-full border",
                                             request.aiPredictionStatus === 'Completed'
-                                                ? "bg-emerald-50 text-emerald-600 border-emerald-100"
+                                                ? "bg-primary/10 text-primary border-primary/20"
                                                 : request.aiPredictionStatus === 'Failed'
-                                                    ? "bg-red-50 text-red-600 border-red-100"
-                                                    : "bg-amber-50 text-amber-600 border-amber-100"
+                                                    ? "bg-destructive/10 text-destructive border-red-100"
+                                                    : "bg-primary/10 text-amber-600 border-primary/20"
                                         )}>
                                             {request.aiPredictionStatus === 'Completed' ? '✓ مكتمل'
                                                 : request.aiPredictionStatus === 'Failed' ? '✗ فشل'
@@ -562,9 +562,9 @@ export default function RequestDetailsPage() {
                                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                                                 {/* Need Level */}
                                                 {request.aiNeedLevel && (
-                                                    <div className="bg-violet-50 rounded-xl p-4 flex flex-col items-center gap-1 border border-violet-100">
-                                                        <span className="text-[10px] font-bold text-violet-400 uppercase tracking-wider">مستوى الحاجة</span>
-                                                        <span className="text-[22px] font-black text-violet-700">
+                                                    <div className="bg-primary/10 rounded-xl p-4 flex flex-col items-center gap-1 border border-primary/20">
+                                                        <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wider">مستوى الحاجة</span>
+                                                        <span className="text-[22px] font-black text-primary">
                                                             {request.aiNeedLevel === 'High' ? 'عالي' : request.aiNeedLevel === 'Medium' ? 'متوسط' : request.aiNeedLevel === 'Low' ? 'منخفض' : request.aiNeedLevel}
                                                         </span>
                                                         <span className={cn(
@@ -574,33 +574,14 @@ export default function RequestDetailsPage() {
                                                     </div>
                                                 )}
 
-                                                {/* Confidence Score */}
-                                                {request.aiConfidence != null && (
-                                                    <div className="bg-slate-50 rounded-xl p-4 flex flex-col items-center gap-1 border border-slate-100">
-                                                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">نسبة الثقة</span>
-                                                        <div className="relative w-14 h-14">
-                                                            <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
-                                                                <circle cx="50" cy="50" r="40" fill="none" stroke="#e2e8f0" strokeWidth="10" />
-                                                                <circle
-                                                                    cx="50" cy="50" r="40" fill="none"
-                                                                    stroke="#8b5cf6" strokeWidth="10"
-                                                                    strokeLinecap="round"
-                                                                    strokeDasharray={`${(request.aiConfidence * 251.2).toFixed(1)} 251.2`}
-                                                                />
-                                                            </svg>
-                                                            <span className="absolute inset-0 flex items-center justify-center text-[13px] font-black text-slate-700">
-                                                                {Math.round(request.aiConfidence * 100)}%
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                )}
+
 
                                                 {/* Method */}
                                                 {request.aiMethod && (
-                                                    <div className="bg-slate-50 rounded-xl p-4 flex flex-col items-center gap-1 border border-slate-100">
-                                                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">نموذج الذكاء</span>
-                                                        <Sparkles className="w-5 h-5 text-slate-400 mt-1" />
-                                                        <span className="text-[11px] font-bold text-slate-600 text-center">{request.aiMethod}</span>
+                                                    <div className="bg-muted rounded-xl p-4 flex flex-col items-center gap-1 border border-border">
+                                                        <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">نموذج الذكاء</span>
+                                                        <Sparkles className="w-5 h-5 text-muted-foreground mt-1" />
+                                                        <span className="text-[11px] font-bold text-muted-foreground text-center">{request.aiMethod}</span>
                                                     </div>
                                                 )}
                                             </div>
@@ -609,25 +590,25 @@ export default function RequestDetailsPage() {
                                             {request.aiExplanation && (
                                                 <div className="space-y-2">
                                                     {request.aiExplanation.summary && (
-                                                        <p className="text-[12px] text-slate-500 font-medium bg-slate-50 rounded-xl px-4 py-3 border border-slate-100">
+                                                        <p className="text-[12px] text-muted-foreground font-medium bg-muted rounded-xl px-4 py-3 border border-border">
                                                             {request.aiExplanation.summary}
                                                         </p>
                                                     )}
                                                     {request.aiExplanation.topFactors && request.aiExplanation.topFactors.length > 0 && (
                                                         <div className="space-y-1.5">
-                                                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-1">أهم العوامل المؤثرة</p>
+                                                            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider px-1">أهم العوامل المؤثرة</p>
                                                             {request.aiExplanation.topFactors.slice(0, 4).map((factor, i) => (
-                                                                <div key={i} className="flex items-center gap-2.5 p-2.5 bg-slate-50 rounded-lg border border-slate-100">
+                                                                <div key={i} className="flex items-center gap-2.5 p-2.5 bg-muted rounded-lg border border-border">
                                                                     <span className={cn(
                                                                         "w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-black shrink-0",
-                                                                        factor.direction === 'positive' ? "bg-emerald-100 text-emerald-600" : "bg-red-100 text-red-500"
+                                                                        factor.direction === 'positive' ? "bg-emerald-100 text-primary" : "bg-red-100 text-destructive"
                                                                     )}>
                                                                         {factor.direction === 'positive' ? '↑' : '↓'}
                                                                     </span>
-                                                                    <span className="text-[12px] font-semibold text-slate-700 flex-1">{factor.label || factor.factor}</span>
+                                                                    <span className="text-[12px] font-semibold text-foreground flex-1">{factor.label || factor.factor}</span>
                                                                     <span className={cn(
                                                                         "text-[10px] font-bold px-2 py-0.5 rounded-full",
-                                                                        factor.impact === 'High' ? "bg-red-50 text-red-500" : factor.impact === 'Medium' ? "bg-amber-50 text-amber-500" : "bg-slate-100 text-slate-500"
+                                                                        factor.impact === 'High' ? "bg-destructive/10 text-destructive" : factor.impact === 'Medium' ? "bg-primary/10 text-primary" : "bg-slate-100 text-muted-foreground"
                                                                     )}>
                                                                         {factor.impact === 'High' ? 'تأثير عالي' : factor.impact === 'Medium' ? 'تأثير متوسط' : 'تأثير منخفض'}
                                                                     </span>
@@ -642,9 +623,9 @@ export default function RequestDetailsPage() {
 
                                     {/* Pending/Processing State */}
                                     {['Pending', 'Processing', 'Retrying'].includes(request.aiPredictionStatus || '') && (
-                                        <div className="flex items-center gap-3 p-3 bg-amber-50 rounded-xl border border-amber-100">
-                                            <Loader2 className="w-4 h-4 text-amber-500 animate-spin shrink-0" />
-                                            <p className="text-[12px] font-medium text-amber-700">جاري تحليل الطلب بالذكاء الاصطناعي، سيظهر التقييم قريباً...</p>
+                                        <div className="flex items-center gap-3 p-3 bg-primary/10 rounded-xl border border-primary/20">
+                                            <Loader2 className="w-4 h-4 text-primary animate-spin shrink-0" />
+                                            <p className="text-[12px] font-medium text-primary">جاري تحليل الطلب بالذكاء الاصطناعي، سيظهر التقييم قريباً...</p>
                                         </div>
                                     )}
                                 </div>
@@ -659,23 +640,23 @@ export default function RequestDetailsPage() {
                                         const FileIcon = getFileIcon(att.fileType);
                                         const hasOcrData = att.aiOcrData && Object.keys(att.aiOcrData).length > 0;
                                         return (
-                                            <div key={att.id} className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+                                            <div key={att.id} className="bg-card rounded-xl border border-border overflow-hidden">
                                                 {/* Attachment Header */}
                                                 <div className="flex items-center gap-3 p-3">
-                                                    <div className="w-8 h-8 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
+                                                    <div className="w-8 h-8 rounded-lg bg-muted border border-border flex items-center justify-center shrink-0">
                                                         <FileIcon className="w-3.5 h-3.5 text-warm-green" />
                                                     </div>
                                                     <div className="flex-1 min-w-0">
-                                                        <p className="text-[12px] font-bold text-slate-700 truncate">{att.fileName}</p>
+                                                        <p className="text-[12px] font-bold text-foreground truncate">{att.fileName}</p>
                                                         <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                                                            <p className="text-[10px] text-slate-400">{att.fileType} • {att.uploadedAt ? new Date(att.uploadedAt).toLocaleDateString('ar-EG') : ""}</p>
+                                                            <p className="text-[10px] text-muted-foreground">{att.fileType} • {att.uploadedAt ? new Date(att.uploadedAt).toLocaleDateString('ar-EG') : ""}</p>
                                                             {/* OCR Status Badge */}
                                                             {att.aiOcrStatus && att.aiOcrStatus !== 'None' && (
                                                                 <span className={cn(
                                                                     "text-[9px] font-bold px-2 py-0.5 rounded-full border flex items-center gap-1",
-                                                                    att.aiOcrStatus === 'Completed' ? "bg-emerald-50 text-emerald-600 border-emerald-100"
-                                                                        : att.aiOcrStatus === 'Failed' ? "bg-red-50 text-red-500 border-red-100"
-                                                                        : "bg-amber-50 text-amber-500 border-amber-100"
+                                                                    att.aiOcrStatus === 'Completed' ? "bg-primary/10 text-primary border-primary/20"
+                                                                        : att.aiOcrStatus === 'Failed' ? "bg-destructive/10 text-destructive border-red-100"
+                                                                        : "bg-primary/10 text-primary border-primary/20"
                                                                 )}>
                                                                     <ScanLine className="w-2.5 h-2.5" />
                                                                     OCR {att.aiOcrStatus === 'Completed' ? 'مكتمل' : att.aiOcrStatus === 'Failed' ? 'فشل' : 'جاري'}
@@ -693,16 +674,16 @@ export default function RequestDetailsPage() {
 
                                                 {/* OCR Data Table */}
                                                 {hasOcrData && (
-                                                    <div className="border-t border-slate-100 bg-violet-50/40 p-3">
-                                                        <p className="text-[10px] font-bold text-violet-500 uppercase tracking-wider mb-2 flex items-center gap-1">
+                                                    <div className="border-t border-border bg-primary/10/40 p-3">
+                                                        <p className="text-[10px] font-bold text-primary uppercase tracking-wider mb-2 flex items-center gap-1">
                                                             <Brain className="w-3 h-3" />
                                                             بيانات مستخرجة بالذكاء الاصطناعي ({att.aiOcrMethod || 'OCR'})
                                                         </p>
                                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
                                                             {Object.entries(att.aiOcrData!).map(([key, val]) => (
-                                                                <div key={key} className="flex flex-col gap-0.5 bg-white rounded-lg px-2.5 py-1.5 border border-violet-100">
-                                                                    <span className="text-[9px] font-bold text-violet-400 uppercase tracking-wider">{key.replace(/_/g, ' ')}</span>
-                                                                    <span className="text-[11px] font-semibold text-slate-700">{String(val) || '—'}</span>
+                                                                <div key={key} className="flex flex-col gap-0.5 bg-card rounded-lg px-2.5 py-1.5 border border-primary/20">
+                                                                    <span className="text-[9px] font-bold text-amber-400 uppercase tracking-wider">{key.replace(/_/g, ' ')}</span>
+                                                                    <span className="text-[11px] font-semibold text-foreground">{String(val) || '—'}</span>
                                                                 </div>
                                                             ))}
                                                         </div>
@@ -717,10 +698,10 @@ export default function RequestDetailsPage() {
 
                         {/* ===== Chat Area ===== */}
                         <div className="anim-up mt-6" style={{ animationDelay: "450ms" }}>
-                            <div className="bg-white rounded-2xl border border-slate-100 p-5 shadow-sm flex items-center justify-between">
+                            <div className="bg-card rounded-2xl border border-border p-5 shadow-sm flex items-center justify-between">
                                 <div>
-                                    <h3 className="font-bold text-lg text-slate-900">التواصل المباشر مع الجمعية</h3>
-                                    <p className="text-sm text-slate-500 mt-1">تواصل مع موظفي الجمعية لمتابعة طلبك أو الاستفسار.</p>
+                                    <h3 className="font-bold text-lg text-foreground">التواصل المباشر مع الجمعية</h3>
+                                    <p className="text-sm text-muted-foreground mt-1">تواصل مع موظفي الجمعية لمتابعة طلبك أو الاستفسار.</p>
                                 </div>
                                 <Link href={`/dashboard/family/messages?requestId=${id}`}>
                                     <Button className="bg-warm-green hover:bg-warm-green/90 rounded-xl px-6">
@@ -738,27 +719,27 @@ export default function RequestDetailsPage() {
         <AlertDialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
             <AlertDialogContent className="rounded-2xl border-0 shadow-2xl sm:max-w-md" dir="rtl">
                 <AlertDialogHeader className="items-center text-center gap-3">
-                    <div className="w-14 h-14 rounded-full bg-red-50 flex items-center justify-center mx-auto">
-                        <AlertCircle className="w-7 h-7 text-red-500" />
+                    <div className="w-14 h-14 rounded-full bg-destructive/10 flex items-center justify-center mx-auto">
+                        <AlertCircle className="w-7 h-7 text-destructive" />
                     </div>
-                    <AlertDialogTitle className="text-lg font-black text-slate-900">
+                    <AlertDialogTitle className="text-lg font-black text-foreground">
                         تأكيد إلغاء الطلب
                     </AlertDialogTitle>
-                    <AlertDialogDescription className="text-sm text-slate-500 font-medium leading-relaxed">
+                    <AlertDialogDescription className="text-sm text-muted-foreground font-medium leading-relaxed">
                         هل أنت متأكد من إلغاء هذا الطلب؟
                         <br />
-                        <span className="text-red-400 font-bold">لا يمكن التراجع عن هذا الإجراء بعد التأكيد.</span>
+                        <span className="text-destructive font-bold">لا يمكن التراجع عن هذا الإجراء بعد التأكيد.</span>
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter className="flex-row-reverse gap-3 sm:flex-row-reverse pt-2">
                     <AlertDialogAction
                         onClick={handleCancel}
-                        className="bg-red-500 hover:bg-red-600 text-white rounded-xl h-10 px-5 font-bold text-sm flex-1"
+                        className="bg-destructive/100 hover:bg-red-600 text-white rounded-xl h-10 px-5 font-bold text-sm flex-1"
                     >
                         <Ban className="w-4 h-4 ml-2" />
                         نعم، إلغاء الطلب
                     </AlertDialogAction>
-                    <AlertDialogCancel className="rounded-xl h-10 px-5 font-bold text-sm flex-1 border-slate-200">
+                    <AlertDialogCancel className="rounded-xl h-10 px-5 font-bold text-sm flex-1 border-border">
                         تراجع
                     </AlertDialogCancel>
                 </AlertDialogFooter>

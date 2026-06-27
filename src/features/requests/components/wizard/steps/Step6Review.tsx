@@ -27,9 +27,9 @@ export function Step6Review({ formData, categories, uploadedFiles }: Step6Review
 
     const Field = ({ label, value }: { label: string; value: React.ReactNode }) => (
         <div className="flex flex-col gap-1">
-            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{label}</span>
-            <span className="text-[13px] font-semibold text-slate-800 bg-white rounded-lg px-3 py-2 min-h-[36px] flex items-center border border-slate-100">
-                {value || <span className="text-slate-400 italic font-normal text-xs">غير محدد</span>}
+            <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">{label}</span>
+            <span className="text-[13px] font-semibold text-foreground bg-card rounded-lg px-3 py-2 min-h-[36px] flex items-center border border-border">
+                {value || <span className="text-muted-foreground italic font-normal text-xs">غير محدد</span>}
             </span>
         </div>
     );
@@ -45,14 +45,14 @@ export function Step6Review({ formData, categories, uploadedFiles }: Step6Review
             <motion.div
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="flex items-center gap-3 p-4 bg-emerald-50 rounded-xl border border-emerald-100"
+                className="flex items-center gap-3 p-4 bg-primary/10 rounded-xl border border-emerald-100"
             >
-                <div className="w-8 h-8 bg-white rounded-full shadow-sm flex items-center justify-center shrink-0">
-                    <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                <div className="w-8 h-8 bg-card rounded-full shadow-sm flex items-center justify-center shrink-0">
+                    <CheckCircle2 className="w-5 h-5 text-primary" />
                 </div>
                 <div>
-                    <p className="font-bold text-slate-900 text-[15px]">جاهز للإرسال!</p>
-                    <p className="text-xs text-slate-500 mt-0.5">تحقق من البيانات أدناه قبل الإرسال النهائي.</p>
+                    <p className="font-bold text-foreground text-[15px]">جاهز للإرسال!</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">تحقق من البيانات أدناه قبل الإرسال النهائي.</p>
                 </div>
             </motion.div>
 
@@ -73,7 +73,7 @@ export function Step6Review({ formData, categories, uploadedFiles }: Step6Review
                             label="المدينة / المنطقة"
                             value={
                                 <span className="flex items-center gap-1.5">
-                                    <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                                    <MapPin className="w-3.5 h-3.5 text-muted-foreground" />
                                     {formData.location}
                                 </span>
                             }
@@ -111,9 +111,9 @@ export function Step6Review({ formData, categories, uploadedFiles }: Step6Review
                 {/* Health */}
                 <SectionCard title="الحالة الصحية" icon={Heart} iconColor="text-rose-500" iconBg="bg-rose-50">
                     <div className="grid grid-cols-2 gap-3">
-                        <Field label="تأمين طبي" value={formData.hasInsurance ? <span className="text-emerald-600">نعم ({formData.insuranceType})</span> : "لا يوجد"} />
+                        <Field label="تأمين طبي" value={formData.hasInsurance ? <span className="text-primary">نعم ({formData.insuranceType})</span> : "لا يوجد"} />
                         <Field label="أمراض مزمنة" value={formData.hasChronicDisease ? <span className="text-rose-600">نعم ({formData.chronicDiseaseType})</span> : "لا يوجد"} />
-                        <Field label="إعاقة" value={formData.hasDisability ? <span className="text-purple-600">نعم ({formData.disabilityType})</span> : "لا يوجد"} />
+                        <Field label="إعاقة" value={formData.hasDisability ? <span className="text-amber-600">نعم ({formData.disabilityType})</span> : "لا يوجد"} />
                         {formData.hasChronicDisease && (
                             <Field label="التكلفة الطبية الشهرية" value={formatCurrency(formData.medicalCostMonthly)} />
                         )}
@@ -121,7 +121,7 @@ export function Step6Review({ formData, categories, uploadedFiles }: Step6Review
                 </SectionCard>
 
                 {/* Financial */}
-                <SectionCard title="الوضع المالي" icon={Coins} iconColor="text-amber-500" iconBg="bg-amber-50">
+                <SectionCard title="الوضع المالي" icon={Coins} iconColor="text-primary" iconBg="bg-primary/10">
                     <div className="grid grid-cols-2 gap-3">
                         <Field label="إجمالي المصاريف" value={formatCurrency(formData.monthlyExpenses)} />
                         {formData.housingType === "Rented" && (
@@ -140,7 +140,7 @@ export function Step6Review({ formData, categories, uploadedFiles }: Step6Review
                 <SectionCard title={`المرفقات (${uploadedFiles.length})`} icon={Paperclip}>
                     <ul className="flex flex-wrap gap-2">
                         {uploadedFiles.map((f, i) => (
-                            <li key={i} className="text-xs font-medium text-slate-600 bg-white border border-slate-100 px-3 py-1.5 rounded-lg">
+                            <li key={i} className="text-xs font-medium text-muted-foreground bg-card border border-border px-3 py-1.5 rounded-lg">
                                 {f.name}
                             </li>
                         ))}

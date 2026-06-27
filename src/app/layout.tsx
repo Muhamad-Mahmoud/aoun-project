@@ -46,6 +46,7 @@ export const metadata: Metadata = {
 };
 
 import { cookies } from "next/headers";
+import { ThemeProvider } from "@/shared/providers";
 
 export default async function RootLayout({
     children,
@@ -57,7 +58,7 @@ export default async function RootLayout({
     const isAuthenticated = !!token;
 
     return (
-        <html lang="ar" dir="rtl">
+        <html lang="ar" dir="rtl" suppressHydrationWarning>
             <head>
                 <link rel="dns-prefetch" href="https://aoun-api.runasp.net" />
                 {/* Keep external services as dns-prefetch only to avoid unused preconnect warnings */}
@@ -67,13 +68,19 @@ export default async function RootLayout({
                 <meta name="csrf-protection" content="SameSite=Strict; Secure" />
             </head>
             <body className={font.className}>
-                <AuthProvider initialIsAuthenticated={isAuthenticated}>
-
-                    <LayoutContent>
-                        {children}
-                    </LayoutContent>
-                    <Toaster />
-                </AuthProvider>
+                <ThemeProvider
+                    attribute="class"
+                    defaultTheme="system"
+                    enableSystem
+                    disableTransitionOnChange
+                >
+                    <AuthProvider initialIsAuthenticated={isAuthenticated}>
+                        <LayoutContent>
+                            {children}
+                        </LayoutContent>
+                        <Toaster />
+                    </AuthProvider>
+                </ThemeProvider>
             </body>
         </html>
     );

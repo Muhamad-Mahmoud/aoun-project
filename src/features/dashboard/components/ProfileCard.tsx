@@ -25,12 +25,12 @@ export function ProfileCard({
             <div className="bg-primary/5 p-6 relative">
                 <div className="absolute top-0 start-0 p-4">
                     {isVerified && (
-                        <Badge variant="secondary" className="bg-white/50 backdrop-blur-sm hover:bg-white/80">
+                        <Badge variant="secondary" className="bg-card/50 backdrop-blur-sm hover:bg-card/80">
                             موثق ✓
                         </Badge>
                     )}
                 </div>
-                <div className="w-20 h-20 bg-white rounded-full mx-auto mb-3 flex items-center justify-center border-4 border-white shadow-lg">
+                <div className="w-20 h-20 bg-card rounded-full mx-auto mb-3 flex items-center justify-center border-4 border-border shadow-lg">
                     <Users className="w-8 h-8 text-primary" />
                 </div>
                 <h3 className="font-bold text-foreground text-lg mb-1">{familyName}</h3>

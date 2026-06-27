@@ -9,10 +9,10 @@ export default function FamilyMessagesPage() {
     return (
         <DashboardLayout>
             <FamilySidebar />
-            <div className="flex-1 flex flex-col h-screen overflow-hidden bg-slate-50" dir="rtl">
+            <div className="flex-1 flex flex-col h-screen overflow-hidden bg-muted" dir="rtl">
                 <DashboardTopBar userType="family" />
                 <main className="flex-1 overflow-hidden p-4 sm:p-6 pb-0 flex flex-col">
-                    <div className="flex-1 overflow-hidden bg-white rounded-t-2xl border-x border-t border-slate-200 shadow-sm mt-4 lg:mt-0">
+                    <div className="flex-1 overflow-hidden bg-card rounded-t-2xl border-x border-t border-border shadow-sm mt-4 lg:mt-0">
                         <ChatLayout />
                     </div>
                 </main>

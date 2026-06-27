@@ -69,37 +69,37 @@ export default function AdminUsersPage() {
         <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-black text-slate-900 mb-2">إدارة المستخدمين</h1>
-                    <p className="text-slate-500">عرض جميع المستخدمين والتحكم في حالات الحسابات</p>
+                    <h1 className="text-3xl font-black text-foreground mb-2">إدارة المستخدمين</h1>
+                    <p className="text-muted-foreground">عرض جميع المستخدمين والتحكم في حالات الحسابات</p>
                 </div>
 
                 <div className="relative w-full sm:w-72">
-                    <Search className="absolute start-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <Search className="absolute start-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <Input
                         placeholder="ابحث بالاسم أو البريد..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="ps-10 h-12 bg-white border-slate-200 focus:bg-white rounded-xl"
+                        className="ps-10 h-12 bg-card border-border focus:bg-card rounded-xl"
                     />
                 </div>
             </div>
 
-            <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+            <div className="bg-card rounded-3xl border border-border shadow-sm overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full text-start">
-                        <thead className="bg-slate-50/50 border-b border-slate-100">
+                        <thead className="bg-muted/50 border-b border-border">
                             <tr>
-                                <th className="px-6 py-4 text-start text-sm font-black text-slate-500">المستخدم</th>
-                                <th className="px-6 py-4 text-start text-sm font-black text-slate-500">النوع</th>
-                                <th className="px-6 py-4 text-start text-sm font-black text-slate-500">تاريخ التسجيل</th>
-                                <th className="px-6 py-4 text-start text-sm font-black text-slate-500">الحالة</th>
-                                <th className="px-6 py-4 text-end text-sm font-black text-slate-500">الإجراءات</th>
+                                <th className="px-6 py-4 text-start text-sm font-black text-muted-foreground">المستخدم</th>
+                                <th className="px-6 py-4 text-start text-sm font-black text-muted-foreground">النوع</th>
+                                <th className="px-6 py-4 text-start text-sm font-black text-muted-foreground">تاريخ التسجيل</th>
+                                <th className="px-6 py-4 text-start text-sm font-black text-muted-foreground">الحالة</th>
+                                <th className="px-6 py-4 text-end text-sm font-black text-muted-foreground">الإجراءات</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100">
                             {loading ? (
                                 <tr>
-                                    <td colSpan={5} className="p-8 text-center text-slate-500">
+                                    <td colSpan={5} className="p-8 text-center text-muted-foreground">
                                         <div className="flex justify-center items-center gap-2">
                                             <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
                                             جاري التحميل...
@@ -108,42 +108,42 @@ export default function AdminUsersPage() {
                                 </tr>
                             ) : filteredUsers.length === 0 ? (
                                 <tr>
-                                    <td colSpan={5} className="p-8 text-center text-slate-500 font-bold">لا يوجد مستخدمين مطابقين للبحث.</td>
+                                    <td colSpan={5} className="p-8 text-center text-muted-foreground font-bold">لا يوجد مستخدمين مطابقين للبحث.</td>
                                 </tr>
                             ) : (
                                 filteredUsers.map((user) => (
-                                    <tr key={user.id} className="hover:bg-slate-50/50 transition-colors">
+                                    <tr key={user.id} className="hover:bg-muted/50 transition-colors">
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-3">
-                                                <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500">
+                                                <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-muted-foreground">
                                                     <User className="w-5 h-5" />
                                                 </div>
                                                 <div>
-                                                    <p className="font-bold text-slate-900">{user.firstName} {user.lastName}</p>
-                                                    <p className="text-sm text-slate-500">{user.email}</p>
+                                                    <p className="font-bold text-foreground">{user.firstName} {user.lastName}</p>
+                                                    <p className="text-sm text-muted-foreground">{user.email}</p>
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
                                             <span className={`px-3 py-1 rounded-full text-xs font-bold ${
                                                 user.userType === 'Admin' ? 'bg-primary/10 text-primary' :
-                                                user.userType === 'Family' ? 'bg-amber-500/10 text-amber-600' :
-                                                'bg-emerald-500/10 text-emerald-600'
+                                                user.userType === 'Family' ? 'bg-primary/100/10 text-amber-600' :
+                                                'bg-primary/10 text-primary'
                                             }`}>
                                                 {user.userType}
                                             </span>
                                         </td>
-                                        <td className="px-6 py-4 text-sm text-slate-600 font-medium">
+                                        <td className="px-6 py-4 text-sm text-muted-foreground font-medium">
                                             {new Date(user.createdAt).toLocaleDateString('ar-EG')}
                                         </td>
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-2">
                                                 {user.isActive ? (
-                                                    <span className="flex items-center gap-1.5 text-emerald-600 bg-emerald-50 text-xs font-bold px-2.5 py-1 rounded-full border border-emerald-100">
+                                                    <span className="flex items-center gap-1.5 text-primary bg-primary/10 text-xs font-bold px-2.5 py-1 rounded-full border border-primary\/20">
                                                         <CheckCircle2 className="w-3.5 h-3.5" /> نشط
                                                     </span>
                                                 ) : (
-                                                    <span className="flex items-center gap-1.5 text-red-600 bg-red-50 text-xs font-bold px-2.5 py-1 rounded-full border border-red-100">
+                                                    <span className="flex items-center gap-1.5 text-destructive bg-destructive\/10 text-xs font-bold px-2.5 py-1 rounded-full border border-red-100">
                                                         <UserX className="w-3.5 h-3.5" /> محظور
                                                     </span>
                                                 )}
@@ -155,7 +155,7 @@ export default function AdminUsersPage() {
                                                     <>
                                                         <button
                                                             onClick={() => handleImpersonate(user.id, user.userType)}
-                                                            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-bold text-sky-600 bg-sky-50 hover:bg-sky-100 border border-sky-100 transition-colors"
+                                                            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-bold text-teal-600 bg-teal-50 hover:bg-teal-100 border border-teal-100 transition-colors"
                                                             title="تسجيل الدخول كـ هذا المستخدم"
                                                         >
                                                             <LogIn className="w-4 h-4" />
@@ -165,8 +165,8 @@ export default function AdminUsersPage() {
                                                             onClick={() => handleToggleStatus(user.id, user.isActive, user.userType)}
                                                             className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${
                                                                 user.isActive 
-                                                                    ? 'bg-red-50 text-red-600 hover:bg-red-100 border border-red-100' 
-                                                                    : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100 border border-emerald-100'
+                                                                    ? 'bg-destructive\/10 text-destructive hover:bg-red-100 border border-red-100' 
+                                                                    : 'bg-primary/10 text-primary hover:bg-emerald-100 border border-primary\/20'
                                                             }`}
                                                         >
                                                             {user.isActive ? 'حظر' : 'تفعيل'}

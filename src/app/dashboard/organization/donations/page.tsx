@@ -52,7 +52,7 @@ export default function OrganizationDonationsPage() {
                     <DashboardTopBar userType="organization" />
                     <main className="flex-1">
                         <div className="flex justify-center items-center h-64">
-                            <div className="w-8 h-8 border-4 border-secondary border-t-transparent rounded-full animate-spin"></div>
+                            <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
                         </div>
                     </main>
                 </div>
@@ -72,8 +72,8 @@ export default function OrganizationDonationsPage() {
                         <div className="space-y-4 md:space-y-6 max-w-6xl mx-auto p-3 sm:p-6 lg:p-8">
                             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-100">
                                 <div className="flex items-center gap-3 md:gap-4">
-                                    <div className="w-10 h-10 md:w-14 md:h-14 shrink-0 bg-secondary/10 rounded-2xl flex items-center justify-center">
-                                        <HeartHandshake className="w-5 h-5 md:w-7 md:h-7 text-secondary" />
+                                    <div className="w-10 h-10 md:w-14 md:h-14 shrink-0 bg-primary/10 rounded-2xl flex items-center justify-center">
+                                        <HeartHandshake className="w-5 h-5 md:w-7 md:h-7 text-primary" />
                                     </div>
                                     <div>
                                         <h1 className="text-lg md:text-2xl font-black text-slate-900">إدارة التبرعات الواردة</h1>
@@ -81,12 +81,12 @@ export default function OrganizationDonationsPage() {
                                     </div>
                                 </div>
                                 <div className="flex gap-2 md:gap-4">
-                                    <div className="text-center flex-1 md:flex-none px-2 py-2 md:px-4 md:py-3 bg-amber-50 rounded-xl border border-amber-100">
-                                        <p className="text-amber-600 text-[10px] md:text-sm font-bold">بانتظار التأكيد</p>
-                                        <p className="text-base md:text-xl font-black text-amber-700">{pendingDonations.length}</p>
+                                    <div className="text-center flex-1 md:flex-none px-2 py-2 md:px-4 md:py-3 bg-primary/10 rounded-xl border border-primary/20">
+                                        <p className="text-primary text-[10px] md:text-sm font-bold">بانتظار التأكيد</p>
+                                        <p className="text-base md:text-xl font-black text-primary">{pendingDonations.length}</p>
                                     </div>
-                                    <div className="text-center flex-1 md:flex-none px-2 py-2 md:px-4 md:py-3 bg-emerald-50 rounded-xl border border-emerald-100">
-                                        <p className="text-emerald-600 text-[10px] md:text-sm font-bold">تم الاستلام</p>
+                                    <div className="text-center flex-1 md:flex-none px-2 py-2 md:px-4 md:py-3 bg-primary/10 rounded-xl border border-emerald-100">
+                                        <p className="text-primary text-[10px] md:text-sm font-bold">تم الاستلام</p>
                                         <p className="text-base md:text-xl font-black text-emerald-700">{confirmedDonations.length}</p>
                                     </div>
                                 </div>
@@ -123,7 +123,7 @@ export default function OrganizationDonationsPage() {
                                                         </td>
                                                         <td className="px-4 md:px-6 py-4 whitespace-nowrap">
                                                             {donation.amount ? (
-                                                                <p className="font-black text-secondary">{donation.amount} ج.م</p>
+                                                                <p className="font-black text-primary">{donation.amount} ج.م</p>
                                                             ) : (
                                                                 <p className="font-bold text-slate-700">تبرع عيني</p>
                                                             )}
@@ -141,13 +141,13 @@ export default function OrganizationDonationsPage() {
                                                         </td>
                                                         <td className="px-4 md:px-6 py-4 whitespace-nowrap">
                                                             {donation.status === "Confirmed" ? (
-                                                                <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full text-sm font-bold border border-emerald-200">
+                                                                <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-emerald-700 rounded-full text-sm font-bold border border-emerald-200">
                                                                     <CheckCircle className="w-4 h-4" />
                                                                     تم الاستلام
                                                                 </div>
                                                             ) : (
                                                                 <div className="flex items-center gap-3">
-                                                                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-50 text-amber-700 rounded-full text-sm font-bold border border-amber-200">
+                                                                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-bold border border-primary/20">
                                                                         <Clock className="w-4 h-4" />
                                                                         بانتظار التأكيد
                                                                     </div>

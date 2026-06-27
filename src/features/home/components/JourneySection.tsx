@@ -25,7 +25,7 @@ const steps = [
         number: "٣",
         title: "التحليل الذكي",
         description: "نظامنا يرشح أنسب الجمعيات",
-        color: colors.purple.gradient,
+        color: colors.amber.gradient,
     },
     {
         icon: Building2,
@@ -48,7 +48,7 @@ export function JourneySection() {
         <section id="journey" className="py-24 md:py-32 bg-warm-beige/30 relative overflow-hidden">
             {/* Background Elements */}
             <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-golden-orange/3 rounded-full blur-3xl -z-10"></div>
-            <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-sky-blue/3 rounded-full blur-3xl -z-10"></div>
+            <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-teal-blue/3 rounded-full blur-3xl -z-10"></div>
 
             <div className="container mx-auto px-4 max-w-[1400px]" dir="rtl">
                 {/* Header */}
@@ -117,7 +117,7 @@ export function JourneySection() {
                             العديد من الأسر استفادت.. ابدأ خطوتك الأولى الآن
                         </p>
                         <Link href="/register">
-                            <Button className="h-14 px-10 text-lg font-bold bg-gradient-to-l from-warm-green via-warm-green-light to-sky-blue hover:from-warm-green-dark hover:to-sky-blue-dark text-white shadow-lg transition-all duration-250 gap-2 rounded-2xl hover:scale-[1.02] hover:-translate-y-0.5">
+                            <Button className="h-14 px-10 text-lg font-bold bg-gradient-to-l from-warm-green via-warm-green-light to-teal-blue hover:from-warm-green-dark hover:to-teal-blue-dark text-white shadow-lg transition-all duration-250 gap-2 rounded-2xl hover:scale-[1.02] hover:-translate-y-0.5">
                                 ابدأ رحلتك الآن
                                 <ArrowLeft className="w-5 h-5" />
                             </Button>

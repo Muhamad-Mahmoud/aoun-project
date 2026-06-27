@@ -74,7 +74,7 @@ export function Footer() {
                     <div>
                         <h3 className="text-lg font-bold mb-6 text-footer-foreground relative inline-block">
                             للمستخدمين
-                            <span className="absolute -bottom-2 right-0 w-1/2 h-1 bg-secondary rounded-full"></span>
+                            <span className="absolute -bottom-2 right-0 w-1/2 h-1 bg-primary rounded-full"></span>
                         </h3>
                         <ul className="space-y-4">
                             {[
@@ -85,7 +85,7 @@ export function Footer() {
                             ].map((link) => (
                                 <li key={link.name}>
                                     <Link href={link.href} className="group flex items-center text-footer-muted hover:text-footer-foreground transition-all duration-300 font-medium text-[15px]">
-                                        <ChevronLeft className="w-4 h-4 text-secondary opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 absolute" />
+                                        <ChevronLeft className="w-4 h-4 text-primary opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 absolute" />
                                         <span className="group-hover:pr-6 transition-all duration-300">{link.name}</span>
                                     </Link>
                                 </li>
@@ -141,7 +141,7 @@ export function Footer() {
                         © <span suppressHydrationWarning>{new Date().getFullYear()}</span> منصة عون – مصرية ١٠٠٪ لخدمة المصريين 🇪🇬
                     </p>
                     <p className="text-footer-muted text-sm flex items-center gap-1.5" dir="ltr">
-                        Made with <Heart className="w-4 h-4 fill-secondary text-secondary animate-pulse" /> by Aoun Team
+                        Made with <Heart className="w-4 h-4 fill-secondary text-primary animate-pulse" /> by Aoun Team
                     </p>
                 </div>
 
