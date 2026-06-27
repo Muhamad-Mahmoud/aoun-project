@@ -359,7 +359,7 @@ export default function OrganizationDashboardPage() {
                                     <div className="flex flex-col gap-1 p-4 rounded-xl bg-slate-50 border border-slate-100">
                                         <Award className="w-5 h-5 text-amber-500 mb-1" />
                                         <span className="text-2xl sm:text-3xl font-black text-slate-900"><NumberCounter value={impactData.totalDonations} /></span>
-                                        <span className="text-[10px] sm:text-xs font-bold text-slate-500">التبرعات (﷼)</span>
+                                        <span className="text-[10px] sm:text-xs font-bold text-slate-500">التبرعات (جنيه)</span>
                                     </div>
                                     <div className="flex flex-col gap-1 p-4 rounded-xl bg-slate-50 border border-slate-100">
                                         <Users className="w-5 h-5 text-purple-500 mb-1" />

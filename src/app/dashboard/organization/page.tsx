@@ -279,7 +279,7 @@ export default function OrganizationDashboardPage() {
                                 sparklineData={[30, 35, 40, 50, 45, 55, 60]}
                             />
                             <MetricCard 
-                                title="إجمالي التبرعات (﷼)" value={"2.4M"} 
+                                title="إجمالي التبرعات (جنيه)" value={"2.4M"} 
                                 icon={Award} trend={{ positive: true, value: 24 }} colorClass="text-purple-500 dark:text-purple-400"
                                 sparklineData={[10, 20, 15, 30, 40, 50, 65]}
                             />

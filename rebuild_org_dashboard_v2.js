@@ -234,7 +234,7 @@ export default function OrganizationDashboardPage() {
     const impactData = {
         familiesHelped: (analytics?.totalRequestsApproved || 120) * 4, // average 4 per family
         casesCompleted: analytics?.totalRequestsApproved || 120,
-        totalDonations: "24,500 ﷼",
+        totalDonations: "24,500 جنيه",
         volunteers: 45
     };
 
