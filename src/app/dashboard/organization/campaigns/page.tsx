@@ -181,7 +181,7 @@ export default function AssociationCampaignsPage() {
                                 {campaign.imageUrl && (
                                     <div className="w-full h-40 mb-4 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0 border border-slate-100">
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                                        <img src={`http://aounn.runasp.net/uploads/${campaign.imageUrl.replace(/^\/?(uploads\/)?/, '')}`} alt={campaign.title} className="w-full h-full object-cover" />
+                                        <img src={campaign.imageUrl.startsWith('http') ? campaign.imageUrl.replace(/^http:/i, 'https:') : `https://aounn.runasp.net/uploads/${campaign.imageUrl.replace(/^\/?(uploads\/)?/, '')}`} alt={campaign.title} className="w-full h-full object-cover" />
                                     </div>
                                 )}
 

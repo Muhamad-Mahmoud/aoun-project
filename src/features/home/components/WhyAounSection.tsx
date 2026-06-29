@@ -1,101 +1,157 @@
+import {
+  MapPinned,
+  Target,
+  Zap,
+  ShieldCheck,
+  type LucideIcon,
+} from "lucide-react";
 
-import { MapPinned, Target, Zap, ShieldCheck } from "lucide-react";
-import { colors } from "@/shared/constants";
+type Feature = {
+  icon: LucideIcon;
+  title: string;
+  description: string;
+  badge: string;
+  featured?: boolean;
+};
 
-const features = [
-    {
-        icon: MapPinned,
-        title: "بحث ذكي حسب النطاق الجغرافي",
-        description: "نربطك بأقرب الجمعيات الخيرية في منطقتك ومحافظتك بدقة عالية لضمان سهولة الوصول.",
-        bg: colors.warmGreen.lightGradient,
-        gradient: colors.warmGreen.gradient,
-        border: colors.warmGreen.borderLight,
-    },
-    {
-        icon: Target,
-        title: "توجيه دقيق حسب نوع الدعم",
-        description: "سواء كان احتياجك طبيًا، تعليميًا، أو ماديًا، نقوم بتوصيلك بالجهة المتخصصة لتلبية طلبك بكفاءة.",
-        bg: colors.amber.lightGradient,
-        gradient: colors.amber.gradient,
-        border: colors.amber.borderLight,
-    },
-    {
-        icon: Zap,
-        title: "استجابة سريعة خلال 24 ساعة",
-        description: "لا داعي للانتظار الطويل؛ نحرص على الرد وتوجيهك لأفضل الخيارات المناسبة خلال 24 ساعة.",
-        bg: colors.tealBlue.lightGradient,
-        gradient: colors.tealBlue.gradient,
-        border: colors.tealBlue.borderLight,
-    },
-    {
-        icon: ShieldCheck,
-        title: "جهات ومؤسسات معتمدة",
-        description: "نتعاون حصريًا مع جمعيات ومؤسسات مرخصة رسميًا من وزارة التضامن الاجتماعي لضمان الأمان والمصداقية.",
-        bg: colors.emerald.lightGradient,
-        gradient: colors.emerald.gradient,
-        border: colors.emerald.borderLight,
-    },
+const features: Feature[] = [
+  {
+    icon: MapPinned,
+    badge: "٠١",
+    title: "بحث ذكي حسب النطاق الجغرافي",
+    description:
+      "نربطك بأقرب الجمعيات الخيرية في منطقتك ومحافظتك بدقة عالية لضمان سهولة الوصول.",
+  },
+  {
+    icon: Target,
+    badge: "٠٢",
+    title: "توجيه دقيق حسب نوع الدعم",
+    description:
+      "سواء كان احتياجك طبيًا، تعليميًا، أو ماديًا، نقوم بتوصيلك بالجهة المتخصصة لتلبية طلبك بكفاءة.",
+    featured: true,
+  },
+  {
+    icon: Zap,
+    badge: "٠٣",
+    title: "استجابة خلال 24 ساعة",
+    description:
+      "لا داعي للانتظار الطويل؛ نحرص على الرد وتوجيهك لأفضل الخيارات المناسبة خلال يوم واحد.",
+  },
+  {
+    icon: ShieldCheck,
+    badge: "٠٤",
+    title: "جهات ومؤسسات معتمدة",
+    description:
+      "نتعاون حصريًا مع جمعيات ومؤسسات مرخصة رسميًا من وزارة التضامن الاجتماعي لضمان الأمان والمصداقية.",
+  },
 ];
 
 export function WhyAounSection() {
-    return (
-        <section id="why-aoun" className="py-24 md:py-32 bg-warm-white relative overflow-hidden">
-            {/* Background Decorations */}
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] max-w-[100vw] bg-teal-blue/5 rounded-full blur-3xl -z-10 overflow-hidden"></div>
-            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] max-w-[100vw] bg-warm-green/5 rounded-full blur-3xl -z-10 overflow-hidden"></div>
+  return (
+    <section
+      id="why-aoun"
+      dir="rtl"
+      className="relative overflow-hidden bg-white py-24 md:py-32"
+    >
+      {/* Pattern خفيف جداً يربط السكشن بالهوية بدون blobs */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.035]"
+        style={{
+          backgroundImage:
+            "linear-gradient(45deg, hsl(var(--warm-green)) 1px, transparent 1px), linear-gradient(-45deg, hsl(var(--golden-orange)) 1px, transparent 1px)",
+          backgroundSize: "42px 42px",
+        }}
+      />
 
-            <div className="container mx-auto px-4 max-w-[1400px]" dir="rtl">
-                {/* Header */}
-                <div className="!text-center mb-16 animate-fade-in">
-                    <div className="inline-block px-5 py-2 rounded-full bg-gradient-to-l from-warm-green/10 to-warm-green-light/10 text-warm-green text-sm font-bold mb-5 border border-warm-green/20">
-                        لماذا عون؟
-                    </div>
-                    <h2 className="text-4xl md:text-h2-desktop font-bold mb-6 text-foreground">
-                        مميزات{" "}
-                        <span className="relative inline-block">
-                            <span className="bg-gradient-to-br from-warm-green via-warm-green-light to-warm-green bg-clip-text text-transparent">
-                                المنصة الذكية
-                            </span>
-                            <svg className="absolute w-full h-3 -bottom-2 left-0 text-warm-green opacity-25" viewBox="0 0 100 10" preserveAspectRatio="none">
-                                <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="5" fill="none" />
-                            </svg>
-                        </span>
-                    </h2>
-                    <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                        نظام متكامل يجمع بين الذكاء الاصطناعي والشفافية لضمان وصول الدعم لمستحقيه
-                    </p>
+      <div className="container relative z-10 mx-auto max-w-[1400px] px-4">
+        {/* Header */}
+        <div className="mx-auto mb-16 max-w-4xl text-center animate-fade-in">
+          <div className="section-pill">لماذا عون؟</div>
+
+          <h2 className="section-title">
+            مميزات{" "}
+            <span className="title-highlight">المنصة الذكية</span>
+          </h2>
+
+          <p className="mx-auto max-w-3xl text-base sm:text-lg lg:text-xl leading-[1.9] text-muted-foreground">
+            نظام متكامل يجمع بين الذكاء الاصطناعي والشفافية لضمان وصول الدعم لمستحقيه بسرعة وأمان.
+          </p>
+        </div>
+
+        {/* Features Grid */}
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4 lg:gap-7">
+          {features.map((feature, index) => {
+            const Icon = feature.icon;
+
+            return (
+              <article
+                key={feature.title}
+                className={[
+                  "group relative flex h-full flex-col overflow-hidden rounded-[1.75rem] border p-7 text-right transition-all duration-300 hover:-translate-y-1",
+                  feature.featured
+                    ? "bg-white border-warm-green/40 shadow-[0_20px_50px_hsl(var(--warm-green)/0.12)]"
+                    : "bg-white border-border shadow-sm hover:shadow-[0_18px_40px_hsl(var(--warm-green)/0.10)] hover:border-warm-green/25",
+                ].join(" ")}
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                {/* رقم الميزة */}
+                <div
+                  className={[
+                    "absolute left-5 top-5 text-5xl font-black leading-none opacity-[0.07]",
+                    feature.featured ? "text-golden-orange" : "text-warm-green",
+                  ].join(" ")}
+                >
+                  {feature.badge}
                 </div>
 
-                {/* Features Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-                    {features.map((feature, index) => {
-                        const Icon = feature.icon;
-                        return (
-                            <div
-                                key={index}
-                                className={`group relative bg-card rounded-2xl lg:rounded-3xl p-6 lg:p-8 border-2 ${feature.border} hover:border-warm-green/30 shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col items-center !text-center h-full`}
-                                style={{ animationDelay: `${index * 100}ms` }}
-                            >
-                                {/* Icon Background */}
-                                <div className={`absolute inset-0 bg-gradient-to-br ${feature.bg} opacity-50 group-hover:opacity-70 transition-opacity duration-500 -z-10 pointer-events-none`}></div>
-
-                                {/* Icon */}
-                                <div className={`w-14 h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-5 lg:mb-6 shadow-lg group-hover:scale-110 transition-transform duration-500`}>
-                                    <Icon className="w-7 h-7 lg:w-8 lg:h-8 text-white" />
-                                </div>
-
-                                {/* Content */}
-                                <h3 className="text-base lg:text-lg font-bold mb-2.5 lg:mb-3 text-foreground leading-tight">
-                                    {feature.title}
-                                </h3>
-                                <p className="text-muted-foreground leading-relaxed text-[13px] lg:text-sm">
-                                    {feature.description}
-                                </p>
-                            </div>
-                        );
-                    })}
+                {/* Icon */}
+                <div
+                  className={[
+                    "mb-6 flex h-14 w-14 items-center justify-center rounded-2xl shadow-sm transition-transform duration-300 group-hover:scale-110",
+                    feature.featured
+                      ? "bg-golden-orange/15 text-golden-orange border border-golden-orange/20"
+                      : "bg-warm-green text-white",
+                  ].join(" ")}
+                >
+                  <Icon className="h-7 w-7" />
                 </div>
-            </div>
-        </section>
-    );
+
+                {/* Content */}
+                <h3
+                  className={[
+                    "mb-3 text-lg lg:text-xl font-black leading-[1.45]",
+                    "text-foreground",
+                  ].join(" ")}
+                >
+                  {feature.title}
+                </h3>
+
+                <p
+                  className={[
+                    "text-sm leading-[1.9]",
+                    "text-muted-foreground",
+                  ].join(" ")}
+                >
+                  {feature.description}
+                </p>
+
+                {/* Bottom accent */}
+                <div
+                  className={[
+                    "mt-7 h-1 w-14 rounded-full transition-all duration-300 group-hover:w-24",
+                    feature.featured ? "bg-golden-orange" : "bg-warm-green/35",
+                  ].join(" ")}
+                />
+
+                {/* Decorative corner للـ featured بس */}
+                {feature.featured && (
+                  <div className="pointer-events-none absolute -bottom-16 -left-16 h-40 w-40 rounded-full bg-warm-green/10 blur-2xl" />
+                )}
+              </article>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
 }

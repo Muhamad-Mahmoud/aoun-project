@@ -54,19 +54,26 @@ export function FeaturesSection() {
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
                     {features.map((feature, index) => {
                         const Icon = feature.icon;
+                        const isFeatured = index === 3; // التوصية — the human-connection feature
                         return (
                             <div
                                 key={index}
-                                className="group relative bg-card rounded-2xl p-8 border border-border shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 flex flex-col h-full"
+                                className={`group relative rounded-2xl p-8 border transition-all duration-500 hover:-translate-y-2 flex flex-col h-full
+                                    ${isFeatured
+                                        ? 'bg-golden-orange/[0.04] border-golden-orange/25 hover:border-golden-orange/45 shadow-sm hover:shadow-[0_12px_28px_-4px_rgba(19,114,89,0.10)]'
+                                        : 'bg-card border-border shadow-sm hover:shadow-xl'
+                                    }`}
                                 style={{ animationDelay: `${index * 100}ms` }}
                             >
-                                {/* Icon Container - All Blue */}
-                                <div className="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 shadow-sm">
-                                    <Icon className="w-8 h-8 text-primary" />
+                                {/* Icon Container */}
+                                <div className={`w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 shadow-sm
+                                    ${isFeatured ? 'bg-golden-orange/15' : 'bg-primary/10'}`}>
+                                    <Icon className={`w-8 h-8 ${isFeatured ? 'text-golden-orange' : 'text-primary'}`} />
                                 </div>
 
                                 {/* Content */}
-                                <h3 className="text-xl font-bold mb-3 text-foreground font-display group-hover:text-primary transition-colors duration-300">
+                                <h3 className={`text-xl font-bold mb-3 text-foreground font-display transition-colors duration-300
+                                    ${isFeatured ? 'group-hover:text-golden-orange' : 'group-hover:text-primary'}`}>
                                     {feature.title}
                                 </h3>
                                 <p className="text-muted-foreground leading-relaxed text-base line-clamp-3">

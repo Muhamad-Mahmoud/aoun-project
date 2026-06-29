@@ -6,10 +6,6 @@ import { Heart, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, Che
 export function Footer() {
     return (
         <footer className="bg-footer text-footer-foreground py-16 md:py-24 border-t border-footer-border overflow-hidden relative">
-            {/* Background Pattern - Egyptian Theme */}
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none"></div>
-            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent/5 rounded-full blur-[100px] pointer-events-none"></div>
-
             <div className="container mx-auto px-4 md:px-6 relative z-10" dir="rtl">
                 <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-8 mb-12">
                     {/* Brand - Egyptian Identity */}

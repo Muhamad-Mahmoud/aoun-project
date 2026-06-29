@@ -8,7 +8,6 @@ module.exports = {
     './src/**/*.{ts,tsx}',
   ],
   prefix: "",
-  // Enable RTL support - uses logical properties (start/end instead of left/right)
   future: {
     hoverOnlyWhenSupported: true,
   },
@@ -39,7 +38,8 @@ module.exports = {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
         },
-        // Semantic Colors
+
+        // ===== Semantic Colors =====
         success: {
           DEFAULT: "hsl(var(--success))",
           foreground: "hsl(var(--success-foreground))",
@@ -80,7 +80,14 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Spec-driven Palette
+
+        // ===== Brand Identity (الأساسي) =====
+        // ⚠️ لازم تضيف --brand-dark في globals.css عشان ده يشتغل
+        // ده اللون الغامق الموحّد للـ hero / CTA band / footer
+        "brand-dark": {
+          DEFAULT: "hsl(var(--brand-dark))",
+          foreground: "hsl(var(--brand-dark-foreground))",
+        },
         "warm-green": {
           DEFAULT: "hsl(var(--warm-green))",
           light: "hsl(var(--warm-green-light))",
@@ -94,7 +101,10 @@ module.exports = {
           dark: "hsl(var(--golden-orange-dark))",
           pale: "hsl(var(--golden-orange-pale))",
         },
+        "gold-text": "hsl(var(--gold-text))",
         "pharaoh-gold": "hsl(var(--pharaoh-gold))",
+
+        // ===== ألوان مساعدة (استخدمها بحذر — خليك على الأخضر + الذهبي للهوية) =====
         "sky-blue": {
           DEFAULT: "hsl(var(--sky-blue))",
           light: "hsl(var(--sky-blue-light))",
@@ -116,15 +126,18 @@ module.exports = {
           light: "hsl(var(--emerald-green-light))",
           pale: "hsl(var(--emerald-green-pale))",
         },
-        "social": {
+
+        // ===== Neutrals الدافئة =====
+        "warm-beige": "hsl(var(--warm-beige))",
+        "warm-white": "hsl(var(--warm-white))",
+        "soft-gray": "hsl(var(--soft-gray))",
+
+        social: {
           facebook: "hsl(var(--social-facebook))",
           twitter: "hsl(var(--social-twitter))",
           instagram: "hsl(var(--social-instagram))",
           linkedin: "hsl(var(--social-linkedin))",
         },
-        "warm-beige": "hsl(var(--warm-beige))",
-        "warm-white": "hsl(var(--warm-white))",
-        "soft-gray": "hsl(var(--soft-gray))",
         sidebar: {
           DEFAULT: 'hsl(var(--sidebar-background))',
           foreground: 'hsl(var(--sidebar-foreground))',
@@ -142,14 +155,16 @@ module.exports = {
           border: 'hsl(var(--footer-border))',
         },
       },
-
-
+      fontFamily: {
+        sans: ['var(--font-cairo)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-cairo)', 'system-ui', 'sans-serif'],
+      },
       fontSize: {
-        'hero-desktop': ['64px', { lineHeight: '1.2', fontWeight: '900' }],
-        'hero-mobile': ['48px', { lineHeight: '1.2', fontWeight: '900' }],
-        'h2-desktop': ['48px', { lineHeight: '1.3', fontWeight: '700' }],
-        'h2-mobile': ['36px', { lineHeight: '1.3', fontWeight: '700' }],
-        'h3': ['32px', { lineHeight: '1.3', fontWeight: '600' }],
+        'hero-desktop': ['64px', { lineHeight: '1.1', fontWeight: '900' }],
+        'hero-mobile': ['48px', { lineHeight: '1.15', fontWeight: '900' }],
+        'h2-desktop': ['48px', { lineHeight: '1.2', fontWeight: '800' }],
+        'h2-mobile': ['36px', { lineHeight: '1.25', fontWeight: '800' }],
+        'h3': ['32px', { lineHeight: '1.3', fontWeight: '700' }],
         'body-lg': ['20px', { lineHeight: '1.8' }],
         'body': ['18px', { lineHeight: '1.8' }],
       },
@@ -159,9 +174,9 @@ module.exports = {
         sm: "calc(var(--radius) - 4px)",
       },
       boxShadow: {
-        sm: '0 2px 8px -2px rgba(22, 163, 74, 0.05)',
-        md: '0 8px 24px -4px rgba(22, 163, 74, 0.08)',
-        lg: '0 16px 32px -8px rgba(22, 163, 74, 0.12)',
+        sm: '0 2px 8px -2px hsl(var(--warm-green) / 0.06)',
+        md: '0 8px 24px -4px hsl(var(--warm-green) / 0.09)',
+        lg: '0 16px 32px -8px hsl(var(--warm-green) / 0.12)',
         card: '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
         'card-hover': '0 12px 28px -4px rgba(0, 0, 0, 0.08)',
       },

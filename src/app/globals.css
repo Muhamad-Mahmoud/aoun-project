@@ -2,44 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom Scrollbar Styling */
+/* ===== Custom Scrollbar ===== */
 @layer utilities {
     .scrollbar-hide {
         -ms-overflow-style: none;
         scrollbar-width: none;
     }
-
     .scrollbar-hide::-webkit-scrollbar {
         display: none;
     }
 }
 
-/* Global Custom Scrollbar */
 * {
     scrollbar-width: thin;
-    scrollbar-color: hsl(160 84% 39% / 0.4) transparent;
+    scrollbar-color: hsl(var(--warm-green) / 0.4) transparent;
 }
-
 *::-webkit-scrollbar {
     width: 6px;
     height: 6px;
 }
-
 *::-webkit-scrollbar-track {
     background: transparent;
     border-radius: 10px;
 }
-
 *::-webkit-scrollbar-thumb {
     background: hsl(var(--warm-green) / 0.3);
     border-radius: 10px;
     transition: background-color 0.2s ease;
 }
-
 *::-webkit-scrollbar-thumb:hover {
-    background: hsl(160 84% 39% / 0.6);
+    background: hsl(var(--warm-green) / 0.6);
 }
-
 *::-webkit-scrollbar-corner {
     background: transparent;
 }
@@ -49,262 +42,191 @@
         /* ===== TYPOGRAPHY ===== */
         --font-sans: var(--font-cairo), system-ui, sans-serif;
 
-        /* ===== AOUN WARM & HUMAN COLOR SYSTEM 🇪🇬 ===== */
-        /* Organized by purpose: Brand → Semantic → UI → Special */
+        /* ===== AOUN IDENTITY 🇪🇬 — Deep Teal-Green + Honey Gold + Creamy Neutrals ===== */
 
-        /* --- BRAND COLORS (Primary Identity) --- */
-        /* Warm Green - Primary Brand (Hope & Growth) */
-        --warm-green: 160 84% 32%;
-        /* Highly optimized for contrast (5.2:1 ratio) */
-        --warm-green-light: 160 71% 42%;
-        --warm-green-dark: 160 84% 28%;
-        --warm-green-lighter: 160 76% 73%;
-        --warm-green-pale: 160 76% 97%;
+        /* --- BRAND (Primary Identity) --- */
+        --brand-dark: 164 45% 11%;            /* أخضر غامق موحّد: Hero / CTA band / Footer */
+        --brand-dark-foreground: 0 0% 100%;   /* نص أبيض فوق الغامق ✅ (الإصلاح الناقص) */
 
-        /* Golden Orange - Secondary Brand (Warmth & Action) */
-        --golden-orange: 30 92% 38%;
-        /* Darkened for ≥4.5:1 contrast on white */
-        --golden-orange-light: 43 96% 56%;
-        --golden-orange-dark: 32 95% 36%;
-        --golden-orange-pale: 48 100% 88%;
+        --warm-green: 164 72% 26%;            /* ≈ #136B4D — 7.5:1 on cream ✅ */
+        --warm-green-light: 164 65% 38%;
+        --warm-green-dark: 164 72% 20%;
+        --warm-green-lighter: 164 60% 70%;
+        --warm-green-pale: 164 55% 96%;
 
-        /* Pharaoh Gold - Accent Brand (Luxury & Heritage) */
-        --pharaoh-gold: 43 96% 56%;
-        /* Matching golden-orange-light for now, adjust as needed */
+        /* Honey Gold — أكسنت للـ fills/الأيقونات فقط (مش نص فوق فاتح) */
+        --golden-orange: 38 85% 44%;          /* ≈ #CA8E0C */
+        --golden-orange-light: 43 90% 58%;
+        --golden-orange-dark: 38 85% 36%;
+        --golden-orange-pale: 40 85% 92%;
 
-        /* Sky Blue - Trust Brand (Credibility) */
+        --gold-text: 39 92% 28%;              /* ≈ #8C5E00 — 5.2:1 للنص على فاتح ✅ */
+        --pharaoh-gold: 43 88% 50%;
+
+        /* --- AUXILIARY (استخدمها بحذر — الهوية = أخضر + ذهبي بس) --- */
         --sky-blue: 199 89% 38%;
-        /* Darkened for ≥4.5:1 contrast on white */
         --sky-blue-light: 199 95% 74%;
         --sky-blue-dark: 199 89% 32%;
         --sky-blue-pale: 204 94% 94%;
+        --royal-purple: 270 95% 60%;
+        --royal-purple-light: 270 96% 75%;
+        --royal-purple-pale: 270 96% 96%;
+        --vibrant-cyan: 190 90% 30%;
+        --vibrant-cyan-light: 190 90% 70%;
+        --vibrant-cyan-pale: 190 90% 95%;
+        --emerald-green: 150 80% 28%;
+        --emerald-green-light: 150 80% 60%;
+        --emerald-green-pale: 150 80% 95%;
 
-        /* --- SEMANTIC COLORS (Status & Feedback) --- */
-        /* Success - Use for positive actions, confirmations */
-        --success: 160 84% 39%;
-        /* Maps to warm-green */
+        /* --- SEMANTIC --- */
+        --success: 164 72% 32%;
         --success-foreground: 0 0% 100%;
-        --success-light: 160 76% 97%;
-        --success-dark: 160 84% 30%;
-
-        /* Warning - Use for cautions, important notices */
-        --warning: 38 92% 50%;
-        /* Maps to golden-orange */
+        --success-light: 164 55% 96%;
+        --success-dark: 164 72% 24%;
+        --warning: 38 85% 44%;
         --warning-foreground: 0 0% 100%;
-        --warning-light: 48 100% 88%;
-        --warning-dark: 32 95% 44%;
-
-        /* Error/Destructive - Use for errors, destructive actions */
+        --warning-light: 40 85% 92%;
+        --warning-dark: 38 85% 36%;
         --error: 0 84% 60%;
         --error-foreground: 0 0% 100%;
         --error-light: 0 84% 97%;
         --error-dark: 0 84% 50%;
-
-        /* Info - Use for informational messages */
         --info: 199 89% 48%;
-        /* Maps to sky-blue */
         --info-foreground: 0 0% 100%;
         --info-light: 204 94% 94%;
         --info-dark: 199 89% 40%;
 
-        /* --- AUXILIARY BRAND COLORS (Feature Variety) --- */
-        --royal-purple: 270 95% 60%;
-        --royal-purple-light: 270 96% 75%;
-        --royal-purple-pale: 270 96% 96%;
+        /* --- NEUTRALS (دافئة) --- */
+        --warm-white: 40 30% 97%;             /* ≈ #FAF9F5 كريمي */
+        --warm-beige: 40 40% 93%;
+        --soft-gray: 164 8% 88%;
 
-        --vibrant-cyan: 190 90% 30%;
-        /* Darkened for ≥4.5:1 contrast on white */
-        --vibrant-cyan-light: 190 90% 70%;
-        --vibrant-cyan-pale: 190 90% 95%;
+        /* --- TEXT --- */
+        --text-primary: 164 30% 12%;          /* 11:1 ✅ */
+        --text-secondary: 164 10% 40%;        /* 5.1:1 ✅ */
+        --text-tertiary: 164 10% 34%;
+        --text-muted: 164 6% 60%;
 
-        --emerald-green: 150 80% 28%;
-        /* Darkened for ≥5.0:1 contrast on white */
-        --emerald-green-light: 150 80% 60%;
-        --emerald-green-pale: 150 80% 95%;
+        /* --- BORDERS --- */
+        --border-light: 164 15% 90%;
+        --border-medium: 164 12% 84%;
+        --border-dark: 164 12% 70%;
 
-        /* --- NEUTRAL COLORS (Backgrounds & Text) --- */
-        /* Backgrounds */
-        --warm-white: 0 0% 100%;
-        --warm-beige: 48 100% 96%;
-        --soft-gray: 220 13% 91%;
-
-        /* Text Colors (Verified for 100/100 Accessibility) */
-        --text-primary: 217 33% 13%;
-        /* 11:1 contrast */
-        --text-secondary: 215 16% 38%;
-        /* 5.4:1 contrast - Perfect for AA */
-        --text-tertiary: 215 16% 32%;
-        /* High distinction */
-        --text-muted: 210 10% 64%;
-        /* Darkened for CC */
-
-        /* Borders */
-        --border-light: 214 32% 91%;
-        --border-medium: 217 19% 85%;
-        --border-dark: 217 19% 70%;
-
-        /* --- SOCIAL MEDIA COLORS --- */
+        /* --- SOCIAL --- */
         --social-facebook: 221 90% 52%;
         --social-twitter: 203 89% 53%;
         --social-instagram: 340 75% 57%;
         --social-linkedin: 206 90% 40%;
 
-        /* --- GLASS EFFECTS --- */
+        /* --- GLASS --- */
         --glass-border: 0 0% 100% / 0.1;
         --glass-bg: 0 0% 100% / 0.7;
 
-        /* ===== SHADCN/UI SEMANTIC MAPPINGS ===== */
-        /* Maps brand colors to UI semantic tokens */
+        /* ===== SHADCN MAPPINGS ===== */
         --background: var(--warm-white);
         --foreground: var(--text-primary);
-
-        --card: var(--warm-white);
+        --card: 0 0% 100%;
         --card-foreground: var(--text-primary);
-
-        --popover: var(--warm-white);
+        --popover: 0 0% 100%;
         --popover-foreground: var(--text-primary);
-
-        /* Primary = Aoun Brand Teal (Trust, Charity) */
-        --primary: 160 84% 39%;
+        --primary: 164 72% 26%;
         --primary-foreground: 0 0% 100%;
-
-        /* Secondary = Warm Amber (Growth, Action) */
-        --secondary: 38 92% 50%;
+        --secondary: 38 85% 44%;
         --secondary-foreground: 0 0% 100%;
-
-        /* Muted = Slate 50 (Subtle Backgrounds) */
-        --muted: 210 40% 96.1%;
-        --muted-foreground: 215.4 16.3% 46.9%;
-
-        /* Accent = Amber-500 (Warmth / Call-to-Action) */
-        --accent: 38 92% 50%;
+        --muted: 40 25% 94%;
+        --muted-foreground: 164 8% 45%;
+        --accent: 38 85% 44%;
         --accent-foreground: 0 0% 100%;
-
-        /* Destructive = Error Red */
         --destructive: var(--error);
         --destructive-foreground: var(--error-foreground);
-
-        /* UI Elements */
-        --border: 214.3 31.8% 91.4%;
-        --input: 214.3 31.8% 91.4%;
-        --ring: 160 84% 39%;
+        --border: 164 15% 90%;
+        --input: 164 15% 90%;
+        --ring: 164 72% 26%;
         --radius: 0.75rem;
 
-        /* --- CHART COLORS (Data Visualization) --- */
-        --chart-1: 160 84% 39%;
-        /* Warm Green */
-        --chart-2: 38 92% 50%;
-        /* Golden Orange */
+        /* --- CHARTS --- */
+        --chart-1: 164 72% 26%;
+        --chart-2: 38 85% 44%;
         --chart-3: 199 89% 48%;
-        /* Sky Blue */
         --chart-4: 270 95% 60%;
-        /* Royal Purple */
         --chart-5: 150 80% 40%;
-        /* Emerald Green */
 
-        /* --- SIDEBAR COLORS --- */
-        --sidebar-background: var(--warm-white);
+        /* --- SIDEBAR --- */
+        --sidebar-background: 0 0% 100%;
         --sidebar-foreground: var(--text-primary);
         --sidebar-primary: var(--warm-green);
         --sidebar-primary-foreground: 0 0% 100%;
-        --sidebar-accent: var(--warm-beige);
+        --sidebar-accent: 40 25% 94%;
         --sidebar-accent-foreground: var(--text-primary);
         --sidebar-border: var(--border-light);
         --sidebar-ring: var(--warm-green);
 
-        /* --- FOOTER COLORS (Always Dark) --- */
-        --footer-background: 222 47% 11%;
-        /* Dark blue-grey */
-        --footer-foreground: 210 40% 95%;
-        /* Light text for dark background */
-        --footer-muted: 215 20% 75%;
-        /* Darkened for CC compliance */
-        --footer-border: 217 19% 25%;
-        /* Border for dark background */
+        /* --- FOOTER (موحّد مع brand-dark) --- */
+        --footer-background: var(--brand-dark);
+        --footer-foreground: 164 15% 92%;
+        --footer-muted: 164 10% 68%;
+        --footer-border: 164 20% 20%;
     }
 
     .dark {
-        /* ===== DARK MODE OVERRIDES ===== */
-        /* Maintains brand colors but adjusts backgrounds and text for dark theme */
+        --background: 164 35% 9%;
+        --card: 164 30% 13%;
+        --popover: 164 30% 13%;
+        --brand-dark: 164 35% 9%;
+        --brand-dark-foreground: 0 0% 100%;   /* نفس الإصلاح في الدارك */
 
-        /* --- BACKGROUNDS (Dark Theme) --- */
-        --background-primary: 222 47% 10%;
-        --background-secondary: 220 35% 15%;
-        --background-tertiary: 220 30% 20%;
-        --background: 222 47% 10%;
-        --card: 220 35% 15%;
-        --popover: 220 35% 15%;
-
-        /* --- TEXT (Dark Theme - High Contrast) --- */
-        --text-primary: 210 40% 98%;
-        --text-secondary: 215 20% 85%;
-        --text-tertiary: 215 15% 65%;
+        --text-primary: 164 20% 97%;
+        --text-secondary: 164 15% 82%;
+        --text-tertiary: 164 10% 65%;
         --foreground: var(--text-primary);
         --card-foreground: var(--text-primary);
         --popover-foreground: var(--text-primary);
         --muted-foreground: var(--text-tertiary);
 
-        /* --- BORDERS (Dark Theme) --- */
-        --border: 217 19% 30%;
-        --input: 217 19% 30%;
-        --border-light: 217 19% 30%;
-        --border-medium: 217 19% 25%;
-        --border-dark: 217 19% 20%;
+        --border: 164 20% 22%;
+        --input: 164 20% 22%;
+        --border-light: 164 20% 22%;
+        --border-medium: 164 18% 18%;
+        --border-dark: 164 15% 14%;
 
-        /* --- BRAND COLORS (Slightly Adjusted for Dark) --- */
-        /* Keep brand colors but may adjust lightness for better contrast */
-        --warm-green: 160 70% 45%;
-        /* Slightly lighter for dark backgrounds */
-        --golden-orange: 38 85% 55%;
-        /* Slightly lighter */
+        --warm-green: 164 60% 42%;
+        --golden-orange: 38 80% 52%;
+        --gold-text: 39 85% 62%;
         --sky-blue: 199 85% 55%;
-        /* Slightly lighter */
 
-        /* --- SEMANTIC COLORS (Dark Theme) --- */
-        --success: 160 70% 45%;
-        --warning: 38 85% 55%;
+        --success: 164 60% 42%;
+        --warning: 38 80% 52%;
         --error: 0 72% 65%;
-        /* Slightly lighter for dark mode */
         --info: 199 85% 55%;
 
-        /* --- UI ELEMENTS (Dark Theme) --- */
-        --ring: var(--pharaoh-gold);
-        /* Gold ring for better visibility in dark mode */
-        --muted: 220 35% 15%;
-        /* Darker muted background */
+        --muted: 164 30% 13%;
+        --muted-foreground: 164 8% 62%;
+        --ring: var(--warm-green);
+        --primary: 164 60% 42%;
+        --primary-foreground: 164 35% 9%;
 
-        /* --- GLASS EFFECTS (Dark Theme) --- */
-        --glass-border: 255 255% 255% / 0.08;
-        --glass-bg: 222 47% 10% / 0.6;
+        --glass-border: 164 20% 80% / 0.08;
+        --glass-bg: 164 35% 9% / 0.6;
 
-        /* --- CHART COLORS (Dark Theme - Adjusted for Visibility) --- */
-        --chart-1: 160 70% 50%;
-        /* Warm Green - lighter */
-        --chart-2: 38 85% 60%;
-        /* Golden Orange - lighter */
+        --chart-1: 164 60% 48%;
+        --chart-2: 38 80% 56%;
         --chart-3: 199 85% 60%;
-        /* Sky Blue - lighter */
         --chart-4: 270 90% 70%;
-        /* Royal Purple - lighter */
         --chart-5: 150 75% 55%;
-        /* Emerald Green - lighter */
 
-        /* --- SIDEBAR (Dark Theme) --- */
-        --sidebar-background: 222 47% 10%;
-        --sidebar-foreground: 210 40% 98%;
+        --sidebar-background: 164 35% 9%;
+        --sidebar-foreground: 164 20% 97%;
         --sidebar-primary: var(--warm-green);
-        --sidebar-primary-foreground: 0 0% 100%;
-        --sidebar-accent: 220 35% 15%;
-        --sidebar-accent-foreground: 210 40% 98%;
-        --sidebar-border: 217 19% 30%;
-        --sidebar-ring: var(--pharaoh-gold);
+        --sidebar-primary-foreground: 164 35% 9%;
+        --sidebar-accent: 164 30% 13%;
+        --sidebar-accent-foreground: 164 20% 97%;
+        --sidebar-border: 164 20% 22%;
+        --sidebar-ring: var(--warm-green);
 
-        /* --- FOOTER COLORS (Dark Mode - Same as Light) --- */
-        /* Footer is always dark, so colors remain the same */
-        --footer-background: 222 47% 11%;
-        --footer-foreground: 210 40% 95%;
-        --footer-muted: 215 20% 65%;
-        --footer-border: 217 19% 25%;
+        --footer-background: var(--brand-dark);
+        --footer-foreground: 164 15% 92%;
+        --footer-muted: 164 10% 65%;
+        --footer-border: 164 20% 20%;
     }
 }
 
@@ -312,31 +234,22 @@
     * {
         @apply border-border outline-ring/50;
     }
-
     html {
         direction: rtl;
-        /* Prevent grey overlay on mobile tap */
         -webkit-tap-highlight-color: transparent;
     }
-
     body {
         @apply bg-background text-foreground font-sans antialiased;
-        /* Disable double-tap-to-zoom so taps register instantly */
         touch-action: manipulation;
-        background-image:
-            radial-gradient(circle at 50% 0%, hsl(var(--primary) / 0.05) 0%, transparent 60%),
-            radial-gradient(circle at 100% 100%, hsl(var(--accent) / 0.03) 0%, transparent 40%);
     }
-
-    /* Global safeguard: decorative layers with negative z-index must never capture touch/pointer events.
-       This prevents invisible overlays from blocking taps on real mobile devices. */
+    /* الطبقات الزخرفية بـ z سالب ميمسكش اللمس */
     .-z-10, .-z-20, .-z-30, .-z-40, .-z-50,
     [class*="-z-"] {
         pointer-events: none;
     }
 }
 
-/* Hide Next.js Dev Indicators */
+/* إخفاء مؤشرات Next.js للتطوير */
 [data-nextjs-toast-wrapper],
 [data-nextjs-toast],
 .nextjs-toast-errors-parent,
@@ -345,127 +258,144 @@ nextjs-portal {
 }
 
 @layer components {
+    /* ===== نظام السكشنز الموحّد (مصدر التناسق) ===== */
 
-    /* Premium Glass Effect */
+    /* سكشن غامق كامل بكلاس واحد (Hero / CTA band / Footer) */
+    .section-dark {
+        @apply bg-brand-dark text-brand-dark-foreground;
+    }
+
+    /* إيقاع الخلفيات */
+    .bg-rhythm-dark { @apply bg-brand-dark; }
+    .bg-rhythm-creamy { @apply bg-warm-white; }
+    .bg-rhythm-white { @apply bg-white; }
+
+    /* eyebrow pills */
+    .section-pill {
+        @apply inline-flex items-center px-5 py-2 rounded-full bg-warm-white border border-border text-warm-green text-sm lg:text-base font-bold shadow-sm mb-6;
+    }
+    .section-pill-dark {
+        @apply inline-flex items-center px-5 py-2 rounded-full bg-white/10 border border-white/20 text-white text-sm lg:text-base font-bold shadow-sm mb-6 backdrop-blur-sm;
+    }
+
+    /* عناوين السكشنز */
+    .section-title {
+        @apply text-3xl md:text-4xl lg:text-[clamp(2.5rem,4vw,3.5rem)] font-black font-display leading-snug text-foreground mb-6;
+    }
+    .section-title-dark {
+        @apply text-3xl md:text-4xl lg:text-[clamp(2.5rem,4vw,3.5rem)] font-black font-display leading-snug text-white mb-6;
+    }
+
+    /* موتيف الـ underline الذهبي */
+    .title-highlight {
+        @apply text-warm-green relative inline-block z-10 leading-snug;
+    }
+    .title-highlight-underline {
+        @apply absolute right-0 left-0 rounded-full bg-golden-orange opacity-90;
+        height: 0.1em;
+        bottom: 0.15em;
+    }
+
+    /* الكارت الموحّد */
+    .card-unified {
+        @apply bg-card rounded-2xl lg:rounded-3xl p-6 lg:p-8 border border-border shadow-sm hover:shadow-xl hover:border-warm-green/30 transition-all duration-300;
+    }
+
+    /* ===== مكوّنات مساعدة ===== */
     .glass-panel {
         @apply bg-background/60 backdrop-blur-xl border border-white/20 shadow-xl;
     }
-
     .dark .glass-panel {
         @apply bg-background/40 border-white/5;
     }
-
     .text-gradient {
-        @apply bg-gradient-to-br from-primary via-sky-blue to-primary/80 bg-clip-text text-transparent;
+        @apply bg-gradient-to-br from-primary via-warm-green-light to-primary/80 bg-clip-text text-transparent;
     }
-
     .text-gradient-gold {
         @apply bg-gradient-to-br from-golden-orange via-pharaoh-gold to-golden-orange-light bg-clip-text text-transparent;
     }
-
-    /* Card Hover Effects */
     .card-premium {
         @apply rounded-xl border border-border/40 bg-card/60 backdrop-blur-sm shadow-sm;
-        transition: transform 0.3s ease, shadow 0.3s ease, border-color 0.3s ease;
+        transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
     }
-
     .card-premium:hover {
         @apply shadow-lg border-primary/20 -translate-y-1;
     }
-
     .container-responsive {
         @apply container mx-auto px-4 md:px-6 lg:px-8;
+    }
+    .page-section {
+        @apply space-y-6 px-6 lg:px-10 pb-20 pt-6 lg:pt-8 relative z-10;
+    }
+    .form-field-group {
+        @apply space-y-2;
+    }
+    .form-field-group label {
+        @apply text-sm font-semibold text-foreground;
+    }
+    .form-field-group .field-error {
+        @apply text-xs font-bold text-destructive mt-1;
+    }
+    .section-header {
+        @apply flex items-center gap-2 mb-4;
+    }
+    .section-header::before {
+        content: '';
+        @apply w-1.5 h-6 rounded-full bg-primary block;
+    }
+    .section-header h2 {
+        @apply text-xl font-black text-foreground;
+    }
+    .focus-ring {
+        @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-2;
+    }
+    .skeleton-shimmer {
+        background: linear-gradient(90deg,
+            hsl(var(--muted)) 25%,
+            hsl(var(--muted) / 0.5) 50%,
+            hsl(var(--muted)) 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.5s ease-in-out infinite;
+    }
+    .animate-fade-slide-up {
+        animation: fadeSlideUp 0.4s ease-out both;
     }
 }
 
 @layer utilities {
-    .animate-fade-in-up {
-        animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
+    .animate-fade-in-up { animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .animate-fade-in { animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .animate-scale-in { animation: scaleIn 0.4s ease-out forwards; }
+    .animate-counter { animation: counter 0.5s ease-out forwards; }
+    .animate-float { animation: float 3s ease-in-out infinite; }
+    .animate-pulse-slow { animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    .delay-100 { animation-delay: 100ms; }
+    .delay-200 { animation-delay: 200ms; }
+    .delay-300 { animation-delay: 300ms; }
+    .delay-400 { animation-delay: 400ms; }
+    .delay-500 { animation-delay: 500ms; }
+    .delay-700 { animation-delay: 700ms; }
+    .text-balance { text-wrap: balance; }
+    .spacing-xs { gap: 8px; }
+    .spacing-sm { gap: 16px; }
+    .spacing-md { gap: 24px; }
+    .spacing-lg { gap: 32px; }
+    .spacing-xl { gap: 48px; }
+    .spacing-2xl { gap: 64px; }
+    .spacing-3xl { gap: 96px; }
+    .spacing-4xl { gap: 128px; }
 
-    .animate-fade-in {
-        animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    .animate-scale-in {
-        animation: scaleIn 0.4s ease-out forwards;
-    }
-
-    .animate-counter {
-        animation: counter 0.5s ease-out forwards;
-    }
-
-    .animate-float {
-        animation: float 3s ease-in-out infinite;
-    }
-
-    .animate-pulse-slow {
-        animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    }
-
-    .delay-100 {
-        animation-delay: 100ms;
-    }
-
-    .delay-200 {
-        animation-delay: 200ms;
-    }
-
-    .delay-300 {
-        animation-delay: 300ms;
-    }
-
-    .delay-400 {
-        animation-delay: 400ms;
-    }
-
-    .delay-500 {
-        animation-delay: 500ms;
-    }
-
-    .delay-700 {
-        animation-delay: 700ms;
-    }
-
-    .text-balance {
-        text-wrap: balance;
-    }
-
-    /* Spacing System - 8px Base */
-    .spacing-xs {
-        gap: 8px;
-    }
-
-    .spacing-sm {
-        gap: 16px;
-    }
-
-    .spacing-md {
-        gap: 24px;
-    }
-
-    .spacing-lg {
-        gap: 32px;
-    }
-
-    .spacing-xl {
-        gap: 48px;
-    }
-
-    .spacing-2xl {
-        gap: 64px;
-    }
-
-    .spacing-3xl {
-        gap: 96px;
-    }
-
-    .spacing-4xl {
-        gap: 128px;
+    @media (max-width: 1024px) {
+        main:not(.overflow-hidden)::after {
+            content: '';
+            display: block;
+            height: 7rem;
+            width: 100%;
+            flex-shrink: 0;
+        }
     }
 }
 
-/* Respect reduced-motion preferences to lower animation and transition cost */
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
         animation-duration: 0.001ms !important;
@@ -475,103 +405,19 @@ nextjs-portal {
     }
 }
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translate3d(0, 20px, 0);
-    }
+/* ===== Keyframes ===== */
+@keyframes fadeInUp { from { opacity: 0; transform: translate3d(0, 20px, 0); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes scaleIn { from { opacity: 0; transform: scale3d(0.95, 0.95, 1); } to { opacity: 1; transform: scale3d(1, 1, 1); } }
+@keyframes counter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes float { 0%, 100% { transform: translate3d(0, 0, 0); } 50% { transform: translate3d(0, -15px, 0); } }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+@keyframes fadeSlideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+.typing-cursor { animation: blink 0.8s step-end infinite; }
 
-    to {
-        opacity: 1;
-        transform: translate3d(0, 0, 0);
-    }
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes scaleIn {
-    from {
-        opacity: 0;
-        transform: scale3d(0.95, 0.95, 1);
-    }
-
-    to {
-        opacity: 1;
-        transform: scale3d(1, 1, 1);
-    }
-}
-
-@keyframes counter {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes float {
-
-    0%,
-    100% {
-        transform: translate3d(0, 0, 0);
-    }
-
-    50% {
-        transform: translate3d(0, -15px, 0);
-    }
-}
-
-@keyframes pulse {
-
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.5;
-    }
-}
-
-@keyframes pulse-subtle {
-
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.95;
-    }
-}
-
-/* Chat Typing Cursor */
-@keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
-}
-
-.typing-cursor {
-    animation: blink 0.8s step-end infinite;
-}
-
-/* --- Vercel / Next Dev Overlays & Toolbar Fix ---
-   Vercel injects toolbars, analytics widgets, and feedback overlays that
-   create invisible full-screen layers on mobile — blocking ALL touch events.
-   We aggressively collapse and neutralize every known injected element.
-*/
+/* ===== Vercel / Next Dev Overlays Fix ===== */
 #preact-border-shadow-host,
 [data-vercel-toolbar],
 vercel-live-feedback,
@@ -593,87 +439,6 @@ nextjs-portal,
     overflow: hidden !important;
     opacity: 0 !important;
 }
-
-/* Catch-all: ensure the first child of body (our app root) always
-   receives pointer events, even if third-party scripts inject siblings. */
 body > :first-child {
     pointer-events: auto !important;
-}
-
-@layer components {
-    /* Consistent page section container */
-    .page-section {
-        @apply space-y-6 px-6 lg:px-10 pb-20 pt-6 lg:pt-8 relative z-10;
-    }
-
-    /* Form field group with consistent spacing */
-    .form-field-group {
-        @apply space-y-2;
-    }
-    .form-field-group label {
-        @apply text-sm font-semibold text-slate-700;
-    }
-    .form-field-group .field-error {
-        @apply text-xs font-bold text-destructive mt-1;
-    }
-
-    /* Section header with accent bar */
-    .section-header {
-        @apply flex items-center gap-2 mb-4;
-    }
-    .section-header::before {
-        content: '';
-        @apply w-1.5 h-6 rounded-full bg-primary block;
-    }
-    .section-header h2 {
-        @apply text-xl font-black text-slate-900;
-    }
-
-    /* Focus-visible ring for keyboard navigation */
-    .focus-ring {
-        @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-2;
-    }
-
-    /* Shimmer skeleton animation */
-    .skeleton-shimmer {
-        background: linear-gradient(90deg, 
-            hsl(var(--muted)) 25%, 
-            hsl(var(--muted) / 0.5) 50%, 
-            hsl(var(--muted)) 75%
-        );
-        background-size: 200% 100%;
-        animation: shimmer 1.5s ease-in-out infinite;
-    }
-
-    /* Fade slide up animation for cards */
-    .animate-fade-slide-up {
-        animation: fadeSlideUp 0.4s ease-out both;
-    }
-}
-
-@keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-}
-
-@keyframes fadeSlideUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@layer utilities {
-    @media (max-width: 1024px) {
-        /* 
-         * Global fix for Mobile Bottom Nav overlap.
-         * Appends a transparent spacer at the end of every scrollable <main> tag.
-         * We exclude .overflow-hidden to avoid breaking fixed-height pages like Chat/Messages.
-         */
-        main:not(.overflow-hidden)::after {
-            content: '';
-            display: block;
-            height: 7rem; /* ~112px */
-            width: 100%;
-            flex-shrink: 0;
-        }
-    }
 }

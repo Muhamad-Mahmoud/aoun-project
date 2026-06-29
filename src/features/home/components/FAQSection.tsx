@@ -18,7 +18,7 @@ const faqs = [
     },
     {
         question: "كيف يمكن للجمعيات الخيرية الانضمام؟",
-        answer: "نسعد بانضمام شركاء الخير. يمكنكم التسجيل عبر خيار 'الجمعيات' في القائمة، وسيتم التواصل معكم وسرعة مراجعة الأوراق الرسمية للااعتماد.",
+        answer: "نسعد بانضمام شركاء الخير. يمكنكم التسجيل عبر خيار 'الجمعيات' في القائمة، وسيتم التواصل معكم وسرعة مراجعة الأوراق الرسمية للاعتماد.",
     },
     {
         question: "متى يمكنني توقع الرد على طلبي؟",
@@ -34,26 +34,16 @@ export function FAQSection() {
     const [openIndex, setOpenIndex] = useState<number | null>(0);
 
     return (
-
-        <section id="faq" className="py-24 md:py-32 bg-warm-white relative overflow-hidden">
-            {/* Background */}
-            <div className="absolute top-0 left-0 w-[500px] h-[500px] max-w-[100vw] bg-primary/5 rounded-full blur-3xl -z-10 overflow-hidden"></div>
-            <div className="absolute bottom-0 right-0 w-[400px] h-[400px] max-w-[100vw] bg-primary/5 rounded-full blur-3xl -z-10 overflow-hidden"></div>
-
+        <section id="faq" className="py-24 md:py-32 bg-white relative overflow-hidden">
             <div className="container mx-auto px-4 max-w-[1000px]" dir="rtl">
                 {/* Header */}
                 <div className="!text-center mb-16 animate-fade-in">
-                    <div className="inline-block px-5 py-2 rounded-full bg-gradient-to-l from-primary/10 to-primary/10 text-primary text-sm font-bold mb-5 border border-primary/20">
+                    <div className="section-pill">
                         الأسئلة الشائعة
                     </div>
-                    <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">
+                    <h2 className="section-title">
                         أسئلة{" "}
-                        <span className="text-primary relative inline-block">
-                            متكررة
-                            <svg className="absolute w-full h-3 -bottom-2 left-0 text-accent opacity-25" viewBox="0 0 100 10" preserveAspectRatio="none">
-                                <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="5" fill="none" />
-                            </svg>
-                        </span>
+                        <span className="title-highlight">متكررة</span>
                     </h2>
                     <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
                         إجابات وافية على الاستفسارات الأكثر شيوعاً
@@ -65,29 +55,29 @@ export function FAQSection() {
                     {faqs.map((faq, index) => (
                         <div
                             key={index}
-                            className="bg-card rounded-2xl border-2 border-border shadow-md transition-all duration-300 overflow-hidden"
+                            className="bg-card rounded-2xl border border-border shadow-sm transition-all duration-300 overflow-hidden hover:border-warm-green/30"
                         >
                             <button
                                 className="w-full text-right p-6 flex items-center justify-between gap-4 transition-colors duration-300"
                                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
                             >
                                 <div className="flex items-center gap-4 flex-1">
-                                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 ${openIndex === index ? 'bg-gradient-to-br from-primary to-warm-green-dark text-white' : 'bg-muted'}`}>
-                                        <HelpCircle className={`w-6 h-6 transition-colors duration-300 ${openIndex === index ? 'text-white' : 'text-primary'}`} />
+                                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 ${openIndex === index ? 'bg-warm-green text-white' : 'bg-muted'}`}>
+                                        <HelpCircle className={`w-6 h-6 transition-colors duration-300 ${openIndex === index ? 'text-white' : 'text-warm-green'}`} />
                                     </div>
                                     <h3 className="text-base sm:text-lg md:text-xl font-bold text-foreground text-right leading-snug">
                                         {faq.question}
                                     </h3>
                                 </div>
                                 <ChevronDown
-                                    className={`w-6 h-6 text-primary transition-transform duration-300 shrink-0 ${openIndex === index ? 'rotate-180' : ''}`}
+                                    className={`w-6 h-6 text-warm-green transition-transform duration-300 shrink-0 ${openIndex === index ? 'rotate-180' : ''}`}
                                 />
                             </button>
 
                             <div
                                 className={`overflow-hidden transition-all duration-300 ${openIndex === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}
                             >
-                                <div className="p-4 sm:p-6 pt-0 pr-[72px] sm:pr-[88px] text-muted-foreground leading-relaxed text-[13px] sm:text-base">
+                                <div className="p-4 sm:p-6 pt-0 pr-[72px] sm:pr-[88px] text-muted-foreground leading-relaxed text-[13px] sm:text-base font-medium">
                                     {faq.answer}
                                 </div>
                             </div>
@@ -96,10 +86,10 @@ export function FAQSection() {
                 </div>
 
                 {/* Contact Note */}
-                <div className="!text-center mt-12 p-8 bg-gradient-to-l from-primary/10 to-primary/10 rounded-2xl border-2 border-border">
-                    <p className="text-lg text-muted-foreground">
+                <div className="!text-center mt-12 p-8 bg-white rounded-2xl border border-border shadow-sm">
+                    <p className="text-lg text-muted-foreground font-medium">
                         لم تجد إجابة لسؤالك؟{" "}
-                        <a href="mailto:info@aoun.org" className="font-bold text-primary transition-colors underline">
+                        <a href="mailto:info@aoun.org" className="font-bold text-warm-green hover:text-warm-green-dark transition-colors underline">
                             تواصل معنا
                         </a>
                     </p>

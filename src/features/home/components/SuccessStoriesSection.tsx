@@ -1,6 +1,4 @@
-
 import { Quote, MapPin, Heart } from "lucide-react";
-import { storyCategoryColors } from "@/shared/constants";
 
 const stories = [
     {
@@ -25,25 +23,15 @@ const stories = [
 
 export function SuccessStoriesSection() {
     return (
-        <section id="success-stories" className="py-24 md:py-32 bg-warm-white relative overflow-hidden">
-            {/* Background */}
-            <div className="absolute top-0 left-0 w-[500px] h-[500px] max-w-[100vw] bg-emerald-green-pale/50 rounded-full blur-3xl -z-10 overflow-hidden"></div>
-            <div className="absolute bottom-0 right-0 w-[400px] h-[400px] max-w-[100vw] bg-vibrant-cyan-pale/50 rounded-full blur-3xl -z-10 overflow-hidden"></div>
-
+        <section id="stories" className="py-24 md:py-32 bg-rhythm-creamy relative overflow-hidden">
             <div className="container mx-auto px-4 max-w-[1400px]" dir="rtl">
                 {/* Header */}
                 <div className="!text-center mb-16 animate-fade-in">
-                    <div className="inline-block px-5 py-2 rounded-full bg-gradient-to-l from-vibrant-cyan-pale/50 to-emerald-green-pale/50 text-vibrant-cyan text-sm font-bold mb-5 border border-vibrant-cyan/20">
+                    <div className="section-pill">
                         قصص نجاح
                     </div>
-                    <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">
-                        حكايات{" "}
-                        <span className="text-vibrant-cyan relative inline-block">
-                            واقعية
-                            <svg className="absolute w-full h-3 -bottom-2 left-0 text-golden-orange opacity-25" viewBox="0 0 100 10" preserveAspectRatio="none">
-                                <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="5" fill="none" />
-                            </svg>
-                        </span>
+                    <h2 className="section-title">
+                        قصص <span className="title-highlight">نجاح</span> حقيقية
                     </h2>
                     <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                         نماذج حقيقية لأسر تغيرت حياتهم للأفضل من خلال منصة عون
@@ -53,18 +41,14 @@ export function SuccessStoriesSection() {
                 {/* Stories Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
                     {stories.map((story, index) => {
-                        const colorScheme = storyCategoryColors[story.category];
                         return (
                             <div
                                 key={index}
-                                className="relative bg-card rounded-3xl p-8 border-2 border-border shadow-lg transition-all duration-500 flex flex-col overflow-hidden !text-center items-center"
+                                className="card-unified flex flex-col !text-center items-center h-full relative"
                                 style={{ animationDelay: `${index * 100}ms` }}
                             >
-                                {/* Gradient Background */}
-                                <div className={`absolute inset-0 bg-gradient-to-br ${colorScheme.gradient} opacity-[0.03] -z-10 pointer-events-none`}></div>
-
                                 {/* Quote Icon */}
-                                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${colorScheme.gradient} flex items-center justify-center mb-6 shadow-lg`}>
+                                <div className="w-14 h-14 rounded-2xl bg-warm-green flex items-center justify-center mb-6 shadow-md">
                                     <Quote className="w-7 h-7 text-white" />
                                 </div>
 
@@ -74,22 +58,17 @@ export function SuccessStoriesSection() {
                                 </p>
 
                                 {/* Author Info */}
-                                <div className="w-full flex items-center justify-between pt-6 border-t-2 border-border">
+                                <div className="w-full flex items-center justify-between pt-6 border-t border-border">
                                     <div className="text-right">
                                         <h3 className="text-lg font-bold text-foreground mb-1">{story.name}</h3>
-                                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                            <MapPin className="w-4 h-4" />
+                                        <div className="flex items-center gap-2 text-sm text-muted-foreground font-semibold">
+                                            <MapPin className="w-4 h-4 text-golden-orange" />
                                             <span>{story.location}</span>
                                         </div>
                                     </div>
-                                    <div className={`px-3 py-1 rounded-full bg-gradient-to-l ${colorScheme.gradient} text-white text-xs font-bold`}>
+                                    <div className="px-3 py-1 rounded-full bg-warm-green/10 text-warm-green text-xs font-bold border border-warm-green/20">
                                         {story.category}
                                     </div>
-                                </div>
-
-                                {/* Decorative Heart */}
-                                <div className="absolute bottom-4 left-4 opacity-5 pointer-events-none">
-                                    <Heart className="w-20 h-20 text-vibrant-cyan" fill="currentColor" />
                                 </div>
                             </div>
                         );
@@ -98,9 +77,9 @@ export function SuccessStoriesSection() {
             </div>
 
             {/* Bottom Note */}
-            <div className="!text-center mt-12">
-                <p className="text-muted-foreground text-lg">
-                    <span className="font-bold text-emerald-green">+١,٢٠٠ أسرة</span> استفادت من منصة عون حتى الآن
+            <div className="!text-center mt-16">
+                <p className="text-muted-foreground text-lg font-semibold">
+                    <span className="font-bold text-warm-green">+١,٢٠٠ أسرة</span> استفادت من منصة عون حتى الآن
                 </p>
             </div>
         </section>

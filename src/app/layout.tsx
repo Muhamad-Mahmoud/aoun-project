@@ -7,12 +7,14 @@ import LayoutContent from "./LayoutContent";
 
 const font = Cairo({
     subsets: ["arabic", "latin"],
-    display: 'swap'
+    display: 'swap',
+    variable: '--font-cairo',
+    weight: ['400', '500', '600', '700', '800', '900'],
 });
 
 
 export const metadata: Metadata = {
-    metadataBase: new URL("http://aounn.runasp.net"),
+    metadataBase: new URL("https://aounn.runasp.net"),
     title: "عون | مد يد المساعدة للأسر المحتاجة في مصر",
     description: "المنصة الرقمية الأولى في مصر لربط الأسر المحتاجة بالجمعيات الخيرية والمؤسسات المعتمدة بذكاء وأمان وشفافية تامة.",
     keywords: ["عون", "مساعدة", "خير", "جمعيات خيرية", "مصر", "دعم أسر", "تكافل"],
@@ -20,7 +22,7 @@ export const metadata: Metadata = {
     openGraph: {
         title: "منصة عون - المساعدة في دقائق",
         description: "نوصل المساعدة إلى كل أسرة بأمان وسرعة. انضم إلينا الآن كمستفيد أو كجمعية شريكة.",
-        url: "http://aounn.runasp.net",
+        url: "https://aounn.runasp.net",
         siteName: "عون",
         images: [
             {
@@ -67,11 +69,11 @@ export default async function RootLayout({
                 {/* CSRF Protection Hint - Signals backend to use SameSite=Strict cookies */}
                 <meta name="csrf-protection" content="SameSite=Strict; Secure" />
             </head>
-            <body className={font.className}>
+            <body className={font.variable}>
                 <ThemeProvider
                     attribute="class"
-                    defaultTheme="system"
-                    enableSystem
+                    defaultTheme="light"
+                    enableSystem={false}
                     disableTransitionOnChange
                 >
                     <AuthProvider initialIsAuthenticated={isAuthenticated}>

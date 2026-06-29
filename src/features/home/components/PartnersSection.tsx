@@ -1,7 +1,6 @@
 import { Heart, Stethoscope, UtensilsCrossed, Users, ArrowLeft } from "lucide-react";
 import Link from 'next/link';
 import { Button } from "@/shared/ui/button";
-import { partnerTypeColors } from "@/shared/constants";
 
 const partners = [
   { name: "جمعية رسالة", icon: Heart, cases: "٣٥٠ حالة", type: "عامة" },
@@ -14,28 +13,19 @@ const partners = [
 
 export function PartnersSection() {
   return (
-    <section id="partners" className="py-24 md:py-32 bg-gradient-to-b from-emerald-green-pale/30 via-background to-background relative overflow-hidden">
-      {/* Background */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] max-w-[100vw] bg-vibrant-cyan-pale/50 rounded-full blur-3xl -z-10 overflow-hidden"></div>
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] max-w-[100vw] bg-golden-orange-pale/50 rounded-full blur-3xl -z-10 overflow-hidden"></div>
-
+    <section id="partners" className="py-24 md:py-32 bg-white relative overflow-hidden">
       <div className="container mx-auto px-4 max-w-[1400px]" dir="rtl">
         {/* Header */}
         <div className="!text-center mb-16 animate-fade-in">
-          <div className="inline-block px-5 py-2 rounded-full bg-background text-emerald-green text-sm font-bold mb-5 border-2 border-emerald-green/20 shadow-sm">
+          <div className="section-pill">
             شركاؤنا
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">
+          <h2 className="section-title">
             شركاؤنا في{" "}
-            <span className="text-emerald-green relative inline-block">
-              خدمة مصر
-              <svg className="absolute w-full h-3 -bottom-2 left-0 text-vibrant-cyan opacity-25" viewBox="0 0 100 10" preserveAspectRatio="none">
-                <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="5" fill="none" />
-              </svg>
-            </span>
+            <span className="title-highlight">خدمة مصر</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            <span className="font-bold text-emerald-green">٨٥+ جهة خيرية وحكومية</span> نفخر بالتعاون معهم لخدمة المجتمع
+            <span className="font-bold text-warm-green">٨٥+ جهة خيرية وحكومية</span> نفخر بالتعاون معهم لخدمة المجتمع
           </p>
         </div>
 
@@ -43,26 +33,25 @@ export function PartnersSection() {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 lg:gap-6">
           {partners.map((partner, index) => {
             const Icon = partner.icon;
-            const colorScheme = partnerTypeColors[partner.type];
             return (
               <div
                 key={index}
-                className="group bg-card rounded-2xl border-2 border-border p-6 flex flex-col items-center justify-center !text-center transition-all duration-300 hover:border-emerald-green/40 hover:shadow-xl hover:-translate-y-2 animate-fade-in"
+                className="card-unified flex flex-col items-center justify-center !text-center group"
                 style={{ animationDelay: `${index * 50}ms` }}
               >
-                {/* Icon */}
-                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${colorScheme.lightGradient} ${colorScheme.hoverLightGradient} flex items-center justify-center mb-4 transition-all duration-300 group-hover:scale-110`}>
-                  <Icon className={`w-8 h-8 ${colorScheme.text} group-hover:${colorScheme.textDark} transition-colors duration-300`} />
+                {/* Fully Saturated Icon */}
+                <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-2xl bg-warm-green flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110 shadow-md">
+                  <Icon className="w-7 h-7 text-white" />
                 </div>
 
                 {/* Name */}
-                <p className={`text-base font-bold text-foreground group-hover:${colorScheme.textDark} transition-colors duration-300 leading-tight mb-2`}>
+                <p className="text-sm lg:text-base font-bold text-foreground leading-tight mb-2">
                   {partner.name}
                 </p>
 
                 {/* Stats */}
-                <div className="text-xs text-muted-foreground flex items-center gap-1.5">
-                  <Heart className="w-3 h-3 text-error" />
+                <div className="text-xs text-muted-foreground flex items-center gap-1.5 font-semibold">
+                  <Heart className="w-3 h-3 text-golden-orange" />
                   <span>{partner.cases}</span>
                 </div>
               </div>
@@ -72,40 +61,40 @@ export function PartnersSection() {
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 max-w-4xl mx-auto">
-          <div className="!text-center p-6 bg-card rounded-2xl border-2 border-border shadow-md">
-            <div className="text-4xl font-bold text-emerald-green mb-2">٨٥+</div>
-            <div className="text-sm text-muted-foreground">جهة شريكة</div>
+          <div className="card-unified !text-center p-6 lg:p-8">
+            <div className="text-3xl lg:text-4xl font-black text-warm-green mb-2">٨٥+</div>
+            <div className="text-sm lg:text-base font-semibold text-muted-foreground">جهة شريكة</div>
           </div>
-          <div className="!text-center p-6 bg-card rounded-2xl border-2 border-border shadow-md">
-            <div className="text-4xl font-bold text-vibrant-cyan mb-2">٢٧</div>
-            <div className="text-sm text-muted-foreground">محافظة</div>
+          <div className="card-unified !text-center p-6 lg:p-8">
+            <div className="text-3xl lg:text-4xl font-black text-golden-orange mb-2">٢٧</div>
+            <div className="text-sm lg:text-base font-semibold text-muted-foreground">محافظة</div>
           </div>
-          <div className="!text-center p-6 bg-card rounded-2xl border-2 border-border shadow-md">
-            <div className="text-4xl font-bold text-golden-orange mb-2">١,٢٠٠+</div>
-            <div className="text-sm text-muted-foreground">أسرة مستفيدة</div>
+          <div className="card-unified !text-center p-6 lg:p-8">
+            <div className="text-3xl lg:text-4xl font-black text-warm-green mb-2">١,٢٠٠+</div>
+            <div className="text-sm lg:text-base font-semibold text-muted-foreground">أسرة مستفيدة</div>
           </div>
-          <div className="!text-center p-6 bg-card rounded-2xl border-2 border-border shadow-md">
-            <div className="text-4xl font-bold text-emerald-green mb-2">٩٨٪</div>
-            <div className="text-sm text-muted-foreground">نسبة نجاح</div>
+          <div className="card-unified !text-center p-6 lg:p-8">
+            <div className="text-3xl lg:text-4xl font-black text-golden-orange mb-2">٩٨٪</div>
+            <div className="text-sm lg:text-base font-semibold text-muted-foreground">نسبة نجاح</div>
           </div>
         </div>
 
         {/* CTA for NGOs */}
-        <div className="!text-center mt-16 p-10 bg-card rounded-3xl border-2 border-border shadow-xl max-w-3xl mx-auto">
-          <h3 className="text-2xl md:text-3xl font-bold mb-4 text-foreground">
+        <div className="!text-center mt-16 p-10 bg-white rounded-[2rem] border border-border shadow-md max-w-3xl mx-auto">
+          <h3 className="text-2xl md:text-3xl font-black mb-4 text-foreground">
             هل أنت جمعية خيرية مسجلة؟
           </h3>
-          <p className="text-muted-foreground mb-6 text-lg">
+          <p className="text-muted-foreground mb-8 text-lg font-medium">
             انضم لشبكة عون واستقبل طلبات مساعدة موثقة من محافظتك
           </p>
           <Link href="/register?type=organization">
-            <Button className="h-14 px-10 text-lg font-bold bg-gradient-to-l from-emerald-green to-emerald-green-light hover:from-emerald-green-dark hover:to-emerald-green text-white shadow-xl hover:shadow-2xl transition-all duration-300 gap-2 rounded-2xl hover:-translate-y-1">
+            <Button className="h-14 px-10 text-lg font-bold bg-warm-green hover:bg-warm-green-dark text-white shadow-lg transition-all duration-300 gap-2 rounded-xl hover:scale-[1.02] hover:-translate-y-1">
               سجل جمعيتك الآن
               <ArrowLeft className="w-5 h-5" />
             </Button>
           </Link>
         </div>
       </div>
-    </section >
+    </section>
   );
 }

@@ -80,7 +80,7 @@ export function DonationModal({ campaign, children }: DonationModalProps) {
                 {campaign.imageUrl && (
                     <div className="w-full h-40 bg-slate-100 rounded-xl overflow-hidden mb-4 relative">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={`http://aounn.runasp.net/uploads/${campaign.imageUrl.replace(/^\/?(uploads\/)?/, '')}`} alt={campaign.title} className="w-full h-full object-cover" />
+                        <img src={campaign.imageUrl.startsWith('http') ? campaign.imageUrl.replace(/^http:/i, 'https:') : `https://aounn.runasp.net/uploads/${campaign.imageUrl.replace(/^\/?(uploads\/)?/, '')}`} alt={campaign.title} className="w-full h-full object-cover" />
                     </div>
                 )}
 

@@ -67,7 +67,7 @@ export default function CampaignDetailsPage() {
                 {campaign.imageUrl ? (
                     <>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={`http://aounn.runasp.net/uploads/${campaign.imageUrl.replace(/^\/?(uploads\/)?/, '')}`} alt={campaign.title} className="absolute inset-0 w-full h-full object-cover opacity-50" />
+                        <img src={campaign.imageUrl.startsWith('http') ? campaign.imageUrl.replace(/^http:/i, 'https:') : `https://aounn.runasp.net/uploads/${campaign.imageUrl.replace(/^\/?(uploads\/)?/, '')}`} alt={campaign.title} className="absolute inset-0 w-full h-full object-cover opacity-50" />
                     </>
                 ) : (
                     <div className="absolute inset-0 flex items-center justify-center bg-slate-900 opacity-50">
