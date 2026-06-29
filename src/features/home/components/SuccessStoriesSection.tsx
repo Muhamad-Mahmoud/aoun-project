@@ -1,4 +1,4 @@
-import { Quote, MapPin, Heart } from "lucide-react";
+import { MapPin, Heart, BookOpen, Utensils } from "lucide-react";
 
 const stories = [
     {
@@ -6,25 +6,37 @@ const stories = [
         location: "الإسكندرية",
         story: "بفضل الله، تمكنت عبر منصة عون من الوصول إلى جمعية تكفلت بإجراء العملية الجراحية لابني في وقت قياسي. شكراً لكم على سرعة الاستجابة والاهتمام.",
         category: "رعاية صحية",
+        icon: Heart,
+        initials: "أأ",
+        colorClass: "bg-rose-100 text-rose-600 border-rose-200"
     },
     {
         name: "محمد سعيد",
         location: "أسيوط",
         story: "كنت أواجه صعوبة في سداد المصروفات الدراسية لابنتي. ساعدتني المنصة في التواصل مع مؤسسة تعليمية تكفلت بكافة المصاريف لاستكمال تعليمها الجامعي.",
         category: "دعم تعليمي",
+        icon: BookOpen,
+        initials: "مس",
+        colorClass: "bg-blue-100 text-blue-600 border-blue-200"
     },
     {
         name: "فاطمة حسن",
         location: "القاهرة",
         story: "في وقت الأزمة، وجدنا الدعم الفوري من خلال عون. تم توصيلنا ببنك الطعام وحصلنا على الدعم الغذائي الشهري للأسر المستحقة بكل سهولة وكرامة.",
         category: "دعم غذائي",
+        icon: Utensils,
+        initials: "فح",
+        colorClass: "bg-orange-100 text-orange-600 border-orange-200"
     },
 ];
 
 export function SuccessStoriesSection() {
     return (
-        <section id="stories" className="py-24 md:py-32 bg-rhythm-creamy relative overflow-hidden">
-            <div className="container mx-auto px-4 max-w-[1400px]" dir="rtl">
+        <section id="stories" className="py-24 md:py-32 bg-white relative overflow-hidden">
+            {/* Soft decorative background element */}
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-warm-green/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+
+            <div className="container mx-auto px-4 max-w-[1400px] relative z-10" dir="rtl">
                 {/* Header */}
                 <div className="!text-center mb-16 animate-fade-in">
                     <div className="section-pill">
@@ -41,32 +53,37 @@ export function SuccessStoriesSection() {
                 {/* Stories Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
                     {stories.map((story, index) => {
+                        const CategoryIcon = story.icon;
+                        
                         return (
                             <div
                                 key={index}
-                                className="card-unified flex flex-col !text-center items-center h-full relative"
+                                className="group relative bg-white border border-border shadow-sm rounded-3xl p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl hover:border-warm-green/30 flex flex-col h-full"
                                 style={{ animationDelay: `${index * 100}ms` }}
                             >
-                                {/* Quote Icon */}
-                                <div className="w-14 h-14 rounded-2xl bg-warm-green flex items-center justify-center mb-6 shadow-md">
-                                    <Quote className="w-7 h-7 text-white" />
-                                </div>
-
-                                {/* Story */}
-                                <p className="text-muted-foreground leading-relaxed text-base mb-6 flex-grow italic">
-                                    "{story.story}"
-                                </p>
-
-                                {/* Author Info */}
-                                <div className="w-full flex items-center justify-between pt-6 border-t border-border">
-                                    <div className="text-right">
-                                        <h3 className="text-lg font-bold text-foreground mb-1">{story.name}</h3>
-                                        <div className="flex items-center gap-2 text-sm text-muted-foreground font-semibold">
-                                            <MapPin className="w-4 h-4 text-golden-orange" />
+                                {/* Author Info Header */}
+                                <div className="flex items-center gap-4 mb-6">
+                                    <div className="w-14 h-14 rounded-full bg-gradient-to-br from-warm-green/20 to-warm-green/5 text-warm-green flex items-center justify-center font-bold text-xl border border-warm-green/20 shrink-0">
+                                        {story.initials}
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <h3 className="text-lg font-bold text-foreground">{story.name}</h3>
+                                        <div className="flex items-center gap-1.5 text-sm text-muted-foreground font-semibold">
+                                            <MapPin className="w-3.5 h-3.5 text-golden-orange" />
                                             <span>{story.location}</span>
                                         </div>
                                     </div>
-                                    <div className="px-3 py-1 rounded-full bg-warm-green/10 text-warm-green text-xs font-bold border border-warm-green/20">
+                                </div>
+
+                                {/* Story text */}
+                                <p className="text-muted-foreground leading-relaxed text-[15px] flex-grow">
+                                    "{story.story}"
+                                </p>
+
+                                {/* Bottom Category Badge */}
+                                <div className="mt-6 pt-6 border-t border-border/50 flex justify-end">
+                                    <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold border ${story.colorClass}`}>
+                                        <CategoryIcon className="w-3.5 h-3.5" />
                                         {story.category}
                                     </div>
                                 </div>
@@ -74,13 +91,6 @@ export function SuccessStoriesSection() {
                         );
                     })}
                 </div>
-            </div>
-
-            {/* Bottom Note */}
-            <div className="!text-center mt-16">
-                <p className="text-muted-foreground text-lg font-semibold">
-                    <span className="font-bold text-warm-green">+١,٢٠٠ أسرة</span> استفادت من منصة عون حتى الآن
-                </p>
             </div>
         </section>
     );

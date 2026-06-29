@@ -5,8 +5,40 @@ import { Heart, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, Che
 
 export function Footer() {
     return (
-        <footer className="bg-footer text-footer-foreground py-16 md:py-24 border-t border-footer-border overflow-hidden relative">
+        <footer className="bg-footer text-footer-foreground pt-0 pb-16 md:pb-24 border-t border-footer-border relative">
             <div className="container mx-auto px-4 md:px-6 relative z-10" dir="rtl">
+                
+                {/* Newsletter Subscription */}
+                <div className="bg-white/5 border border-white/10 rounded-[2.5rem] p-8 md:p-12 mb-16 mt-8 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
+                    {/* Background elements */}
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-warm-green/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2" />
+                    <div className="absolute bottom-0 left-0 w-64 h-64 bg-golden-orange/10 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/2" />
+                    
+                    <div className="relative z-10 max-w-xl text-right">
+                        <h3 className="text-2xl md:text-3xl font-black text-white mb-3">ابق على اطلاع بأحدث الحملات</h3>
+                        <p className="text-white/80 text-[15px] md:text-base leading-relaxed">
+                            اشترك في نشرتنا البريدية لتصلك أحدث قصص النجاح والمبادرات الإنسانية التي تحدث فرقاً في مجتمعنا.
+                        </p>
+                    </div>
+
+                    <div className="relative z-10 w-full md:w-auto flex-shrink-0">
+                        <form className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                            <input 
+                                type="email" 
+                                placeholder="البريد الإلكتروني..." 
+                                className="h-14 px-6 rounded-xl bg-white/10 border border-white/20 text-white placeholder:text-white/50 focus:outline-none focus:border-warm-green focus:bg-white/15 transition-all min-w-[280px]"
+                                required
+                            />
+                            <button 
+                                type="submit"
+                                className="h-14 px-8 rounded-xl bg-golden-orange hover:bg-golden-orange-light text-brand-dark font-bold transition-all shadow-[0_8px_20px_hsla(var(--golden-orange)/0.3)] hover:-translate-y-1"
+                            >
+                                اشترك الآن
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
                 <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-8 mb-12">
                     {/* Brand - Egyptian Identity */}
                     <div className="col-span-2 md:col-span-1 lg:col-span-1">

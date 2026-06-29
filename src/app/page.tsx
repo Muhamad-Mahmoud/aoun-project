@@ -7,9 +7,11 @@ export const revalidate = 3600;
 // Below-the-fold sections — lazy loaded for faster initial paint
 const WhyAounSection = dynamic(() => import("@/features/home/components/WhyAounSection").then(mod => mod.WhyAounSection));
 const JourneySection = dynamic(() => import("@/features/home/components/JourneySection").then(mod => mod.JourneySection));
+const HowItWorksSection = dynamic(() => import("@/features/home/components/HowItWorksSection").then(mod => mod.HowItWorksSection));
 const PartnersSection = dynamic(() => import("@/features/home/components/PartnersSection").then(mod => mod.PartnersSection));
 const SuccessStoriesSection = dynamic(() => import("@/features/home/components/SuccessStoriesSection").then(mod => mod.SuccessStoriesSection));
 const FAQSection = dynamic(() => import("@/features/home/components/FAQSection").then(mod => mod.FAQSection));
+const CTASection = dynamic(() => import("@/features/home/components/CTASection").then(mod => mod.CTASection));
 
 
 export default function Home() {
@@ -19,9 +21,11 @@ export default function Home() {
             <WhyAounSection />
 
             <JourneySection />
+            <HowItWorksSection />
             <PartnersSection />
             <SuccessStoriesSection />
             <FAQSection />
+            <CTASection />
         </div>
     );
 }

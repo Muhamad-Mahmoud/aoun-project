@@ -237,13 +237,13 @@ export function Header() {
 			<header
 				dir="rtl"
 				className={[
-					"sticky top-0 z-50 w-full transition-[height,background-color,box-shadow,backdrop-filter] duration-300",
+					"sticky top-0 z-50 w-full transition-[height,background-color,box-shadow,backdrop-filter,color] duration-500",
 					isScrolled
-						? "bg-white/85 backdrop-blur-2xl shadow-md shadow-slate-200/40 border-b border-slate-200/70"
-						: "bg-white/70 backdrop-blur-xl shadow-sm shadow-slate-100/50 border-b border-slate-100",
+						? "bg-white/90 backdrop-blur-2xl shadow-md shadow-slate-200/40 border-b border-slate-200/70 text-foreground"
+						: "bg-transparent border-transparent shadow-none text-white",
 				].join(" ")}
 			>
-				<div className="container mx-auto px-6 lg:px-12">
+				<div className="container mx-auto px-8 lg:px-16">
 					<div
 						className="flex items-center justify-between gap-8 relative transition-[height] duration-300"
 						style={{ height: `${headerH}px` }}
@@ -271,7 +271,7 @@ export function Header() {
 
 						{/* Desktop Nav */}
 						<nav
-							className="hidden lg:flex items-center gap-1"
+							className="hidden lg:flex items-center gap-3"
 							aria-label="الرئيسية"
 						>
 							{navItems.map((item) => {
@@ -288,8 +288,8 @@ export function Header() {
 											"transition-[color,background-color] duration-200",
 											"focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-warm-green/40",
 											active
-												? "text-warm-green"
-												: "text-foreground/70 hover:text-warm-green hover:bg-warm-green/5",
+												? (isScrolled ? "text-warm-green" : "text-white drop-shadow-md")
+												: (isScrolled ? "text-foreground/70 hover:text-warm-green hover:bg-warm-green/5" : "text-white/80 hover:text-white hover:bg-white/10 drop-shadow-sm"),
 										].join(" ")}
 									>
 										<span className="relative">
@@ -341,7 +341,7 @@ export function Header() {
 												<span className="text-sm font-bold leading-none max-w-[160px] truncate">
 													{displayName}
 												</span>
-												<ChevronDown className="w-4 h-4 text-muted-foreground group-hover:text-foreground group-data-[state=open]:rotate-180 transition" />
+												<ChevronDown className={`w-4 h-4 group-hover:text-foreground group-data-[state=open]:rotate-180 transition ${isScrolled ? 'text-muted-foreground' : 'text-white/80'}`} />
 											</div>
 										</Button>
 									</DropdownMenuTrigger>
@@ -391,7 +391,7 @@ export function Header() {
 									<Link href="/login" prefetch>
 										<Button
 											variant="ghost"
-											className="font-medium text-[15px] px-5 h-11 rounded-xl border border-border hover:border-warm-green hover:bg-warm-green/5 hover:text-warm-green transition"
+											className={`font-medium text-[15px] px-5 h-11 rounded-xl border transition ${isScrolled ? 'border-border hover:border-warm-green hover:bg-warm-green/5 hover:text-warm-green text-foreground' : 'border-white/30 text-white hover:bg-white/10 hover:border-white/50 backdrop-blur-sm'}`}
 										>
 											تسجيل الدخول
 										</Button>
@@ -427,7 +427,8 @@ export function Header() {
 							<span className="relative block w-6 h-6">
 								<Menu
 									className={[
-										"absolute inset-0 w-6 h-6 text-foreground transition-all duration-300",
+										"absolute inset-0 w-6 h-6 transition-all duration-300",
+										isScrolled ? "text-foreground" : "text-white drop-shadow-md",
 										isMenuOpen
 											? "opacity-0 rotate-90 scale-75"
 											: "opacity-100 rotate-0 scale-100",
@@ -435,7 +436,8 @@ export function Header() {
 								/>
 								<X
 									className={[
-										"absolute inset-0 w-6 h-6 text-foreground transition-all duration-300",
+										"absolute inset-0 w-6 h-6 transition-all duration-300",
+										isScrolled ? "text-foreground" : "text-white drop-shadow-md",
 										isMenuOpen
 											? "opacity-100 rotate-0 scale-100"
 											: "opacity-0 -rotate-90 scale-75",

@@ -11,7 +11,10 @@ type Feature = {
   title: string;
   description: string;
   badge: string;
-  featured?: boolean;
+  styleClass: string;
+  iconClass: string;
+  badgeClass: string;
+  lineClass: string;
 };
 
 const features: Feature[] = [
@@ -19,30 +22,41 @@ const features: Feature[] = [
     icon: MapPinned,
     badge: "٠١",
     title: "بحث ذكي حسب النطاق الجغرافي",
-    description:
-      "نربطك بأقرب الجمعيات الخيرية في منطقتك ومحافظتك بدقة عالية لضمان سهولة الوصول.",
+    description: "نربطك بأقرب الجمعيات الخيرية في منطقتك ومحافظتك بدقة عالية لضمان سهولة الوصول.",
+    styleClass: "bg-white border-border shadow-sm hover:shadow-md hover:border-warm-green/30",
+    iconClass: "bg-warm-green text-white",
+    badgeClass: "text-warm-green",
+    lineClass: "bg-warm-green/30",
   },
   {
     icon: Target,
     badge: "٠٢",
     title: "توجيه دقيق حسب نوع الدعم",
-    description:
-      "سواء كان احتياجك طبيًا، تعليميًا، أو ماديًا، نقوم بتوصيلك بالجهة المتخصصة لتلبية طلبك بكفاءة.",
-    featured: true,
+    description: "سواء كان احتياجك طبيًا، تعليميًا، أو ماديًا، نقوم بتوصيلك بالجهة المتخصصة لتلبية طلبك بكفاءة.",
+    styleClass: "bg-warm-green/5 border-warm-green/20 shadow-sm hover:shadow-lg hover:border-warm-green/40",
+    iconClass: "bg-warm-green text-white shadow-sm",
+    badgeClass: "text-warm-green",
+    lineClass: "bg-warm-green",
   },
   {
     icon: Zap,
     badge: "٠٣",
     title: "استجابة خلال 24 ساعة",
-    description:
-      "لا داعي للانتظار الطويل؛ نحرص على الرد وتوجيهك لأفضل الخيارات المناسبة خلال يوم واحد.",
+    description: "لا داعي للانتظار الطويل؛ نحرص على الرد وتوجيهك لأفضل الخيارات المناسبة خلال يوم واحد.",
+    styleClass: "bg-gradient-to-br from-white to-golden-orange/10 border-golden-orange/20 shadow-[0_10px_30px_hsl(var(--golden-orange)/0.1)] hover:shadow-[0_20px_40px_hsl(var(--golden-orange)/0.15)]",
+    iconClass: "bg-golden-orange/20 text-golden-orange border border-golden-orange/30",
+    badgeClass: "text-golden-orange",
+    lineClass: "bg-golden-orange",
   },
   {
     icon: ShieldCheck,
     badge: "٠٤",
     title: "جهات ومؤسسات معتمدة",
-    description:
-      "نتعاون حصريًا مع جمعيات ومؤسسات مرخصة رسميًا من وزارة التضامن الاجتماعي لضمان الأمان والمصداقية.",
+    description: "نتعاون حصريًا مع جمعيات ومؤسسات مرخصة رسميًا من وزارة التضامن الاجتماعي لضمان الأمان والمصداقية.",
+    styleClass: "bg-brand-dark border-brand-dark shadow-[0_20px_40px_rgba(15,93,70,0.2)] hover:-translate-y-2 text-white",
+    iconClass: "bg-white/10 text-golden-orange border border-white/20",
+    badgeClass: "text-white",
+    lineClass: "bg-golden-orange",
   },
 ];
 
@@ -53,13 +67,13 @@ export function WhyAounSection() {
       dir="rtl"
       className="relative overflow-hidden bg-white py-24 md:py-32"
     >
-      {/* Pattern خفيف جداً يربط السكشن بالهوية بدون blobs */}
+      {/* Subtle background pattern */}
       <div
-        className="absolute inset-0 pointer-events-none opacity-[0.035]"
+        className="absolute inset-0 pointer-events-none opacity-[0.02]"
         style={{
           backgroundImage:
             "linear-gradient(45deg, hsl(var(--warm-green)) 1px, transparent 1px), linear-gradient(-45deg, hsl(var(--golden-orange)) 1px, transparent 1px)",
-          backgroundSize: "42px 42px",
+          backgroundSize: "48px 48px",
         }}
       />
 
@@ -79,74 +93,48 @@ export function WhyAounSection() {
         </div>
 
         {/* Features Grid */}
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4 lg:gap-7">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4 lg:gap-6">
           {features.map((feature, index) => {
             const Icon = feature.icon;
+            const isDark = index === 3;
 
             return (
               <article
                 key={feature.title}
-                className={[
-                  "group relative flex h-full flex-col overflow-hidden rounded-[1.75rem] border p-7 text-right transition-all duration-300 hover:-translate-y-1",
-                  feature.featured
-                    ? "bg-white border-warm-green/40 shadow-[0_20px_50px_hsl(var(--warm-green)/0.12)]"
-                    : "bg-white border-border shadow-sm hover:shadow-[0_18px_40px_hsl(var(--warm-green)/0.10)] hover:border-warm-green/25",
-                ].join(" ")}
+                className={`group relative flex h-full flex-col overflow-hidden rounded-[2rem] border p-8 text-right transition-all duration-500 hover:-translate-y-1 ${feature.styleClass}`}
                 style={{ animationDelay: `${index * 100}ms` }}
               >
-                {/* رقم الميزة */}
+                {/* Number Badge */}
                 <div
-                  className={[
-                    "absolute left-5 top-5 text-5xl font-black leading-none opacity-[0.07]",
-                    feature.featured ? "text-golden-orange" : "text-warm-green",
-                  ].join(" ")}
+                  className={`absolute left-5 top-5 text-6xl font-black leading-none opacity-[0.06] ${feature.badgeClass}`}
                 >
                   {feature.badge}
                 </div>
 
                 {/* Icon */}
                 <div
-                  className={[
-                    "mb-6 flex h-14 w-14 items-center justify-center rounded-2xl shadow-sm transition-transform duration-300 group-hover:scale-110",
-                    feature.featured
-                      ? "bg-golden-orange/15 text-golden-orange border border-golden-orange/20"
-                      : "bg-warm-green text-white",
-                  ].join(" ")}
+                  className={`mb-6 flex h-14 w-14 items-center justify-center rounded-2xl transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3 ${feature.iconClass}`}
                 >
                   <Icon className="h-7 w-7" />
                 </div>
 
                 {/* Content */}
                 <h3
-                  className={[
-                    "mb-3 text-lg lg:text-xl font-black leading-[1.45]",
-                    "text-foreground",
-                  ].join(" ")}
+                  className={`mb-3 text-[19px] font-black leading-[1.4] ${isDark ? "text-white" : "text-brand-dark"}`}
                 >
                   {feature.title}
                 </h3>
 
                 <p
-                  className={[
-                    "text-sm leading-[1.9]",
-                    "text-muted-foreground",
-                  ].join(" ")}
+                  className={`text-[15px] leading-[1.9] font-medium ${isDark ? "text-white/80" : "text-brand-dark/70"}`}
                 >
                   {feature.description}
                 </p>
 
                 {/* Bottom accent */}
                 <div
-                  className={[
-                    "mt-7 h-1 w-14 rounded-full transition-all duration-300 group-hover:w-24",
-                    feature.featured ? "bg-golden-orange" : "bg-warm-green/35",
-                  ].join(" ")}
+                  className={`mt-8 h-1 w-12 rounded-full transition-all duration-500 group-hover:w-20 ${feature.lineClass}`}
                 />
-
-                {/* Decorative corner للـ featured بس */}
-                {feature.featured && (
-                  <div className="pointer-events-none absolute -bottom-16 -left-16 h-40 w-40 rounded-full bg-warm-green/10 blur-2xl" />
-                )}
               </article>
             );
           })}

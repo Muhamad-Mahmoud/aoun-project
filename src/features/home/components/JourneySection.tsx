@@ -38,7 +38,7 @@ const steps = [
 export function JourneySection() {
     return (
         <>
-            <section id="journey" className="py-24 md:py-32 bg-rhythm-creamy relative overflow-hidden">
+            <section id="journey" className="py-24 md:py-32 bg-warm-green/5 relative overflow-hidden">
                 <div className="container mx-auto px-4 max-w-[1400px]" dir="rtl">
                     {/* Header */}
                     <div className="!text-center mb-20 animate-fade-in">
@@ -96,26 +96,6 @@ export function JourneySection() {
                             })}
                         </div>
                     </div>
-                </div>
-            </section>
-
-            {/* Middle CTA Anchor Section */}
-            <section className="py-20 md:py-24 bg-rhythm-dark relative" dir="rtl">
-                {/* Background Decor */}
-                <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
-                <div className="container mx-auto px-4 !text-center relative z-10">
-                    <h2 className="section-title-dark mb-6">
-                        جاهز لتغيير واقعك للأفضل؟
-                    </h2>
-                    <p className="text-white/80 mb-10 text-lg lg:text-xl max-w-2xl mx-auto">
-                        العديد من الأسر استفادت.. ابدأ خطوتك الأولى الآن وانضم إلى منصة عون.
-                    </p>
-                    <Link href="/register">
-                        <Button className="h-14 lg:h-16 px-10 lg:px-12 text-lg font-bold bg-golden-orange hover:bg-golden-orange-light text-brand-dark shadow-[0_8px_20px_hsla(var(--golden-orange)/0.3)] transition-[background,box-shadow,transform] duration-300 gap-3 rounded-xl hover:scale-[1.03] hover:-translate-y-1">
-                            ابدأ رحلتك الآن
-                            <ArrowLeft className="w-6 h-6" />
-                        </Button>
-                    </Link>
                 </div>
             </section>
         </>

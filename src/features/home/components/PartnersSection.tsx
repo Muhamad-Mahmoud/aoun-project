@@ -13,7 +13,7 @@ const partners = [
 
 export function PartnersSection() {
   return (
-    <section id="partners" className="py-24 md:py-32 bg-white relative overflow-hidden">
+    <section id="partners" className="py-24 md:py-32 bg-warm-green/5 relative overflow-hidden">
       <div className="container mx-auto px-4 max-w-[1400px]" dir="rtl">
         {/* Header */}
         <div className="!text-center mb-16 animate-fade-in">
@@ -30,7 +30,7 @@ export function PartnersSection() {
         </div>
 
         {/* Partners Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 lg:gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 sm:gap-8 lg:gap-10">
           {partners.map((partner, index) => {
             const Icon = partner.icon;
             return (
@@ -40,8 +40,8 @@ export function PartnersSection() {
                 style={{ animationDelay: `${index * 50}ms` }}
               >
                 {/* Fully Saturated Icon */}
-                <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-2xl bg-warm-green flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110 shadow-md">
-                  <Icon className="w-7 h-7 text-white" />
+                <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-2xl bg-warm-green flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110 shadow-md">
+                  <Icon className="w-8 h-8 lg:w-9 lg:h-9 text-white" />
                 </div>
 
                 {/* Name */}
@@ -57,26 +57,6 @@ export function PartnersSection() {
               </div>
             );
           })}
-        </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 max-w-4xl mx-auto">
-          <div className="card-unified !text-center p-6 lg:p-8">
-            <div className="text-3xl lg:text-4xl font-black text-warm-green mb-2">٨٥+</div>
-            <div className="text-sm lg:text-base font-semibold text-muted-foreground">جهة شريكة</div>
-          </div>
-          <div className="card-unified !text-center p-6 lg:p-8">
-            <div className="text-3xl lg:text-4xl font-black text-golden-orange mb-2">٢٧</div>
-            <div className="text-sm lg:text-base font-semibold text-muted-foreground">محافظة</div>
-          </div>
-          <div className="card-unified !text-center p-6 lg:p-8">
-            <div className="text-3xl lg:text-4xl font-black text-warm-green mb-2">١,٢٠٠+</div>
-            <div className="text-sm lg:text-base font-semibold text-muted-foreground">أسرة مستفيدة</div>
-          </div>
-          <div className="card-unified !text-center p-6 lg:p-8">
-            <div className="text-3xl lg:text-4xl font-black text-golden-orange mb-2">٩٨٪</div>
-            <div className="text-sm lg:text-base font-semibold text-muted-foreground">نسبة نجاح</div>
-          </div>
         </div>
 
         {/* CTA for NGOs */}

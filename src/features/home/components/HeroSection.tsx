@@ -15,6 +15,8 @@ import {
 import type { LucideIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState, useRef } from "react";
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
 import { useCountUp } from "@/shared/hooks/useCountUp";
 
 const trustBadges = [
@@ -37,184 +39,198 @@ const trustBadges = [
 
 const stats = [
   {
-    icon: Users,
-    number: "١,٢٠٠+",
+    number: "98",
+    label: "نسبة نجاح وتوصيل الدعم",
+    icon: Sparkles,
+    colorClass: "text-warm-green",
+    bgClass: "bg-warm-green/15",
+    suffix: "%"
+  },
+  {
+    number: "5000",
     label: "أسرة مستفيدة",
-    colorClass: "text-golden-orange",
-    bgClass: "bg-golden-orange/15",
+    icon: Users,
+    colorClass: "text-brand-dark",
+    bgClass: "bg-brand-dark/15",
+    suffix: "+"
   },
   {
-    icon: Building2,
-    number: "٨٥+",
+    number: "200",
     label: "جهة شريكة",
-    colorClass: "text-warm-green",
-    bgClass: "bg-warm-green/10",
-  },
-  {
-    icon: MapPin,
-    number: "٢٧",
-    label: "محافظة مصرية",
-    colorClass: "text-warm-green",
-    bgClass: "bg-warm-green/10",
-  },
-  {
-    icon: CheckCircle,
-    number: "٩٨٪",
-    label: "نسبة نجاح",
+    icon: Building2,
     colorClass: "text-golden-orange",
     bgClass: "bg-golden-orange/15",
+    suffix: "+"
   },
 ];
 
+function CountUpNumber({ target, suffix = "" }: { target: number, suffix?: string }) {
+  const [inView, setInView] = useState(false);
+  const ref = useRef<HTMLSpanElement>(null);
+  const [value, setValue] = useState(0);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setInView(true);
+      },
+      { threshold: 0.5 }
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (inView) {
+      let start = 0;
+      const end = target;
+      const duration = 2000;
+      const incrementTime = (duration / end) * 5;
+      
+      const timer = setInterval(() => {
+        start += Math.ceil(end / 40);
+        if (start >= end) {
+          setValue(end);
+          clearInterval(timer);
+        } else {
+          setValue(start);
+        }
+      }, incrementTime);
+      return () => clearInterval(timer);
+    }
+  }, [inView, target]);
+
+  return <span ref={ref}>{value}{suffix}</span>;
+}
+
 export function HeroSection() {
+  const { scrollY } = useScroll();
+  const y = useTransform(scrollY, [0, 1000], [0, 250]); // Subtle parallax
+
   return (
     <section
       id="hero"
       dir="rtl"
-      className="relative overflow-hidden bg-warm-white pt-16 pb-20 lg:pt-24 lg:pb-28"
+      className="relative z-10 flex flex-col justify-center min-h-[100dvh] -mt-[76px] pt-28 lg:pt-32 pb-16 lg:pb-20 overflow-hidden"
     >
-      {/* Subtle identity pattern */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-[0.045]"
-        style={{
-          backgroundImage:
-            "linear-gradient(45deg, hsl(var(--warm-green)) 1px, transparent 1px), linear-gradient(-45deg, hsl(var(--warm-green)) 1px, transparent 1px)",
-          backgroundSize: "42px 42px",
-        }}
-      />
+      {/* 1. Background Image with Premium Image Adjustments & Parallax */}
+      <motion.div style={{ y }} className="absolute inset-0 z-0 bg-brand-dark scale-110 origin-top">
+        <Image
+          src="/herobg.png"
+          alt="عون - منصة تربط الأسر المحتاجة بالجمعيات الخيرية"
+          unoptimized={true}
+          fill
+          priority
+          fetchPriority="high"
+          sizes="100vw"
+          className="object-cover object-[15%_20%] lg:object-[15%_center] brightness-[1.05] contrast-[1.05] saturate-[1.10]"
+        />
+        
+        {/* Lighter Gradient (Better visibility of the photo) */}
+        <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/85 via-brand-dark/40 to-transparent mix-blend-multiply pointer-events-none" />
+        
+        {/* Radial Glow behind text */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_50%,_rgba(15,93,70,0.45)_0%,_transparent_65%)] mix-blend-screen pointer-events-none" />
+        
+        {/* Cinematic Sunlight Rays (Top Left) */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_5%,_rgba(255,255,255,0.3)_0%,_rgba(255,255,255,0.05)_30%,_transparent_60%)] mix-blend-overlay pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent mix-blend-overlay opacity-50 pointer-events-none" />
+        
+        {/* Atmospheric Particles Overlay (Subtle noise/texture) */}
+        <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay pointer-events-none" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }} />
 
-      {/* Cream-to-white depth */}
-      <div className="absolute inset-x-0 top-0 h-[58%] bg-gradient-to-b from-warm-beige/70 via-warm-white to-transparent pointer-events-none" />
+        {/* Cinematic Vignette */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_40%,_rgba(0,0,0,0.4)_100%)] pointer-events-none" />
+      </motion.div>
 
-      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-12 max-w-7xl">
-        <div className="grid grid-cols-1 lg:grid-cols-[56%_44%] gap-12 lg:gap-16 items-center">
-          {/* Content */}
-          <div className="order-2 lg:order-1 text-right">
-            <div className="inline-flex items-center gap-2 rounded-full border border-warm-green/20 bg-white/75 px-4 py-2 text-sm font-bold text-warm-green shadow-sm backdrop-blur-sm opacity-0 animate-fade-in-up">
+      {/* 2. Content Container (8px Spacing System) */}
+      <div className="container relative z-10 mx-auto px-6 lg:px-12 flex justify-start mt-8">
+        <div className="max-w-[640px] lg:max-w-[720px] text-right flex flex-col gap-6 lg:gap-8">
+            
+            {/* Tag / Badge */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-bold text-white shadow-sm backdrop-blur-md self-start"
+            >
               <Sparkles className="h-4 w-4 text-golden-orange" />
               منصة ذكية لخدمة الأسر في مصر
-            </div>
+            </motion.div>
 
-            <h1 className="mt-6 max-w-3xl text-[2.55rem] sm:text-5xl lg:text-[64px] font-black leading-[1.28] lg:leading-[1.2] tracking-normal text-foreground">
-              نُوصّل{" "}
-              <span className="title-highlight">
-                المساعدة
-                <span className="title-highlight-underline" />
-              </span>
+            {/* Headline */}
+            <motion.h1 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="text-[2.5rem] sm:text-5xl lg:text-[56px] font-black leading-[1.4] tracking-normal text-white drop-shadow-lg"
+            >
+              كل طلب مساعدة
               <br className="hidden sm:block" />
-              إلى كل أسرة بأمان وسرعة
-            </h1>
+              يجد طريقه إلى{" "}
+              <span className="title-highlight text-golden-orange relative inline-block mt-1 sm:mt-2">
+                الجهة المناسبة
+                <span className="title-highlight-underline opacity-70 h-[2px] bottom-1" />
+              </span>
+            </motion.h1>
 
-            <p className="mt-5 max-w-2xl text-base sm:text-lg lg:text-[20px] leading-[1.9] text-muted-foreground">
-              منصة رقمية تربط الأسر المحتاجة بالجمعيات الموثوقة في دقائق، لتجربة إنسانية كريمة ووصول أسرع للدعم.
-            </p>
+            {/* Description */}
+            <motion.p 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.35 }}
+              className="max-w-[580px] text-[17px] lg:text-[19px] leading-[1.8] text-white/90 font-medium drop-shadow-md mt-4"
+            >
+              منصة ذكية تربط الأسر المحتاجة بالجمعيات المعتمدة، لضمان وصول الدعم بشفافية وأمان.
+            </motion.p>
 
-            {/* CTA */}
-            <div className="mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center justify-center lg:justify-start opacity-0 animate-fade-in-up delay-300">
-              <Link href="/explore" className="w-full sm:w-auto">
-                <Button className="w-full sm:w-auto h-14 lg:h-16 rounded-xl px-8 text-base lg:text-[17px] font-bold gap-3 bg-warm-green text-white hover:bg-warm-green-dark shadow-[0_12px_26px_hsl(var(--warm-green)/0.24)] hover:shadow-[0_16px_34px_hsl(var(--warm-green)/0.34)] transition-[background,box-shadow,transform] duration-300 hover:-translate-y-1">
+            {/* CTAs (Equal Widths) */}
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-[540px]"
+            >
+              <Link href="/explore" className="w-full">
+                <Button className="w-full h-14 lg:h-16 rounded-xl text-[16px] lg:text-[17px] font-bold gap-3 bg-warm-green text-white hover:bg-warm-green-dark shadow-[0_8px_24px_rgba(15,93,70,0.4)] transition-all duration-300 hover:scale-[1.03] hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(15,93,70,0.5)] border-none">
                   تبرع وادعم الآن
                   <Heart className="h-5 w-5" />
                 </Button>
               </Link>
 
-              <Link href="/register" className="w-full sm:w-auto">
+              <Link href="/register" className="w-full">
                 <Button
                   variant="outline"
-                  className="w-full sm:w-auto h-14 lg:h-16 rounded-xl px-7 text-base lg:text-[17px] font-bold border-2 border-warm-green/35 bg-white/70 text-warm-green hover:bg-warm-green hover:text-white hover:border-warm-green transition-[background-color,border-color,color,transform] duration-300 hover:-translate-y-1"
+                  className="w-full h-14 lg:h-16 rounded-xl text-[16px] lg:text-[17px] font-bold border border-white/40 bg-white/10 text-white hover:bg-white/20 hover:border-white/60 transition-all duration-300 hover:scale-[1.03] hover:-translate-y-1 backdrop-blur-md shadow-[0_4px_16px_rgba(0,0,0,0.1)]"
                 >
                   اطلب مساعدة
                 </Button>
               </Link>
-            </div>
+            </motion.div>
 
-            {/* Trust badges */}
-            <div className="mt-6 flex flex-wrap gap-2.5 sm:gap-3 opacity-0 animate-fade-in delay-500">
-              {trustBadges.map((badge) => {
-                const Icon = badge.icon;
-
-                return (
-                  <div
-                    key={badge.label}
-                    className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-[13px] lg:text-sm font-bold shadow-sm backdrop-blur-sm transition-transform duration-300 hover:-translate-y-0.5 ${badge.className}`}
-                  >
-                    <Icon className="h-4 w-4 lg:h-5 lg:w-5 shrink-0" />
-                    <span>{badge.label}</span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Visual */}
-          <div className="order-1 lg:order-2 relative opacity-0 animate-fade-in delay-500">
-            <div className="relative mx-auto lg:mx-0 max-w-[360px] sm:max-w-[460px]">
-              {/* Brand backing block */}
-              <div className="absolute inset-5 rounded-[2rem] bg-warm-green/5 rotate-3 border border-warm-green/10" />
-
-              {/* Image frame */}
-              <div className="relative rounded-[2rem] bg-white p-3 shadow-[0_18px_50px_hsl(var(--text-primary)/0.12)] border border-border">
-                <div className="relative aspect-square overflow-hidden rounded-[1.5rem] bg-gradient-to-br from-warm-green/10 to-golden-orange/10">
-                  <Image
-                    src="/hero-illustration.png"
-                    alt="عون - منصة تربط الأسر المحتاجة بالجمعيات الخيرية"
-                    fill
-                    priority
-                    fetchPriority="high"
-                    sizes="(max-width: 768px) 90vw, 40vw"
-                    className="object-cover"
-                  />
-                </div>
+            {/* Trust Indicators (Sleek Horizontal Row) */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 0.8 }}
+              className="mt-6 pt-8 border-t border-white/15"
+            >
+              <div className="grid grid-cols-3 gap-6 lg:gap-8 max-w-[600px]">
+                {stats.slice(0, 3).map((stat) => {
+                  return (
+                    <div key={stat.label} className="flex flex-col gap-1">
+                      <div className="flex items-baseline gap-1">
+                        <span className="text-3xl lg:text-4xl font-black text-white tracking-tighter drop-shadow-sm">
+                          <CountUpNumber target={parseInt(stat.number)} suffix={stat.suffix} />
+                        </span>
+                      </div>
+                      <span className="text-[11px] lg:text-sm text-white/70 font-medium leading-tight">{stat.label}</span>
+                    </div>
+                  );
+                })}
               </div>
-
-              {/* Floating cards */}
-              <div className="absolute -top-4 -right-3 lg:-right-6 rounded-2xl bg-white px-4 py-3 shadow-xl border border-border">
-                <div className="flex items-center gap-2">
-                  <MapPin className="h-5 w-5 text-warm-green" />
-                  <div>
-                    <div className="text-sm font-black text-foreground">٢٧ محافظة</div>
-                    <div className="text-xs font-semibold text-muted-foreground">تغطية أوسع</div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="absolute -bottom-4 -left-3 lg:-left-6 rounded-2xl bg-white px-4 py-3 shadow-xl border border-border">
-                <div className="flex items-center gap-2">
-                  <Users className="h-5 w-5 text-golden-orange" />
-                  <div>
-                    <div className="text-sm font-black text-foreground">+١٢٠٠ أسرة</div>
-                    <div className="text-xs font-semibold text-muted-foreground">وصلها الدعم</div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="absolute top-1/2 -left-5 hidden sm:block rounded-2xl bg-white px-4 py-3 shadow-xl border border-border">
-                <div className="flex items-center gap-2">
-                  <Clock className="h-5 w-5 text-gold-text" />
-                  <div>
-                    <div className="text-sm font-black text-foreground">٢٤ ساعة</div>
-                    <div className="text-xs font-semibold text-muted-foreground">استجابة سريعة</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Statistics anchor */}
-        <div className="mt-16 lg:mt-20 mx-auto max-w-5xl rounded-[2rem] bg-white border border-border px-5 py-7 lg:px-10 lg:py-9 shadow-xl opacity-0 animate-fade-in-up delay-700">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-            {stats.map((stat) => (
-              <AnimatedStatCard
-                key={stat.label}
-                icon={stat.icon}
-                number={stat.number}
-                label={stat.label}
-                colorClass={stat.colorClass}
-                bgClass={stat.bgClass}
-              />
-            ))}
-          </div>
+            </motion.div>
+            
         </div>
       </div>
     </section>

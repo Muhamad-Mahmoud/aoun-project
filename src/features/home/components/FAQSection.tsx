@@ -34,8 +34,8 @@ export function FAQSection() {
     const [openIndex, setOpenIndex] = useState<number | null>(0);
 
     return (
-        <section id="faq" className="py-24 md:py-32 bg-white relative overflow-hidden">
-            <div className="container mx-auto px-4 max-w-[1000px]" dir="rtl">
+        <section id="faq" className="py-24 md:py-32 bg-warm-green/5 relative overflow-hidden">
+            <div className="container mx-auto px-4 max-w-3xl" dir="rtl">
                 {/* Header */}
                 <div className="!text-center mb-16 animate-fade-in">
                     <div className="section-pill">
