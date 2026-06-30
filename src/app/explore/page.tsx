@@ -27,6 +27,12 @@ export default function ExplorePage() {
         return Math.min(100, Math.round((current / target) * 100));
     };
 
+    const getSecureImageUrl = (url: string | null) => {
+        if (!url) return '';
+        if (url.startsWith('http')) return url.replace(/^http:/i, 'https:');
+        return `http://aounn.runasp.net/uploads/${url.replace(/^\/?(uploads\/)?/, '')}`;
+    };
+
     return (
         <div className="bg-slate-50 flex flex-col" dir="rtl">
             
@@ -95,7 +101,7 @@ export default function ExplorePage() {
                                                 <>
                                                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent z-10"></div>
                                                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                                                    <img src={campaign.imageUrl.startsWith('http') ? campaign.imageUrl : `http://aounn.runasp.net/uploads/${campaign.imageUrl.replace(/^\/?(uploads\/)?/, '')}`} alt={campaign.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                                    <img src={getSecureImageUrl(campaign.imageUrl)} alt={campaign.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                                 </>
                                             ) : (
                                                 <>
@@ -172,7 +178,7 @@ export default function ExplorePage() {
                                         <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center border-2 border-slate-50 group-hover:border-primary/20 transition-colors">
                                             {assoc.logoUrl ? (
                                                 // eslint-disable-next-line @next/next/no-img-element
-                                                <img src={assoc.logoUrl.startsWith('http') ? assoc.logoUrl : `http://aounn.runasp.net/uploads/${assoc.logoUrl.replace(/^\/?(uploads\/)?/, '')}`} alt={assoc.name} className="w-full h-full object-cover rounded-2xl" />
+                                                <img src={getSecureImageUrl(assoc.logoUrl)} alt={assoc.name} className="w-full h-full object-cover rounded-2xl" />
                                             ) : (
                                                 <Building className="w-8 h-8 text-slate-400" />
                                             )}

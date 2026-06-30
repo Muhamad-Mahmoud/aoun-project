@@ -6,6 +6,8 @@ import { donationsApi } from '../api/donationsApi';
 import { useAuthContext } from '@/shared/providers';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { useToast } from "@/shared/ui/use-toast";
+import { getSecureImageUrl } from "@/shared/utils";
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
 import { CampaignDto } from '../api/searchApi';
@@ -80,7 +82,7 @@ export function DonationModal({ campaign, children }: DonationModalProps) {
                 {campaign.imageUrl && (
                     <div className="w-full h-40 bg-slate-100 rounded-xl overflow-hidden mb-4 relative">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={campaign.imageUrl.startsWith('http') ? campaign.imageUrl.replace(/^http:/i, 'https:') : `https://aounn.runasp.net/uploads/${campaign.imageUrl.replace(/^\/?(uploads\/)?/, '')}`} alt={campaign.title} className="w-full h-full object-cover" />
+                        <img src={getSecureImageUrl(campaign.imageUrl)} alt={campaign.title} className="w-full h-full object-cover" />
                     </div>
                 )}
 

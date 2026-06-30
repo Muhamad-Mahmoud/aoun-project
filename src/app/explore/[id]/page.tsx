@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { donationsApi } from '@/features/donations/api/donationsApi';
 import { CampaignDto } from '@/features/donations/api/searchApi';
 import { Building, Target, Wallet, ArrowRight, Share2, Heart, ShieldCheck, MapPin, Calendar, Clock, CheckCircle2 } from 'lucide-react';
+import { getSecureImageUrl } from "@/shared/utils";
 import { DonationModal } from '@/features/donations/components/DonationModal';
 
 export default function CampaignDetailsPage() {
@@ -67,7 +68,7 @@ export default function CampaignDetailsPage() {
                 {campaign.imageUrl ? (
                     <>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={campaign.imageUrl.startsWith('http') ? campaign.imageUrl.replace(/^http:/i, 'https:') : `https://aounn.runasp.net/uploads/${campaign.imageUrl.replace(/^\/?(uploads\/)?/, '')}`} alt={campaign.title} className="absolute inset-0 w-full h-full object-cover opacity-50" />
+                        <img src={getSecureImageUrl(campaign.imageUrl)} alt={campaign.title} className="absolute inset-0 w-full h-full object-cover opacity-50" />
                     </>
                 ) : (
                     <div className="absolute inset-0 flex items-center justify-center bg-slate-900 opacity-50">
