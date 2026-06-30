@@ -1,4 +1,4 @@
-# Aoun Platform - منصة عون
+# Aoun Platform  
 
 **Aoun** is a comprehensive digital platform designed to bridge the gap between donors, charitable organizations, and families in need. Built with scalability and security in mind, it leverages modern web technologies to provide a seamless user experience.
 
