@@ -32,37 +32,43 @@ export default function ExplorePage() {
             
             <div className="flex-1">
                 {/* Hero Search Section */}
-                <div className="bg-primary/5 border-b border-primary/10 py-16">
-                    <div className="container max-w-5xl mx-auto px-4">
-                        <div className="text-center max-w-3xl mx-auto mb-10">
-                            <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-6 leading-tight">
-                                اكتشف <span className="text-primary">الجمعيات</span> وادعم <span className="text-primary">حملات الخير</span>
-                            </h1>
-                            <p className="text-lg text-slate-600">
-                                محرك بحث منصة عون يساعدك في الوصول للجمعيات الموثوقة أو المشاركة في حملات التبرع العاجلة لدعم الأسر المتعففة.
-                            </p>
-                        </div>
+                <div className="relative pt-32 pb-20 overflow-hidden bg-[#0F4C4A] -mt-[76px]">
+                    {/* Background like landing page */}
+                    <div className="absolute inset-0 z-0">
+                        <div className="absolute inset-0 bg-gradient-to-br from-[#0F4C4A] via-[#0F4C4A] to-[#0a3829] z-10 opacity-90" />
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,_rgba(18,161,123,0.3)_0%,_transparent_50%)] z-20 pointer-events-none" />
+                        <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay z-20 pointer-events-none" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }} />
+                    </div>
 
-                        <div className="bg-white p-2 rounded-2xl shadow-lg border border-slate-100 flex flex-col md:flex-row gap-2 max-w-3xl mx-auto">
+                    <div className="container max-w-5xl mx-auto px-4 relative z-30 mt-8">
+                        {/* Heading */}
+                        <div className="text-center max-w-3xl mx-auto mb-10">
+                            <h1 className="text-4xl md:text-5xl font-black text-white leading-tight drop-shadow-md">
+                                اكتشف <span className="text-[#f58a1f]">الجمعيات</span> وادعم <span className="text-[#f58a1f]">حملات الخير</span>
+                            </h1>
+                        </div>
+                       
+                        {/* Search Box - Premium Glassmorphism */}
+                        <div className="bg-white/10 backdrop-blur-md p-3 rounded-[2rem] shadow-2xl border border-white/20 flex flex-col md:flex-row gap-3 max-w-3xl mx-auto">
                             <div className="flex-1 relative">
-                                <Search className="absolute start-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                                <Search className="absolute start-5 top-1/2 -translate-y-1/2 w-5 h-5 text-white/60" />
                                 <Input 
                                     placeholder={activeTab === 'campaigns' ? "ابحث عن حملة تبرع، بطانيات، علاج..." : "ابحث عن جمعية بالاسم..."}
                                     value={query}
                                     onChange={(e) => setQuery(e.target.value)}
-                                    className="ps-12 h-14 bg-transparent border-none text-lg focus-visible:ring-0"
+                                    className="ps-14 h-14 bg-white/5 border-transparent text-lg focus-visible:ring-2 focus-visible:ring-[#12a17b] text-white placeholder:text-white/50 rounded-2xl transition-all"
                                 />
                             </div>
-                            <div className="flex gap-2 p-2 bg-slate-50 rounded-xl">
+                            <div className="flex gap-2 p-1.5 bg-black/20 rounded-2xl">
                                 <button 
                                     onClick={() => setActiveTab('campaigns')}
-                                    className={`px-6 py-2 rounded-lg font-bold transition-all ${activeTab === 'campaigns' ? 'bg-white shadow-sm text-primary' : 'text-slate-500 hover:text-slate-700'}`}
+                                    className={`px-6 py-2.5 rounded-xl font-bold transition-all text-sm ${activeTab === 'campaigns' ? 'bg-[#12a17b] text-white shadow-md' : 'text-white/70 hover:text-white hover:bg-white/10'}`}
                                 >
                                     حملات التبرع
                                 </button>
                                 <button 
                                     onClick={() => setActiveTab('associations')}
-                                    className={`px-6 py-2 rounded-lg font-bold transition-all ${activeTab === 'associations' ? 'bg-white shadow-sm text-primary' : 'text-slate-500 hover:text-slate-700'}`}
+                                    className={`px-6 py-2.5 rounded-xl font-bold transition-all text-sm ${activeTab === 'associations' ? 'bg-[#12a17b] text-white shadow-md' : 'text-white/70 hover:text-white hover:bg-white/10'}`}
                                 >
                                     دليل الجمعيات
                                 </button>
@@ -89,7 +95,7 @@ export default function ExplorePage() {
                                                 <>
                                                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent z-10"></div>
                                                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                                                    <img src={campaign.imageUrl.startsWith('http') ? campaign.imageUrl.replace(/^http:/i, 'https:') : `https://aounn.runasp.net/uploads/${campaign.imageUrl.replace(/^\/?(uploads\/)?/, '')}`} alt={campaign.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                                    <img src={campaign.imageUrl.startsWith('http') ? campaign.imageUrl : `http://aounn.runasp.net/uploads/${campaign.imageUrl.replace(/^\/?(uploads\/)?/, '')}`} alt={campaign.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                                 </>
                                             ) : (
                                                 <>
@@ -98,14 +104,14 @@ export default function ExplorePage() {
                                                 </>
                                             )}
                                             <div className="absolute bottom-4 start-4 z-20">
-                                                <span className="bg-primary text-white text-xs font-black px-3 py-1.5 rounded-full uppercase tracking-wider">
+                                                <span className="bg-[#12a17b] text-white text-xs font-black px-3 py-1.5 rounded-full uppercase tracking-wider">
                                                     حملة نشطة
                                                 </span>
                                             </div>
                                         </div>
                                         <div className="p-6 flex-1 flex flex-col">
                                             <div className="flex items-center gap-2 text-sm text-slate-500 mb-3 font-bold">
-                                                <Building className="w-4 h-4 text-primary" />
+                                                <Building className="w-4 h-4 text-[#12a17b]" />
                                                 {campaign.associationName}
                                             </div>
                                             <h3 className="text-xl font-black text-slate-900 mb-2 line-clamp-2">{campaign.title}</h3>
@@ -117,11 +123,11 @@ export default function ExplorePage() {
                                                 {campaign.targetAmount ? (
                                                     <div>
                                                         <div className="flex justify-between text-sm font-bold mb-2">
-                                                            <span className="text-primary">{campaign.currentAmount.toLocaleString()} ج.م</span>
+                                                            <span className="text-[#12a17b]">{campaign.currentAmount.toLocaleString()} ج.م</span>
                                                             <span className="text-slate-500">الهدف: {campaign.targetAmount.toLocaleString()} ج.م</span>
                                                         </div>
                                                         <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
-                                                            <div className="h-full bg-primary rounded-full transition-all duration-1000" style={{ width: `${progress}%` }}></div>
+                                                            <div className="h-full bg-[#12a17b] rounded-full transition-all duration-1000" style={{ width: `${progress}%` }}></div>
                                                         </div>
                                                     </div>
                                                 ) : (
@@ -137,7 +143,7 @@ export default function ExplorePage() {
                                                         التفاصيل
                                                     </Link>
                                                     <DonationModal campaign={campaign}>
-                                                        <button className="w-full h-12 bg-slate-900 hover:bg-primary text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-colors">
+                                                        <button className="w-full h-12 bg-[#0F4C4A] hover:bg-[#12a17b] text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-colors">
                                                             <Wallet className="w-5 h-5" />
                                                             تبرع الآن
                                                         </button>
@@ -166,7 +172,7 @@ export default function ExplorePage() {
                                         <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center border-2 border-slate-50 group-hover:border-primary/20 transition-colors">
                                             {assoc.logoUrl ? (
                                                 // eslint-disable-next-line @next/next/no-img-element
-                                                <img src={assoc.logoUrl} alt={assoc.name} className="w-full h-full object-cover rounded-2xl" />
+                                                <img src={assoc.logoUrl.startsWith('http') ? assoc.logoUrl : `http://aounn.runasp.net/uploads/${assoc.logoUrl.replace(/^\/?(uploads\/)?/, '')}`} alt={assoc.name} className="w-full h-full object-cover rounded-2xl" />
                                             ) : (
                                                 <Building className="w-8 h-8 text-slate-400" />
                                             )}
@@ -174,7 +180,7 @@ export default function ExplorePage() {
                                         <div className="flex-1">
                                             <h3 className="text-lg font-black text-slate-900 mb-1">{assoc.name}</h3>
                                             <div className="flex items-center gap-1.5 text-sm font-bold text-slate-500">
-                                                <MapPin className="w-4 h-4 text-primary/70" />
+                                                <MapPin className="w-4 h-4 text-[#12a17b]/80" />
                                                 {assoc.locations.join('، ') || 'المكان غير محدد'}
                                             </div>
                                         </div>
@@ -198,7 +204,7 @@ export default function ExplorePage() {
                                                 <Activity className="w-4 h-4 text-emerald-500" />
                                                 <span className="text-slate-700">{assoc.activeCampaignsCount} حملات نشطة</span>
                                             </div>
-                                            <button className="text-primary font-bold text-sm flex items-center gap-1 hover:gap-2 transition-all">
+                                            <button className="text-[#0F4C4A] hover:text-[#12a17b] font-bold text-sm flex items-center gap-1 hover:gap-2 transition-all">
                                                 عرض التفاصيل
                                                 <ArrowLeft className="w-4 h-4" />
                                             </button>

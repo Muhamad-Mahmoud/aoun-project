@@ -29,9 +29,10 @@ type NavItem = { label: string; href: string; sectionId?: string };
 
 const NAV_ITEMS: NavItem[] = [
 	{ label: "الرئيسية", href: "/", sectionId: "hero" },
+	{ label: "من نحن", href: "/#about", sectionId: "about" },
+	{ label: "مجالات العون", href: "/#journey", sectionId: "journey" },
+	{ label: "كيف نعمل", href: "/#how-it-works", sectionId: "how-it-works" },
 	{ label: "حملات التبرع", href: "/explore" },
-	{ label: "لماذا عون؟", href: "/#why-aoun", sectionId: "why-aoun" },
-	{ label: "رحلة المساعدة", href: "/#journey", sectionId: "journey" },
 	{ label: "الأسئلة الشائعة", href: "/#faq", sectionId: "faq" },
 ];
 

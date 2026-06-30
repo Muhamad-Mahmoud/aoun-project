@@ -38,7 +38,7 @@ const steps = [
 
 export function HowItWorksSection() {
     return (
-        <section className="py-24 md:py-32 bg-white relative overflow-hidden" dir="rtl">
+        <section id="how-it-works" className="py-24 md:py-32 bg-white relative overflow-hidden" dir="rtl">
             {/* Decorative background blur */}
             <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-[#12a17b]/5 rounded-full blur-[120px] -z-10 pointer-events-none"></div>
 
