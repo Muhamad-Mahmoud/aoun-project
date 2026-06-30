@@ -29,8 +29,13 @@ export default function ExplorePage() {
 
     const getSecureImageUrl = (url: string | null) => {
         if (!url) return '';
-        if (url.startsWith('http')) return url.replace(/^http:/i, 'https:');
-        return `http://aounn.runasp.net/uploads/${url.replace(/^\/?(uploads\/)?/, '')}`;
+        
+        let targetUrl = url;
+        if (!url.startsWith('http')) {
+            targetUrl = `http://aounn.runasp.net/uploads/${url.replace(/^\/?(uploads\/)?/, '')}`;
+        }
+        
+        return `/_next/image?url=${encodeURIComponent(targetUrl)}&w=1080&q=75`;
     };
 
     return (
