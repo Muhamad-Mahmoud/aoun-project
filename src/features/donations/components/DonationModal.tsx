@@ -6,7 +6,6 @@ import { donationsApi } from '../api/donationsApi';
 import { useAuthContext } from '@/shared/providers';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
-import { useToast } from "@/shared/ui/use-toast";
 import { getSecureImageUrl } from "@/shared/utils";
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
