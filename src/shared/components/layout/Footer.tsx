@@ -12,7 +12,7 @@ export function Footer() {
                     <div className="flex flex-col items-start lg:pr-4">
                         <Link href="/" className="inline-block mb-6">
                             <Image
-                                src="/logo-new.png"
+                                src="/logo-new.webp"
                                 alt="عون"
                                 width={120}
                                 height={60}

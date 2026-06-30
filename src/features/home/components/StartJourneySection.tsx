@@ -20,11 +20,12 @@ export function StartJourneySection() {
                     {/* Full Background Image */}
                     <div className="absolute inset-0 w-full h-full">
                         <Image 
-                            src="/Start_your_journey.png" 
+                            src="/Start_your_journey.webp" 
                             alt="ابدأ رحلتك" 
                             fill 
+                            loading="lazy"
+                            sizes="(min-width: 1280px) 1280px, 100vw"
                             className="object-cover lg:object-fill object-center"
-                            priority
                         />
                     </div>
 

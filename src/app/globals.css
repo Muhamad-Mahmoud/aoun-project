@@ -237,6 +237,11 @@
     html {
         direction: rtl;
         -webkit-tap-highlight-color: transparent;
+        /* Hardcoded dark green: prevents white gap/flash at top before CSS vars load */
+        background-color: #0f3a29;
+        margin: 0;
+        padding: 0;
+        border: none;
     }
     body {
         @apply bg-background text-foreground font-sans antialiased;
@@ -415,6 +420,8 @@ nextjs-portal {
 @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+/* Partners slider — pure CSS compositor animation (no JS rAF) */
+@keyframes scroll-partners { to { transform: translateX(-50%); } }
 .typing-cursor { animation: blink 0.8s step-end infinite; }
 
 /* ===== Vercel / Next Dev Overlays Fix ===== */

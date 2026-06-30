@@ -26,7 +26,7 @@ export const metadata: Metadata = {
         siteName: "عون",
         images: [
             {
-                url: "/logo-new.png",
+                url: "/logo-new.webp",
                 width: 800,
                 height: 600,
             },
@@ -38,11 +38,11 @@ export const metadata: Metadata = {
         card: "summary_large_image",
         title: "منصة عون للعمل الإنساني",
         description: "الرابط الذكي بين المتبرعين والجمعيات والأسر المحتاجة.",
-        images: ["/logo-new.png"],
+        images: ["/logo-new.webp"],
     },
     icons: {
-        icon: "/logo-new.png",
-        apple: "/logo-new.png",
+        icon: "/logo-new.webp",
+        apple: "/logo-new.webp",
     },
     manifest: "/manifest.json",
 };

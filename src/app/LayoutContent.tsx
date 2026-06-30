@@ -48,7 +48,7 @@ export default function LayoutContent({ children }: { children: React.ReactNode 
         <>
             <ImpersonationBanner />
             {!hideLayout && <Header />}
-            <main className={!hideLayout ? "min-h-screen" : ""}>{children}</main>
+            <main className={!hideLayout ? "min-h-screen pt-[76px]" : ""}>{children}</main>
             {!hideLayout && <Footer />}
             {/* Show global chat widget on all non-dashboard / non-auth pages */}
             {!hideLayout && <ChatWidget />}

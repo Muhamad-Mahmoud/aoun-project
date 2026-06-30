@@ -69,7 +69,7 @@ export function LoginForm() {
                                 required
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}      
-                                className="text-right pr-11 pl-4 h-[52px] text-[15px] rounded-xl border-slate-200 focus-visible:ring-4 focus-visible:ring-emerald-500/20 focus-visible:border-emerald-500 transition-all bg-slate-50 hover:bg-slate-100/50 focus:bg-white"
+                                className="text-right pr-11 pl-4 h-[52px] text-[15px] rounded-xl border-slate-200 focus-visible:ring-4 focus-visible:ring-[#12a17b]/20 focus-visible:border-[#12a17b] transition-all bg-slate-50 hover:bg-slate-100/50 focus:bg-white"
                                 dir="rtl"
                             />
                         </div>
@@ -82,7 +82,7 @@ export function LoginForm() {
                             </Label>
                             <Link
                                 href="/forgot-password"
-                                className="text-sm text-primary hover:text-emerald-700 underline underline-offset-4 decoration-emerald-600/30 hover:decoration-emerald-600 font-bold transition-all"
+                                className="text-sm text-[#12a17b] hover:text-[#0f3a29] underline underline-offset-4 decoration-[#12a17b]/30 hover:decoration-[#12a17b] font-bold transition-all"
                             >
                                 نسيت كلمة المرور؟
                             </Link>
@@ -95,13 +95,13 @@ export function LoginForm() {
                                 required
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}   
-                                className="text-right pr-4 pl-12 h-[52px] text-[15px] rounded-xl border-slate-200 focus-visible:ring-4 focus-visible:ring-emerald-500/20 focus-visible:border-emerald-500 transition-all bg-slate-50 hover:bg-slate-100/50 focus:bg-white"
+                                className="text-right pr-4 pl-12 h-[52px] text-[15px] rounded-xl border-slate-200 focus-visible:ring-4 focus-visible:ring-[#12a17b]/20 focus-visible:border-[#12a17b] transition-all bg-slate-50 hover:bg-slate-100/50 focus:bg-white"
                                 dir="rtl"
                             />
                             <button
                                 type="button"
                                 onClick={togglePassword}
-                                className="absolute left-2.5 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-primary hover:bg-primary/10 transition-all z-10"
+                                className="absolute left-2.5 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-[#12a17b] hover:bg-[#12a17b]/10 transition-all z-10"
                             >
                                 {showPassword ? (
                                     <EyeOff strokeWidth={1.5} className="h-4 w-4" />
@@ -117,7 +117,7 @@ export function LoginForm() {
                     <div className="flex items-start gap-3 pt-1">  
                         <Checkbox
                             id="remember"
-                            className="mt-[3px] w-[18px] h-[18px] rounded border-slate-300 data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600 transition-all"
+                            className="mt-[3px] w-[18px] h-[18px] rounded border-slate-300 data-[state=checked]:bg-[#12a17b] data-[state=checked]:border-[#12a17b] transition-all"
                             checked={rememberMe}
                             onCheckedChange={(checked) => setRememberMe(checked as boolean)}
                         />
@@ -135,7 +135,7 @@ export function LoginForm() {
             {/* Submit Button */}
             <div className="mt-8 relative z-20">
                 <Button
-                    className="w-full text-[15px] font-semibold flex items-center justify-center px-8 py-3.5 h-[54px] rounded-full bg-gradient-to-r from-emerald-500 to-emerald-600 shadow-[0_8px_20px_rgba(16,185,129,0.25)] hover:shadow-[0_18px_40px_rgba(16,185,129,0.45)] hover:-translate-y-[1px] transition-all duration-300 ease-out text-white group"
+                    className="w-full text-[15px] font-semibold flex items-center justify-center px-8 py-3.5 h-[54px] rounded-full bg-[#12a17b] hover:bg-[#0f3a29] shadow-[0_8px_20px_rgba(18,161,123,0.25)] hover:shadow-[0_18px_40px_rgba(15,58,41,0.35)] hover:-translate-y-[1px] transition-all duration-300 ease-out text-white group"
                     type="submit"
                     disabled={isLoading || isPending}
                 >

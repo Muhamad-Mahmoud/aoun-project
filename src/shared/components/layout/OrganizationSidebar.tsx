@@ -72,7 +72,7 @@ export function OrganizationSidebarContent({ isCollapsed }: { isCollapsed?: bool
                  <span className="text-primary font-black text-xl">ع</span>
              </div>
           ) : (
-             <Image src="/logo.png" alt="عون" width={96} height={48} className="h-12 w-auto shrink-0 dark:invert-[.8]" />
+             <Image src="/logo-new.webp" alt="عون" width={96} height={48} className="h-12 w-auto shrink-0 dark:invert-[.8]" />
           )}
         </Link>
       </div>

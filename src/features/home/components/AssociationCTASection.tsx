@@ -9,10 +9,10 @@ export function AssociationCTASection() {
             <div className="container mx-auto max-w-[1400px] px-4">
                 <div className="relative flex min-h-[198px] items-center overflow-hidden rounded-xl bg-[#0f6a60] shadow-[0_8px_28px_rgba(15,106,96,0.18)] ring-1 ring-black/5">
                     <Image
-                        src="/Are_you_association.png"
+                        src="/Are_you_association.webp"
                         alt="شبكة عون للجمعيات الخيرية"
                         fill
-                        priority
+                        loading="lazy"
                         sizes="(min-width: 1400px) 1400px, 100vw"
                         className="object-cover object-left"
                     />

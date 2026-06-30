@@ -34,7 +34,7 @@ function FormLoadingSkeleton() {
             <div className="h-12 bg-slate-100 rounded-lg w-full"></div>
             <div className="h-12 bg-slate-100 rounded-lg w-3/4"></div>
             <div className="flex justify-center pt-4">
-                <Loader2 className="h-6 w-6 animate-spin text-emerald-400" />
+                <Loader2 className="h-6 w-6 animate-spin text-[#12a17b]" />
             </div>
         </div>
     );
@@ -177,7 +177,7 @@ export function RegisterFormContent() {
                         <Button
                             type="button"
                             onClick={nextStep}
-                            className="flex-[2] font-bold h-[54px] rounded-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:shadow-[0_14px_30px_rgba(16,185,129,0.3)] hover:-translate-y-0.5 transition-all text-base text-white"
+                            className="flex-[2] font-bold h-[54px] rounded-full bg-[#12a17b] hover:bg-[#0f3a29] hover:shadow-[0_14px_30px_rgba(18,161,123,0.3)] hover:-translate-y-0.5 transition-all text-base text-white"
                         >
                             التالي
                             <ChevronLeft className="ml-2 h-5 w-5" />
@@ -186,7 +186,7 @@ export function RegisterFormContent() {
                         <Button
                             type="submit"
                             disabled={isLoading || isPending}
-                            className="flex-[2] font-bold h-[54px] rounded-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:shadow-[0_14px_30px_rgba(16,185,129,0.35)] hover:-translate-y-0.5 transition-all text-base text-white relative group"
+                            className="flex-[2] font-bold h-[54px] rounded-full bg-[#12a17b] hover:bg-[#0f3a29] hover:shadow-[0_14px_30px_rgba(18,161,123,0.35)] hover:-translate-y-0.5 transition-all text-base text-white relative group"
                         >
                             {(isLoading || isPending) ? (
                                 <div className="flex items-center gap-2">

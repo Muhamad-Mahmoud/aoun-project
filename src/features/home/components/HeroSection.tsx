@@ -4,20 +4,16 @@ import { Button } from "@/shared/ui/button";
 import {
   Award,
   Building2,
-  CheckCircle,
   Clock,
   Heart,
-  MapPin,
   ShieldCheck,
   Sparkles,
   Users,
 } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
-import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
-import { useCountUp } from "@/shared/hooks/useCountUp";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 const trustBadges = [
   {
@@ -104,30 +100,35 @@ function CountUpNumber({ target, suffix = "" }: { target: number, suffix?: strin
 }
 
 export function HeroSection() {
-  const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 1000], [0, 250]); // Subtle parallax
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start'],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], [0, 250]);
 
   return (
     <section
+      ref={sectionRef}
       id="hero"
       dir="rtl"
-      className="relative z-10 flex flex-col justify-center min-h-[100dvh] -mt-[76px] pt-28 lg:pt-32 pb-16 lg:pb-20 overflow-hidden"
+      className="relative z-10 flex flex-col justify-center min-h-[100dvh] -mt-[76px] pt-20 lg:pt-24 pb-10 lg:pb-12 overflow-hidden bg-brand-dark"
     >
       {/* 1. Background Image with Premium Image Adjustments & Parallax */}
-      <motion.div style={{ y }} className="absolute inset-0 z-0 bg-brand-dark overflow-hidden">
+      <motion.div style={{ y }} className="absolute inset-0 z-0 bg-brand-dark overflow-hidden" aria-hidden="true">
         <motion.div
           animate={{ scale: [1.05, 1.1] }}
           transition={{ duration: 25, ease: "linear", repeat: Infinity, repeatType: "reverse" }}
           className="absolute inset-0"
         >
           <Image
-            src="/herobg.png"
+            src="/herobg.webp"
             alt="عون - منصة تربط الأسر المحتاجة بالجمعيات الخيرية"
-            unoptimized={true}
             fill
             priority
             fetchPriority="high"
             sizes="100vw"
+            quality={85}
             className="object-cover object-[15%_20%] lg:object-[15%_center] brightness-[1.15] contrast-[1.05] saturate-[1.10]"
           />
         </motion.div>
@@ -149,9 +150,9 @@ export function HeroSection() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_40%,_rgba(0,0,0,0.4)_100%)] pointer-events-none" />
       </motion.div>
 
-      {/* 2. Content Container (8px Spacing System) */}
-      <div className="container relative z-10 mx-auto px-6 lg:px-12 flex justify-start mt-8">
-        <div className="max-w-[640px] lg:max-w-[720px] text-right flex flex-col gap-6 lg:gap-8">
+      {/* 2. Content Container (Tightened Spacing for 100vh fit) */}
+      <div className="container relative z-10 mx-auto px-6 lg:px-12 flex justify-start">
+        <div className="max-w-[640px] lg:max-w-[720px] text-right flex flex-col gap-4 lg:gap-5">
             
             {/* Tag / Badge */}
             <motion.div 
@@ -169,7 +170,7 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-[2.5rem] sm:text-5xl lg:text-[56px] font-black leading-[1.4] tracking-normal text-white drop-shadow-lg"
+              className="text-[2.5rem] sm:text-5xl lg:text-[56px] font-black leading-[1.3] tracking-normal text-white drop-shadow-lg mt-1"
             >
               كل طلب مساعدة
               <br className="hidden sm:block" />
@@ -184,7 +185,7 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.35 }}
-              className="max-w-[550px] text-[17px] lg:text-[19px] leading-[1.8] text-white/90 font-medium drop-shadow-md mt-4"
+              className="max-w-[550px] text-[17px] lg:text-[19px] leading-[1.7] text-white/90 font-medium drop-shadow-md"
             >
               منصة ذكية تربط الأسر المحتاجة بالجمعيات المعتمدة، لضمان وصول الدعم بشفافية وأمان.
             </motion.p>
@@ -194,10 +195,10 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
-              className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-[540px]"
+              className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-[540px] mt-2"
             >
               <Link href="/explore" className="w-full">
-                <Button className="w-full h-14 lg:h-16 rounded-xl text-[16px] lg:text-[17px] font-bold gap-3 bg-warm-green text-white hover:bg-warm-green-dark shadow-[0_8px_24px_rgba(15,93,70,0.4)] transition-all duration-300 hover:scale-[1.02] hover:-translate-y-[3px] hover:shadow-[0_12px_28px_rgba(15,93,70,0.5)] border-none">
+                <Button className="w-full h-14 lg:h-14 rounded-xl text-[16px] lg:text-[17px] font-bold gap-3 bg-warm-green text-white hover:bg-warm-green-dark shadow-[0_8px_24px_rgba(15,93,70,0.4)] transition-all duration-300 hover:scale-[1.02] hover:-translate-y-[3px] hover:shadow-[0_12px_28px_rgba(15,93,70,0.5)] border-none">
                   تبرع وادعم الآن
                   <Heart className="h-5 w-5" />
                 </Button>
@@ -206,7 +207,7 @@ export function HeroSection() {
               <Link href="/register" className="w-full">
                 <Button
                   variant="outline"
-                  className="w-full h-14 lg:h-16 rounded-xl text-[16px] lg:text-[17px] font-bold border border-white/40 bg-white/10 text-white hover:bg-white/20 hover:border-white/60 transition-all duration-300 hover:scale-[1.02] hover:-translate-y-[3px] hover:shadow-lg backdrop-blur-md shadow-[0_4px_16px_rgba(0,0,0,0.1)]"
+                  className="w-full h-14 lg:h-14 rounded-xl text-[16px] lg:text-[17px] font-bold border border-white/40 bg-white/10 text-white hover:bg-white/20 hover:border-white/60 transition-all duration-300 hover:scale-[1.02] hover:-translate-y-[3px] hover:shadow-lg backdrop-blur-md shadow-[0_4px_16px_rgba(0,0,0,0.1)]"
                 >
                   اطلب مساعدة
                 </Button>
@@ -218,18 +219,18 @@ export function HeroSection() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1, delay: 0.8 }}
-              className="mt-6 pt-8 border-t border-white/15"
+              className="mt-4 pt-5 border-t border-white/15"
             >
               <div className="grid grid-cols-3 gap-6 lg:gap-8 max-w-[600px]">
                 {stats.slice(0, 3).map((stat) => {
                   return (
                     <div key={stat.label} className="flex flex-col gap-1">
                       <div className="flex items-baseline gap-1">
-                        <span className="text-3xl lg:text-4xl font-black text-white tracking-tighter drop-shadow-sm">
+                        <span className="text-3xl lg:text-4xl font-medium text-white tracking-tighter drop-shadow-sm">
                           <CountUpNumber target={parseInt(stat.number)} suffix={stat.suffix} />
                         </span>
                       </div>
-                      <span className="text-[11px] lg:text-sm text-white/70 font-medium leading-tight">{stat.label}</span>
+                      <span className="text-[11px] lg:text-sm text-white/70 font-normal leading-tight">{stat.label}</span>
                     </div>
                   );
                 })}
@@ -241,37 +242,4 @@ export function HeroSection() {
     </section>
   );
 }
-
-interface AnimatedStatCardProps {
-  icon: LucideIcon;
-  number: string;
-  label: string;
-  colorClass: string;
-  bgClass: string;
-}
-
-function AnimatedStatCard({
-  icon: Icon,
-  number,
-  label,
-  colorClass,
-  bgClass,
-}: AnimatedStatCardProps) {
-  const animatedValue = useCountUp(number);
-
-  return (
-    <div className="text-center">
-      <div className={`mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl ${bgClass}`}>
-        <Icon className={`h-6 w-6 ${colorClass}`} />
-      </div>
-
-      <div className={`mb-1 text-3xl lg:text-4xl font-black ${colorClass}`}>
-        {animatedValue}
-      </div>
-
-      <div className="text-sm lg:text-[15px] font-bold text-muted-foreground">
-        {label}
-      </div>
-    </div>
-  );
-}
+

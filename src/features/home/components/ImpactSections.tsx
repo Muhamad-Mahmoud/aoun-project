@@ -6,7 +6,7 @@ import { ChevronLeft, Heart, Quote } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 type Testimonial = {
     name: string;
@@ -24,30 +24,30 @@ const testimonials: Testimonial[] = [
     {
         name: "محمد",
         quote: "تمكنت من العودة لمدرستي بعد أن حصلت على دعم عون لتكاليف الدراسة.",
-        image: "/person1.png",
+        image: "/person1.webp",
         alt: "محمد من أسرة مستفيدة",
     },
     {
         name: "أم أحمد",
         quote: "ساعدوني في علاج ابني وكان لهم دور كبير في تحسين حالتنا.",
-        image: "/person2.png",
+        image: "/person2.webp",
         alt: "أم أحمد من أسرة مستفيدة",
     },
     {
         name: "أبو خالد",
         quote: "منحة صغيرة من عون بدأت بها مشروعي وفّر لي مصدر دخل مستقر.",
-        image: "/person3.png",
+        image: "/person3.webp",
         alt: "أبو خالد من أسرة مستفيدة",
     },
 ];
 
 const partners: Partner[] = [
-    { name: "الهلال الأحمر المصري", logoSrc: "/partners/egyptian-red-crescent.png" },
-    { name: "جمعية رسالة", logoSrc: "/partners/resala.png" },
-    { name: "جمعية الأورمان", logoSrc: "/partners/orman.png" },
-    { name: "بنك الطعام المصري", logoSrc: "/partners/food-bank.png" },
+    { name: "الهلال الأحمر المصري", logoSrc: "/partners/egyptian-red-crescent.webp" },
+    { name: "جمعية رسالة", logoSrc: "/partners/resala.webp" },
+    { name: "جمعية الأورمان", logoSrc: "/partners/orman.webp" },
+    { name: "بنك الطعام المصري", logoSrc: "/partners/food-bank.webp" },
     { name: "UNICEF لكل طفل", logoSrc: "/partners/unicef.svg" },
-    { name: "وزارة التضامن الاجتماعي", logoSrc: "/partners/solidarity.png" },
+    { name: "وزارة التضامن الاجتماعي", logoSrc: "/partners/solidarity.webp" },
 ];
 
 export function ImpactSections() {
@@ -204,7 +204,7 @@ function DonateCtaSection() {
                     dir="ltr"
                 >
                     <Image
-                        src="/Donar.png"
+                        src="/Donar.webp"
                         alt=""
                         fill
                         priority={false}
@@ -251,59 +251,10 @@ function DonateCtaSection() {
 }
 
 function PartnersSliderSection() {
-    const scrollerRef = useRef<HTMLDivElement>(null);
     const [paused, setPaused] = useState(false);
     const reduceMotion = useReducedMotion();
-    const duplicatedPartners = [...partners, ...partners, ...partners];
-
-    useEffect(() => {
-        const scroller = scrollerRef.current;
-        if (!scroller) return;
-
-        let animationFrame = 0;
-        const loopWidth = scroller.scrollWidth / 3;
-
-        if (!reduceMotion && scroller.scrollLeft < 1 && loopWidth > 0) {
-            scroller.scrollLeft = loopWidth;
-        }
-
-        if (reduceMotion || paused) return;
-
-        let previousTime = performance.now();
-        let currentScroll = scroller.scrollLeft;
-        const speed = 0.035;
-        const tick = (time: number) => {
-            const delta = time - previousTime;
-            previousTime = time;
-
-            currentScroll += delta * speed;
-
-            if (currentScroll >= loopWidth * 2) {
-                currentScroll -= loopWidth;
-            }
-
-            if (currentScroll <= 0) {
-                currentScroll += loopWidth;
-            }
-
-            scroller.scrollLeft = currentScroll;
-            animationFrame = requestAnimationFrame(tick);
-        };
-
-        animationFrame = requestAnimationFrame(tick);
-        return () => cancelAnimationFrame(animationFrame);
-    }, [paused, reduceMotion]);
-
-    const scrollByCards = (direction: "previous" | "next") => {
-        const scroller = scrollerRef.current;
-        if (!scroller) return;
-
-        const amount = Math.max(scroller.clientWidth * 0.8, 280);
-        scroller.scrollBy({
-            left: direction === "next" ? amount : -amount,
-            behavior: "smooth",
-        });
-    };
+    // 2 copies: CSS animation translates -50% for seamless loop
+    const duplicatedPartners = [...partners, ...partners];
 
     return (
         <section id="partners" className="bg-white py-14 md:py-16" dir="rtl" aria-labelledby="partners-title">
@@ -318,7 +269,7 @@ function PartnersSliderSection() {
                 </div>
 
                 <div
-                    className="relative"
+                    className="relative overflow-hidden"
                     role="region"
                     aria-label="شعارات شركاء عون"
                     onMouseEnter={() => setPaused(true)}
@@ -326,10 +277,18 @@ function PartnersSliderSection() {
                     onFocus={() => setPaused(true)}
                     onBlur={() => setPaused(false)}
                 >
+                    {/* Fade edges */}
+                    <div className="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" aria-hidden="true" />
+                    <div className="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" aria-hidden="true" />
+
                     <div
-                        ref={scrollerRef}
-                        className="scrollbar-hide flex gap-4 overflow-x-auto px-1 py-3"
+                        className="flex gap-4 py-3 w-max"
                         dir="ltr"
+                        style={{
+                            animation: reduceMotion ? 'none' : 'scroll-partners 28s linear infinite',
+                            animationPlayState: paused ? 'paused' : 'running',
+                            willChange: 'transform',
+                        }}
                     >
                         {duplicatedPartners.map((partner, index) => (
                             <PartnerLogoCard key={`${partner.name}-${index}`} partner={partner} />

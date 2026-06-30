@@ -237,7 +237,7 @@ export function Header() {
 			<header
 				dir="rtl"
 				className={[
-					"sticky top-0 z-50 w-full transition-[height,background-color,box-shadow,backdrop-filter,color] duration-500",
+					"fixed inset-x-0 top-0 z-50 w-full transition-[height,background-color,box-shadow,backdrop-filter,color] duration-500",
 					isScrolled
 						? "bg-[#0a4740]/90 backdrop-blur-2xl shadow-lg shadow-black/10 border-b border-white/10 text-white"
 						: "bg-transparent border-transparent shadow-none text-white",
@@ -256,7 +256,7 @@ export function Header() {
 							onClick={(e) => handleNavClick(e, navItems[0])}
 						>
 							<Image
-								src="/logo-new.png"
+								src="/logo-new.webp"
 								alt="عون - منصة العون للأسر المحتاجة"
 								width={131}
 								height={46}
