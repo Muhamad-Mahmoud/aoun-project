@@ -110,6 +110,12 @@ export async function rejectAssociationRequest(id: string | number, data: Reject
     );
 }
 
+export async function completeAssociationRequest(id: string | number): Promise<void> {
+    await apiClient.post<ApiResponse<void>>(
+        API_ENDPOINTS.association.completeRequest(id)
+    );
+}
+
 /**
  * Dashboard endpoints
  */

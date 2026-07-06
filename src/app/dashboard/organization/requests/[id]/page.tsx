@@ -5,7 +5,6 @@ import { useParams, useRouter } from "next/navigation";
 import { DashboardLayout, DashboardTopBar } from "@/shared/components/layout/DashboardLayout";
 import { OrganizationSidebar } from "@/shared/components/layout/OrganizationSidebar";
 import { useAssociationRequestDetail } from "@/features/associations";
-import { RequestStatus } from "@/features/associations/types";
 import { Card } from "@/shared/ui/card";
 import { Button } from "@/shared/ui/button";
 import { Badge } from "@/shared/ui/badge";
@@ -79,7 +78,7 @@ export default function RequestDetailPage() {
     const router = useRouter();
     const id = params.id as string;
     
-    const { request, isLoading, isActionLoading, error, acceptRequest, rejectRequest } = useAssociationRequestDetail(id);
+    const { request, isLoading, isActionLoading, error, acceptRequest, rejectRequest, completeRequest } = useAssociationRequestDetail(id);
 
     const [showAcceptForm, setShowAcceptForm] = useState(false);
     const [showRejectForm, setShowRejectForm] = useState(false);
@@ -171,13 +170,24 @@ export default function RequestDetailPage() {
         }
     };
 
-    const isPending = request.status === RequestStatus.Pending || request.status === RequestStatus.InReview;
+    const handleComplete = async () => {
+        const success = await completeRequest();
+        if (success) {
+            toast.success("تم تحديد الطلب كمكتمل بنجاح");
+        } else {
+            toast.error("حدث خطأ أثناء إتمام الطلب");
+        }
+    };
+
     const statusKey = resolveStatus(request.status);
     const status = statusConfig[statusKey] || statusConfig.PENDING;
     const StatusIcon = status.icon;
     const cat = categoryConfig[resolveCategory(request.requestType)] || categoryConfig["Other"];
     const CatIcon = cat.icon;
-    const isTerminal = ["REJECTED", "CANCELLED"].includes(statusKey);
+
+    const isPending = ["PENDING", "INREVIEW"].includes(statusKey);
+    const isApproved = statusKey === "APPROVED";
+    const isTerminal = ["REJECTED", "CANCELLED", "COMPLETED"].includes(statusKey);
 
     const emp = request.employmentData;
     const health = request.healthData;
@@ -340,11 +350,34 @@ export default function RequestDetailPage() {
                                     </div>
                                 )}
 
+                                {/* Complete Request (Only if Approved) */}
+                                {isApproved && (
+                                    <div className="anim-up bg-emerald-50 rounded-2xl border border-emerald-200 shadow-sm p-5 sm:p-6" style={{ animationDelay: "60ms" }}>
+                                        <h3 className="font-bold text-base mb-3 flex items-center gap-2 text-emerald-700">
+                                            <span className="w-1 h-5 bg-emerald-500 rounded-full" />
+                                            إتمام الطلب
+                                        </h3>
+                                        <p className="text-sm text-emerald-700 mb-4 font-medium">
+                                            تم قبول هذا الطلب. بعد تقديم المساعدة، يمكنك تحديد الطلب كمكتمل.
+                                        </p>
+                                        <Button
+                                            onClick={handleComplete}
+                                            disabled={isActionLoading}
+                                            className="w-full rounded-xl bg-emerald-600 hover:bg-emerald-700 h-11 text-white font-bold"
+                                        >
+                                            {isActionLoading
+                                                ? <Loader2 className="w-4 h-4 animate-spin ml-2" />
+                                                : <CheckCircle2 className="w-4 h-4 ml-2" />}
+                                            تأكيد إتمام الطلب
+                                        </Button>
+                                    </div>
+                                )}
+
                                 {/* Decision Info (if already decided) */}
                                 {!isPending && request.decisionReason && (
-                                    <div className={cn("anim-up rounded-2xl p-5 border shadow-sm", request.status === RequestStatus.Approved ? 'border-green-200 bg-primary/5' : 'border-red-200 bg-red-50/50')} style={{ animationDelay: "60ms" }}>
+                                    <div className={cn("anim-up rounded-2xl p-5 border shadow-sm", isApproved || statusKey === "COMPLETED" ? 'border-green-200 bg-primary/5' : 'border-red-200 bg-red-50/50')} style={{ animationDelay: "60ms" }}>
                                         <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
-                                            {request.status === RequestStatus.Approved ? <CheckCircle2 className="w-5 h-5 text-primary" /> : <XCircle className="w-5 h-5 text-red-600" />}
+                                            {isApproved || statusKey === "COMPLETED" ? <CheckCircle2 className="w-5 h-5 text-primary" /> : <XCircle className="w-5 h-5 text-red-600" />}
                                             الملاحظات والقرارات
                                         </h3>
                                         <p className="text-foreground font-medium bg-background/50 p-4 rounded-xl border border-border">{request.decisionReason}</p>
@@ -356,6 +389,7 @@ export default function RequestDetailPage() {
                                         )}
                                     </div>
                                 )}
+
 
                                 {/* ===== Request Overview Card ===== */}
                                 <div className="anim-up bg-card rounded-2xl border border-border shadow-sm overflow-hidden" style={{ animationDelay: "120ms" }}>
@@ -519,7 +553,7 @@ export default function RequestDetailPage() {
                                                                 </div>
                                                             </div>
                                                             <a
-                                                                href={att.filePath || att.url}
+                                                                href={att.filePath ? (att.filePath.startsWith('http') ? att.filePath : `${process.env.NEXT_PUBLIC_API_URL || ''}/${att.filePath.replace(/\\/g, '/')}`) : (att.url || '#')}
                                                                 target="_blank"
                                                                 rel="noopener noreferrer"
                                                                 className="w-8 h-8 rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-white flex items-center justify-center transition-colors shrink-0"
@@ -531,12 +565,15 @@ export default function RequestDetailPage() {
                                                         {hasOcrData && (
                                                             <div className="bg-muted/50 border-t border-border p-3">
                                                                 <div className="grid grid-cols-2 gap-2">
-                                                                    {Object.entries(att.aiOcrData).map(([key, val]: [string, any], i) => (
-                                                                        <div key={i} className="bg-card border border-border rounded-lg p-2 flex flex-col">
-                                                                            <span className="text-[10px] text-muted-foreground font-bold uppercase">{key}</span>
-                                                                            <span className="text-[11px] font-semibold text-foreground truncate" title={String(val)}>{String(val)}</span>
-                                                                        </div>
-                                                                    ))}
+                                                                    {Object.entries(att.aiOcrData).map(([key, val]: [string, any], i) => {
+                                                                        const displayVal = typeof val === 'object' && val !== null ? JSON.stringify(val, null, 2) : String(val);
+                                                                        return (
+                                                                            <div key={i} className="bg-card border border-border rounded-lg p-2 flex flex-col col-span-2 sm:col-span-1">
+                                                                                <span className="text-[10px] text-muted-foreground font-bold uppercase mb-1">{key}</span>
+                                                                                <span className="text-[11px] font-semibold text-foreground whitespace-pre-wrap break-all">{displayVal}</span>
+                                                                            </div>
+                                                                        );
+                                                                    })}
                                                                 </div>
                                                             </div>
                                                         )}
@@ -608,6 +645,42 @@ export default function RequestDetailPage() {
                                                         <div className="mt-2 bg-destructive/10 border border-red-200 rounded-lg p-3 text-xs text-destructive">
                                                             <span className="font-black flex items-center gap-1.5 mb-1"><AlertCircle className="w-3.5 h-3.5" /> تعذر التقييم الآلي:</span>
                                                             <span className="font-medium leading-relaxed">{request.aiErrorMessage}</span>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            )}
+
+                                            {/* SHAP Explanation */}
+                                            {request.aiExplanation && (
+                                                <div className="pt-4 border-t border-border space-y-3">
+                                                    <span className="text-[11px] text-muted-foreground mb-2 font-bold uppercase tracking-wide flex items-center gap-1.5">
+                                                        <Brain className="w-3.5 h-3.5" /> تحليل النظام للملخص والعوامل
+                                                    </span>
+                                                    {request.aiExplanation.summary && (
+                                                        <p className="text-[12px] text-muted-foreground font-medium bg-muted rounded-xl px-4 py-3 border border-border">
+                                                            {request.aiExplanation.summary}
+                                                        </p>
+                                                    )}
+                                                    {request.aiExplanation.topFactors && request.aiExplanation.topFactors.length > 0 && (
+                                                        <div className="space-y-1.5">
+                                                            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider px-1">أهم العوامل المؤثرة</p>
+                                                            {request.aiExplanation.topFactors.slice(0, 4).map((factor: any, i: number) => (
+                                                                <div key={i} className="flex items-center gap-2.5 p-2.5 bg-muted rounded-lg border border-border">
+                                                                    <span className={cn(
+                                                                        "w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-black shrink-0",
+                                                                        factor.direction === 'positive' ? "bg-emerald-100 text-primary" : "bg-red-100 text-destructive"
+                                                                    )}>
+                                                                        {factor.direction === 'positive' ? '↑' : '↓'}
+                                                                    </span>
+                                                                    <span className="text-[12px] font-semibold text-foreground flex-1">{factor.label || factor.factor}</span>
+                                                                    <span className={cn(
+                                                                        "text-[10px] font-bold px-2 py-0.5 rounded-full",
+                                                                        factor.impact === 'High' ? "bg-destructive/10 text-destructive" : factor.impact === 'Medium' ? "bg-primary/10 text-primary" : "bg-slate-100 text-muted-foreground"
+                                                                    )}>
+                                                                        {factor.impact === 'High' ? 'تأثير عالي' : factor.impact === 'Medium' ? 'تأثير متوسط' : 'تأثير منخفض'}
+                                                                    </span>
+                                                                </div>
+                                                            ))}
                                                         </div>
                                                     )}
                                                 </div>

@@ -28,38 +28,52 @@ export interface StatusDisplayConfig {
 }
 
 export const statusConfig: Record<string, StatusDisplayConfig> = {
-    PENDING:      { label: "قيد المراجعة", icon: Clock,        color: "text-amber-600",  bg: "bg-primary/10 border-amber-200" },
-    VERIFIED:     { label: "تم التحقق",   icon: CheckCircle2,  color: "text-primary",   bg: "bg-primary/10 border-primary/30" },
-    IN_PROGRESS:  { label: "جاري التنفيذ", icon: Loader2,      color: "text-teal-600",    bg: "bg-teal-50 border-teal-200" },
-    COMPLETED:    { label: "مكتمل",       icon: CheckCircle2,  color: "text-primary", bg: "bg-primary/10 border-emerald-200" },
-    REJECTED:     { label: "مرفوض",       icon: XCircle,       color: "text-red-600",    bg: "bg-red-50 border-red-200" },
-    CANCELLED:    { label: "ملغي",        icon: Ban,           color: "text-gray-500",   bg: "bg-gray-50 border-gray-200" },
+    PENDING:      { label: "قيد المراجعة",  icon: Clock,        color: "text-amber-600",   bg: "bg-primary/10 border-amber-200" },
+    INREVIEW:     { label: "تحت المراجعة", icon: Loader2,       color: "text-blue-600",    bg: "bg-blue-50 border-blue-200" },
+    APPROVED:     { label: "معتمد",         icon: CheckCircle2, color: "text-primary",      bg: "bg-primary/10 border-primary/30" },
+    COMPLETED:    { label: "مكتمل",         icon: CheckCircle2, color: "text-emerald-600",  bg: "bg-emerald-50 border-emerald-200" },
+    REJECTED:     { label: "مرفوض",         icon: XCircle,      color: "text-red-600",      bg: "bg-red-50 border-red-200" },
+    CANCELLED:    { label: "ملغي",           icon: Ban,          color: "text-gray-500",     bg: "bg-gray-50 border-gray-200" },
+    // Legacy keys kept for backward compat
+    VERIFIED:     { label: "تم التحقق",    icon: CheckCircle2,  color: "text-primary",      bg: "bg-primary/10 border-primary/30" },
+    IN_PROGRESS:  { label: "جاري التنفيذ", icon: Loader2,       color: "text-teal-600",    bg: "bg-teal-50 border-teal-200" },
 };
 
 export const statusNumericMap: Record<number, string> = {
-    0: "PENDING",
-    1: "VERIFIED",
-    2: "IN_PROGRESS",
-    3: "COMPLETED",
-    4: "REJECTED",
-    5: "CANCELLED",
+    0: "PENDING",    // Pending
+    1: "INREVIEW",  // InReview
+    2: "APPROVED",  // Approved
+    3: "REJECTED",  // Rejected
+    4: "COMPLETED", // Completed
+    5: "CANCELLED", // Cancelled
 };
 
 /** Safely resolve a status (number or string) to a statusConfig key. */
 export function resolveStatus(status: number | string | undefined | null): string {
     if (typeof status === "number") return statusNumericMap[status] ?? "PENDING";
-    if (typeof status === "string") return status.toUpperCase();
+    if (typeof status === "string") {
+        // Normalize camelCase backend strings to uppercase keys
+        const normalized = status.trim();
+        if (normalized === "InReview")  return "INREVIEW";
+        if (normalized === "Approved")  return "APPROVED";
+        if (normalized === "Pending")   return "PENDING";
+        if (normalized === "Rejected")  return "REJECTED";
+        if (normalized === "Completed") return "COMPLETED";
+        if (normalized === "Cancelled") return "CANCELLED";
+        return normalized.toUpperCase();
+    }
     return "PENDING";
 }
 
 /** Status filter tabs for the list page. */
 export const statusFilters = [
     { value: "",           label: "الكل" },
-    { value: "PENDING",    label: "قيد المراجعة" },
-    { value: "IN_PROGRESS", label: "جاري التنفيذ" },
-    { value: "COMPLETED",  label: "مكتمل" },
-    { value: "REJECTED",   label: "مرفوض" },
-    { value: "CANCELLED",  label: "ملغي" },
+    { value: "Pending",    label: "قيد المراجعة" },
+    { value: "InReview",   label: "تحت المراجعة" },
+    { value: "Approved",   label: "معتمد" },
+    { value: "Completed",  label: "مكتمل" },
+    { value: "Rejected",   label: "مرفوض" },
+    { value: "Cancelled",  label: "ملغي" },
 ];
 
 /** Safely resolve a requestType to string for backward compatibility */

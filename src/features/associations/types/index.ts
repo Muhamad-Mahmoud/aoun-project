@@ -138,6 +138,7 @@ export interface RequestDetailDto {
     aiPredictionStatus?: string | null;
     aiMethod?: string | null;
     aiErrorMessage?: string | null;
+    aiExplanation?: any | null;
 }
 
 // Action Requests

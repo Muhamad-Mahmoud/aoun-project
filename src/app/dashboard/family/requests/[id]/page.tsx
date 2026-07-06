@@ -123,9 +123,9 @@ function getFileIcon(fileType: string) {
 
 // ===== Status Lifecycle Steps =====
 const lifecycleSteps = [
-    { key: "PENDING", label: "قيد المراجعة" },
-    { key: "VERIFIED", label: "تم التحقق" },
-    { key: "IN_PROGRESS", label: "جاري التنفيذ" },
+    { key: "PENDING",   label: "قيد المراجعة" },
+    { key: "INREVIEW",  label: "تحت المراجعة" },
+    { key: "APPROVED",  label: "تمت الموافقة" },
     { key: "COMPLETED", label: "مكتمل" },
 ];
 
@@ -243,7 +243,7 @@ export default function RequestDetailsPage() {
     const statusKey = resolveStatus(request.status);
     const status = statusConfig[statusKey] || statusConfig.PENDING;
     const StatusIcon = status.icon;
-    const canCancel = ["PENDING", "VERIFIED"].includes(statusKey);
+    const canCancel = ["PENDING", "INREVIEW"].includes(statusKey);
     const cat = categoryConfig[resolveCategory(request.requestType)] || categoryConfig["Other"];
     const CatIcon = cat.icon;
     const isTerminal = ["REJECTED", "CANCELLED"].includes(statusKey);
@@ -529,108 +529,6 @@ export default function RequestDetailsPage() {
                             )}
                         </div>
 
-                        {/* ===== AI Prediction Results ===== */}
-                        {request.aiPredictionStatus && request.aiPredictionStatus !== 'None' && (
-                            <div className="anim-up bg-card rounded-2xl border border-border shadow-sm overflow-hidden" style={{ animationDelay: "140ms" }}>
-                                <div className="h-1 w-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500/40" />
-                                <div className="p-5 sm:p-6">
-                                    <div className="flex items-center gap-2.5 mb-4">
-                                        <span className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                                            <Brain className="w-3.5 h-3.5 text-amber-600" />
-                                        </span>
-                                        <h4 className="text-[14px] font-black text-foreground">نتائج تقييم الذكاء الاصطناعي</h4>
-                                        {/* AI Status Badge */}
-                                        <span className={cn(
-                                            "mr-auto text-[10px] font-bold px-2.5 py-0.5 rounded-full border",
-                                            request.aiPredictionStatus === 'Completed'
-                                                ? "bg-primary/10 text-primary border-primary/20"
-                                                : request.aiPredictionStatus === 'Failed'
-                                                    ? "bg-destructive/10 text-destructive border-red-100"
-                                                    : "bg-primary/10 text-amber-600 border-primary/20"
-                                        )}>
-                                            {request.aiPredictionStatus === 'Completed' ? '✓ مكتمل'
-                                                : request.aiPredictionStatus === 'Failed' ? '✗ فشل'
-                                                : request.aiPredictionStatus === 'Processing' ? '⟳ جاري المعالجة'
-                                                : request.aiPredictionStatus === 'Retrying' ? '↺ إعادة المحاولة'
-                                                : request.aiPredictionStatus}
-                                        </span>
-                                    </div>
-
-                                    {request.aiPredictionStatus === 'Completed' && (
-                                        <div className="space-y-4">
-                                            {/* Score Cards Row */}
-                                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                                                {/* Need Level */}
-                                                {request.aiNeedLevel && (
-                                                    <div className="bg-primary/10 rounded-xl p-4 flex flex-col items-center gap-1 border border-primary/20">
-                                                        <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wider">مستوى الحاجة</span>
-                                                        <span className="text-[22px] font-black text-primary">
-                                                            {request.aiNeedLevel === 'High' ? 'عالي' : request.aiNeedLevel === 'Medium' ? 'متوسط' : request.aiNeedLevel === 'Low' ? 'منخفض' : request.aiNeedLevel}
-                                                        </span>
-                                                        <span className={cn(
-                                                            "w-2.5 h-2.5 rounded-full mt-0.5",
-                                                            request.aiNeedLevel === 'High' ? "bg-red-400" : request.aiNeedLevel === 'Medium' ? "bg-amber-400" : "bg-emerald-400"
-                                                        )} />
-                                                    </div>
-                                                )}
-
-
-
-                                                {/* Method */}
-                                                {request.aiMethod && (
-                                                    <div className="bg-muted rounded-xl p-4 flex flex-col items-center gap-1 border border-border">
-                                                        <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">نموذج الذكاء</span>
-                                                        <Sparkles className="w-5 h-5 text-muted-foreground mt-1" />
-                                                        <span className="text-[11px] font-bold text-muted-foreground text-center">{request.aiMethod}</span>
-                                                    </div>
-                                                )}
-                                            </div>
-
-                                            {/* SHAP Explanation */}
-                                            {request.aiExplanation && (
-                                                <div className="space-y-2">
-                                                    {request.aiExplanation.summary && (
-                                                        <p className="text-[12px] text-muted-foreground font-medium bg-muted rounded-xl px-4 py-3 border border-border">
-                                                            {request.aiExplanation.summary}
-                                                        </p>
-                                                    )}
-                                                    {request.aiExplanation.topFactors && request.aiExplanation.topFactors.length > 0 && (
-                                                        <div className="space-y-1.5">
-                                                            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider px-1">أهم العوامل المؤثرة</p>
-                                                            {request.aiExplanation.topFactors.slice(0, 4).map((factor, i) => (
-                                                                <div key={i} className="flex items-center gap-2.5 p-2.5 bg-muted rounded-lg border border-border">
-                                                                    <span className={cn(
-                                                                        "w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-black shrink-0",
-                                                                        factor.direction === 'positive' ? "bg-emerald-100 text-primary" : "bg-red-100 text-destructive"
-                                                                    )}>
-                                                                        {factor.direction === 'positive' ? '↑' : '↓'}
-                                                                    </span>
-                                                                    <span className="text-[12px] font-semibold text-foreground flex-1">{factor.label || factor.factor}</span>
-                                                                    <span className={cn(
-                                                                        "text-[10px] font-bold px-2 py-0.5 rounded-full",
-                                                                        factor.impact === 'High' ? "bg-destructive/10 text-destructive" : factor.impact === 'Medium' ? "bg-primary/10 text-primary" : "bg-slate-100 text-muted-foreground"
-                                                                    )}>
-                                                                        {factor.impact === 'High' ? 'تأثير عالي' : factor.impact === 'Medium' ? 'تأثير متوسط' : 'تأثير منخفض'}
-                                                                    </span>
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            )}
-                                        </div>
-                                    )}
-
-                                    {/* Pending/Processing State */}
-                                    {['Pending', 'Processing', 'Retrying'].includes(request.aiPredictionStatus || '') && (
-                                        <div className="flex items-center gap-3 p-3 bg-primary/10 rounded-xl border border-primary/20">
-                                            <Loader2 className="w-4 h-4 text-primary animate-spin shrink-0" />
-                                            <p className="text-[12px] font-medium text-primary">جاري تحليل الطلب بالذكاء الاصطناعي، سيظهر التقييم قريباً...</p>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        )}
 
                         {/* ===== Attachments ===== */}
                         {request.attachments && request.attachments.length > 0 && (
@@ -638,7 +536,6 @@ export default function RequestDetailsPage() {
                                 <div className="sm:col-span-2 space-y-3">
                                     {request.attachments.map((att) => {
                                         const FileIcon = getFileIcon(att.fileType);
-                                        const hasOcrData = att.aiOcrData && Object.keys(att.aiOcrData).length > 0;
                                         return (
                                             <div key={att.id} className="bg-card rounded-xl border border-border overflow-hidden">
                                                 {/* Attachment Header */}
@@ -650,18 +547,6 @@ export default function RequestDetailsPage() {
                                                         <p className="text-[12px] font-bold text-foreground truncate">{att.fileName}</p>
                                                         <div className="flex items-center gap-2 mt-0.5 flex-wrap">
                                                             <p className="text-[10px] text-muted-foreground">{att.fileType} • {att.uploadedAt ? new Date(att.uploadedAt).toLocaleDateString('ar-EG') : ""}</p>
-                                                            {/* OCR Status Badge */}
-                                                            {att.aiOcrStatus && att.aiOcrStatus !== 'None' && (
-                                                                <span className={cn(
-                                                                    "text-[9px] font-bold px-2 py-0.5 rounded-full border flex items-center gap-1",
-                                                                    att.aiOcrStatus === 'Completed' ? "bg-primary/10 text-primary border-primary/20"
-                                                                        : att.aiOcrStatus === 'Failed' ? "bg-destructive/10 text-destructive border-red-100"
-                                                                        : "bg-primary/10 text-primary border-primary/20"
-                                                                )}>
-                                                                    <ScanLine className="w-2.5 h-2.5" />
-                                                                    OCR {att.aiOcrStatus === 'Completed' ? 'مكتمل' : att.aiOcrStatus === 'Failed' ? 'فشل' : 'جاري'}
-                                                                </span>
-                                                            )}
                                                         </div>
                                                     </div>
                                                     {att.filePath && (
@@ -671,24 +556,6 @@ export default function RequestDetailsPage() {
                                                         </a>
                                                     )}
                                                 </div>
-
-                                                {/* OCR Data Table */}
-                                                {hasOcrData && (
-                                                    <div className="border-t border-border bg-primary/10/40 p-3">
-                                                        <p className="text-[10px] font-bold text-primary uppercase tracking-wider mb-2 flex items-center gap-1">
-                                                            <Brain className="w-3 h-3" />
-                                                            بيانات مستخرجة بالذكاء الاصطناعي ({att.aiOcrMethod || 'OCR'})
-                                                        </p>
-                                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-                                                            {Object.entries(att.aiOcrData!).map(([key, val]) => (
-                                                                <div key={key} className="flex flex-col gap-0.5 bg-card rounded-lg px-2.5 py-1.5 border border-primary/20">
-                                                                    <span className="text-[9px] font-bold text-amber-400 uppercase tracking-wider">{key.replace(/_/g, ' ')}</span>
-                                                                    <span className="text-[11px] font-semibold text-foreground">{String(val) || '—'}</span>
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                    </div>
-                                                )}
                                             </div>
                                         );
                                     })}

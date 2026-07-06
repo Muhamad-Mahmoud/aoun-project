@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { getAssociationRequestById, acceptAssociationRequest, rejectAssociationRequest } from '../api/associationsApi';
+import { getAssociationRequestById, acceptAssociationRequest, rejectAssociationRequest, completeAssociationRequest } from '../api/associationsApi';
 import type { RequestDetailDto, AcceptRequestDto, RejectRequestDto } from '../types';
 import { logger } from '@/lib/logger';
 
@@ -65,6 +65,20 @@ export const useAssociationRequestDetail = (id: string | number) => {
         }
     };
 
+    const completeRequest = async () => {
+        setIsActionLoading(true);
+        try {
+            await completeAssociationRequest(id);
+            await fetchRequest(); // refresh to update status
+            return true;
+        } catch (err: unknown) {
+            logger.error('Failed to complete request', err);
+            setError('حدث خطأ أثناء إتمام الطلب.');
+            setIsActionLoading(false);
+            return false;
+        }
+    };
+
     return { 
         request, 
         isLoading, 
@@ -72,6 +86,7 @@ export const useAssociationRequestDetail = (id: string | number) => {
         error, 
         refresh: fetchRequest,
         acceptRequest,
-        rejectRequest
+        rejectRequest,
+        completeRequest
     };
 };

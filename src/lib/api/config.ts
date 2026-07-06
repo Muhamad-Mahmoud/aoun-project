@@ -60,6 +60,7 @@ export const API_ENDPOINTS = {
         requestById: (id: string | number) => `/api/Associations/requests/${id}`,
         acceptRequest: (id: string | number) => `/api/Associations/requests/${id}/accept`,
         rejectRequest: (id: string | number) => `/api/Associations/requests/${id}/reject`,
+        completeRequest: (id: string | number) => `/api/Associations/requests/${id}/complete`,
     },
 
     // Dashboard endpoints
