@@ -284,22 +284,36 @@ export function useStreamingChat({
                 logger.info(`Confirmation ${approved ? "approved" : "rejected"} for ID: ${confirmationId}`);
 
                 if (approved) {
-                    // Re-trigger the last user message so the agent can now
-                    // execute the approved tool and continue the loop.
-                    const lastUserMsg = [...messagesRef.current]
-                        .reverse()
-                        .find((m) => m.role === "user");
-                    if (lastUserMsg?.content) {
-                        // Create a history without the pending confirmation AI message
-                        const newHistory = messagesRef.current
-                            .slice(0, -1) // remove AI message
-                            .slice(-20)
-                            .map(m => ({ role: m.role, content: m.content }));
-                        
-                        // Remove the pending AI message with the confirmation UI
-                        setMessages((prev) => prev.slice(0, -1));
-                        await sendMessage(lastUserMsg.content, true, newHistory);
-                    }
+                    // Send an explicit approval message from the user
+                    // We keep the history intact so the LLM sees the confirmation flow.
+                    
+                    let paramsText = "";
+                    
+                    // 1. Remove the confirmation object from the last AI message so the buttons disappear from UI
+                    setMessages((prev) => {
+                        const newMessages = [...prev];
+                        const lastModelMsgIndex = newMessages.length - 1;
+                        if (newMessages[lastModelMsgIndex].role === "model" && newMessages[lastModelMsgIndex].confirmation) {
+                            const conf = newMessages[lastModelMsgIndex].confirmation;
+                            if (conf?.parameters) {
+                                const cleanParams = { ...conf.parameters };
+                                delete cleanParams.thought_process;
+                                paramsText = JSON.stringify(cleanParams);
+                            }
+                            const { confirmation, ...msgWithoutConfirmation } = newMessages[lastModelMsgIndex];
+                            newMessages[lastModelMsgIndex] = msgWithoutConfirmation;
+                        }
+                        return newMessages;
+                    });
+
+                    // 2. The user confirmed, so we simulate the user typing "نعم" with the context args!
+                    // This perfectly matches the prompt's instruction: "كلمات التأكيد: «نعم»... → استدعِ الأداة فوراً"
+                    // And by injecting the args, the LLM doesn't forget the context of the internal tools it ran previously!
+                    const userMsg = paramsText 
+                        ? `نعم، أوافق على تنفيذ العملية بالمعطيات التالية: ${paramsText}` 
+                        : "نعم، أوافق";
+                    await sendMessage(userMsg, false);
+
                 } else {
                     // Rejection — just append a system note, do not re-trigger
                     setMessages((prev) => [

@@ -6,8 +6,9 @@ export async function POST(req: NextRequest) {
         const token = req.cookies.get("auth_token")?.value;
         const body = await req.json();
 
-        // Forward request directly to Hugging Face
-        const targetUrl = "https://muhammadmahmoud-aoun-ai.hf.space/api/ai/chat/stream";
+        // Forward request to local API if configured, otherwise fallback to Hugging Face
+        const baseUrl = process.env.AI_API_URL || "https://muhammadmahmoud-aoun-ai.hf.space";
+        const targetUrl = `${baseUrl.replace(/\/$/, '')}/api/ai/chat/stream`;
         
         const headers: Record<string, string> = {
             "Content-Type": "application/json",
