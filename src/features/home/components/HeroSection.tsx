@@ -114,20 +114,26 @@ export function HeroSection() {
       className="relative z-10 flex flex-col justify-center min-h-[100dvh] -mt-[76px] pt-28 lg:pt-32 pb-16 lg:pb-20 overflow-hidden"
     >
       {/* 1. Background Image with Premium Image Adjustments & Parallax */}
-      <motion.div style={{ y }} className="absolute inset-0 z-0 bg-brand-dark scale-110 origin-top">
-        <Image
-          src="/herobg.png"
-          alt="عون - منصة تربط الأسر المحتاجة بالجمعيات الخيرية"
-          unoptimized={true}
-          fill
-          priority
-          fetchPriority="high"
-          sizes="100vw"
-          className="object-cover object-[15%_20%] lg:object-[15%_center] brightness-[1.05] contrast-[1.05] saturate-[1.10]"
-        />
+      <motion.div style={{ y }} className="absolute inset-0 z-0 bg-brand-dark overflow-hidden">
+        <motion.div
+          animate={{ scale: [1.05, 1.1] }}
+          transition={{ duration: 25, ease: "linear", repeat: Infinity, repeatType: "reverse" }}
+          className="absolute inset-0"
+        >
+          <Image
+            src="/herobg.png"
+            alt="عون - منصة تربط الأسر المحتاجة بالجمعيات الخيرية"
+            unoptimized={true}
+            fill
+            priority
+            fetchPriority="high"
+            sizes="100vw"
+            className="object-cover object-[15%_20%] lg:object-[15%_center] brightness-[1.15] contrast-[1.05] saturate-[1.10]"
+          />
+        </motion.div>
         
         {/* Lighter Gradient (Better visibility of the photo) */}
-        <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/85 via-brand-dark/40 to-transparent mix-blend-multiply pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-brand-dark/70 via-brand-dark/20 to-transparent mix-blend-multiply pointer-events-none" />
         
         {/* Radial Glow behind text */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_50%,_rgba(15,93,70,0.45)_0%,_transparent_65%)] mix-blend-screen pointer-events-none" />
@@ -155,7 +161,7 @@ export function HeroSection() {
               className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-bold text-white shadow-sm backdrop-blur-md self-start"
             >
               <Sparkles className="h-4 w-4 text-golden-orange" />
-              منصة ذكية لخدمة الأسر في مصر
+              منصة موثوقة تربط المحتاجين بالجمعيات
             </motion.div>
 
             {/* Headline */}
@@ -168,9 +174,8 @@ export function HeroSection() {
               كل طلب مساعدة
               <br className="hidden sm:block" />
               يجد طريقه إلى{" "}
-              <span className="title-highlight text-golden-orange relative inline-block mt-1 sm:mt-2">
+              <span className="text-golden-orange font-bold">
                 الجهة المناسبة
-                <span className="title-highlight-underline opacity-70 h-[2px] bottom-1" />
               </span>
             </motion.h1>
 
@@ -179,7 +184,7 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.35 }}
-              className="max-w-[580px] text-[17px] lg:text-[19px] leading-[1.8] text-white/90 font-medium drop-shadow-md mt-4"
+              className="max-w-[550px] text-[17px] lg:text-[19px] leading-[1.8] text-white/90 font-medium drop-shadow-md mt-4"
             >
               منصة ذكية تربط الأسر المحتاجة بالجمعيات المعتمدة، لضمان وصول الدعم بشفافية وأمان.
             </motion.p>
@@ -192,7 +197,7 @@ export function HeroSection() {
               className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-[540px]"
             >
               <Link href="/explore" className="w-full">
-                <Button className="w-full h-14 lg:h-16 rounded-xl text-[16px] lg:text-[17px] font-bold gap-3 bg-warm-green text-white hover:bg-warm-green-dark shadow-[0_8px_24px_rgba(15,93,70,0.4)] transition-all duration-300 hover:scale-[1.03] hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(15,93,70,0.5)] border-none">
+                <Button className="w-full h-14 lg:h-16 rounded-xl text-[16px] lg:text-[17px] font-bold gap-3 bg-warm-green text-white hover:bg-warm-green-dark shadow-[0_8px_24px_rgba(15,93,70,0.4)] transition-all duration-300 hover:scale-[1.02] hover:-translate-y-[3px] hover:shadow-[0_12px_28px_rgba(15,93,70,0.5)] border-none">
                   تبرع وادعم الآن
                   <Heart className="h-5 w-5" />
                 </Button>
@@ -201,7 +206,7 @@ export function HeroSection() {
               <Link href="/register" className="w-full">
                 <Button
                   variant="outline"
-                  className="w-full h-14 lg:h-16 rounded-xl text-[16px] lg:text-[17px] font-bold border border-white/40 bg-white/10 text-white hover:bg-white/20 hover:border-white/60 transition-all duration-300 hover:scale-[1.03] hover:-translate-y-1 backdrop-blur-md shadow-[0_4px_16px_rgba(0,0,0,0.1)]"
+                  className="w-full h-14 lg:h-16 rounded-xl text-[16px] lg:text-[17px] font-bold border border-white/40 bg-white/10 text-white hover:bg-white/20 hover:border-white/60 transition-all duration-300 hover:scale-[1.02] hover:-translate-y-[3px] hover:shadow-lg backdrop-blur-md shadow-[0_4px_16px_rgba(0,0,0,0.1)]"
                 >
                   اطلب مساعدة
                 </Button>

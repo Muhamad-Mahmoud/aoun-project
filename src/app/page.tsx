@@ -5,27 +5,25 @@ import { HeroSection } from "@/features/home/components/HeroSection";
 export const revalidate = 3600;
 
 // Below-the-fold sections — lazy loaded for faster initial paint
-const WhyAounSection = dynamic(() => import("@/features/home/components/WhyAounSection").then(mod => mod.WhyAounSection));
+const AboutSection = dynamic(() => import("@/features/home/components/AboutSection").then(mod => mod.AboutSection));
 const JourneySection = dynamic(() => import("@/features/home/components/JourneySection").then(mod => mod.JourneySection));
 const HowItWorksSection = dynamic(() => import("@/features/home/components/HowItWorksSection").then(mod => mod.HowItWorksSection));
-const PartnersSection = dynamic(() => import("@/features/home/components/PartnersSection").then(mod => mod.PartnersSection));
-const SuccessStoriesSection = dynamic(() => import("@/features/home/components/SuccessStoriesSection").then(mod => mod.SuccessStoriesSection));
+const AssociationCTASection = dynamic(() => import("@/features/home/components/AssociationCTASection").then(mod => mod.AssociationCTASection));
+const ImpactSections = dynamic(() => import("@/features/home/components/ImpactSections").then(mod => mod.ImpactSections));
+const StartJourneySection = dynamic(() => import("@/features/home/components/StartJourneySection").then(mod => mod.StartJourneySection));
 const FAQSection = dynamic(() => import("@/features/home/components/FAQSection").then(mod => mod.FAQSection));
-const CTASection = dynamic(() => import("@/features/home/components/CTASection").then(mod => mod.CTASection));
-
 
 export default function Home() {
     return (
         <div className="flex flex-col gap-0">
             <HeroSection />
-            <WhyAounSection />
-
+            <AboutSection />
             <JourneySection />
             <HowItWorksSection />
-            <PartnersSection />
-            <SuccessStoriesSection />
+            <AssociationCTASection />
+            <ImpactSections />
+            <StartJourneySection />
             <FAQSection />
-            <CTASection />
         </div>
     );
 }

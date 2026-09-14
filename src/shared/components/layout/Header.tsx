@@ -239,7 +239,7 @@ export function Header() {
 				className={[
 					"sticky top-0 z-50 w-full transition-[height,background-color,box-shadow,backdrop-filter,color] duration-500",
 					isScrolled
-						? "bg-white/90 backdrop-blur-2xl shadow-md shadow-slate-200/40 border-b border-slate-200/70 text-foreground"
+						? "bg-[#0a4740]/90 backdrop-blur-2xl shadow-lg shadow-black/10 border-b border-white/10 text-white"
 						: "bg-transparent border-transparent shadow-none text-white",
 				].join(" ")}
 			>
@@ -256,7 +256,7 @@ export function Header() {
 							onClick={(e) => handleNavClick(e, navItems[0])}
 						>
 							<Image
-								src="/logo.png"
+								src="/logo-new.png"
 								alt="عون - منصة العون للأسر المحتاجة"
 								width={131}
 								height={46}
@@ -264,7 +264,7 @@ export function Header() {
 								sizes="131px"
 								className={[
 									"w-auto object-contain transition-[height,transform] duration-300 group-hover:scale-[1.04]",
-									isScrolled ? "h-12" : "h-14",
+									isScrolled ? "h-14" : "h-16",
 								].join(" ")}
 							/>
 						</Link>
@@ -288,20 +288,12 @@ export function Header() {
 											"transition-[color,background-color] duration-200",
 											"focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-warm-green/40",
 											active
-												? (isScrolled ? "text-warm-green" : "text-white drop-shadow-md")
-												: (isScrolled ? "text-foreground/70 hover:text-warm-green hover:bg-warm-green/5" : "text-white/80 hover:text-white hover:bg-white/10 drop-shadow-sm"),
+												? "bg-white/20 text-white font-bold shadow-sm"
+												: "text-white/80 hover:text-white hover:bg-white/10 drop-shadow-sm",
 										].join(" ")}
 									>
 										<span className="relative">
 											{item.label}
-											<span
-												aria-hidden
-												className={[
-													"pointer-events-none absolute -bottom-1 inset-x-0 h-[2px] rounded-full bg-warm-green",
-													"origin-center transition-transform duration-300 ease-out",
-													active ? "scale-x-100" : "scale-x-0",
-												].join(" ")}
-											/>
 										</span>
 									</Link>
 								);
@@ -341,7 +333,7 @@ export function Header() {
 												<span className="text-sm font-bold leading-none max-w-[160px] truncate">
 													{displayName}
 												</span>
-												<ChevronDown className={`w-4 h-4 group-hover:text-foreground group-data-[state=open]:rotate-180 transition ${isScrolled ? 'text-muted-foreground' : 'text-white/80'}`} />
+												<ChevronDown className="w-4 h-4 group-hover:text-white group-data-[state=open]:rotate-180 transition text-white/80" />
 											</div>
 										</Button>
 									</DropdownMenuTrigger>
@@ -391,7 +383,7 @@ export function Header() {
 									<Link href="/login" prefetch>
 										<Button
 											variant="ghost"
-											className={`font-medium text-[15px] px-5 h-11 rounded-xl border transition ${isScrolled ? 'border-border hover:border-warm-green hover:bg-warm-green/5 hover:text-warm-green text-foreground' : 'border-white/30 text-white hover:bg-white/10 hover:border-white/50 backdrop-blur-sm'}`}
+											className={`font-medium text-[15px] px-5 h-11 rounded-xl border transition border-white/30 text-white hover:bg-white/10 hover:border-white/50 backdrop-blur-sm`}
 										>
 											تسجيل الدخول
 										</Button>
@@ -404,7 +396,7 @@ export function Header() {
                                  hover:-translate-y-0.5 active:translate-y-0
                                  transition-[box-shadow,transform] duration-250"
 										>
-											<span className="relative z-10">حساب جديد</span>
+											<span className="relative z-10">إنشاء حساب</span>
 										</Button>
 									</Link>
 								</>
@@ -427,8 +419,7 @@ export function Header() {
 							<span className="relative block w-6 h-6">
 								<Menu
 									className={[
-										"absolute inset-0 w-6 h-6 transition-all duration-300",
-										isScrolled ? "text-foreground" : "text-white drop-shadow-md",
+										"absolute inset-0 w-6 h-6 transition-all duration-300 text-white drop-shadow-md",
 										isMenuOpen
 											? "opacity-0 rotate-90 scale-75"
 											: "opacity-100 rotate-0 scale-100",
@@ -436,8 +427,7 @@ export function Header() {
 								/>
 								<X
 									className={[
-										"absolute inset-0 w-6 h-6 transition-all duration-300",
-										isScrolled ? "text-foreground" : "text-white drop-shadow-md",
+										"absolute inset-0 w-6 h-6 transition-all duration-300 text-white drop-shadow-md",
 										isMenuOpen
 											? "opacity-100 rotate-0 scale-100"
 											: "opacity-0 -rotate-90 scale-75",
