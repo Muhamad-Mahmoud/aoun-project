@@ -11,18 +11,13 @@ export const useAssociationRequestDetail = (id: string | number) => {
     const [isActionLoading, setIsActionLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    console.log(`[Hook] useAssociationRequestDetail initialized for id: ${id}`);
-
     const fetchRequest = useCallback(async () => {
-        console.log(`[Hook] fetchRequest starting for id: ${id}`);
         setIsLoading(true);
         try {
             const data = await getAssociationRequestById(id);
-            console.log(`[Hook] fetchRequest success for id: ${id}:`, data);
             setRequest(data);
             setError(null);
         } catch (err: unknown) {
-            console.error(`[Hook] Failed to fetch request detail for id ${id}`, err);
             logger.error(`Failed to fetch request detail for id ${id}`, err);
             setError('فشل تحميل تفاصيل الطلب.');
             setRequest(null);

@@ -1,7 +1,8 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, type NextRequest } from 'next/server';
 import { cookies } from 'next/headers';
 import { API_ENDPOINTS } from '@/lib/api/config';
 import { getAuthCookieOptions } from '@/lib/security/authCookies';
+import { checkServerRateLimit, RATE_LIMIT_PRESETS } from '@/lib/security/serverRateLimiter';
 
 function clearAuthCookies(response: NextResponse) {
     response.cookies.delete('auth_token');
@@ -9,7 +10,17 @@ function clearAuthCookies(response: NextResponse) {
     return response;
 }
 
-export async function POST() {
+export async function POST(request: NextRequest) {
+    // ENFORCING server-side rate limit (client helper is UX-only, never trusted).
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
+    const rl = checkServerRateLimit(`auth:refresh:${ip}`, RATE_LIMIT_PRESETS.auth);
+    if (!rl.allowed) {
+        return NextResponse.json(
+            { message: 'Too many attempts, please try again later.' },
+            { status: 429, headers: { 'Retry-After': String(rl.resetAfterSec) } },
+        );
+    }
+
     try {
         const cookieStore = await cookies();
         const authToken = cookieStore.get('auth_token')?.value ?? '';

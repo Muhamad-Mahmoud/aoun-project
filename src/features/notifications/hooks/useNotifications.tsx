@@ -119,8 +119,7 @@ export function useNotifications(userType: string) {
                 });
 
                 await newConnection.start();
-                console.log("SignalR Notifications Connected.");
-                
+
                 if (isSubscribed) {
                     setConnection(newConnection);
                 } else {

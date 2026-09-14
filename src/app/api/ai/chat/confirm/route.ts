@@ -13,15 +13,15 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        // Forward request to local API if configured, otherwise fallback to Hugging Face
-        const baseUrl = process.env.AI_API_URL || "https://muhammadmahmoud-aoun-ai.hf.space";
-        const targetUrl = `${baseUrl.replace(/\/$/, '')}/api/ai/chat/confirm?confirmation_id=${encodeURIComponent(confirmationId)}&approved=${approved}`;
-        
+        // AI backend — server-only env (never NEXT_PUBLIC). Fallback only for local dev.
+        const baseUrl = (process.env.AI_API_URL || 'http://127.0.0.1:8000').replace(/\/$/, '');
+        const targetUrl = `${baseUrl}/api/ai/chat/confirm?confirmation_id=${encodeURIComponent(confirmationId)}&approved=${approved}`;
+
         const hfResponse = await fetch(targetUrl, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "X-API-Key": "dev-awn-ai-service-key-2026",
+                ...(process.env.AI_API_KEY ? { "X-API-Key": process.env.AI_API_KEY } : {}),
             },
         });
 

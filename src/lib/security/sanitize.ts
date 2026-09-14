@@ -1,12 +1,17 @@
 /**
  * Input Sanitization Utilities
- * Lightweight XSS prevention without dependencies
+ *
+ * - sanitizeHtml: escapes the 5 HTML-significant chars (& < > " ').
+ *   It deliberately does NOT escape `/` — escaping slashes corrupts URLs
+ *   and is unnecessary for XSS prevention.
+ * - sanitizeUrl: allow-list for href/src values (http/https/mailto/tel/relative only).
+ * - sanitizeLogData / sanitizeEmail / sanitizePhone / sanitizeText: unchanged helpers.
+ *
+ * For rendered Markdown/HTML always use <SafeMarkdown /> (DOMPurify +
+ * rehype-sanitize) instead of hand-rolled regexes — entity escaping alone
+ * cannot neutralize `javascript:` URLs, event handlers, or <svg>/<math> vectors.
  */
 
-/**
- * Sanitize HTML to prevent XSS attacks
- * Escapes dangerous characters
- */
 export function sanitizeHtml(input: string): string {
     if (!input) return '';
 
@@ -15,8 +20,20 @@ export function sanitizeHtml(input: string): string {
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#x27;')
-        .replace(/\//g, '&#x2F;');
+        .replace(/'/g, '&#x27;');
+}
+
+const SAFE_URL = /^(https?:\/\/|mailto:|tel:|\/|#)/i;
+
+/**
+ * Allow-list URL sanitizer for href/src attributes.
+ * Returns '#' for blocked schemes (javascript:, data:, vbscript:, blob: from user input…).
+ */
+export function sanitizeUrl(url: string | undefined | null): string {
+    if (!url) return '#';
+    const trimmed = url.trim();
+    if (SAFE_URL.test(trimmed)) return trimmed;
+    return '#';
 }
 
 /**
@@ -25,7 +42,7 @@ export function sanitizeHtml(input: string): string {
  */
 export function sanitizeLogData(
     data: unknown,
-    sensitiveFields: string[] = ['password', 'token', 'refreshToken', 'accessToken', 'secret', 'confirmPassword']
+    sensitiveFields: string[] = ['password', 'token', 'refreshToken', 'accessToken', 'secret', 'confirmPassword'],
 ): unknown {
     if (!data || typeof data !== 'object') {
         return data;
@@ -33,14 +50,14 @@ export function sanitizeLogData(
 
     // Handle arrays
     if (Array.isArray(data)) {
-        return data.map(item => sanitizeLogData(item, sensitiveFields));
+        return data.map((item) => sanitizeLogData(item, sensitiveFields));
     }
 
     // Handle objects
     const sanitized: Record<string, unknown> = {};
     for (const [key, value] of Object.entries(data as Record<string, unknown>)) {
         const lowerKey = key.toLowerCase();
-        const isSensitive = sensitiveFields.some(field => lowerKey.includes(field.toLowerCase()));
+        const isSensitive = sensitiveFields.some((field) => lowerKey.includes(field.toLowerCase()));
 
         if (isSensitive) {
             sanitized[key] = '***REDACTED***';

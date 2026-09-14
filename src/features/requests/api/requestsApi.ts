@@ -60,11 +60,6 @@ export async function createRequest(payload: CreateAidRequestPayload): Promise<A
         annualPayment: 'AnnualPayment',
     };
 
-    // Log the raw payload for deep debugging only in development
-    if (process.env.NODE_ENV === 'development') {
-        console.log('🔍 [DEBUG] RAW PAYLOAD:', JSON.stringify(payload, null, 2));
-    }
-
     Object.entries(payload).forEach(([key, value]) => {
         if (key === 'attachments') return;
         
@@ -122,12 +117,6 @@ export async function createRequest(payload: CreateAidRequestPayload): Promise<A
         });
     }
 
-    // Diagnostic logging of the final FormData only in dev
-    if (process.env.NODE_ENV === 'development') {
-        console.log('📤 [DEBUG] FINAL FORMDATA BEING SENT:');
-        formData.forEach((val, key) => console.log(`  - ${key}: ${val instanceof File ? `[File] ${val.name}` : val}`));
-    }
-
     try {
         const response = await apiClient.post<ApiResponse<AidRequest>>(
             API_ENDPOINTS.requests.base,
@@ -135,20 +124,7 @@ export async function createRequest(payload: CreateAidRequestPayload): Promise<A
         );
         return response.data.data;
     } catch (error: any) {
-        // Deep diagnostic logging (Development only to avoid leaking details in Prod)
         const apiError = error as ApiError;
-        
-        if (process.env.NODE_ENV === 'development') {
-            console.error('❌ [CRITICAL] Request submission failed:', {
-                message: apiError.message,
-                statusCode: apiError.statusCode,
-                errors: apiError.errors ? JSON.stringify(apiError.errors, null, 2) : 'None'
-            });
-
-            if (apiError.errors) {
-                console.warn('Backend reported specific validation errors:', apiError.errors);
-            }
-        }
 
         // If the backend has a specific inner exception message, it will be included in apiError.message
         let errorMessage = apiError.message || 'حدث خطأ أثناء حفظ البيانات.';

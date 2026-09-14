@@ -3,18 +3,34 @@ import "./src/env"; //  CRITICAL: Force Env Validation on Build/Start
 
 const isProd = process.env.NODE_ENV === "production";
 
+/**
+ * Helper: safely parse a URL and return its origin + hostname/protocol.
+ * Returns null if invalid — caller must handle fallback.
+ */
+function safeParseOrigin(raw: string | undefined): { origin: string; hostname: string; protocol: 'http' | 'https' } | null {
+  if (!raw) return null;
+  try {
+    const u = new URL(raw);
+    const protocol = u.protocol === 'http:' ? 'http' as const : 'https' as const;
+    return { origin: u.origin, hostname: u.hostname, protocol };
+  } catch {
+    return null;
+  }
+}
+
+// Derive allowed backends from env — ZERO hardcoded domains in production
+const apiOrigin = safeParseOrigin(process.env.API_URL);
+const siteOrigin = safeParseOrigin(process.env.APP_URL || process.env.SITE_URL || process.env.NEXT_PUBLIC_SITE_URL);
+
 const nextConfig: NextConfig = {
   // Security checks
   productionBrowserSourceMaps: false, //  CRITICAL: Never expose source code in production
 
-  // Security headers
+  // Security headers — production hardened.
+  // NOTE: Content-Security-Policy is set DYNAMICALLY per-request in src/proxy.ts
+  // (per-request nonce via buildCsp). Do NOT add a static CSP here — duplicate
+  // CSP headers AND-combine in browsers and would break pages.
   async headers() {
-    // CSP connect-src: in production only allow 'self' (all calls go through /api/proxy).
-    // In development, allow direct local backend access for easier debugging.
-    const devBackends = !isProd
-      ? 'http://aounn.runasp.net https://aounn.runasp.net'
-      : '';
-
     return [
       {
         source: "/:path*",
@@ -33,51 +49,35 @@ const nextConfig: NextConfig = {
           },
           {
             key: "Permissions-Policy",
-            // Only allow camera/mic if explicitly needed; restrict everything else
             value: "camera=(), microphone=(self), geolocation=(), payment=(), usb=()",
-          },
-          {
-            key: "Content-Security-Policy",
-            // connect-src: only 'self' in prod — all API calls go through the Next.js proxy,
-            // so the real backend URL is NEVER needed by the browser.
-            value: [
-              "default-src 'self'",
-              "script-src 'self' 'unsafe-inline'",
-              "style-src 'self' 'unsafe-inline'",
-              // Images from DiceBear (avatars) and main API
-              `img-src 'self' data: blob: https://api.dicebear.com http://aounn.runasp.net https://aounn.runasp.net`,
-              "font-src 'self' data:",
-              "frame-ancestors 'none'",
-              // Browser only ever connects to its own origin (Next.js proxy handles the rest)
-              `connect-src 'self' http://aounn.runasp.net https://aounn.runasp.net https://muhammadmahmoud-aoun-ai.hf.space ${devBackends}`,
-            ].join('; ').replace(/\s+/g, ' ').trim(),
           },
         ],
       },
     ];
   },
-  // Image optimization
+  // Image optimization — derive remotePatterns from env, no hardcoded hosts
   images: {
     formats: ["image/avif", "image/webp"],
+    // Allow dicebear always; allow API host dynamically (protocol from env)
     remotePatterns: [
-      // Only external image CDNs allowed — backend images served via /api/proxy
       {
         protocol: "https",
-        hostname: "api.dicebear.com", // Avatar service
+        hostname: "api.dicebear.com",
       },
-      {
-        protocol: "http",
-        hostname: "aounn.runasp.net",
-      },
-      {
-        protocol: "https",
-        hostname: "aounn.runasp.net",
-      },
-      // Development-only: local backend direct image access
-      ...(!isProd ? [
-        { protocol: "http" as const, hostname: "aounn.runasp.net" },
-        { protocol: "https" as const, hostname: "aounn.runasp.net" },
-      ] : []),
+      ...(apiOrigin
+        ? [{ protocol: apiOrigin.protocol, hostname: apiOrigin.hostname } as const]
+        : []),
+      // In non-prod, also allow site origin if different from API
+      ...(!isProd && siteOrigin && siteOrigin.hostname !== apiOrigin?.hostname
+        ? [{ protocol: siteOrigin.protocol, hostname: siteOrigin.hostname } as const]
+        : []),
+      // Dev-only: localhost for local backend
+      ...(!isProd
+        ? ([
+            { protocol: "http" as const, hostname: "127.0.0.1" },
+            { protocol: "http" as const, hostname: "localhost" },
+          ] as const)
+        : []),
     ],
   },
   // Performance optimizations

@@ -553,7 +553,14 @@ export default function RequestDetailPage() {
                                                                 </div>
                                                             </div>
                                                             <a
-                                                                href={att.filePath ? (att.filePath.startsWith('http') ? att.filePath : `${process.env.NEXT_PUBLIC_API_URL || ''}/${att.filePath.replace(/\\/g, '/')}`) : (att.url || '#')}
+                                                                href={(() => {
+                                                                    const raw = att.filePath || att.url || '#';
+                                                                    if (!raw || raw === '#') return '#';
+                                                                    if (raw.startsWith('http://') || raw.startsWith('https://')) return raw;
+                                                                    // Client-safe: proxy via Next.js BFF so backend URL never leaks (no NEXT_PUBLIC_)
+                                                                    const clean = raw.replace(/\\/g, '/').replace(/^\//, '');
+                                                                    return `/api/proxy/${clean}`;
+                                                                })()}
                                                                 target="_blank"
                                                                 rel="noopener noreferrer"
                                                                 className="w-8 h-8 rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-white flex items-center justify-center transition-colors shrink-0"

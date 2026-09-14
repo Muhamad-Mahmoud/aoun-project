@@ -1,213 +1,281 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import * as signalR from '@microsoft/signalr';
 import { chatApi, ChatMessageDto } from '../api/chatApi';
+import { mergeMessages, type ChatMessage } from '../utils/chatMerge';
 import { useAuthContext } from '@/shared/providers';
+
+export type { ChatMessage };
+export { mergeMessages };
+
+const RECONNECT_DELAYS = [0, 2000, 5000, 10_000, 30_000];
 
 export function useChat(assistanceRequestId: number) {
     const { user } = useAuthContext();
-    const [messages, setMessages] = useState<ChatMessageDto[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [messages, setMessages] = useState<ChatMessage[]>([]);
+    const [historyFor, setHistoryFor] = useState<number | null>(null);
+    // Derived loading flag (avoids synchronous setState inside effects).
+    const isLoading = historyFor !== assistanceRequestId;
     const [isConnected, setIsConnected] = useState(false);
     const [isOtherTyping, setIsOtherTyping] = useState(false);
     const connectionRef = useRef<signalR.HubConnection | null>(null);
-    const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const typingThrottleRef = useRef(0);
+    const currentRequestRef = useRef(assistanceRequestId);
 
-    // Fetch initial messages
+    // Keep the ref in sync without writing during render (react-hooks/refs).
+    useEffect(() => {
+        currentRequestRef.current = assistanceRequestId;
+    }, [assistanceRequestId]);
+
+    const markReadIfNeeded = useCallback(
+        (list: ChatMessageDto[]) => {
+            if (!user) return;
+            const hasUnread = list.some((m) => !m.isRead && m.senderId !== user.id);
+            if (hasUnread) chatApi.markAsRead(assistanceRequestId).catch(() => {});
+        },
+        [assistanceRequestId, user],
+    );
+
+    const refetch = useCallback(async () => {
+        try {
+            const data = await chatApi.getMessages(assistanceRequestId);
+            setMessages((prev) => mergeMessages(prev, data));
+            markReadIfNeeded(data);
+        } catch {
+            // Keep stale messages on failure (offline-friendly).
+        }
+    }, [assistanceRequestId, markReadIfNeeded]);
+
+    // Initial history load
     useEffect(() => {
         if (!user) return;
-        setIsLoading(true);
-        chatApi.getMessages(assistanceRequestId)
-            .then(data => {
-                setMessages(data);
-                const hasUnread = data.some(m => !m.isRead && m.senderId !== user.id);
-                if (hasUnread) chatApi.markAsRead(assistanceRequestId).catch(console.error);
+        let cancelled = false;
+        chatApi
+            .getMessages(assistanceRequestId)
+            .then((data) => {
+                if (cancelled) return;
+                setMessages((prev) => mergeMessages(prev, data));
+                markReadIfNeeded(data);
             })
-            .catch(err => console.error("Failed to load chat messages", err))
-            .finally(() => setIsLoading(false));
-    }, [assistanceRequestId, user]);
+            .catch(() => {})
+            .finally(() => {
+                if (!cancelled) setHistoryFor(assistanceRequestId);
+            });
+        return () => {
+            cancelled = true;
+        };
+    }, [assistanceRequestId, user, markReadIfNeeded]);
 
-    // Listen for global notification events to instantly refetch chat (workaround for ChatHub issues)
+    // Single SignalR connection (StrictMode-safe via connectionRef + aborted flag).
+    // No fixed-interval polling: refetch only on reconnect + tab-visible (stale-while-reconnect).
     useEffect(() => {
-        const handleNewMessageNotification = (e: any) => {
-            if (e.detail?.requestId == assistanceRequestId || e.detail?.requestId === String(assistanceRequestId)) {
-                chatApi.getMessages(assistanceRequestId).then(data => {
-                    setMessages(data);
-                    const hasUnread = data.some(m => !m.isRead && m.senderId !== user?.id);
-                    if (hasUnread) chatApi.markAsRead(assistanceRequestId).catch(console.error);
-                }).catch(console.error);
+        if (!user) return;
+        let aborted = false;
+
+        const handleReceiveMessage = (message: ChatMessageDto) => {
+            if (currentRequestRef.current !== assistanceRequestId) return;
+            if (message.assistanceRequestId !== assistanceRequestId) return;
+            setMessages((prev) => {
+                // Dedupe by server id
+                if (prev.some((m) => !m.pending && m.id === message.id)) return prev;
+                // Reconcile an optimistic temp (same sender + text) with the server echo
+                const tempIdx = prev.findIndex(
+                    (m) => m.pending && m.senderId === message.senderId && m.message === message.message,
+                );
+                if (tempIdx >= 0) {
+                    const next = [...prev];
+                    next[tempIdx] = { ...message };
+                    return next;
+                }
+                return [...prev, { ...message }];
+            });
+            if (message.senderId !== user.id) {
+                setIsOtherTyping(false);
+                chatApi.markAsRead(assistanceRequestId).catch(() => {});
             }
         };
-        window.addEventListener("chatMessageReceived", handleNewMessageNotification);
-        return () => window.removeEventListener("chatMessageReceived", handleNewMessageNotification);
-    }, [assistanceRequestId, user]);
 
-    // Failsafe polling every 5 seconds to ensure absolute reliability
-    useEffect(() => {
-        if (!user) return;
-        const interval = setInterval(() => {
-            chatApi.getMessages(assistanceRequestId).then(data => {
-                setMessages(prev => {
-                    if (data.length !== prev.length) {
-                        const hasUnread = data.some(m => !m.isRead && m.senderId !== user.id);
-                        if (hasUnread) chatApi.markAsRead(assistanceRequestId).catch(console.error);
-                        return data;
-                    }
-                    return prev;
-                });
-            }).catch(() => {});
-        }, 5000);
-        return () => clearInterval(interval);
-    }, [assistanceRequestId, user]);
-
-    // Setup SignalR connection - using ref to survive StrictMode double-invoke
-    useEffect(() => {
-        if (!user) return;
-
-        // If already connected, just join the group for this request
-        if (connectionRef.current?.state === signalR.HubConnectionState.Connected) {
-            connectionRef.current.invoke('JoinRequestChatGroup', assistanceRequestId).catch(console.error);
-            setIsConnected(true);
-
-            const handleReceiveMessage = (message: ChatMessageDto) => {
-                setMessages(prev => [...prev, message]);
-                if (user && message.senderId !== user.id) {
-                    setIsOtherTyping(false); // Stop typing when message received
-                    chatApi.markAsRead(assistanceRequestId).catch(console.error);
-                }
-            };
-
-            const handleUserTyping = (userId: string, isTyping: boolean) => {
-                if (user && userId !== user.id) {
-                    setIsOtherTyping(isTyping);
-                    // Auto-reset typing after 5 seconds of inactivity
-                    if (isTyping) {
-                        if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
-                        typingTimeoutRef.current = setTimeout(() => setIsOtherTyping(false), 5000);
-                    }
-                }
-            };
-
-            connectionRef.current.on('ReceiveMessage', handleReceiveMessage);
-            connectionRef.current.on('UserTyping', handleUserTyping);
-            
-            return () => {
-                connectionRef.current?.invoke('LeaveRequestChatGroup', assistanceRequestId).catch(console.error);
-                connectionRef.current?.off('ReceiveMessage', handleReceiveMessage);
-                connectionRef.current?.off('UserTyping', handleUserTyping);
-            };
-        }
-
-        let aborted = false;
+        const handleUserTyping = (userId: string, isTyping: boolean) => {
+            if (userId === user.id) return;
+            setIsOtherTyping(isTyping);
+            if (isTyping) {
+                if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+                typingTimeoutRef.current = setTimeout(() => setIsOtherTyping(false), 5000);
+            }
+        };
 
         const connect = async () => {
             try {
-                const sessionRes = await fetch('/api/auth/session');
-                const { token } = await sessionRes.json();
+                // Reuse existing connection for a new request group
+                if (connectionRef.current?.state === signalR.HubConnectionState.Connected) {
+                    await connectionRef.current.invoke('JoinRequestChatGroup', assistanceRequestId);
+                    setIsConnected(true);
+                    connectionRef.current.on('ReceiveMessage', handleReceiveMessage);
+                    connectionRef.current.on('UserTyping', handleUserTyping);
+                    return () => {
+                        connectionRef.current?.invoke('LeaveRequestChatGroup', assistanceRequestId).catch(() => {});
+                        connectionRef.current?.off('ReceiveMessage', handleReceiveMessage);
+                        connectionRef.current?.off('UserTyping', handleUserTyping);
+                    };
+                }
 
+                const sessionRes = await fetch('/api/auth/session');
+                const { token } = await sessionRes.json().catch(() => ({ token: '' }));
                 if (aborted) return;
 
                 const hub = new signalR.HubConnectionBuilder()
                     .withUrl('/api/proxy/hubs/chat', {
                         accessTokenFactory: () => token || '',
-                        // Force LongPolling so the proxy can handle it (no WebSocket upgrade needed)
+                        // Force LongPolling so the edge proxy can handle it (no WebSocket upgrade needed)
                         transport: signalR.HttpTransportType.LongPolling,
                     })
-                    .withAutomaticReconnect()
+                    .withAutomaticReconnect(RECONNECT_DELAYS)
                     .build();
 
-                hub.onclose(() => setIsConnected(false));
-                hub.onreconnecting(() => setIsConnected(false));
-                hub.onreconnected(() => setIsConnected(true));
-
-                await hub.start();
-                if (aborted) { hub.stop(); return; }
-
-                connectionRef.current = hub;
-                console.log('ChatHub connected via LongPolling');
-
-                await hub.invoke('JoinRequestChatGroup', assistanceRequestId);
-                setIsConnected(true);
-
-                const handleReceiveMessage = (message: ChatMessageDto) => {
-                    setMessages(prev => [...prev, message]);
-                    if (user && message.senderId !== user.id) {
-                        setIsOtherTyping(false);
-                        chatApi.markAsRead(assistanceRequestId).catch(console.error);
+                hub.onclose(() => {
+                    if (!aborted) setIsConnected(false);
+                });
+                hub.onreconnecting(() => {
+                    if (!aborted) setIsConnected(false);
+                });
+                hub.onreconnected(async () => {
+                    if (aborted) return;
+                    setIsConnected(true);
+                    try {
+                        await hub.invoke('JoinRequestChatGroup', currentRequestRef.current);
+                    } catch {
+                        // Will retry on next reconnect cycle
                     }
-                };
-
-                const handleUserTyping = (userId: string, isTyping: boolean) => {
-                    if (user && userId !== user.id) {
-                        setIsOtherTyping(isTyping);
-                        if (isTyping) {
-                            if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
-                            typingTimeoutRef.current = setTimeout(() => setIsOtherTyping(false), 5000);
-                        }
+                    // Single refetch to heal missed messages (instead of interval polling)
+                    try {
+                        const data = await chatApi.getMessages(currentRequestRef.current);
+                        setMessages((prev) => mergeMessages(prev, data));
+                    } catch {
+                        // ignore
                     }
-                };
+                });
 
                 hub.on('ReceiveMessage', handleReceiveMessage);
                 hub.on('UserTyping', handleUserTyping);
 
-            } catch (err) {
-                if (!aborted) {
-                    console.error('ChatHub connection failed:', err);
-                    setIsConnected(false);
+                await hub.start();
+                if (aborted) {
+                    await hub.stop().catch(() => {});
+                    return;
                 }
+
+                connectionRef.current = hub;
+                await hub.invoke('JoinRequestChatGroup', assistanceRequestId);
+                if (!aborted) setIsConnected(true);
+            } catch {
+                if (!aborted) setIsConnected(false);
             }
         };
 
         connect();
 
+        // Heal-on-visible: refetch once when tab becomes visible (missed-message healing without polling)
+        const onVisible = () => {
+            if (document.visibilityState === 'visible') refetch();
+        };
+        document.addEventListener('visibilitychange', onVisible);
+
         return () => {
             aborted = true;
-            if (connectionRef.current) {
-                connectionRef.current.invoke('LeaveRequestChatGroup', assistanceRequestId).catch(console.error);
-                connectionRef.current.off('ReceiveMessage');
-                connectionRef.current.off('UserTyping');
-                connectionRef.current.stop().then(() => {
-                    connectionRef.current = null;
-                    setIsConnected(false);
-                });
+            document.removeEventListener('visibilitychange', onVisible);
+            if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+            const hub = connectionRef.current;
+            if (hub) {
+                hub.invoke('LeaveRequestChatGroup', assistanceRequestId).catch(() => {});
+                hub.off('ReceiveMessage', handleReceiveMessage);
+                hub.off('UserTyping', handleUserTyping);
+                // Keep shared connection alive for other hooks; only stop if no listeners remain.
+                // Here: stop is safe because each useChat owns its lifecycle per request view.
+                hub.stop()
+                    .then(() => {
+                        if (connectionRef.current === hub) connectionRef.current = null;
+                        setIsConnected(false);
+                    })
+                    .catch(() => {});
             }
         };
-    }, [user, assistanceRequestId]);
+    }, [user, assistanceRequestId, refetch]);
 
-    const sendMessage = useCallback(async (text: string): Promise<boolean> => {
-        // Try SignalR first
-        const hub = connectionRef.current;
-        if (hub?.state === signalR.HubConnectionState.Connected) {
+    const sendMessage = useCallback(
+        async (text: string): Promise<boolean> => {
+            const trimmed = text.trim();
+            if (!trimmed || !user) return false;
+
+            const clientId = crypto.randomUUID();
+            const optimistic: ChatMessage = {
+                id: -Date.now(),
+                assistanceRequestId,
+                senderId: user.id,
+                senderName: user.name ?? '',
+                message: trimmed,
+                createdAt: new Date().toISOString(),
+                isRead: true,
+                clientId,
+                pending: true,
+            };
+            setMessages((prev) => [...prev, optimistic]);
+
+            // Prefer SignalR; server echo reconciles the optimistic row via ReceiveMessage.
+            const hub = connectionRef.current;
+            if (hub?.state === signalR.HubConnectionState.Connected) {
+                try {
+                    await hub.invoke('SendMessage', { assistanceRequestId, message: trimmed, clientMessageId: clientId });
+                    return true;
+                } catch {
+                    // Fall through to REST fallback below
+                }
+            }
+
+            // REST fallback (offline / hub down): replace optimistic row with the real one.
             try {
-                await hub.invoke('SendMessage', { assistanceRequestId, message: text });
+                const real = await chatApi.sendMessage({ assistanceRequestId, message: trimmed });
+                setMessages((prev) =>
+                    prev.map((m) => (m.clientId === clientId ? { ...real } : m)),
+                );
                 return true;
-            } catch (err) {
-                console.error('SignalR send failed, will not fall back:', err);
+            } catch {
+                setMessages((prev) =>
+                    prev.map((m) => (m.clientId === clientId ? { ...m, pending: false, failed: true } : m)),
+                );
                 return false;
             }
-        }
+        },
+        [assistanceRequestId, user],
+    );
 
-        // Fallback: send via REST API if SignalR is not ready
-        console.warn('SignalR not connected, sending via REST API');
-        try {
-            const newMsg = await chatApi.sendMessage({ assistanceRequestId, message: text });
-            setMessages(prev => [...prev, newMsg]);
-            return true;
-        } catch (err) {
-            console.error('REST API send also failed:', err);
-            return false;
-        }
-    }, [assistanceRequestId]);
+    /** Retry a failed optimistic message. */
+    const retryMessage = useCallback(
+        async (clientId: string): Promise<boolean> => {
+            const msg = messages.find((m) => m.clientId === clientId);
+            if (!msg) return false;
+            setMessages((prev) => prev.filter((m) => m.clientId !== clientId));
+            return sendMessage(msg.message);
+        },
+        [messages, sendMessage],
+    );
 
-    const sendTypingStatus = useCallback(async (isTyping: boolean) => {
-        const hub = connectionRef.current;
-        if (hub?.state === signalR.HubConnectionState.Connected) {
-            try {
-                await hub.invoke('SendTypingStatus', assistanceRequestId, isTyping);
-            } catch (err) {
-                console.error('Failed to send typing status:', err);
+    const sendTypingStatus = useCallback(
+        async (isTyping: boolean) => {
+            // Throttle typing events: at most 1 per 1.5s, plus trailing "stopped" event.
+            const now = Date.now();
+            if (isTyping && now - typingThrottleRef.current < 1500) return;
+            typingThrottleRef.current = now;
+            const hub = connectionRef.current;
+            if (hub?.state === signalR.HubConnectionState.Connected) {
+                try {
+                    await hub.invoke('SendTypingStatus', assistanceRequestId, isTyping);
+                } catch {
+                    // Typing presence is best-effort; never surface to the user.
+                }
             }
-        }
-    }, [assistanceRequestId]);
+        },
+        [assistanceRequestId],
+    );
 
     return {
         messages,
@@ -215,6 +283,8 @@ export function useChat(assistanceRequestId: number) {
         isConnected,
         isOtherTyping,
         sendMessage,
+        retryMessage,
+        refresh: refetch,
         sendTypingStatus,
     };
 }

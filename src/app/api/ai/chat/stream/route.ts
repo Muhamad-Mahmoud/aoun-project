@@ -6,13 +6,13 @@ export async function POST(req: NextRequest) {
         const token = req.cookies.get("auth_token")?.value;
         const body = await req.json();
 
-        // Forward request to local API if configured, otherwise fallback to Hugging Face
-        const baseUrl = process.env.AI_API_URL || "https://muhammadmahmoud-aoun-ai.hf.space";
-        const targetUrl = `${baseUrl.replace(/\/$/, '')}/api/ai/chat/stream`;
-        
+        // AI backend — server-only env (never NEXT_PUBLIC). Fallback only for local dev.
+        const baseUrl = (process.env.AI_API_URL || 'http://127.0.0.1:8000').replace(/\/$/, '');
+        const targetUrl = `${baseUrl}/api/ai/chat/stream`;
+
         const headers: Record<string, string> = {
             "Content-Type": "application/json",
-            "X-API-Key": "dev-awn-ai-service-key-2026", // The current API Key expected by Aoun-Ai
+            ...(process.env.AI_API_KEY ? { "X-API-Key": process.env.AI_API_KEY } : {}),
         };
 
         // Attach JWT Token if available to allow identity propagation to backend tools

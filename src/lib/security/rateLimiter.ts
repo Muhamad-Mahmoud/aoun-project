@@ -1,7 +1,11 @@
 /**
- * Client-Side Rate Limiter
- * Lightweight in-memory throttling for sensitive operations
- * Prevents basic brute-force attacks without server load
+ * Client-Side Rate Limiter (UX-ONLY — never a security control)
+ *
+ * Shows friendly "slow down" hints before hitting the network. The ENFORCING
+ * limiter lives server-side: src/lib/security/serverRateLimiter.ts (used by
+ * src/proxy.ts + app/api/auth/refresh/route.ts). In-memory per-tab state is
+ * intentionally ephemeral; attackers bypass it trivially, so the backend
+ * (.NET throttling) remains the source of truth.
  */
 
 interface RateLimitEntry {

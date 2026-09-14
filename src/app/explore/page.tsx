@@ -27,15 +27,17 @@ export default function ExplorePage() {
         return Math.min(100, Math.round((current / target) * 100));
     };
 
+    // Use shared hardened helper inline to avoid extra import in client component
+    // (mirrors src/shared/utils/image.ts but kept local to avoid server env leakage)
     const getSecureImageUrl = (url: string | null) => {
         if (!url) return '';
-        
-        let targetUrl = url;
-        if (!url.startsWith('http')) {
-            targetUrl = `http://aounn.runasp.net/uploads/${url.replace(/^\/?(uploads\/)?/, '')}`;
+        if (url.startsWith('http://') || url.startsWith('https://')) {
+            return `/_next/image?url=${encodeURIComponent(url)}&w=1080&q=75`;
         }
-        
-        return `/_next/image?url=${encodeURIComponent(targetUrl)}&w=1080&q=75`;
+        const cleanPath = url.replace(/^\/?(uploads\/)?/, '');
+        // Client-safe: proxy via /api/proxy (backend URL never in bundle)
+        const proxyPath = `/api/proxy/uploads/${cleanPath}`;
+        return `/_next/image?url=${encodeURIComponent(proxyPath)}&w=1080&q=75`;
     };
 
     return (

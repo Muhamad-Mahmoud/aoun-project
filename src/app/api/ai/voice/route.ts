@@ -6,7 +6,9 @@ import { NextRequest, NextResponse } from 'next/server';
  * Uses /api/ai/voice/stream to get SSE back instead of a plain JSON response.
  */
 export async function POST(request: NextRequest) {
-    const AI_API_URL = (process.env.AI_API_URL || 'http://127.0.0.1:8000').replace('localhost', '127.0.0.1');
+    const AI_API_URL = (process.env.AI_API_URL || 'http://127.0.0.1:8000')
+        .replace('localhost', '127.0.0.1')
+        .replace(/\/$/, '');
     const targetUrl = `${AI_API_URL}/api/ai/voice/stream`;
 
     try {
@@ -23,10 +25,6 @@ export async function POST(request: NextRequest) {
             if (token) {
                 outgoing.append('access_token', token.value);
             }
-        }
-
-        if (process.env.NODE_ENV === 'development') {
-            console.log(`[Voice Proxy] POST -> ${targetUrl}`);
         }
 
         const response = await fetch(targetUrl, {

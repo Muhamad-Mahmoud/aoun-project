@@ -112,13 +112,10 @@ export function setupResponseInterceptors(axiosInstance: AxiosInstance) {
                         return Promise.reject(refreshPayload ?? error);
                     }
 
-                    const refreshedToken = refreshPayload?.token;
-                    const usesProxy = originalRequest.baseURL?.startsWith('/api/proxy');
-
-                    if (refreshedToken && originalRequest.headers && !usesProxy) {
-                        originalRequest.headers.Authorization = `Bearer ${refreshedToken}`;
-                    }
-
+                    // Refresh succeeded (new cookies are set server-side by /api/auth/refresh).
+                    // No manual Authorization patching: ALL browser calls go through the
+                    // BFF (/api/proxy), which re-reads the fresh auth_token cookie and
+                    // injects `Bearer` server-side on retry. Just replay the request once.
                     return axiosInstance(originalRequest);
                 } catch (refreshError) {
                     logger.error('Token refresh failed', refreshError);

@@ -1,7 +1,11 @@
 import type { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
-  const base = "https://aounn.runasp.net";
+  const base =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    process.env.APP_URL ||
+    process.env.SITE_URL ||
+    "https://aounn.runasp.net";
 
   return {
     rules: {

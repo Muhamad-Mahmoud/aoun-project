@@ -2,6 +2,9 @@
 
 import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeSanitize from "rehype-sanitize";
+import { sanitizeUrl } from "@/lib/security/sanitize";
 import { Bot, User, CheckCircle2, XCircle, ChevronDown, BrainCircuit } from "lucide-react";
 import { cn } from "@/shared/utils";
 import type { ChatMessage } from "@/shared/hooks";
@@ -168,6 +171,9 @@ export const ChatBubble = React.memo(function ChatBubble({ message, isLast, isSt
                             </div>
                         )}
                         <ReactMarkdown
+                            remarkPlugins={[remarkGfm]}
+                            rehypePlugins={[rehypeSanitize]}
+                            urlTransform={sanitizeUrl}
                             components={{
                                 p: ({ children }) => (
                                     <p className="mb-3.5 last:mb-0">{children}</p>
@@ -222,7 +228,7 @@ export const ChatBubble = React.memo(function ChatBubble({ message, isLast, isSt
                                 },
                                 a: ({ href, children }) => (
                                     <a
-                                        href={href}
+                                        href={sanitizeUrl(href)}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="text-primary font-semibold underline underline-offset-2 decoration-primary/30 hover:decoration-primary/70 transition-colors"
